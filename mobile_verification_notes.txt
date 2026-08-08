@@ -1,0 +1,28 @@
+Initial mobile verification pass on https://jazeera.pages.dev after commit 3cd575c.
+
+Observed screenshots:
+1. /home/ubuntu/screenshots/home_mobile.png
+   - Home page renders successfully in mobile width.
+   - Mobile header, booking card, promo strip, offer card, and bottom navigation are visible.
+   - Layout appears substantially mobile-optimized.
+
+2. /home/ubuntu/screenshots/flight_results_mobile.png
+   - Direct navigation to /flight-results returns a 404 page on deployed site.
+   - Indicates SPA deep-link routing is not available from direct URL, or route path differs.
+
+3. /home/ubuntu/screenshots/passenger_details_mobile.png
+   - Screenshot is blank/empty gray page.
+   - Likely requires navigation state, query params, or prior flow instead of direct URL access.
+
+4. /home/ubuntu/screenshots/seat_customization_mobile.png
+   - Screenshot unexpectedly shows the home page, not seat customization.
+   - Likely same deep-link/state issue.
+
+5. /home/ubuntu/screenshots/review_pay_mobile.png
+   - Screenshot is blank/empty gray page.
+   - Likely requires prior booking flow state.
+
+Conclusion:
+- Need second verification pass using real in-app navigation through the booking flow instead of direct deep links.
+- Also need to inspect deployed SPA routing behavior for Cloudflare Pages if deep links are expected to work.
+- Desktop layout has not been checked yet in this pass; current focus is mobile-only verification.

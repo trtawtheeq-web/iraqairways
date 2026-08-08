@@ -1,0 +1,125 @@
+{
+  "offers": [
+    {
+      "code": "J9SUMMER",
+      "title": "Big Summer Sale",
+      "desc": "Upto 50% Off on Flights",
+      "img": "./jazeera_files/09062026-SummerSale50Off-Webbanners-OfferCard-EN"
+    },
+    {
+      "code": "J950SO",
+      "title": "Summer Sale – Social",
+      "desc": "Upto 50% Off on Flights",
+      "img": "./jazeera_files/09062026-SummerSale50Off-Webbanners-OfferCard-EN"
+    },
+    {
+      "code": "J950AB",
+      "title": "Summer Sale – Social",
+      "desc": "Upto 50% Off on Flights",
+      "img": "./jazeera_files/09062026-SummerSale50Off-Webbanners-OfferCard-EN"
+    },
+    {
+      "code": "J950YS",
+      "title": "Summer Sale – Social",
+      "desc": "Upto 50% Off on Flights",
+      "img": "./jazeera_files/09062026-SummerSale50Off-Webbanners-OfferCard-EN"
+    },
+    {
+      "code": "J950OT",
+      "title": "Summer Sale – Social",
+      "desc": "Upto 50% Off on Flights",
+      "img": "./jazeera_files/09062026-SummerSale50Off-Webbanners-OfferCard-EN"
+    },
+    {
+      "code": "J950BK",
+      "title": "Summer Sale – Social",
+      "desc": "Upto 50% Off on Flights",
+      "img": "./jazeera_files/09062026-SummerSale50Off-Webbanners-OfferCard-EN"
+    }
+  ],
+  "deals": [
+    {
+      "title": "Career",
+      "desc": "",
+      "img": "./jazeera_files/Career"
+    },
+    {
+      "title": "Travel with Pets",
+      "desc": "",
+      "img": "./jazeera_files/Travel-with-Pets"
+    },
+    {
+      "title": "Visa Information",
+      "desc": "",
+      "img": "./jazeera_files/Visa-Information"
+    },
+    {
+      "title": "Baggage Allowance",
+      "desc": "",
+      "img": "./jazeera_files/Baggage-Allowance"
+    },
+    {
+      "title": "Cancel For Any Reason",
+      "desc": "",
+      "img": "https://s7g10.scene7.com/is/image/jazeeraairways/CFAR-icon"
+    }
+  ],
+  "services": [
+    {
+      "title": "Use left and right arrow keys to navigate services. Swipe on touch devices. Use pagination dots to jump to a service.",
+      "desc": "Priority ServicesSeamless travel with priority check-in & baggage",
+      "img": "./jazeera_files/priority-service-2"
+    }
+  ],
+  "destinations": [
+    {
+      "tag": "City Break",
+      "title": "City Break",
+      "img": "https://s7g10.scene7.com/is/image/jazeeraairways/Dubai-web"
+    },
+    {
+      "tag": "Cultural Heritage",
+      "title": "Cultural Heritage",
+      "img": "https://s7g10.scene7.com/is/image/jazeeraairways/Cairo-web"
+    },
+    {
+      "tag": "Coastal Escape",
+      "title": "Coastal Escape",
+      "img": "https://s7g10.scene7.com/is/image/jazeeraairways/Colombo-web"
+    }
+  ],
+  "aviation": [
+    {
+      "title": "Cabin Crew CourseKnow More",
+      "desc": "Cabin Crew Course",
+      "img": "https://s7g10.scene7.com/is/image/jazeeraairways/cabincrewtrainingcourse_whosthiscourse"
+    },
+    {
+      "title": "Aviation CourseKnow More",
+      "desc": "Aviation Course",
+      "img": "https://s7g10.scene7.com/is/image/jazeeraairways/launchyouraviationjourney_careerpathway"
+    },
+    {
+      "title": "Graduate TrainingKnow More",
+      "desc": "Graduate Training",
+      "img": "https://s7g10.scene7.com/is/image/jazeeraairways/Graduate_training"
+    }
+  ],
+  "membership": [
+    {
+      "title": "Your Travel Starts Here",
+      "desc": "Sign in or sign up for seamless bookings and easy trip management",
+      "img": "./jazeera_files/img-banner"
+    }
+  ],
+  "banners": [
+    {
+      "title": " background",
+      "img": "./jazeera_files/10062026-SummerSale50Off-KW-Webbanners-Web-EN"
+    },
+    {
+      "title": " background",
+      "img": "./jazeera_files/10062026-SummerSale50Off-KW-Webbanners-APP-EN"
+    }
+  ]
+}

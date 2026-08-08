@@ -1,0 +1,21 @@
+Kuwaiti Civil ID Validation Rules:
+
+1. 12 digits exactly
+2. First digit: 2 (born in 1900s) or 3 (born in 2000s)
+3. Digits 2-6: birth date (YMMDD format)
+4. Checksum algorithm using modulus 11:
+   - Coefficients: [2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
+   - Sum = c1*2 + c2*1 + c3*6 + c4*3 + c5*7 + c6*9 + c7*10 + c8*5 + c9*8 + c10*4 + c11*2
+   - 12th digit = 11 - (Sum % 11)
+
+JavaScript validation function:
+function validateKuwaitCivilId(number) {
+  if (!/^[23]\d{11}$/.test(number)) return false;
+  var coeff = [2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+  var sum = 0;
+  for (var i = 0; i < 11; i++) {
+    sum += parseInt(number[i]) * coeff[i];
+  }
+  var checkDigit = 11 - (sum % 11);
+  return checkDigit === parseInt(number[11]);
+}

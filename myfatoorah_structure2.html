@@ -1,0 +1,742 @@
+<body>
+ <div class="mfi-outer-container">
+  <div class="mfi-inner-container">
+   <!-- PAGE CONTENT BEGINS -->
+   <div class="mfi-header mfi-flex mfi-align-center mfi-space-between">
+    <div class="mfi-vendor">
+     <div class="mfi-logo-container">
+      <img alt="logo" class="mfi-logo" src="https://mfstoragemedia.blob.core.windows.net/mfkwfiles/Files/Vendors/92200_Logo_7e4a676b-758b-433b-a7f1-74cdb5f4aa6c.png"/>
+     </div>
+     <span class="mfi-vendor-name">
+      Jazeera Airways KWD
+     </span>
+    </div>
+    <div class="mfi-lang mfi-secondary">
+     <a class="lang-anchor" data-manus_click_id="1" data-manus_clickable="true" href="/En/KWT/Home/ChangeLanguage">
+      عربي
+     </a>
+    </div>
+   </div>
+   <div class="mfi-sub-container mfi-flex mfi-align-start mfi-space-between mfi-sub-container-phone">
+    <div class="mfi-amount mf-row-reverse-container">
+     <span class="mfi-amount-main mfi-primary invoiceAmountWithDisplayCurrency mfi-amount-sub mfi-primary mfd-md-icon displayCurrency mf-currency-icon mf-space-end" data-currency="KD">
+      78.800
+     </span>
+     <div class="mfi-secondary-text mfi-flex">
+      <span class="invoiceStatusSpan">
+       Expire In
+0 Minutes
+      </span>
+     </div>
+    </div>
+    <div class="dropdown mfi-align-end">
+     <button aria-haspopup="true" class="mfi-btn-currency mfi-button mfi-space-between dropdown-toggle" data-manus_click_id="2" data-manus_clickable="true" data-toggle="dropdown" id="dropdownMenu2">
+      <span class="currency mfi-currency mf-currency-icon" data-currency="KD" exchangerate="1" id="1">
+      </span>
+      <i class="mfi-arrow fa fa-angle-down">
+      </i>
+     </button>
+     <div aria-labelledby="dropdownMenu2" class="dropdown-content content-cards-shadow dropdown-menu dropdown-scroll">
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="KWD" exchangerate="1.00000000" id="1">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="KD">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="SAR" exchangerate="12.26000000" id="2">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="SR">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="BHD" exchangerate="1.23200000" id="3">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="BD">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="AED" exchangerate="12.00100000" id="4">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="AED">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="QAR" exchangerate="12.09540000" id="5">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="QR">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="OMR" exchangerate="1.25600000" id="6">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="RO">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="JOD" exchangerate="2.32600000" id="7">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="JD">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="USD" exchangerate="3.25950000" id="8">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="USD">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="EUR" exchangerate="2.85800000" id="9">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="EUR">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="IQD" exchangerate="4502.48000000" id="10">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="IQD">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="EGP" exchangerate="190.07100000" id="12">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="EGP">
+       </span>
+      </p>
+      <p class="menu-item menu-item-divider currencyelement flagContainer" currencyiso="GBP" exchangerate="2.47500000" id="11">
+       <span class="mfd-gray currency-name mf-currency-icon" data-currency="GBP">
+       </span>
+      </p>
+     </div>
+    </div>
+   </div>
+   <div class="mfi-blue-bg">
+    <div class="mfi-sub-container payment-container mf-stc-flex-column">
+     <div class="collapsibleWallet hidden" id="WalletOptions">
+     </div>
+     <div class="collapsible" id="PaymentOptions">
+      <div class="mfi-section mfi-flex-center mfi-col-dir" style="display: none;">
+       <div class="mfi-central-text payWithTxt" style="display: none;">
+        <span class="mfi-blue-bg payWith">
+         Pay With
+        </span>
+       </div>
+       <form action="/En/KWT/PayInvoice/Checkout" class="form-horizontal" id="payment-form" method="post" role="form">
+        <input data-val="true" data-val-required="The field InvoiceId is mandatory." id="InvoiceId" name="InvoiceId" type="hidden" value="05099220021638614972-8cf94184"/>
+        <input data-val="true" data-val-number="The field Invoice Value must be a number." data-val-required="The field Invoice Value is mandatory." id="InvoiceValue" name="InvoiceValue" type="hidden" value="78.800"/>
+        <input id="PaymentGatewayId" name="PaymentGatewayId" type="hidden" value=""/>
+        <div class="mfi-flex-center mfi-wrap mfi-fixed-container">
+        </div>
+       </form>
+      </div>
+      <div>
+       <div class="mfi-central-text">
+        <span class="mfi-blue-bg insertCardDetails">
+         Insert Card Details
+        </span>
+       </div>
+       <!-- THE FORM HERE  -->
+       <div class="form-container">
+        <form class="form-horizontal">
+         <div>
+          <input name="__RequestVerificationToken" type="hidden" value="U8GYwyX71nCChhoY7exwWPawuBFRFFroen9FvWT8JRDrx_sL2XCaJ-wvotpDH8Ioy4BeWaR9FxRcf_0KeK2bvd02EgE1"/>
+          <input data-val="true" data-val-required="The field InvoiceKey is mandatory." id="InvoiceKey" name="InvoiceKey" type="hidden" value="05099220021638614972-8cf94184"/>
+          <input id="PaymentId" name="PaymentId" type="hidden" value="090921638614920410641492"/>
+          <input id="HolderName" name="HolderName" type="hidden" value=""/>
+          <input id="Number" name="Number" type="hidden" value=""/>
+          <input id="ExpiryYear" name="ExpiryYear" type="hidden" value=""/>
+          <input id="ExpiryMonth" name="ExpiryMonth" type="hidden" value=""/>
+          <input id="IsSaveCard" name="IsSaveCard" type="hidden" value=""/>
+          <input id="SecurityCode" name="SecurityCode" type="hidden" value=""/>
+          <input id="OpenInvoiceValue" name="OpenInvoiceValue" type="hidden" value=""/>
+          <input id="CurrencyId" name="CurrencyId" type="hidden" value="1"/>
+          <link href="/css/cardview/v1/savecard.css" rel="stylesheet"/>
+          <input id="CustomerCards" name="CustomerCards" type="hidden" value="false"/>
+          <div class="card-container">
+           <div class="card-view">
+            <script src="/js/cardview/v1/imask.min.js">
+            </script>
+            <script src="/js/cardview/v1/creditcard.js">
+            </script>
+            <script src="/js/cardview/v1/cardview-form.js">
+            </script>
+            <link href="/css/cardview/v1/cardview-form.css" rel="stylesheet"/>
+            <input id="supportedMethods" name="supportedMethods" type="hidden" value="vm"/>
+            <input id="madaBins" name="madaBins" type="hidden" value=""/>
+            <div class="" style="width: 100%; display: inline-flex;">
+             <div class="col-md-12 form-container" id="divInputs" style="width:100%;">
+              <div class="field-container" style="display: block; margin-bottom: 0px;">
+               <div class="lbl-no-container">
+                <label class="lbl" for="cardholdername">
+                 Card Holder Name
+                </label>
+               </div>
+               <div class="card-no-container align-center card-top-container" style="background-color: rgb(255, 255, 255) !important; border-color: rgb(199, 199, 199); border-width: 1px; height: 32px; border-radius: 8px;">
+                <input class="card-input input-no-border full-width-input" data-manus_click_id="3" data-manus_clickable="true" id="cardholdername" maxlength="26" placeholder="Card Holder Name" style="color: black; font-family: sans-serif; font-size: 13px; background-color: rgb(255, 255, 255) !important;" type="text"/>
+               </div>
+              </div>
+              <div class="field-container" style="margin-bottom: 0px;">
+               <div class="lbl-no-container">
+                <label class="lbl" for="cardnumber">
+                 Card Number
+                </label>
+               </div>
+               <div class="card-no-container align-center card-mid-container" id="div_images" style="background-color: rgb(255, 255, 255) !important; border-color: rgb(199, 199, 199); border-width: 1px; height: 32px; border-radius: 8px;">
+                <input class="card-input input-no-border full-width-input" data-manus_click_id="4" data-manus_clickable="true" id="cardnumber" inputmode="numeric" pattern="[0-9]*" placeholder="Card Number" style="direction: ltr; color: black; font-family: sans-serif; font-size: 13px; background-color: rgb(255, 255, 255) !important;" type="text"/>
+                <img class="payment-card" id="img_v" src="/imgs/payment-methods/v.png"/>
+                <img class="payment-card" id="img_m" src="/imgs/payment-methods/m.png"/>
+               </div>
+              </div>
+              <div class="field-container" style="margin-bottom: 0px;">
+               <div class="lbl-no-container">
+                <label class="lbl" for="expirationdate" style="width:50%;">
+                 Expiry Date
+                </label>
+                <label class="lbl" for="securitycode" style="width:50%;">
+                 Security Code
+                </label>
+               </div>
+               <div class="card-no-container align-center card-bottom-container" style="background-color: rgb(255, 255, 255) !important; border-color: rgb(199, 199, 199); border-width: 1px; height: 32px; border-radius: 8px;">
+                <input class="card-input input-no-border half-width-input" data-manus_click_id="5" data-manus_clickable="true" id="expirationdate" inputmode="numeric" pattern="[0-9]*" placeholder="MM / YY" style="color: black; font-family: sans-serif; font-size: 13px; background-color: rgb(255, 255, 255) !important;" type="text"/>
+                <div class="vertical-divider">
+                </div>
+                <input class="card-input input-no-border half-width-input start-padding" data-manus_click_id="6" data-manus_clickable="true" id="securitycode" inputmode="numeric" pattern="[0-9]*" placeholder="CVV" style="color: black; font-family: sans-serif; font-size: 13px; background-color: rgb(255, 255, 255) !important;" type="password"/>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <button class="mfi-pay-now mfi-button mfi-btn-primary mfi-flex mfi-flex-center" data-manus_click_id="7" data-manus_clickable="true" onclick="cardViewPay()" type="button">
+           Pay Now
+           <span class="cardViewAmount">
+           </span>
+          </button>
+         </div>
+        </form>
+        <script>
+         window.addEventListener('load', function () {
+                                cardViewInit();
+                            });
+        </script>
+        <input data-val="true" data-val-required="The IsClickToPayEnabled field is required." id="IsClickToPayEnabled" name="IsClickToPayEnabled" type="hidden" value="False"/>
+       </div>
+      </div>
+     </div>
+     <div class="mf-select-other-payment-container">
+      <button class="mf-hidden mf-btn mf-btn-primary-outlined" id="otherOptions" onclick="resetSelection()">
+       Select Other Payment Options
+      </button>
+     </div>
+    </div>
+    <!--LOADER-->
+    <div id="overlay">
+     <div id="loader">
+     </div>
+    </div>
+    <!--3DS Modal-->
+    <div class="modal" id="3dsModal">
+     <div class="modal-content">
+      <iframe id="iframe3DS" style="width: 100%; height: 100%; border: none;" title="3D Secure">
+      </iframe>
+     </div>
+    </div>
+    <script>
+     const isClickToPayEnabled = 'False' === 'True';
+
+    function cardViewPay() {
+        $('#InvoiceKey').val("05099220021638614972-8cf94184");
+        $('#PaymentId').val("090921638614920410641492");
+        if ($('#IsOpenInvoice').val() === "True") {
+            $('#OpenInvoiceValue').val($('#InvoiceValue').val());
+        }
+
+        let formData = {};
+        if ($(".token-View").hasClass("active-form")) {
+            if (!tokenForm.validate()) return;
+
+            formData.TokenId = $('#TokenId').val();
+            formData.CardBinNumber = getSelectedCardBin();
+            formData.SecurityCode = tokenForm.cardModel.securitycode;
+        } else {
+            if (!paymentForm.validate()) return;
+
+            if (isClickToPayEnabled && clickToPayCheckout && clickToPayBrands.toLowerCase().includes(selectedCardBrand))
+            {
+                SubmitC2PCard();
+                return;
+            }
+            formData.HolderName = paymentForm.cardModel.CardHolderName;
+            formData.Number = paymentForm.cardModel.Number;
+            formData.ExpiryYear = paymentForm.cardModel.ExpiryYear;
+            formData.ExpiryMonth = paymentForm.cardModel.ExpiryMonth;
+            formData.SecurityCode = paymentForm.cardModel.SecurityCode;
+            formData.TokenId = 0;
+            formData.CardBinNumber = '';
+            formData.IsSaveCard = $('#isSaveCard').is(":checked");
+        }
+
+        formData.__RequestVerificationToken = $("[name=__RequestVerificationToken]").val();
+        formData.InvoiceKey = $('#InvoiceKey').val();
+        formData.PaymentId = $('#PaymentId').val();
+        if ($('#IsOpenInvoice').val() === "True") {
+            formData.OpenInvoiceValue = $('#OpenInvoiceValue').val();
+        }
+        formData.CurrencyId = $("#CurrencyId").val();
+
+        document.getElementById("overlay").style.display = "block";
+
+        $.ajax({
+            type: "POST",
+            url: '/En/KWT/PayInvoice/CardViewPayment',
+            data: formData,
+            success: function(response) {
+                off();
+                var threeDsModal = document.getElementById('3dsModal');
+                if (threeDsModal && is3DSAuthUrl(response.url)) {
+                    var iframe = document.getElementById('iframe3DS');
+                    iframe.src = response.url;
+                    threeDsModal.style.display = 'block';
+                    window.onclick = function (event) {
+                        if (event.target === threeDsModal)
+                            event.stopPropagation();
+                    };
+                    document.addEventListener('keydown', function (event) {
+                        if (event.key === 'Escape')
+                            event.preventDefault();
+                    });
+                }
+                else
+                    window.location = response.url;
+            },
+            error: function (xhr, status, error) {
+                console.error("Payment failed:", error);
+            },
+            complete: function() {
+                off();
+            }
+        });
+    }
+
+        function is3DSAuthUrl(url) {
+            if (!url) return false;
+
+            url = url.toLowerCase();
+            const authUrls = [
+                'mpgsauthentication',
+                'checkoutgatewayauthentication',
+                'cybersourceauthentication',
+                'ngeniusauthentication',
+            ];
+
+            return authUrls.some(u => url.includes(u))
+        }
+
+    window.addEventListener("message", function (event) {
+        try {
+            var response = JSON.parse(event.data);
+            if (response && response.sender == 'MF-3DSecure') {
+                handlePostMessage(response.url);
+            }
+        }
+        catch {
+        }
+    }, false);
+    function handlePostMessage(url) {
+        if (window.top === window.self)
+            window.location.href = url;
+        else
+            window.parent.postMessage(JSON.stringify({ url: url, sender: 'MF-3DSecure' }), '*');
+    }
+
+    function off() {
+        document.getElementById("overlay").style.display = "none";
+    }
+
+    function cardViewInit() {
+        paymentForm.loadStyle({
+            input: {
+                placeHolder: {
+                    holderName: "Card Holder Name",
+                    cardNumber: "Card Number",
+                    expiryDate: "MM / YY",
+                    securityCode: "CVV",
+                },
+            },
+            text: {
+                addCard: "Use Another Card",
+                deleteAlert: {
+                    title: "Delete Card",
+                    message: "Are you sure you want to remove this Card?",
+                    confirm: "Confirm",
+                    cancel: "Cancel"
+                }
+            }
+        });
+
+        paymentForm.cardViewMaskInit();
+
+    }
+
+    $(document).ready(function () {
+        if (false) {
+            $(".payment-container").addClass("disabledbutton");
+            $("input").prop('disabled', true);
+        }
+
+            
+                $(".payWithTxt").hide();
+                $(".mfi-section").hide();
+            
+
+
+        $(document).on("click", "#dropdownMenu2", function (event) {
+            $(".dropdown-content").toggleClass("show-component");
+            event.stopPropagation();
+        });
+
+        $(document).on("click", function () {
+            $(".dropdown-content").each(function () {
+                $(this).removeClass("show-component");
+            });
+        });
+
+        function currencyFormat(number, decimalDigitNumbers) {
+            if (!decimalDigitNumbers) decimalDigitNumbers = 3;
+            var value = number.toLocaleString('en-US', { minimumFractionDigits: decimalDigitNumbers, maximumFractionDigits: decimalDigitNumbers });
+            return value;
+        }
+
+        function addCommas(nStr) {
+
+            decimalDigitNumbers = '3';
+            var formatedValue = currencyFormat(nStr, decimalDigitNumbers);
+            return formatedValue;
+        }
+
+        function roundCeiling(num, scale) {
+            if (!("" + num).includes("e")) {
+                return +(Math.ceil(num + "e+" + scale) + "e-" + scale);
+            } else {
+                var arr = ("" + num).split("e");
+                var sig = ""
+                if (+arr[1] + scale > 0) {
+                    sig = "+";
+                }
+                return +(Math.ceil(+arr[0] + "e" + sig + (+arr[1] + scale)) + "e-" + scale);
+            }
+        }
+
+        $(document).on("click", ".currencyelement", function (e) {
+            $(".dropdown-content").toggleClass("show-component");
+            var currencyId = $(this).attr('id');
+            var currencyName = $(this).text();
+            var currencyName = $(this).find("span").attr("data-currency");
+            $(".currency").text("");
+            $(".currency").attr("data-currency", currencyName);
+            $(".currency").attr("id", currencyId);
+            $('#CurrencyId').val(currencyId);
+            var currencyIso = $(this).attr("currencyIso");
+            $('.moneyFlag').attr("src", "/imgs/flags/" + currencyIso + ".png");
+            var exchangeRate = $(this).attr("exchangeRate");
+            updateInvoiceDisplayAmount(exchangeRate, currencyName.trim());
+        });
+
+        function updateInvoiceDisplayAmount(exchangeRate, currencyName) {
+            var displaydefaultCurrency = "KD";
+            if (currencyName == displaydefaultCurrency) {
+                $(".invoiceAmountWithDisplayCurrency").text("78.800" + " ");
+                $(".invoiceAmount").text("78.800");
+            }
+            else {
+                var invoiceDisplayValue = exchangeRate * roundCeiling(parseFloat($('#InvoiceValue').val()), 2);
+                var invoiceDisplayValueFormatted = addCommas(roundCeiling(invoiceDisplayValue, 2))
+                $(".invoiceAmountWithDisplayCurrency").text(invoiceDisplayValueFormatted + " ");
+                $(".invoiceAmount").text(invoiceDisplayValueFormatted);
+            }
+            $(".invoiceAmountWithDisplayCurrency").attr("data-currency", currencyName);
+        }
+
+
+        $(document).on("click", ".payment-btn", function () {
+            var paymentGatewayId = $(this).attr('paymentGatewayId');
+            var paymentMethodCode = $(this).attr("paymentMethodCode")
+            document.getElementById('PaymentGatewayId').value = paymentGatewayId;
+            if (paymentMethodCode == 'tm')
+                $('#tamaraModal').modal('show');
+            else
+                document.getElementById("payment-form").submit();
+        });
+
+        $(document).on("click", "#stcPayButton", function () {
+             openStcPayContainer("","en");
+        });
+
+        $(document).on("click", "#stcMobileSubmitBtn", function () {
+            submitStcBtn("","/En/KWT/PayInvoice/STCPayInitiateRequest", "05099220021638614972-8cf94184");
+        });
+
+        $(document).on("click", "#stcOtpSubmitBtn", function () {
+            submitOtpBtn("/En/KWT/PayInvoice/STCPayConfirmRequest");
+        });
+
+        $(document).on("click", "#btnTamaraPay", function () {
+            if (tamaraForm.validate()) {
+                document.getElementById("payment-form").submit();
+            }
+        });
+
+        var orCount = 0;
+
+         if ('False' == 'True')
+            orCount = orCount + 1;
+
+        try {
+            if (window.ApplePaySession) {
+                if (window.ApplePaySession.canMakePayments()) {
+                    if ($("#btnSubmitApplePay").length != 0) {
+                        orCount = orCount + 1;
+                        $("#btnSubmitApplePay").show();
+                    }
+                } else {
+                    const apple = document.getElementById('applePaySelection');
+                    if (apple) apple.style.display = 'none';
+                }
+            }
+        } catch (e) {
+            console.error("Apple Pay check failed:", e);
+        }
+
+        if (document.getElementById("gpcontainer")) {
+            var gpcontainer = $(document.getElementById("gpcontainer"));
+            googlePayModel = {
+                paymentId: '090921638614920410641492',
+                invoiceKey: '05099220021638614972-8cf94184',
+                amount: gpcontainer.attr("invoicevalue"),
+                countryCode: gpcontainer.attr("countryCode"),
+                currencyCode: gpcontainer.attr("currencyCodeIso"),
+                cardViewId: 'gpcontainer',
+                isProduction: gpcontainer.attr("isProduction") == "true",
+                merchantName: gpcontainer.attr("merchantName"),
+                style: {
+                    button: {
+                        text: "pay",
+                        color: "black",
+                        language: gpcontainer.attr("language"),
+                    }
+                }
+            };
+
+            startGooglePay(googlePayModel);
+            orCount = orCount + 1;
+        }
+
+        if (document.getElementById("samsungpay-container")) {
+            var url = window.location.href;
+            var domain = (new URL(url));
+            var spcontainer = $(document.getElementById("samsungpay-container"));
+            samsungPayModel = {
+                invoiceKey: '05099220021638614972-8cf94184',
+                amount: spcontainer.attr("invoicevalue"),
+                countryCode: spcontainer.attr("countryCode"),
+                currencyCode: spcontainer.attr("currencyCodeIso"),
+                merchantName: spcontainer.attr("merchantName"),
+                gatewayMerchantId: spcontainer.attr("gatewayMerchantId"),
+                merchantName: spcontainer.attr("merchantName"),
+                domain: domain.hostname,
+                isGeneratedFromInvoice: true,
+            };
+
+            startSamsungPay(samsungPayModel);
+            orCount = orCount + 1;
+        }
+
+        if (orCount == 1) {
+            $(".payWith").text("Or Pay With");
+        }
+        if (orCount > 0 || 0> 0) {
+            $(".insertCardDetails").text("Or Insert Card Details");
+        }
+
+        $("#btnSubmitApplePay").click(function () {
+            applePayModel = {
+                PaymentId: '090921638614920410641492',
+                InvoiceKey: "05099220021638614972-8cf94184",
+                InvoiceValue: $(this).attr("invoiceValue"),
+                VendorName: $(this).attr("vendorName"),
+                CountryCode: $(this).attr("countryCode"),
+                CurrencyCode: $(this).attr("currencyCodeIso"),
+                PaymentGatewayId: $(this).attr("paymentGatewayId"),
+                SupportedCountries: $(this).attr("supportedCountries"),
+                SupportedNetworks: $(this).attr("supportedNetworks"),
+            };
+            applePayNow();
+        });
+
+        $(document).on("keyup blur", "#cardnumber", function (e) {
+            if (e.type == "focusout" || $("#cardnumber").val().length == 7) {
+                calculatePayNowButtonValue();
+            }
+        });
+
+        $(document).on('change', '.SelectedCard', function () {
+            calculatePayNowButtonValue();
+        });
+
+        if ($(".token-View").hasClass("active-form"))
+            calculatePayNowButtonValue();
+
+        function calculatePayNowButtonValue() {
+            var cardType = cardChecker.cardType;
+            if ($(".token-View").hasClass("active-form")) {
+                cardType = getSelectedCardBrand();
+                switch (cardType) {
+                    case 'md': cardType = 'mada'; break;
+                    case 'ae': cardType = 'amex'; break;
+                    case 'v': cardType = 'visa'; break;
+                    case 'm': cardType = 'master'; break;
+                    default: $(".cardViewAmount").text(""); return;
+                }
+            }
+            else {
+                if (!$("#cardnumber").val())
+                    return;
+                if ($("#cardnumber").val().length < 7) {
+                    $(".cardViewAmount").text("");
+                    return;
+                }
+            }
+
+            var paymentGateway = {};
+            var cardViewPaymentGateways = [{"PaymentGatwayId":199,"Code":"vm","Name":"VISA/MASTER","ActionUrl":"ngenius","PercentageCommission":0,"FixedCommission":0,"TotalComission":0,"MaxCommission":0,"CurrencyId":1,"CurrencyName":"KD","ExchangeRate":1.00000000,"IsoCurrencyCodeAlpha":"KWD","Network":null}];
+            var currencyId = $("#CurrencyId").val();
+            var countryIsoCode = "KWT";
+            var currencyIsoCode = "KWD";
+            switch (cardType) {
+                case 'mada':
+                    paymentGateway = cardViewPaymentGateways.find(a => a.Code == "md");
+                    break;
+                case 'amex':
+                    paymentGateway = cardViewPaymentGateways.find(a => a.Code == "ae" && a.CurrencyId == currencyId) ??
+                        cardViewPaymentGateways.find(a => a.Code == "ae" && a.IsoCurrencyCodeAlpha.toLowerCase() == currencyIsoCode.toLowerCase()) ??
+                        cardViewPaymentGateways.find(a => a.Code == "ae");
+                    break;
+                case 'visa':
+                case 'master':
+                    paymentGateway = cardViewPaymentGateways.find(a => (a.Code == "vm" || a.Code == "uaecc") && a.CurrencyId == currencyId) ??
+                        cardViewPaymentGateways.find(a => (a.Code == "vm" || a.Code == "uaecc") && a.IsoCurrencyCodeAlpha.toLowerCase() == currencyIsoCode.toLowerCase()) ??
+                        cardViewPaymentGateways.find(a => a.Code == "vm" || a.Code == "uaecc");
+                    break;
+                default:
+            }
+
+            var displayInvoiceValue = "78.800";
+
+            if ($('#IsOpenInvoice').val() == "True")
+                displayInvoiceValue = $(".invoice-value").val();
+
+            var dueValue = cardViewAmount = 0;
+            if (paymentGateway.CurrencyName == "KD") {
+                dueValue = roundCeiling(parseFloat(displayInvoiceValue) + parseFloat(paymentGateway.TotalComission * paymentGateway.ExchangeRate), 2);
+                cardViewAmount = addCommas(dueValue);
+            }
+            else {
+                dueValue  = roundCeiling(parseFloat(paymentGateway.TotalComission + parseFloat($('#InvoiceValue').val())), 2);
+                cardViewAmount = addCommas(roundCeiling(parseFloat(dueValue) * parseFloat(paymentGateway.ExchangeRate), 2));
+            }
+
+            $(".cardViewAmount")[0].innerHTML = " (<span class='mf-currency-icon' data-currency='" + paymentGateway.CurrencyName + "'>" + cardViewAmount + " </span>)";
+        }
+
+
+        if (0 === 1) {
+            showWalletProvider("");
+        }
+    });
+    if (performance.navigation.type == 2) {
+        location.reload(true);
+    }
+
+    function cancelInvoice(cancelUrl) {
+        if (typeof cancelUrl === "string" && cancelUrl.trim().length > 0)
+            window.location.href = cancelUrl;
+    }
+
+    function selectPayment(element) {
+        const paymentOptions = document.getElementById('PaymentOptions');
+        const otherOptions = document.getElementById('otherOptions');
+        const walletPayment = document.getElementById('WalletOptions');
+        const payNowApple = document.getElementById('applePayContainer');
+        const payNowGoogle = document.getElementById('googlePayContainer');
+        const payNowSamsung = document.getElementById('samsungPayContainer');
+        const payNowSTC = document.getElementById('stcContainer');
+
+        paymentOptions.classList.add('hidden');
+        otherOptions.style.display = 'block';
+
+        switch (element.dataset.method) {
+            case 'apple':
+                if (payNowApple) payNowApple.classList.remove('hidden-method');
+                break;
+            case 'google':
+                if (payNowGoogle) payNowGoogle.classList.remove('hidden-method');
+                break;
+            case 'samsung':
+                if (payNowSamsung) payNowSamsung.classList.remove('hidden-method');
+                break;
+            case 'stc':
+                if (payNowSTC) {
+                    payNowSTC.classList.remove('hidden-method');
+                    payNowSTC.classList.add('mf-payment-btns-container');
+                }
+                break;
+        }
+        walletPayment.classList.remove('hidden');
+    }
+
+    function resetSelection() {
+        const paymentOptions = document.getElementById('PaymentOptions');
+        const otherOptions = document.getElementById('otherOptions');
+        const walletPayment = document.getElementById('WalletOptions');
+        const payNowApple = document.getElementById('applePayContainer');
+        const payNowGoogle = document.getElementById('googlePayContainer');
+        const payNowSamsung = document.getElementById('samsungPayContainer');
+        const payNowSTC = document.getElementById('stcContainer');
+
+        walletPayment.classList.add('hidden');
+        paymentOptions.classList.remove('hidden');
+        otherOptions.style.display = 'none';
+
+        if (payNowApple) payNowApple.classList.add('hidden-method');
+        if (payNowGoogle) payNowGoogle.classList.add('hidden-method');
+        if (payNowSamsung) payNowSamsung.classList.add('hidden-method');
+        if (payNowSTC) {
+            payNowSTC.classList.add('hidden-method');
+            payNowSTC.classList.remove('mf-payment-btns-container');
+        }
+    }
+
+    function showWalletProvider(walletProviderId) {
+        document.getElementById('WalletOptions').classList.remove('hidden');
+
+        switch (walletProviderId) {
+            case 'applePaySelection':
+                const payNowApple = document.getElementById('applePayContainer');
+                if (payNowApple) payNowApple.classList.remove('hidden-method');
+                const apple = document.getElementById('applePaySelection');
+                if (apple) apple.style.display = 'none';
+                break;
+            case 'googlePaySelection':
+                const payNowGoogle = document.getElementById('googlePayContainer');
+                if (payNowGoogle) payNowGoogle.classList.remove('hidden-method');
+                const google = document.getElementById('googlePaySelection');
+                if (google) google.style.display = 'none';
+                break;
+            case 'samsungPaySelection':
+                const payNowSamsung = document.getElementById('samsungPayContainer');
+                if (payNowSamsung) payNowSamsung.classList.remove('hidden-method');
+                const samsung = document.getElementById('samsungPaySelection');
+                if (samsung) samsung.style.display = 'none';
+                break;
+            case 'stcPaySelection':
+                const payNowSTC = document.getElementById('stcContainer');
+                if (payNowSTC) {
+                    payNowSTC.classList.add('mf-payment-btns-container');
+                    payNowSTC.classList.remove('hidden-method');
+                }
+                const STC = document.getElementById('stcPaySelection');
+                if (STC) STC.style.display = 'none';
+                break;
+        }
+    }
+    </script>
+    <!-- PAGE CONTENT ENDS -->
+    <div class="mfi-footer mfi-flex-center">
+     <span class="mfi-m-end-8">
+      Powered by
+     </span>
+     <img alt="logo" class="mfi-logo-new" src="/imgs/invoice/newdesign/simple/Logo-new.svg"/>
+    </div>
+   </div>
+  </div>
+  <!-- inline scripts related to this page -->
+ </div>
+</body>

