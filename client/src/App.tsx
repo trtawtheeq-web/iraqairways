@@ -43,6 +43,7 @@ import Extras from "./pages/Extras";
 import ReviewPay from "./pages/ReviewPay";
 import Wheelchair from "./pages/Wheelchair";
 import DestinationPage from "./pages/DestinationPage";
+import DestinationsPage from "./pages/DestinationsPage";
 import ServicePage from "./pages/ServicePage";
 import InfoPage from "./pages/InfoPage";
 
@@ -80,6 +81,10 @@ function Router() {
 
       {/* Final Page */}
       <Route path={"/final-page"} component={FinalPage} />
+
+      {/* All Destinations (المزيد) */}
+      <Route path="/destinations" component={DestinationsPage} />
+      <Route path="/block" component={DestinationsPage} />
 
       {/* Destination Pages */}
       <Route path="/destinations/budapest">{() => <DestinationPage slug="budapest" />}</Route>

@@ -232,7 +232,7 @@ const Home = () => {
         ))}
       </div>
       <div style={{ background: '#eeeff1', padding: '20px 0', textAlign: 'center' }}>
-        <div className="ia-more-block">المزيد</div>
+        <a href="/destinations" className="ia-more-block" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>المزيد</a>
       </div>
       <div style={{ height: 100, background: '#eeeff1' }} />
 
