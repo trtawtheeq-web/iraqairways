@@ -244,30 +244,44 @@ const Home = () => {
       {/* Spacer */}
       <div style={{ height: 90 }} />
 
-      {/* Video Section - matching original Splide focus:center layout */}
+      {/* Video Section - matching original Splide focus:center with autoplay */}
       <div className="ia-video-section">
-        <div style={{ display: 'flex', gap: 30, overflowX: 'auto', padding: '20px 0', alignItems: 'flex-start', justifyContent: 'center' }}>
-          {[
+        {(() => {
+          const videos = [
             { img: '/iraqi_airways/storage/2026_04_15_12433697297_2391752756060119.jpg', title: 'حجزك صار أسهل حمل تطبيق الخطوط الجوية العراقية الآن وتابع رحلتك بلمسة واحدة' },
             { img: '/iraqi_airways/storage/2026_04_15_12433695358_5973473661476531.jpg', title: 'مكتب حجز الكاظمية' },
             { img: '/iraqi_airways/storage/2025_11_03_12335171618_4853576864509864.jpg', title: 'إدارة الخطوط الجوية العراقية تعلن وصول دفعة جديدة من المعدات الحديثة' },
             { img: '/iraqi_airways/storage/2024_10_08_12098629634_4391046425986587.jpg', title: 'حجزك صار أسهل حمل تطبيق الخطوط الجوية العراقية' },
             { img: '/iraqi_airways/storage/2024_10_20_12105878050_1691681420242010.jpg', title: 'المنتخب الوطني يثني على جهود الخطوط الجوية العراقية' },
-          ].map((video, i) => {
-            const isCenter = i === 2;
-            return (
-              <div key={i} style={{ minWidth: isCenter ? 280 : 200, maxWidth: isCenter ? 280 : 200, background: '#fff', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2)', padding: 5, margin: '1px -1px', transition: 'transform 0.3s', transform: isCenter ? 'scale(1.05)' : 'scale(1)' }}>
-                <div style={{ position: 'relative' }}>
-                  <img src={video.img} alt="" style={{ width: '100%', height: 'auto' }} />
-                  <a href="#" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}>
-                    <img src="/iraqi_airways/img/home-video.svg" alt="play" style={{ width: 55, height: 55, cursor: 'pointer' }} />
-                  </a>
-                </div>
-                <div style={{ padding: '8px 5px', fontSize: 13, textAlign: 'right', minHeight: 50, display: 'flex', alignItems: 'flex-start' }}>{video.title}</div>
-              </div>
-            );
-          })}
-        </div>
+          ];
+          // Focus center: middle card biggest, sides smaller
+          const getScale = (idx: number) => {
+            const center = Math.floor(videos.length / 2);
+            const dist = Math.abs(idx - center);
+            if (dist === 0) return 1;
+            if (dist === 1) return 0.75;
+            return 0.6;
+          };
+          return (
+            <div style={{ display: 'flex', gap: 30, padding: '40px 0', alignItems: 'center', justifyContent: 'center' }}>
+              {videos.map((video, i) => {
+                const scale = getScale(i);
+                const width = Math.round(300 * scale);
+                return (
+                  <div key={i} style={{ width, minWidth: width, background: '#fff', boxShadow: '0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2)', padding: 5, transition: 'all 0.4s ease' }}>
+                    <div style={{ position: 'relative', background: '#f7f7f7' }}>
+                      <img src={video.img} alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                      <a href="#" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}>
+                        <img src="/iraqi_airways/img/home-video.svg" alt="play" style={{ width: 55, height: 55, cursor: 'pointer' }} />
+                      </a>
+                    </div>
+                    <div style={{ background: '#fff', padding: '10px 8px', fontSize: 13, textAlign: 'right', minHeight: 45 }}>{video.title}</div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Spacer before footer */}
