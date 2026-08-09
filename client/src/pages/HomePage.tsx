@@ -128,9 +128,20 @@ const Home = () => {
               <label style={{ position: 'absolute', top: -10, right: 55, background: '#fff', padding: '0 5px', fontSize: 11, color: '#666' }}>عدد المسافرين</label>
             </div>
 
+            {/* Return Date - only shown for round trip */}
+            {tripType === 'round' && (
+              <div style={{ flex: 1, position: 'relative', border: '1px solid #ccc', borderRadius: 15, padding: '13px 15px', display: 'flex', alignItems: 'center', gap: 8, direction: 'rtl' }}>
+                <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 20 }} />
+                <span style={{ fontSize: 14, color: '#999' }}>📅</span>
+                <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} style={{ border: 'none', outline: 'none', flex: 1, fontFamily: "'Cairo', sans-serif", fontSize: 13, fontWeight: 'bold' }} />
+                <label style={{ position: 'absolute', top: -10, right: 55, background: '#fff', padding: '0 5px', fontSize: 11, color: '#666' }}>تاريخ العودة</label>
+              </div>
+            )}
+
             {/* Departure Date */}
             <div style={{ flex: 1, position: 'relative', border: '1px solid #ccc', borderRadius: 15, padding: '13px 15px', display: 'flex', alignItems: 'center', gap: 8, direction: 'rtl' }}>
-              <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 22 }} />
+              <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 20 }} />
+              <span style={{ fontSize: 14, color: '#999' }}>📅</span>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ border: 'none', outline: 'none', flex: 1, fontFamily: "'Cairo', sans-serif", fontSize: 13, fontWeight: 'bold' }} />
               <label style={{ position: 'absolute', top: -10, right: 55, background: '#fff', padding: '0 5px', fontSize: 11, color: '#666' }}>تاريخ المغادرة</label>
             </div>
