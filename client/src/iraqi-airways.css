@@ -295,11 +295,12 @@ a { text-decoration: none; outline: none; }
 .ia-footer-copyright {
   width: 100%;
   text-align: center;
-  padding: 30px 20px;
-  background: #12470D;
-  color: #bbb;
+  padding: 25px 20px;
+  background: #1a1a1a;
+  color: #fff;
   font-size: 14px;
-  border-top: 3px solid #0d3509;
+  border-top: 1px solid #333;
+  position: relative;
 }
 
 /* More Block Button */
