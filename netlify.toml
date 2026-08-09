@@ -1,26 +1,8 @@
 [build]
-  command = "npm run build"
-  publish = "dist"
-  functions = "netlify/functions"
-
-[functions]
-  node_bundler = "esbuild"
-
-# Friendly path for the offers proxy function
-[[redirects]]
-  from = "/api/offers"
-  to = "/.netlify/functions/offers"
-  status = 200
-
-# Never let the browser cache the HTML entry point. The HTML references
-# content-hashed JS/CSS bundles, so serving a stale index.html is what makes
-# an old app (and old language logic) appear after a new deploy.
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
+  command = "echo 'static build'"
+  publish = "client/public"
 
 [[headers]]
-  for = "/"
+  for = "/*"
   [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
+    Cache-Control = "no-cache"
