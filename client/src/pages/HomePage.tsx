@@ -114,10 +114,10 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Main Row - RTL: From/To (50%) | Dates (25%+25%) | Passengers (col) | Search btn */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', direction: 'rtl' }}>
-          {/* From + Swap + To - col-lg-6 */}
-          <div style={{ width: '50%', paddingLeft: 10 }}>
+        {/* Main Row - RTL: From/To (33%) | Departure (16.5%) | Return (16.5%) | Passengers (16.5%) | Search (16.5%) */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', direction: 'rtl', flexWrap: 'nowrap' }}>
+          {/* From + Swap + To */}
+          <div style={{ width: '33%', paddingLeft: 10 }}>
             <div className="locations-inputs">
               <img className="flight-svg" src="/iraqi_airways/search/imgs/flight-dept.svg" alt="" style={{ width: 22 }} />
               <div className="input-container">
@@ -155,8 +155,8 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Departure Date - col-lg-3 */}
-          <div style={{ width: '12.5%', paddingLeft: 10 }}>
+          {/* Departure Date */}
+          <div style={{ width: '16.75%', paddingLeft: 10 }}>
             <div className="other-inputs">
               <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 22 }} />
               <input className="other-input has-value" type="text" dir="rtl" value={date} onChange={(e) => setDate(e.target.value)} placeholder="mm/dd/yyyy" autoComplete="off" style={{ fontSize: 10 }} />
@@ -167,9 +167,9 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Return Date - col-lg-3 */}
+          {/* Return Date */}
           {tripType === 'round' && (
-            <div style={{ width: '12.5%', paddingLeft: 10 }}>
+            <div style={{ width: '16.75%', paddingLeft: 10 }}>
               <div className="other-inputs">
                 <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 22 }} />
                 <input className="other-input has-value" type="text" dir="rtl" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} placeholder="mm/dd/yyyy" autoComplete="off" style={{ fontSize: 10 }} />
@@ -182,7 +182,7 @@ const Home = () => {
           )}
 
           {/* Passengers */}
-          <div style={{ width: '12.5%', paddingLeft: 10 }}>
+          <div style={{ width: '16.75%', paddingLeft: 10 }}>
             <div className="other-inputs">
               <img src="/iraqi_airways/search/imgs/customers.svg" alt="" style={{ width: 22 }} />
               <input className="other-input has-value" type="text" dir="rtl" value={`${totalPax} مسافر /  الدرجة السياحية`} readOnly style={{ fontSize: 10 }} />
@@ -191,7 +191,7 @@ const Home = () => {
           </div>
 
           {/* Search Button */}
-          <div style={{ width: '12.5%' }}>
+          <div style={{ width: '16.75%' }}>
             <button className="btn-submit" onClick={goToResults}>
               ابحث
               <img src="/iraqi_airways/search/imgs/search.svg" alt="" />
