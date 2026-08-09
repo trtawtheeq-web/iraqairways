@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الوجهات - الخطوط الجوية العراقية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
+body { margin: 0; background: #f5f5f5; direction: rtl; }
+.header { background: #12470D; color: white; padding: 15px 40px; text-align: center; font-size: 20px; }
+.nav { background: white; padding: 10px 40px; border-bottom: 1px solid #ddd; display: flex; justify-content: flex-end; gap: 20px; flex-wrap: wrap; }
+.nav a { text-decoration: none; color: #333; font-size: 14px; }
+.hero { width: 100%; height: 200px; background: url('/iraqi_airways/storage/2024_06_24_12034551011_9189561186268301.png') center/cover; position: relative; }
+.hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; flex-direction: column; color: white; }
+.hero-overlay h2 { font-size: 28px; margin: 0; }
+.hero-overlay p { font-size: 16px; margin: 5px 0; }
+.title-bar { background: #12470D; color: white; padding: 12px 40px; font-size: 18px; margin-bottom: 30px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.search-box { margin-bottom: 20px; text-align: right; }
+.search-box input { padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; width: 250px; font-family: 'Cairo'; }
+.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+.card img { width: 100%; height: 150px; object-fit: cover; }
+.card h3 { font-size: 14px; padding: 10px; margin: 0; }
+.card .btn { display: block; background: #000; color: white; padding: 10px; text-decoration: none; font-weight: bold; margin: 0 15px 15px; border-radius: 5px; }
+.total { text-align: left; padding: 20px; color: #666; }
+.footer { background: #1a1a1a; color: white; padding: 40px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="header">الشركـة العامـة للخطوط الجويـة العراقيـة</div>
+<div class="nav">
+<a href="/">الرئيسية</a>
+<a href="#">الأخبار</a>
+<a href="#">أسطولنا</a>
+<a href="#">اتصل بنا</a>
+<a href="/block.html">الوجهات</a>
+<a href="#">عروض السفر</a>
+</div>
+<div class="hero"><div class="hero-overlay"><h2>معكم الى وجهتكم</h2><p>With you to your destination</p></div></div>
+<div class="title-bar">الوجهات</div>
+<div class="container">
+<div class="search-box"><input type="text" placeholder="البحث عن العنوان"></div>
+<div class="grid">
+<div class="card"><img src="/iraqi_airways/storage/2023_11_30_11909350084.jpg" alt=""><h3>سافر الى العراق</h3><a href="/dest/iraq.html" class="btn">التفاصيل</a></div>
+<div class="card"><img src="/iraqi_airways/upload/2085170361.jpg" alt=""><h3>سافر الى اسطنبول</h3><a href="/dest/istanbul.html" class="btn">التفاصيل</a></div>
+<div class="card"><img src="/iraqi_airways/storage/2024_01_08_11932929276.png" alt=""><h3>سافر الى ماليزيا</h3><a href="/dest/malaysia.html" class="btn">التفاصيل</a></div>
+<div class="card"><img src="/iraqi_airways/storage/2023_11_30_11909341714.jpg" alt=""><h3>سافر الى كوانجو</h3><a href="/dest/guangzhou.html" class="btn">التفاصيل</a></div>
+<div class="card"><img src="/iraqi_airways/storage/2023_12_04_11911776644.jpg" alt=""><h3>سافر الى كوبنهاكن</h3><a href="/dest/copenhagen.html" class="btn">التفاصيل</a></div>
+<div class="card"><img src="/iraqi_airways/storage/2023_11_30_11909368167.jpg" alt=""><h3>سافر الى دبــي</h3><a href="/dest/dubai.html" class="btn">التفاصيل</a></div>
+</div>
+<div class="total">مجموع البيانات: 6</div>
+</div>
+</body>
+</html>
