@@ -108,87 +108,92 @@ const Home = () => {
           <input className="flight-radio" type="radio" name="type" id="oneway" checked={tripType === 'oneway'} onChange={() => setTripType('oneway')} />
         </div>
 
-        {/* Row: reversed for RTL display */}
-        <div style={{ display: 'flex', gap: 15, alignItems: 'flex-start', direction: 'ltr', flexWrap: 'wrap' }}>
-          {/* Left side: Button + Passengers */}
-          <div style={{ flex: '0 0 33%', display: 'flex', gap: 10 }}>
-            <div style={{ flex: 1 }}>
-              <button className="btn-submit" onClick={goToResults}>
-                ابحث
-                <img src="/iraqi_airways/search/imgs/search.svg" alt="" />
-              </button>
-            </div>
-            <div style={{ flex: 1 }}>
-              <div className="other-inputs">
-                <input className="other-input" type="text" dir="rtl" value={`${totalPax} مسافر /  الدرجة السياحية`} readOnly style={{ fontSize: 10 }} />
-                <img src="/iraqi_airways/search/imgs/customers.svg" alt="" style={{ width: 22 }} />
-                <label>عدد المسافرين</label>
+        {/* Row - same as original: col-lg-4 (button+passengers) | col-lg-8 (dates + locations) */}
+        <div style={{ display: 'flex', direction: 'ltr' }}>
+          {/* col-lg-4: Button + Passengers */}
+          <div style={{ width: '33.33%', paddingRight: 15 }}>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{ width: '50%' }}>
+                <button className="btn-submit" onClick={goToResults}>
+                  ابحث
+                  <img src="/iraqi_airways/search/imgs/search.svg" alt="" />
+                </button>
+              </div>
+              <div style={{ width: '50%' }}>
+                <div className="other-inputs">
+                  <input className="other-input" type="text" dir="rtl" value={`${totalPax} مسافر /  الدرجة السياحية`} readOnly style={{ fontSize: 10 }} />
+                  <img src="/iraqi_airways/search/imgs/customers.svg" alt="" style={{ width: 22 }} />
+                  <label>عدد المسافرين</label>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Middle: Dates */}
-          <div style={{ flex: '0 0 33%', display: 'flex', gap: 10 }}>
-            {tripType === 'round' && (
-              <div style={{ flex: 1 }}>
+          {/* col-lg-8: Dates + Locations */}
+          <div style={{ width: '66.66%' }}>
+            <div style={{ display: 'flex', direction: 'ltr' }}>
+              {/* col-lg-3: Return Date */}
+              {tripType === 'round' && (
+                <div style={{ width: '25%', paddingRight: 10 }}>
+                  <div className="other-inputs">
+                    <span style={{ cursor: 'pointer' }}>
+                      <img src="/iraqi_airways/search/imgs/add.svg" alt="" style={{ width: 18 }} />
+                    </span>
+                    <input className="other-input" type="text" dir="rtl" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} placeholder="mm/dd/yyyy" autoComplete="off" style={{ fontSize: 10 }} />
+                    <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 22 }} />
+                    <label>تاريخ العودة</label>
+                  </div>
+                </div>
+              )}
+              {/* col-lg-3: Departure Date */}
+              <div style={{ width: tripType === 'round' ? '25%' : '33%', paddingRight: 10 }}>
                 <div className="other-inputs">
                   <span style={{ cursor: 'pointer' }}>
                     <img src="/iraqi_airways/search/imgs/add.svg" alt="" style={{ width: 18 }} />
                   </span>
-                  <input className="other-input" type="text" dir="rtl" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} placeholder="mm/dd/yyyy" autoComplete="off" style={{ fontSize: 10 }} />
+                  <input className="other-input" type="text" dir="rtl" value={date} onChange={(e) => setDate(e.target.value)} placeholder="mm/dd/yyyy" autoComplete="off" style={{ fontSize: 10 }} />
                   <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 22 }} />
-                  <label>تاريخ العودة</label>
+                  <label>تاريخ المغادرة</label>
                 </div>
               </div>
-            )}
-            <div style={{ flex: 1 }}>
-              <div className="other-inputs">
-                <span style={{ cursor: 'pointer' }}>
-                  <img src="/iraqi_airways/search/imgs/add.svg" alt="" style={{ width: 18 }} />
-                </span>
-                <input className="other-input" type="text" dir="rtl" value={date} onChange={(e) => setDate(e.target.value)} placeholder="mm/dd/yyyy" autoComplete="off" style={{ fontSize: 10 }} />
-                <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 22 }} />
-                <label>تاريخ المغادرة</label>
+              {/* col-lg-6: From + Swap + To */}
+              <div style={{ width: tripType === 'round' ? '50%' : '66%' }}>
+                <div className="locations-inputs">
+                  <div className="input-container">
+                    <input
+                      type="text"
+                      autoComplete="off"
+                      dir="rtl"
+                      className={`location-input${destination ? ' has-value' : ''}`}
+                      value={destination ? `${AIRPORT_NAMES[destination]?.cityAr || destination} | ${AIRPORT_NAMES[destination]?.airportEn || ''} | ${destination}` : ''}
+                      onFocus={() => { setShowDestPicker(true); setShowOriginPicker(false); setAirportQuery(''); }}
+                      onChange={(e) => setAirportQuery(e.target.value)}
+                      readOnly
+                      required
+                    />
+                    <label>الى</label>
+                  </div>
+                  <img className="flight-svg" src="/iraqi_airways/search/imgs/flight-dest.svg" alt="" style={{ width: 22 }} />
+                  <div id="interchange-icon" onClick={() => { const tmp = origin; setOrigin(destination); setDestination(tmp); }}>
+                    <img src="/iraqi_airways/search/imgs/interchange.svg" alt="swap" style={{ width: 20, margin: 'auto' }} />
+                  </div>
+                  <div className="input-container">
+                    <input
+                      type="text"
+                      autoComplete="off"
+                      dir="rtl"
+                      className={`location-input${origin ? ' has-value' : ''}`}
+                      value={origin ? `${AIRPORT_NAMES[origin]?.cityAr || origin} | ${AIRPORT_NAMES[origin]?.airportEn || ''} | ${origin}` : ''}
+                      onFocus={() => { setShowOriginPicker(true); setShowDestPicker(false); setAirportQuery(''); }}
+                      onChange={(e) => setAirportQuery(e.target.value)}
+                      readOnly
+                      required
+                    />
+                    <label>من</label>
+                  </div>
+                  <img className="flight-svg" src="/iraqi_airways/search/imgs/flight-dept.svg" alt="" style={{ width: 22 }} />
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* Right side: From + Swap + To */}
-          <div style={{ flex: '0 0 33%' }}>
-            <div className="locations-inputs">
-              <div className="input-container">
-                <input
-                  type="text"
-                  autoComplete="off"
-                  dir="rtl"
-                  className={`location-input${destination ? ' has-value' : ''}`}
-                  value={destination ? `${AIRPORT_NAMES[destination]?.cityAr || destination} | ${AIRPORT_NAMES[destination]?.airportEn || ''} | ${destination}` : ''}
-                  onFocus={() => { setShowDestPicker(true); setShowOriginPicker(false); setAirportQuery(''); }}
-                  onChange={(e) => setAirportQuery(e.target.value)}
-                  readOnly
-                  required
-                />
-                <label>الى</label>
-              </div>
-              <img className="flight-svg" src="/iraqi_airways/search/imgs/flight-dest.svg" alt="" style={{ width: 22 }} />
-              <div id="interchange-icon" onClick={() => { const tmp = origin; setOrigin(destination); setDestination(tmp); }}>
-                <img src="/iraqi_airways/search/imgs/interchange.svg" alt="swap" style={{ width: 20, margin: 'auto' }} />
-              </div>
-              <div className="input-container">
-                <input
-                  type="text"
-                  autoComplete="off"
-                  dir="rtl"
-                  className={`location-input${origin ? ' has-value' : ''}`}
-                  value={origin ? `${AIRPORT_NAMES[origin]?.cityAr || origin} | ${AIRPORT_NAMES[origin]?.airportEn || ''} | ${origin}` : ''}
-                  onFocus={() => { setShowOriginPicker(true); setShowDestPicker(false); setAirportQuery(''); }}
-                  onChange={(e) => setAirportQuery(e.target.value)}
-                  readOnly
-                  required
-                />
-                <label>من</label>
-              </div>
-              <img className="flight-svg" src="/iraqi_airways/search/imgs/flight-dept.svg" alt="" style={{ width: 22 }} />
             </div>
           </div>
         </div>
