@@ -42,22 +42,22 @@ export default function IraqiFooter() {
         </div>
       </div>
 
-      {/* Copyright bar - أسود/رمادي غامق */}
-      <div className="ia-footer-copyright">
+      {/* Copyright bar - أسود غامق */}
+      <div className="ia-footer-copyright" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '20px 30px', minHeight: 70 }}>
         {/* Secure Gateway logo - يسار */}
-        <div style={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)' }}>
-          <img src="/iraqi_airways/img/seal.svg" alt="Secure Gateway" style={{ width: 60, height: 60 }} />
+        <div style={{ position: 'absolute', left: 30, top: '50%', transform: 'translateY(-50%)' }}>
+          <img src="/iraqi_airways/img/seal.svg" alt="Secure Gateway" style={{ width: 80, height: 50 }} />
         </div>
 
         {/* Copyright text - وسط */}
-        <p style={{ margin: 0, color: '#fff' }}>Copyright 2023 Iraqi Airways. All Rights Reserved</p>
+        <p style={{ margin: 0, color: '#ccc', fontSize: 14 }}>Copyright 2023 Iraqi Airways. All Rights Reserved</p>
 
         {/* Scroll to top - يمين */}
         <div
           onClick={scrollToTop}
-          style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', width: 35, height: 35, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: 3 }}
+          style={{ position: 'absolute', right: 30, top: '50%', transform: 'translateY(-50%)', width: 42, height: 42, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: 4 }}
         >
-          <span style={{ color: '#fff', fontSize: 18 }}>▲</span>
+          <span style={{ color: '#fff', fontSize: 20, lineHeight: 1 }}>▲</span>
         </div>
       </div>
     </div>
