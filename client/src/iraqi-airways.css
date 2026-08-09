@@ -255,7 +255,7 @@ a { text-decoration: none; outline: none; }
 
 /* Footer */
 .ia-footer {
-  background-image: url('/iraqi_airways/upload/footerbg.jpg');
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/iraqi_airways/upload/footerbg.jpg');
   background-size: cover;
   background-position: center;
   padding: 40px 0;
@@ -264,6 +264,7 @@ a { text-decoration: none; outline: none; }
   flex-wrap: wrap;
   justify-content: center;
   gap: 40px;
+  position: relative;
 }
 .ia-footer-column {
   width: 300px;

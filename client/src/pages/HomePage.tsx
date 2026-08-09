@@ -244,6 +244,32 @@ const Home = () => {
       {/* Spacer */}
       <div style={{ height: 90 }} />
 
+      {/* Video Section */}
+      <div className="ia-video-section">
+        <div style={{ display: 'flex', gap: 20, overflowX: 'auto', padding: '20px 0' }}>
+          {[
+            { img: '/iraqi_airways/storage/2026_04_15_12433697297_2391752756060119.jpg', title: 'حجزك صار أسهل حمل تطبيق الخطوط الجوية العراقية الآن وتابع رحلتك بلمسة واحدة' },
+            { img: '/iraqi_airways/storage/2026_04_15_12433695358_5973473661476531.jpg', title: 'مكتب حجز الكاظمية' },
+            { img: '/iraqi_airways/storage/2025_11_03_12335171618_4853576864509864.jpg', title: 'إدارة الخطوط الجوية العراقية تعلن وصول دفعة جديدة من المعدات الحديثة' },
+            { img: '/iraqi_airways/storage/2024_10_08_12098629634_4391046425986587.jpg', title: 'حجزك صار أسهل حمل تطبيق الخطوط الجوية العراقية' },
+            { img: '/iraqi_airways/storage/2024_10_20_12105878050_1691681420242010.jpg', title: 'المنتخب الوطني يثني على جهود الخطوط الجوية العراقية' },
+          ].map((video, i) => (
+            <div key={i} style={{ minWidth: 200, maxWidth: 200, background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.14)', padding: 5 }}>
+              <div style={{ position: 'relative' }}>
+                <img src={video.img} alt="" style={{ width: '100%', height: 'auto' }} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}>
+                  <img src="/iraqi_airways/img/home-video.svg" alt="play" style={{ width: 55, height: 55, cursor: 'pointer' }} />
+                </div>
+              </div>
+              <div style={{ padding: '8px 5px', fontSize: 12, textAlign: 'right', minHeight: 40 }}>{video.title}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Spacer before footer */}
+      <div style={{ height: 10 }} />
+
       {/* Iraqi Footer */}
       <IraqiFooter />
     </div>
