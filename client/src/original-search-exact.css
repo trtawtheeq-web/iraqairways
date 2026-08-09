@@ -1,0 +1,307 @@
+
+
+
+* {
+    font-family: 'Cairo', sans-serif;
+}
+
+.main-container {
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    background:#fff;
+    padding: 50px 20px;
+    width: 100%;
+    height: auto;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+#interchange-icon {
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 6px 8px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.locations-inputs {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    width: 100%;
+    padding: 5px 5px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: auto;
+}
+
+.input-container{
+    flex: 1;
+    position: relative;
+    margin: 0 5px;
+}
+
+.locations-inputs label {
+    position: absolute;
+    pointer-events: none;
+    left: 10px;
+    top: 10px;
+    transition: 0.2s;
+    font-size: 14px;
+    z-index:99999999999;
+}
+
+.locations-inputs input[type="text"] {
+    border: none;
+    padding: 10px;
+    outline: none;
+    width: 100%;
+    font-weight: bold;
+        z-index:99999999999;
+}
+
+.location-input:focus~label,
+.location-input:valid~label {
+    top: -15px;
+    left: 15px;
+    color: black !important;
+    background-color: #fff;
+    padding: 0 5px 0 5px;
+    font-size: 11px;
+        z-index:99999999999;
+}
+
+.other-inputs label {
+    position: absolute;
+    pointer-events: none;
+    right: 55px;
+    top: 17px;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.other-input:focus~label,
+.other-input:valid~label {
+    top: -12px;
+    left: 65px;
+    color: black !important;
+    background-color: #fff;
+    padding: 0 5px 0 5px;
+    font-size: 11px;
+}
+
+.flight-svg {
+    margin-right: 20px;
+}
+
+.flight-data-popup-container {
+    position: relative;
+        z-index:999;
+}
+
+.flights-data-container {
+    width: 100%;
+    position: absolute;
+    top: -30px;
+    left: 0;
+    margin-top: 15px;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    background-color: white;
+   
+}
+
+.flights-data-data {
+    position: static;
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #333 #999;
+ 
+}
+
+.flights-data-data:-webkit-scrollbar-thumb {
+    background-color: #333;
+}
+
+.flights-data-data:-webkit-scrollbar-track {
+    background-color: #999;
+}
+
+.flights-data-data:-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.flights-data-header {
+    background-color: #F5F5F5;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+}
+
+.flights-data-data-single .row .col-7 {
+    text-align: right;
+}
+
+.flights-data-data-single {
+    border-bottom: 1px solid lightgrey;
+    padding: 15px 5px;
+    cursor: pointer;
+}
+
+.flight-loc-code {
+    background-color: #707070;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 10px;
+}
+
+.flight-loc-name-english {
+    margin-top: 10px;
+    color: gray;
+    font-size: 13px;
+}
+
+.other-inputs {
+    text-align: right;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    width: 100%;
+    height: auto;
+    padding: 5px 7px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.other-inputs input {
+    border: none;
+    padding: 10px;
+    outline: none;
+    width: 100%;
+    font-weight: bold;
+}
+
+.btn-submit {
+    background-color: #135205;
+    color: white;
+    padding: 13px;
+    border-radius: 15px;
+    width: 100%;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+}
+
+.invisible-date-input {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.passenger-selection-popup {
+    position: relative;
+      z-index:999;
+}
+
+.passenger_selection {
+    width: 100%;
+    position: absolute;
+    top: -10px;
+    left: 0;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+.psngr-age-section {
+    text-align: right;
+}
+
+.psngr-age-arabic {
+    font-weight: bold;
+}
+
+.psngr-age-number {
+    color: gray;
+    font-size: 12px;
+}
+
+.inc-dec-btn {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 35px;
+    padding: 3px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.plus-btn {
+    background-color: #135205;
+    color: white;
+}
+
+.minus-btn {
+    background-color: #F5F5F5;
+}
+
+.passenger-class {
+    border: 1px solid lightgray;
+    margin: auto;
+    border-radius: 15px;
+    font-size: 15px;
+    color: gray;
+}
+
+.passenger-class-radio-container {
+    padding: 8px;
+}
+
+@media (max-width: 767px) {
+    .main-container {
+        width: 100%;
+    }
+}
+
+.flights-data-data::-webkit-scrollbar {
+    width: 10px;
+}
+
+.flights-data-data::-webkit-scrollbar-track {
+    background-color: white;
+}
+
+.flights-data-data::-webkit-scrollbar-thumb {
+    background-color: #E6E2EE;
+    border-radius: 5px;
+}
+
+.flights-data-data::-webkit-scrollbar-thumb:hover {
+    background-color: #E6E2EE;
+}
+
+.flight-radio {
+    width: 1.2em;
+    height: 1.2em;
+    accent-color: #056B2E;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.label-radio {
+    padding-bottom: 20px;
+    cursor: pointer;
+}
+
+
+
