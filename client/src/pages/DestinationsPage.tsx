@@ -3,12 +3,12 @@ import IraqiHeader from '../components/iraqi/IraqiHeader';
 import IraqiFooter from '../components/iraqi/IraqiFooter';
 
 const allDestinations = [
-  { title: 'سافر الى كوانجو', img: '/iraqi_airways/storage/2023_11_30_11909341714.jpg' },
-  { title: 'سافر الى العراق', img: '/iraqi_airways/storage/2023_11_30_11909350084.jpg' },
-  { title: 'سافر الى اسطنبول', img: '/iraqi_airways/upload/2085170361.jpg' },
-  { title: 'سافر الى دبــي', img: '/iraqi_airways/storage/2023_11_30_11909368167.jpg' },
-  { title: 'سافر الى ماليزيا', img: '/iraqi_airways/storage/2024_01_08_11932929276.png' },
-  { title: 'سافر الى كوبنهاكن', img: '/iraqi_airways/storage/2023_12_04_11911776644.jpg' },
+  { title: 'سافر الى كوانجو', img: '/iraqi_airways/storage/2023_11_30_11909341714.jpg', slug: 'guangzhou' },
+  { title: 'سافر الى العراق', img: '/iraqi_airways/storage/2023_11_30_11909350084.jpg', slug: 'iraq' },
+  { title: 'سافر الى اسطنبول', img: '/iraqi_airways/upload/2085170361.jpg', slug: 'istanbul' },
+  { title: 'سافر الى دبــي', img: '/iraqi_airways/storage/2023_11_30_11909368167.jpg', slug: 'dubai' },
+  { title: 'سافر الى ماليزيا', img: '/iraqi_airways/storage/2024_01_08_11932929276.png', slug: 'malaysia' },
+  { title: 'سافر الى كوبنهاكن', img: '/iraqi_airways/storage/2023_12_04_11911776644.jpg', slug: 'copenhagen' },
 ];
 
 export default function DestinationsPage() {
@@ -49,7 +49,8 @@ export default function DestinationsPage() {
             <img src={dest.img} alt={dest.title} style={{ width: '100%', height: 140, objectFit: 'cover' }} />
             <div style={{ padding: '10px 15px' }}>
               <p style={{ margin: '10px 0', fontSize: 15, fontWeight: 500 }}>{dest.title}</p>
-              <button
+              <a
+                href={`/dest/${dest.slug}`}
                 style={{
                   background: '#000',
                   color: '#fff',
@@ -58,10 +59,12 @@ export default function DestinationsPage() {
                   fontSize: 14,
                   cursor: 'pointer',
                   fontFamily: "'Cairo', sans-serif",
+                  textDecoration: 'none',
+                  display: 'inline-block',
                 }}
               >
                 التفاصيل
-              </button>
+              </a>
             </div>
           </div>
         ))}

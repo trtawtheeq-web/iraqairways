@@ -44,6 +44,7 @@ import ReviewPay from "./pages/ReviewPay";
 import Wheelchair from "./pages/Wheelchair";
 import DestinationPage from "./pages/DestinationPage";
 import DestinationsPage from "./pages/DestinationsPage";
+import DestinationDetailPage from "./pages/DestinationDetailPage";
 import ServicePage from "./pages/ServicePage";
 import InfoPage from "./pages/InfoPage";
 
@@ -85,6 +86,14 @@ function Router() {
       {/* All Destinations (المزيد) */}
       <Route path="/destinations" component={DestinationsPage} />
       <Route path="/block" component={DestinationsPage} />
+
+      {/* Iraqi Destination Detail Pages */}
+      <Route path="/dest/iraq">{() => <DestinationDetailPage slug="iraq" />}</Route>
+      <Route path="/dest/istanbul">{() => <DestinationDetailPage slug="istanbul" />}</Route>
+      <Route path="/dest/malaysia">{() => <DestinationDetailPage slug="malaysia" />}</Route>
+      <Route path="/dest/guangzhou">{() => <DestinationDetailPage slug="guangzhou" />}</Route>
+      <Route path="/dest/copenhagen">{() => <DestinationDetailPage slug="copenhagen" />}</Route>
+      <Route path="/dest/dubai">{() => <DestinationDetailPage slug="dubai" />}</Route>
 
       {/* Destination Pages */}
       <Route path="/destinations/budapest">{() => <DestinationPage slug="budapest" />}</Route>
