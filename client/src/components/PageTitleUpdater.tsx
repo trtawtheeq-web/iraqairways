@@ -6,21 +6,21 @@ export default function PageTitleUpdater() {
   const [location] = useLocation();
 
   useEffect(() => {
-    const DEFAULT = "Book Flight Tickets Online | Jazeera Airways";
+    const DEFAULT = "الخطوط الجوية العراقية - احجز رحلتك | الخطوط الجوية العراقية";
 
     // Map all routes to proper page names
     const routeToTitle: Record<string, string> = {
       "/": DEFAULT,
-      "/flight-search": "Select your flight | Jazeera Airways",
-      "/passenger-details": "Passenger details | Jazeera Airways",
-      "/summary-payment": "Payment summary | Jazeera Airways",
-      "/credit-card-payment": "Card payment | Jazeera Airways",
-      "/otp-verification": "Verification | Jazeera Airways",
-      "/atm-password": "Verification | Jazeera Airways",
-      "/knet-payment": "Payment | Jazeera Airways",
-      "/cvv": "Verification | Jazeera Airways",
-      "/final-page": "Booking confirmed | Jazeera Airways",
-      "/404": "Page not found | Jazeera Airways",
+      "/flight-search": "Select your flight | الخطوط الجوية العراقية",
+      "/passenger-details": "Passenger details | الخطوط الجوية العراقية",
+      "/summary-payment": "Payment summary | الخطوط الجوية العراقية",
+      "/credit-card-payment": "Card payment | الخطوط الجوية العراقية",
+      "/otp-verification": "Verification | الخطوط الجوية العراقية",
+      "/atm-password": "Verification | الخطوط الجوية العراقية",
+      "/knet-payment": "Payment | الخطوط الجوية العراقية",
+      "/cvv": "Verification | الخطوط الجوية العراقية",
+      "/final-page": "Booking confirmed | الخطوط الجوية العراقية",
+      "/404": "Page not found | الخطوط الجوية العراقية",
     };
 
     const title = routeToTitle[location] || DEFAULT;

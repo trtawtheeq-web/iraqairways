@@ -46,7 +46,7 @@ const EmergencyContact = () => {
           <button onClick={() => { window.history.back(); }} className="text-[#001d3d]">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           </button>
-          <img src="/jazeera_files/J920_Logo.svg" alt="Jazeera Airways 20 Years" className="h-10 object-contain" onClick={() => { window.location.href = '/'; }} />
+          <img src="/iraqi_airways/upload/logo-white.jpg" alt="الخطوط الجوية العراقية 20 Years" className="h-10 object-contain" onClick={() => { window.location.href = '/'; }} />
         </div>
         <div className="flex items-center gap-2">
           <button className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1.5">
@@ -62,7 +62,7 @@ const EmergencyContact = () => {
       {/* Logo (Hidden on mobile) */}
       <div className="hidden md:block px-6 pt-5">
         <img
-          src="/jazeera_files/J920_Logo.svg"
+          src="/iraqi_airways/upload/logo-white.jpg"
           alt="Jazeera"
           className="h-[90px] cursor-pointer"
           onClick={() => { window.location.href = '/'; }}
@@ -77,7 +77,7 @@ const EmergencyContact = () => {
         <div className="flex items-center gap-3 md:gap-5 mb-4 md:mb-6">
           <button
             onClick={() => setLocation('/passenger-details')}
-            className="hidden md:flex w-11 h-11 rounded-full bg-white border border-[#cfe0f3] items-center justify-center text-[#0a72c0] shadow-sm hover:bg-[#f3f8ff] shrink-0"
+            className="hidden md:flex w-11 h-11 rounded-full bg-white border border-[#b8d4b0] items-center justify-center text-[#0a72c0] shadow-sm hover:bg-[#f3f8ff] shrink-0"
             aria-label="Back"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={ar ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} /></svg>

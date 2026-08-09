@@ -1,0 +1,346 @@
+/* Iraqi Airways Global Styles - matching iraqiairways.com.iq */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap');
+
+* { font-family: 'Cairo', sans-serif; }
+a { text-decoration: none; outline: none; }
+
+/* Top Banner */
+.ia-banner {
+  position: relative;
+  width: 100%;
+  height: 75px;
+  user-select: none;
+  background-image: linear-gradient(#12470d, #12470d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9;
+}
+.ia-banner p {
+  font-size: 20px;
+  color: #fff;
+  line-height: 35px;
+  padding: 0;
+  margin: 0;
+}
+.ia-banner .ia-socialMedia {
+  position: absolute;
+  left: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  background: transparent;
+}
+.ia-banner .ia-socialMedia .customizeSquare {
+  width: 40px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ia-banner .ia-socialMedia .customizeSquare:hover {
+  opacity: 0.7;
+  transition: opacity 0.3s linear;
+}
+.ia-socialMedia img {
+  width: 20px;
+  height: 20px;
+}
+.ia-banner .ia-headerLogo {
+  position: absolute;
+  right: 120px;
+  top: 0px;
+  height: 75px;
+  width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ia-headerLogo > img {
+  height: 75px;
+  width: auto;
+}
+
+/* Navigation Menu */
+.ia-menu {
+  display: block;
+  width: 100%;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 3.5px 2px -2px;
+  background: #EFEFDB;
+  z-index: 5;
+}
+.ia-menu .nav-btn {
+  width: 75%;
+  height: 100%;
+  display: inline-block;
+}
+.ia-menu .search-box {
+  position: relative;
+  width: 25%;
+  height: 60px;
+  background: #EFEFDB;
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ia-menu .search-box > input[type=text] {
+  width: 100%;
+  border-radius: 25px;
+  border: 1px solid #000000;
+  color: #000000;
+  background: transparent;
+  padding: 0px 15px;
+  outline: none;
+  height: 50px;
+  -webkit-appearance: none;
+  margin: 0 20px;
+}
+.ia-menu .nav-btn ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.ia-menu .nav-btn p {
+  padding: 0;
+  margin: 0;
+}
+.ia-menu .nav-link {
+  position: relative;
+}
+.ia-menu .nav-link > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  text-decoration: none;
+  color: #000000;
+  height: 60px;
+  white-space: nowrap;
+}
+.ia-menu .nav-link:hover > a {
+  background-color: #12470D;
+  color: #FFFFFF;
+}
+
+/* Hero Banner */
+.ia-hero {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  background-image: linear-gradient(#fff, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ia-hero img {
+  width: 100%;
+  height: 550px;
+  object-fit: cover;
+}
+
+/* Search Form Container */
+.ia-search-container {
+  position: relative;
+  width: 85%;
+  margin: -160px auto 50px auto;
+  direction: ltr;
+  background: transparent;
+  z-index: 3;
+}
+.ia-search-container .main-container {
+  border-radius: 15px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  margin: auto;
+  background: #fff;
+  padding: 50px 20px;
+  width: 100%;
+  height: auto;
+}
+
+/* Search Button */
+.ia-btn-submit {
+  background-color: #135205;
+  color: white;
+  padding: 13px;
+  border-radius: 15px;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+.ia-btn-submit:hover {
+  background-color: #0e3d04;
+}
+
+/* News Ticker */
+.ia-ticker {
+  position: relative;
+  display: block;
+  margin: auto;
+  width: 85%;
+  user-select: none;
+  background: #FFFFFF;
+  border: 2px solid #12470D;
+  border-radius: 0;
+  overflow: hidden;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+.ia-ticker .bn-label {
+  background: #12470D;
+  color: #FFFFFF;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.ia-ticker .bn-news {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 15px;
+}
+
+/* Production/Destinations Grid */
+.ia-production {
+  width: 100%;
+  background: #eeeff1;
+  display: grid;
+  grid-template-columns: 333px 333px 333px;
+  align-content: center;
+  justify-content: center;
+  gap: 50px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+.ia-production-element {
+  background: #fff;
+  box-shadow: 0 0.2rem 0.4rem rgba(0,0,0,.19);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.ia-production-element:hover {
+  box-shadow: 0 0.2rem 0.4rem rgba(0,0,0,.40);
+}
+.ia-production-element-image {
+  width: 100%;
+  height: 140px;
+}
+.ia-production-element-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.ia-production-element-description {
+  color: #000;
+  min-height: 100px;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Footer */
+.ia-footer {
+  background-image: url('/iraqi_airways/upload/footerbg.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 40px 0;
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+.ia-footer-column {
+  width: 300px;
+  padding: 0 20px;
+}
+.ia-footer-column p {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.ia-footer-column span {
+  display: block;
+  color: #ccc;
+  font-size: 13px;
+  padding: 5px 0;
+}
+.ia-footer-column span a {
+  color: #ccc;
+}
+.ia-footer-column span a:hover {
+  color: #fff;
+}
+.ia-footer-column hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  margin: 5px 0;
+}
+.ia-footer-copyright {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background: #0a2e08;
+  color: #aaa;
+  font-size: 13px;
+}
+
+/* More Block Button */
+.ia-more-block {
+  width: 320px;
+  margin: auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #000;
+  border: 1px solid #aaa;
+  border-radius: 0px;
+  cursor: pointer;
+}
+.ia-more-block:hover {
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+/* Video Section */
+.ia-video-section {
+  position: relative;
+  display: block;
+  margin: auto;
+  width: 85%;
+  user-select: none;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .ia-banner .ia-socialMedia { left: 0px; top: -10px; }
+  .ia-socialMedia img { width: 16px; height: 16px; }
+  .ia-banner .ia-headerLogo { right: 0px; }
+  .ia-banner p { font-size: 13px; }
+  .ia-menu .nav-btn { display: none; }
+  .ia-menu .search-box { width: 90%; }
+  .ia-production { grid-template-columns: repeat(auto-fill, 346px); }
+}
+@media (max-width: 700px) {
+  .ia-search-container { width: 99%; margin: -100px auto 50px auto; }
+  .ia-hero img { width: 100%; height: auto; }
+  .ia-video-section { width: 95%; display: block; }
+  .ia-ticker { width: 100%; }
+}

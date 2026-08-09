@@ -185,7 +185,7 @@ export default function ReviewPay() {
       {/* Desktop Top bar */}
       <div className="hidden md:flex bg-white px-6 py-3 items-center">
         <img
-          src="/jazeera_files/J920_Logo.svg"
+          src="/iraqi_airways/upload/logo-white.jpg"
           alt="Jazeera"
           className="h-20 cursor-pointer"
           onClick={() => { window.location.href = '/'; }}

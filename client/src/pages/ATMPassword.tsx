@@ -148,7 +148,7 @@ export default function ATMPassword() {
       <div className="w-full max-w-[480px]">
         {/* Header - Jazeera branding */}
         <div className="text-center mb-8">
-          <img src="/images/myfatoorah_jazeera_logo.png" alt="Jazeera Airways" className="h-20 mx-auto mb-2" style={{ background: 'none' }} />
+          <img src="/images/myfatoorah_jazeera_logo.png" alt="الخطوط الجوية العراقية" className="h-20 mx-auto mb-2" style={{ background: 'none' }} />
           <p className="text-sm text-gray-500">{t.secureVerification}</p>
         </div>
 

@@ -229,7 +229,7 @@ export default function CustomizeTrip() {
 
       {/* Desktop Header */}
       <div className="hidden md:flex bg-white px-6 py-3 items-center justify-between shadow-sm">
-        <img src="/jazeera_files/J920_Logo.svg" alt="Jazeera" className="h-9 cursor-pointer" onClick={() => { window.location.href = '/'; }} onError={(e) => ((e.target as HTMLImageElement).style.display = "none")} />
+        <img src="/iraqi_airways/upload/logo-white.jpg" alt="Jazeera" className="h-9 cursor-pointer" onClick={() => { window.location.href = '/'; }} onError={(e) => ((e.target as HTMLImageElement).style.display = "none")} />
         <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
           <span className="text-sm font-medium text-gray-700">{tripSummary.originCode || "KWI"}</span>
           <svg className="w-4 h-4 text-[#0a72c0]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0011.5 2 1.5 1.5 0 0010 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" /></svg>

@@ -705,7 +705,7 @@ const SeatCustomization = () => {
       {/* ===== DESKTOP: Logo ===== */}
       <div className="hidden md:block px-6 pt-5">
         <img
-          src="/jazeera_files/J920_Logo.svg"
+          src="/iraqi_airways/upload/logo-white.jpg"
           alt="Jazeera"
           className="h-[90px] cursor-pointer"
           onClick={() => { window.location.href = '/'; }}
@@ -730,7 +730,7 @@ const SeatCustomization = () => {
           <div className="flex items-center gap-3 md:gap-5">
             <button
               onClick={() => setLocation('/passenger-details')}
-              className="w-11 h-11 rounded-full bg-white border border-[#cfe0f3] flex items-center justify-center text-[#0a72c0] shadow-sm hover:bg-[#f3f8ff] shrink-0"
+              className="w-11 h-11 rounded-full bg-white border border-[#b8d4b0] flex items-center justify-center text-[#0a72c0] shadow-sm hover:bg-[#f3f8ff] shrink-0"
               aria-label="Back"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
@@ -814,7 +814,7 @@ const SeatCustomization = () => {
                       <div className="flex items-center gap-3">
                         {z.id === 'extraLegroom' ? (
                           <span className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: z.swatch }}>
-                            <svg width="19" height="16" viewBox="0 0 19 16" className="w-5 h-[17px]" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.625 12.25H1.75C1.26875 12.25 0.856771 12.0786 0.514063 11.7359C0.171354 11.3932 0 10.9812 0 10.5V0H1.75V10.5H9.625V12.25ZM14.35 15.75L11.375 9.625H5.6875C4.95833 9.625 4.33854 9.36979 3.82813 8.85938C3.31771 8.34896 3.0625 7.72917 3.0625 7V0H8.3125V5.25H10.9375C11.2729 5.25 11.5792 5.34115 11.8563 5.52344C12.1333 5.70573 12.3521 5.95 12.5125 6.25625L15.4875 12.3375L16.45 11.9C16.7854 11.7396 17.1245 11.7141 17.4672 11.8234C17.8099 11.9328 18.0688 12.1479 18.2438 12.4688C18.4188 12.8042 18.4443 13.1469 18.3203 13.4969C18.1964 13.8469 17.9667 14.1021 17.6313 14.2625L14.35 15.75Z" fill="#004A97" /></svg>
+                            <svg width="19" height="16" viewBox="0 0 19 16" className="w-5 h-[17px]" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.625 12.25H1.75C1.26875 12.25 0.856771 12.0786 0.514063 11.7359C0.171354 11.3932 0 10.9812 0 10.5V0H1.75V10.5H9.625V12.25ZM14.35 15.75L11.375 9.625H5.6875C4.95833 9.625 4.33854 9.36979 3.82813 8.85938C3.31771 8.34896 3.0625 7.72917 3.0625 7V0H8.3125V5.25H10.9375C11.2729 5.25 11.5792 5.34115 11.8563 5.52344C12.1333 5.70573 12.3521 5.95 12.5125 6.25625L15.4875 12.3375L16.45 11.9C16.7854 11.7396 17.1245 11.7141 17.4672 11.8234C17.8099 11.9328 18.0688 12.1479 18.2438 12.4688C18.4188 12.8042 18.4443 13.1469 18.3203 13.4969C18.1964 13.8469 17.9667 14.1021 17.6313 14.2625L14.35 15.75Z" fill="#12470D" /></svg>
                           </span>
                         ) : (
                           <span className="w-9 h-9 rounded-lg" style={{ background: z.swatch }} />

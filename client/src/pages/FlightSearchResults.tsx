@@ -535,13 +535,13 @@ const FlightSearchResults = () => {
     <div className="min-h-screen bg-[#EBF3FF] font-avenir" dir={dir}>
       {/* Mobile Top Bar - matches original: back arrow + route pill + KWD */}
       <div className="md:hidden w-full py-3 px-4 flex items-center justify-between sticky top-0 z-[9999] bg-[#EBF3FF]">
-        <button onClick={() => { if (detailsFlight) { setDetailsFlight(null); } else if (expandedId) { setExpandedId(null); } else { window.location.href = '/'; } }} className="w-9 h-9 rounded-full border border-[#004A97]/30 flex items-center justify-center bg-white">
-          <svg className="w-4 h-4 text-[#004A97]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        <button onClick={() => { if (detailsFlight) { setDetailsFlight(null); } else if (expandedId) { setExpandedId(null); } else { window.location.href = '/'; } }} className="w-9 h-9 rounded-full border border-[#12470D]/30 flex items-center justify-center bg-white">
+          <svg className="w-4 h-4 text-[#12470D]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
         <button onClick={openSmoothPlanning} className="flex items-center gap-2 bg-white rounded-full px-5 py-2.5 border border-[#b8dff5] shadow-[0_0_0_3px_rgba(184,223,245,0.3)]">
-          <span className="text-[#004A97] text-sm font-semibold">{currentLeg.origin}</span>
-          <svg className="w-4 h-4 text-[#004A97]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5L21 16z"/></svg>
-          <span className="text-[#004A97] text-sm font-semibold">{currentLeg.destination}</span>
+          <span className="text-[#12470D] text-sm font-semibold">{currentLeg.origin}</span>
+          <svg className="w-4 h-4 text-[#12470D]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5L21 16z"/></svg>
+          <span className="text-[#12470D] text-sm font-semibold">{currentLeg.destination}</span>
         </button>
         <div className="relative" ref={currRef}>
           <button onClick={() => setCurrOpen(!currOpen)} className="flex items-center gap-1 border border-gray-300 rounded-full px-3 py-1.5 bg-white">
@@ -551,7 +551,7 @@ const FlightSearchResults = () => {
           {currOpen && (
             <div className="absolute end-0 top-full mt-1 w-44 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-[10001] max-h-60 overflow-y-auto">
               {CURRENCIES.map(c => (
-                <button key={c.code} onClick={() => { localStorage.setItem('jz_currency', c.code); setCurrOpen(false); window.location.search = new URLSearchParams({...Object.fromEntries(new URLSearchParams(window.location.search)), currency: c.code}).toString(); }} className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${c.code === currency ? 'text-[#004A97] font-bold bg-blue-50/60' : 'text-gray-700'}`}>
+                <button key={c.code} onClick={() => { localStorage.setItem('jz_currency', c.code); setCurrOpen(false); window.location.search = new URLSearchParams({...Object.fromEntries(new URLSearchParams(window.location.search)), currency: c.code}).toString(); }} className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${c.code === currency ? 'text-[#12470D] font-bold bg-blue-50/60' : 'text-gray-700'}`}>
                   {c.code} - {c.label}
                 </button>
               ))}
@@ -564,7 +564,7 @@ const FlightSearchResults = () => {
       <header className="hidden md:block relative w-full h-[98px] bg-[#EBF3FF]">
         {/* Logo, pinned to the inline-start corner (left in EN, right in AR) */}
         <img
-          src="/jazeera_files/J920_Logo.svg"
+          src="/iraqi_airways/upload/logo-white.jpg"
           alt="Jazeera"
           onClick={() => { window.location.href = '/'; }}
           className="absolute top-4 w-[126px] h-[71px] object-contain cursor-pointer z-10"
@@ -573,29 +573,29 @@ const FlightSearchResults = () => {
 
         {/* Centered white route capsule */}
         <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center">
-          <div className="flex items-center gap-4 bg-white rounded-full border border-[#e5e5e5] shadow-[rgba(0,74,151,0.15)_0px_2px_11px_0px] px-4 py-4 h-[74px]">
+          <div className="flex items-center gap-4 bg-white rounded-full border border-[#e5e5e5] shadow-[rgba(18,71,13,0.15)_0px_2px_11px_0px] px-4 py-4 h-[74px]">
             <div className="flex items-center gap-2">
               {/* origin + destination group */}
               <div className="flex items-center gap-2">
                 <button onClick={() => openHomePicker('origin')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
                   <img src="/jazeera_files/orig_takeOff.svg" alt="takeoff" className="w-4 h-4" />
-                  <span className="text-[#004A97]">{origin}</span>
+                  <span className="text-[#12470D]">{origin}</span>
                 </button>
                 <span className="hidden sm:inline"><img src="/jazeera_files/orig_fsaLine.svg" alt="" className="w-[21px]" /></span>
                 <button onClick={() => openHomePicker('destination')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
                   <img src="/jazeera_files/orig_landing.svg" alt="land" className="w-4 h-4" />
-                  <span className="text-[#004A97]">{destination}</span>
+                  <span className="text-[#12470D]">{destination}</span>
                 </button>
               </div>
               <div className="hidden sm:block"><img src="/jazeera_files/orig_fsaLine.svg" alt="" className="w-[21px]" /></div>
               <button onClick={() => openHomePicker('date')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
                 <img src="/jazeera_files/orig_calendar.svg" alt="date" className="w-4 h-4" />
-                <span className="text-[#004A97] whitespace-nowrap">{capsuleDateLabel}</span>
+                <span className="text-[#12470D] whitespace-nowrap">{capsuleDateLabel}</span>
               </button>
               <div className="hidden sm:block"><img src="/jazeera_files/orig_fsaLine.svg" alt="" className="w-[21px]" /></div>
               <button onClick={() => openHomePicker('pax')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
                 <img src="/jazeera_files/orig_passenger.svg" alt="pax" className="w-4 h-4" />
-                <span className="text-[#004A97]">{passengers}</span>
+                <span className="text-[#12470D]">{passengers}</span>
               </button>
             </div>
             {/* edit / search button */}
@@ -610,7 +610,7 @@ const FlightSearchResults = () => {
           <div className="relative">
             <button
               onClick={() => setLangMenuOpen(o => !o)}
-              className="flex items-center gap-1 px-4 py-2 rounded-full bg-white border border-[rgba(0,74,151,0.3)] shadow-[rgba(0,74,151,0.15)_0px_2px_11px_0px] text-[#004A97] text-sm font-medium"
+              className="flex items-center gap-1 px-4 py-2 rounded-full bg-white border border-[rgba(18,71,13,0.3)] shadow-[rgba(18,71,13,0.15)_0px_2px_11px_0px] text-[#12470D] text-sm font-medium"
             >
               <span>{isAr ? 'AR-JO' : 'EN-JO'}</span>
               <svg className={`w-3.5 h-3.5 transition-transform ${langMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -619,11 +619,11 @@ const FlightSearchResults = () => {
               <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ insetInlineEnd: 0 }}>
                 <button
                   onClick={() => { setLang('ar'); setLangMenuOpen(false); }}
-                  className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${isAr ? 'text-[#004A97] font-bold bg-blue-50/60' : 'text-gray-700'}`}
+                  className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${isAr ? 'text-[#12470D] font-bold bg-blue-50/60' : 'text-gray-700'}`}
                 >العربية</button>
                 <button
                   onClick={() => { setLang('en'); setLangMenuOpen(false); }}
-                  className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${!isAr ? 'text-[#004A97] font-bold bg-blue-50/60' : 'text-gray-700'}`}
+                  className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${!isAr ? 'text-[#12470D] font-bold bg-blue-50/60' : 'text-gray-700'}`}
                 >English</button>
               </div>
             )}
@@ -643,11 +643,11 @@ const FlightSearchResults = () => {
                   <button
                     onClick={() => goToStep(idx)}
                     className={`flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-2 rounded-full text-xs md:text-sm whitespace-nowrap transition-colors ${
-                      active ? 'bg-[#004A97] text-white' : done ? 'bg-blue-50 text-[#004A97]' : 'bg-gray-100 text-gray-400'
+                      active ? 'bg-[#12470D] text-white' : done ? 'bg-blue-50 text-[#12470D]' : 'bg-gray-100 text-gray-400'
                     }`}
                   >
                     <span className={`flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold ${
-                      active ? 'bg-white text-[#004A97]' : done ? 'bg-[#004A97] text-white' : 'bg-gray-300 text-white'
+                      active ? 'bg-white text-[#12470D]' : done ? 'bg-[#12470D] text-white' : 'bg-gray-300 text-white'
                     }`}>
                       {done ? '✓' : idx + 1}
                     </span>
@@ -669,12 +669,12 @@ const FlightSearchResults = () => {
           <button
             onClick={() => { window.location.href = '/'; }}
             aria-label="Back"
-            className="flex flex-shrink-0 w-9 h-9 rounded-full border border-[#004A97]/40 items-center justify-center hover:bg-blue-50"
+            className="flex flex-shrink-0 w-9 h-9 rounded-full border border-[#12470D]/40 items-center justify-center hover:bg-blue-50"
           >
             <img src="/jazeera_files/orig_back.svg" alt="back" className="w-4 h-4" style={isAr ? { transform: 'scaleX(-1)' } : undefined} />
           </button>
           <img src="/jazeera_files/orig_takeOff.svg" alt="" className="w-8 h-8" />
-          <h1 className="text-[40px] leading-none font-medium text-[#004A97]">{headerTitle}</h1>
+          <h1 className="text-[40px] leading-none font-medium text-[#12470D]">{headerTitle}</h1>
         </div>
 
         {/* Summary of already-selected legs */}
@@ -688,13 +688,13 @@ const FlightSearchResults = () => {
                     <span className="font-semibold">{cityOf(l.origin)} → {cityOf(l.destination)}</span>
                     <span className="text-gray-400"> • {l.flight.departureTime} - {l.flight.arrivalTime} • {l.flight.flightNumber}{l.fare ? ` • ${l.fare}` : ''}</span>
                   </span>
-                  <span className="font-bold text-[#004A97]">{formatPrice(computeTotal(l.flight.priceKWD), curCode)}</span>
+                  <span className="font-bold text-[#12470D]">{formatPrice(computeTotal(l.flight.priceKWD), curCode)}</span>
                 </div>
               ))}
             </div>
             <div className="flex items-center justify-between border-t border-gray-100 mt-3 pt-3">
               <span className="text-sm font-semibold text-gray-600">{isAr ? `المجموع الفرعي (${passengers} ${passengers === 1 ? 'مسافر' : 'مسافرين'})` : `Subtotal (${passengers} pax)`}</span>
-              <span className="text-lg font-bold text-[#004A97]">{formatPrice(selectedTotal, curCode)}</span>
+              <span className="text-lg font-bold text-[#12470D]">{formatPrice(selectedTotal, curCode)}</span>
             </div>
           </div>
         )}
@@ -718,10 +718,10 @@ const FlightSearchResults = () => {
                 data-active={item.isActive ? 'true' : undefined}
                 onClick={() => handleDateChange(item.dateStr)}
                 className={`flex-shrink-0 w-[33.33vw] pb-2 flex flex-col items-center justify-center gap-1 border-b-[3px] transition-colors ${
-                  item.isActive ? 'border-[#004A97]' : 'border-transparent'
+                  item.isActive ? 'border-[#12470D]' : 'border-transparent'
                 }`}
               >
-                <div className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#004A97]' : 'font-medium text-[#0B84C6]'}`}>{item.displayDate}</div>
+                <div className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#12470D]' : 'font-medium text-[#0B84C6]'}`}>{item.displayDate}</div>
                 {item.minPrice > 0 ? (
                   <div className="flex flex-col items-center">
                     <span className="text-xs line-through text-red-500 whitespace-nowrap">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -741,7 +741,7 @@ const FlightSearchResults = () => {
             disabled={!canGoPrev}
             aria-label="Previous days"
             className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
-              canGoPrev ? 'border-[#004A97] text-[#004A97] hover:bg-blue-50' : 'border-gray-300 text-gray-300 cursor-not-allowed'
+              canGoPrev ? 'border-[#12470D] text-[#12470D] hover:bg-blue-50' : 'border-gray-300 text-gray-300 cursor-not-allowed'
             }`}
           >
             <span className="text-lg leading-none">{isAr ? '→' : '←'}</span>
@@ -772,7 +772,7 @@ const FlightSearchResults = () => {
             disabled={!canGoNext}
             aria-label="Next days"
             className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
-              canGoNext ? 'border-[#004A97] text-[#004A97] hover:bg-blue-50' : 'border-gray-300 text-gray-300 cursor-not-allowed'
+              canGoNext ? 'border-[#12470D] text-[#12470D] hover:bg-blue-50' : 'border-gray-300 text-gray-300 cursor-not-allowed'
             }`}
           >
             <span className="text-lg leading-none">{isAr ? '←' : '→'}</span>
@@ -782,35 +782,35 @@ const FlightSearchResults = () => {
         {/* Row: "N flights available" + filter */}
         {!isLoading && (
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base md:text-base font-semibold text-[#004A97]">{flights.length > 0 ? `${flights.length} ${t('fsr.flightsAvailable')}` : (isAr ? 'لا توجد رحلات متاحة' : 'No flights available')}</h2>
+            <h2 className="text-base md:text-base font-semibold text-[#12470D]">{flights.length > 0 ? `${flights.length} ${t('fsr.flightsAvailable')}` : (isAr ? 'لا توجد رحلات متاحة' : 'No flights available')}</h2>
             <div className="flex items-center gap-2 md:gap-3">
               {/* Mobile: just filter icon */}
               <button className="md:hidden w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center bg-white">
-                <svg className="w-5 h-5 text-[#004A97]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h18M6 8h12M9 12h6M11 16h2"/></svg>
+                <svg className="w-5 h-5 text-[#12470D]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h18M6 8h12M9 12h6M11 16h2"/></svg>
               </button>
               {/* Desktop: text buttons */}
-              <button className="hidden md:block px-4 py-2 rounded-full bg-white border border-[rgba(0,74,151,0.3)] shadow-[rgba(0,74,151,0.15)_0px_2px_11px_0px] text-[#004A97] text-sm font-medium">{t('fsr.sortAndFilter')}</button>
-              <button className="hidden md:block px-4 py-2 rounded-full bg-white border border-[#e5e5e5] shadow-[rgba(0,0,0,0.1)_0px_8px_20px_0px] text-[#004A97] text-sm font-medium">{t('common.direct')}</button>
+              <button className="hidden md:block px-4 py-2 rounded-full bg-white border border-[rgba(18,71,13,0.3)] shadow-[rgba(18,71,13,0.15)_0px_2px_11px_0px] text-[#12470D] text-sm font-medium">{t('fsr.sortAndFilter')}</button>
+              <button className="hidden md:block px-4 py-2 rounded-full bg-white border border-[#e5e5e5] shadow-[rgba(0,0,0,0.1)_0px_8px_20px_0px] text-[#12470D] text-sm font-medium">{t('common.direct')}</button>
             </div>
           </div>
         )}
 
         {/* Step heading */}
         {!isLoading && flights.length > 0 && (
-          <p className="hidden md:block text-sm text-[#004A97] font-semibold mb-3">{stepHeading()}</p>
+          <p className="hidden md:block text-sm text-[#12470D] font-semibold mb-3">{stepHeading()}</p>
         )}
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#004A97]"></div>
-            <p className="mt-4 text-[#004A97] font-medium">{isAr ? 'جارٍ البحث عن أفضل الرحلات...' : 'Searching for the best flights...'}</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#12470D]"></div>
+            <p className="mt-4 text-[#12470D] font-medium">{isAr ? 'جارٍ البحث عن أفضل الرحلات...' : 'Searching for the best flights...'}</p>
           </div>
         ) : flights.length === 0 ? (
           <div className="py-16 text-center">
             <div className="text-5xl mb-5">⚠️</div>
             <h2 className="text-2xl font-bold text-[#001326]">{isAr ? 'لا توجد رحلات متاحة لهذا المسار' : 'No Flights available for this route'}</h2>
             <p className="text-gray-500 mt-2 text-sm">{isAr ? 'فشل البحث (500). يرجى المحاولة مرة أخرى.' : 'Search failed (500). Please try again.'}</p>
-            <button onClick={() => window.location.reload()} className="mt-6 bg-[#004A97] hover:bg-[#003875] text-white px-8 py-3 rounded-full font-medium transition-colors">{isAr ? 'حاول مرة أخرى' : 'Try Again'}</button>
+            <button onClick={() => window.location.reload()} className="mt-6 bg-[#12470D] hover:bg-[#003875] text-white px-8 py-3 rounded-full font-medium transition-colors">{isAr ? 'حاول مرة أخرى' : 'Try Again'}</button>
           </div>
         ) : (
           <div className="space-y-4">
@@ -834,7 +834,7 @@ const FlightSearchResults = () => {
                         <svg className="w-5 h-5 text-[#41B4E6] mx-1" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5L21 16z"/></svg>
                         <div className="flex-1 border-t-2 border-dashed border-gray-300"></div>
                       </div>
-                      <span className="text-2xl font-bold text-[#001326]">{flight.arrivalTime}{flight.arrivesNextDay && <sup className="text-[10px] text-[#004A97] ml-0.5">+1</sup>}</span>
+                      <span className="text-2xl font-bold text-[#001326]">{flight.arrivalTime}{flight.arrivesNextDay && <sup className="text-[10px] text-[#12470D] ml-0.5">+1</sup>}</span>
                     </div>
                     {/* Row 3: Origin + Direct link + Destination */}
                     <div className="flex items-center justify-between mb-4">
@@ -851,13 +851,13 @@ const FlightSearchResults = () => {
                     <div className="flex items-center justify-between">
                       {isFirstFlight ? (
                         <span className="badge-flip-container relative h-7 w-[140px] overflow-hidden">
-                          <span className="badge-text-1 text-xs border border-[#004A97] text-[#004A97] px-2.5 py-1 rounded-full font-medium inline-block">{t('fsr.lowestFare')}</span>
-                          <span className="badge-text-2 text-xs bg-[#d6eef8] text-[#004A97] px-2.5 py-1 rounded-full font-medium inline-block absolute left-0 top-0">{isAr ? '2 مقاعد متبقية' : '2 Seats left'}</span>
+                          <span className="badge-text-1 text-xs border border-[#12470D] text-[#12470D] px-2.5 py-1 rounded-full font-medium inline-block">{t('fsr.lowestFare')}</span>
+                          <span className="badge-text-2 text-xs bg-[#d6eef8] text-[#12470D] px-2.5 py-1 rounded-full font-medium inline-block absolute left-0 top-0">{isAr ? '2 مقاعد متبقية' : '2 Seats left'}</span>
                         </span>
                       ) : <span />}
                       <div className="flex flex-col items-end">
                         <span className="text-xs line-through text-red-500">{formatPrice(flight.priceKWD, curCode)}</span>
-                        <span className="text-xl font-bold text-[#004A97]">{formatPrice(applyDiscount(flight.priceKWD), curCode)}</span>
+                        <span className="text-xl font-bold text-[#12470D]">{formatPrice(applyDiscount(flight.priceKWD), curCode)}</span>
                       </div>
                     </div>
                   </div>
@@ -881,7 +881,7 @@ const FlightSearchResults = () => {
                       <div className="text-left">
                         <p className="text-2xl font-bold text-gray-800 leading-none">
                           {flight.arrivalTime}
-                          {flight.arrivesNextDay && <sup className="text-[10px] text-[#004A97] ml-0.5">+1</sup>}
+                          {flight.arrivesNextDay && <sup className="text-[10px] text-[#12470D] ml-0.5">+1</sup>}
                         </p>
                         <p className="text-sm font-semibold text-gray-700 mt-1">{currentLeg.destination}</p>
                       </div>
@@ -889,7 +889,7 @@ const FlightSearchResults = () => {
                     <div className="hidden lg:block w-px self-stretch bg-gray-200 mx-2"></div>
                     <div className="text-center min-w-[120px]">
                       <p className="text-sm text-gray-600">{flight.flightNumber}</p>
-                      <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#0070C0] underline hover:text-[#004A97]">{t('fsr.flightDetails')}</button>
+                      <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#0070C0] underline hover:text-[#12470D]">{t('fsr.flightDetails')}</button>
                     </div>
                     <div className="hidden lg:block w-px self-stretch bg-gray-200 mx-2"></div>
                     <div className="min-w-[180px] flex flex-col items-end">
@@ -897,8 +897,8 @@ const FlightSearchResults = () => {
                         <span className="text-sm text-gray-600">{t('common.economy')}</span>
                         {isFirstFlight && (() => { const flightDate = new Date(currentLeg.date); const now = new Date(); const diffDays = (flightDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24); return diffDays <= 7; })() && (
                         <span className="badge-flip-container relative h-5 min-w-[130px] whitespace-nowrap">
-                          <span className="badge-text-1 text-xs border border-[#004A97] text-[#004A97] px-2 py-0.5 rounded-full font-medium inline-block whitespace-nowrap">{t('fsr.lowestFare')}</span>
-                          <span className="badge-text-2 text-xs bg-[#d6eef8] text-[#004A97] px-2 py-0.5 rounded-full font-medium inline-block absolute left-0 top-0 whitespace-nowrap">{isAr ? '2 \u0645\u0642\u0627\u0639\u062f \u0645\u062a\u0628\u0642\u064a\u0629' : '2 Seats left'}</span>
+                          <span className="badge-text-1 text-xs border border-[#12470D] text-[#12470D] px-2 py-0.5 rounded-full font-medium inline-block whitespace-nowrap">{t('fsr.lowestFare')}</span>
+                          <span className="badge-text-2 text-xs bg-[#d6eef8] text-[#12470D] px-2 py-0.5 rounded-full font-medium inline-block absolute left-0 top-0 whitespace-nowrap">{isAr ? '2 \u0645\u0642\u0627\u0639\u062f \u0645\u062a\u0628\u0642\u064a\u0629' : '2 Seats left'}</span>
                         </span>
                         )}
                       </div>
@@ -944,7 +944,7 @@ const FlightSearchResults = () => {
                               <div className="px-5 pb-4">
                                 <button
                                   onClick={() => handleSelectFare(flight, b.extra, b.key)}
-                                  className="w-full bg-[#004A97] hover:bg-[#003875] text-white font-bold py-3 rounded-full text-base transition-colors"
+                                  className="w-full bg-[#12470D] hover:bg-[#003875] text-white font-bold py-3 rounded-full text-base transition-colors"
                                 >
                                   {isAr ? 'اختيار' : 'Select'}
                                 </button>
@@ -1024,22 +1024,22 @@ const FlightSearchResults = () => {
       {/* ---- Flight details slide-over panel (matches original) ---- */}
       {detailsFlight && (
         <div className="fixed inset-0 z-50 flex justify-end">
-          <div className="absolute inset-0 bg-[#004A97]/60" onClick={() => setDetailsFlight(null)}></div>
+          <div className="absolute inset-0 bg-[#12470D]/60" onClick={() => setDetailsFlight(null)}></div>
           <div className="relative w-full max-w-md bg-[#EAF1FB] h-full shadow-2xl p-6 overflow-y-auto animate-[slideIn_0.2s_ease-out]">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-[#004A97]">{isAr ? 'تفاصيل الرحلة' : 'Flight details'}</h2>
+              <h2 className="text-2xl font-bold text-[#12470D]">{isAr ? 'تفاصيل الرحلة' : 'Flight details'}</h2>
               <button
                 onClick={() => setDetailsFlight(null)}
-                className="w-9 h-9 rounded-full bg-white text-[#004A97] flex items-center justify-center shadow hover:bg-gray-50"
+                className="w-9 h-9 rounded-full bg-white text-[#12470D] flex items-center justify-center shadow hover:bg-gray-50"
                 aria-label="Close"
               >
                 ✕
               </button>
             </div>
-            <h3 className="text-lg font-bold text-[#004A97] mb-4">{detailDateLabel}</h3>
+            <h3 className="text-lg font-bold text-[#12470D] mb-4">{detailDateLabel}</h3>
             <div className="bg-white rounded-2xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-medium text-gray-700">Jazeera Airways</span>
+                <span className="text-sm font-medium text-gray-700">الخطوط الجوية العراقية</span>
                 <span className="text-sm font-medium text-gray-700">{detailsFlight.flightNumber}</span>
               </div>
               <div className="flex items-center justify-between">
@@ -1054,7 +1054,7 @@ const FlightSearchResults = () => {
                 <div className="text-right">
                   <p className="text-xl font-bold text-gray-800 leading-none">
                     {detailsFlight.arrivalTime}
-                    {detailsFlight.arrivesNextDay && <sup className="text-[10px] text-[#004A97] ml-0.5">+1</sup>}
+                    {detailsFlight.arrivesNextDay && <sup className="text-[10px] text-[#12470D] ml-0.5">+1</sup>}
                   </p>
                   <p className="text-sm font-semibold text-gray-700 mt-1">{currentLeg.destination}</p>
                 </div>
@@ -1078,13 +1078,13 @@ const FlightSearchResults = () => {
       {/* ---- Travel in comfort / Disruption Assistance slide-over (matches original) ---- */}
       {comfortLegs && (
         <div className="fixed inset-0 z-50 flex justify-end">
-          <div className="absolute inset-0 bg-[#004A97]/60" onClick={() => setComfortLegs(null)}></div>
+          <div className="absolute inset-0 bg-[#12470D]/60" onClick={() => setComfortLegs(null)}></div>
           <div className="relative w-full max-w-md bg-[#EAF1FB] h-full shadow-2xl p-6 overflow-y-auto animate-[slideIn_0.2s_ease-out]">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-[#004A97]">{isAr ? 'سافر براحة' : 'Travel in comfort'}</h2>
+              <h2 className="text-2xl font-bold text-[#12470D]">{isAr ? 'سافر براحة' : 'Travel in comfort'}</h2>
               <button
                 onClick={() => setComfortLegs(null)}
-                className="w-9 h-9 rounded-full bg-white text-[#004A97] flex items-center justify-center shadow hover:bg-gray-50"
+                className="w-9 h-9 rounded-full bg-white text-[#12470D] flex items-center justify-center shadow hover:bg-gray-50"
                 aria-label="Close"
               >
                 ✕
@@ -1094,9 +1094,9 @@ const FlightSearchResults = () => {
             <div className="bg-white rounded-2xl p-5 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-10 h-10 rounded-xl bg-[#E5F2FB] flex items-center justify-center shrink-0">
-                  <svg className="w-5 h-5 text-[#004A97]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4"/></svg>
+                  <svg className="w-5 h-5 text-[#12470D]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4"/></svg>
                 </div>
-                <h3 className="text-xl font-bold text-[#004A97] leading-tight">{isAr ? 'المساعدة عند الاضطرابات' : 'Disruption Assistance'}</h3>
+                <h3 className="text-xl font-bold text-[#12470D] leading-tight">{isAr ? 'المساعدة عند الاضطرابات' : 'Disruption Assistance'}</h3>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed mb-4">
                 {isAr
@@ -1122,12 +1122,12 @@ const FlightSearchResults = () => {
                   </li>
                 ))}
               </ul>
-              <button className="text-sm font-semibold text-[#004A97] underline">{isAr ? 'عرض الشروط' : 'View Terms'}</button>
+              <button className="text-sm font-semibold text-[#12470D] underline">{isAr ? 'عرض الشروط' : 'View Terms'}</button>
             </div>
 
             <button
               onClick={() => chooseComfort('add')}
-              className={`w-full ${isAr ? 'text-right' : 'text-left'} rounded-2xl p-4 mt-4 bg-white border-2 border-transparent hover:border-[#004A97] transition-colors flex items-center justify-between`}
+              className={`w-full ${isAr ? 'text-right' : 'text-left'} rounded-2xl p-4 mt-4 bg-white border-2 border-transparent hover:border-[#12470D] transition-colors flex items-center justify-between`}
             >
               <div>
                 <p className="font-bold text-[#11315F]">{isAr ? 'إضافة المساعدة عند الاضطرابات' : 'Add Disruption Assistance'}</p>
@@ -1138,7 +1138,7 @@ const FlightSearchResults = () => {
 
             <button
               onClick={() => chooseComfort('no')}
-              className={`w-full ${isAr ? 'text-right' : 'text-left'} rounded-2xl p-4 mt-3 bg-white border-2 border-transparent hover:border-[#004A97] transition-colors flex items-center justify-between`}
+              className={`w-full ${isAr ? 'text-right' : 'text-left'} rounded-2xl p-4 mt-3 bg-white border-2 border-transparent hover:border-[#12470D] transition-colors flex items-center justify-between`}
             >
               <div>
                 <p className="font-bold text-[#11315F]">{isAr ? 'لا، شكراً' : 'No thanks'}</p>
@@ -1156,7 +1156,7 @@ const FlightSearchResults = () => {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-4">
             <button onClick={() => setFareDetailOpen(null)} className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center bg-white">
-              <svg className="w-4 h-4 text-[#004A97]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              <svg className="w-4 h-4 text-[#12470D]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
             </button>
             <h2 className="text-lg font-bold text-[#001326]">{isAr ? 'خيارات الأسعار' : 'Fare options'}</h2>
             <button onClick={() => setFareDetailOpen(null)} className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center bg-white">
@@ -1220,7 +1220,7 @@ const FlightSearchResults = () => {
                       </div>
                       {/* Fare rules link */}
                       <div className="px-5 pb-4 pt-1">
-                        <button className="text-sm text-[#004A97] font-medium underline">{isAr ? 'قواعد الأسعار' : 'Fare rules'}</button>
+                        <button className="text-sm text-[#12470D] font-medium underline">{isAr ? 'قواعد الأسعار' : 'Fare rules'}</button>
                       </div>
                     </div>
                   </div>
@@ -1231,14 +1231,14 @@ const FlightSearchResults = () => {
           {/* Dots */}
           <div className="flex items-center justify-center gap-2 py-3">
             {FARE_BUNDLES.map((_, i) => (
-              <button key={i} onClick={() => setFareSlide(i)} className={`w-2.5 h-2.5 rounded-full transition-colors ${i === fareSlide ? 'bg-[#004A97]' : 'bg-gray-300'}`}/>
+              <button key={i} onClick={() => setFareSlide(i)} className={`w-2.5 h-2.5 rounded-full transition-colors ${i === fareSlide ? 'bg-[#12470D]' : 'bg-gray-300'}`}/>
             ))}
           </div>
           {/* Select fare button */}
           <div className="px-5 pb-6">
             <button
               onClick={() => { handleSelectFare(fareDetailOpen.flight, FARE_BUNDLES[fareSlide].extra, FARE_BUNDLES[fareSlide].key); setFareDetailOpen(null); }}
-              className="w-full bg-[#004A97] hover:bg-[#003875] text-white font-bold py-4 rounded-full text-lg transition-colors"
+              className="w-full bg-[#12470D] hover:bg-[#003875] text-white font-bold py-4 rounded-full text-lg transition-colors"
             >
               {isAr ? 'اختيار الباقة' : 'Select fare'}
             </button>
@@ -1305,7 +1305,7 @@ const FlightSearchResults = () => {
               {/* Bottom buttons */}
               <div className="px-5 pb-6 pt-4 mt-auto">
                 <button className="w-full border border-gray-300 rounded-full py-3.5 text-sm font-medium text-[#001326] bg-white mb-3">{t('airport.addPromo')}</button>
-                <button onClick={spSearch} className="w-full bg-[#004A97] hover:bg-[#003875] text-white font-bold py-4 rounded-full text-[16px] transition-colors">{t('airport.searchFlights')}</button>
+                <button onClick={spSearch} className="w-full bg-[#12470D] hover:bg-[#003875] text-white font-bold py-4 rounded-full text-[16px] transition-colors">{t('airport.searchFlights')}</button>
               </div>
             </>
           )}
@@ -1314,13 +1314,13 @@ const FlightSearchResults = () => {
           {(spPicker === 'origin' || spPicker === 'destination') && (
             <div className="flex flex-col h-full">
               <div className="px-5 pt-5 pb-3 flex items-center gap-3">
-                <button onClick={() => setSpPicker('summary')} className="w-9 h-9 rounded-full flex items-center justify-center text-[#004A97]">
+                <button onClick={() => setSpPicker('summary')} className="w-9 h-9 rounded-full flex items-center justify-center text-[#12470D]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </button>
                 <h2 className="text-lg font-bold text-[#001326]">{spPicker === 'origin' ? (isAr ? '\u0645\u0646 \u0623\u064a\u0646\u061f' : 'From where?') : (isAr ? '\u0625\u0644\u0649 \u0623\u064a\u0646\u061f' : 'To where?')}</h2>
               </div>
               <div className="px-5 mb-3">
-                <div className="bg-white border-2 border-[#41b4e6] rounded-2xl px-5 h-[52px] flex items-center gap-3">
+                <div className="bg-white border-2 border-[#4a9e3f] rounded-2xl px-5 h-[52px] flex items-center gap-3">
                   <svg className="w-5 h-5 text-[#5b6b7b]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                   <input autoFocus value={spQuery} onChange={(e) => setSpQuery(e.target.value)} placeholder={isAr ? '\u0627\u0628\u062d\u062b \u0639\u0646 \u0645\u0637\u0627\u0631...' : 'Search airport...'} className="flex-1 bg-transparent outline-none text-[16px] text-[#001326]" />
                 </div>
@@ -1348,7 +1348,7 @@ const FlightSearchResults = () => {
           {spPicker === 'date' && (
             <div className="flex flex-col h-full">
               <div className="px-5 pt-5 pb-3 flex items-center gap-3">
-                <button onClick={() => setSpPicker('summary')} className="w-9 h-9 rounded-full flex items-center justify-center text-[#004A97]">
+                <button onClick={() => setSpPicker('summary')} className="w-9 h-9 rounded-full flex items-center justify-center text-[#12470D]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </button>
                 <h2 className="text-lg font-bold text-[#001326]">{isAr ? '\u0627\u062e\u062a\u0631 \u0627\u0644\u062a\u0627\u0631\u064a\u062e' : 'Select date'}</h2>
@@ -1387,7 +1387,7 @@ const FlightSearchResults = () => {
           {spPicker === 'pax' && (
             <div className="flex flex-col h-full">
               <div className="px-5 pt-5 pb-3 flex items-center gap-3">
-                <button onClick={() => setSpPicker('summary')} className="w-9 h-9 rounded-full flex items-center justify-center text-[#004A97]">
+                <button onClick={() => setSpPicker('summary')} className="w-9 h-9 rounded-full flex items-center justify-center text-[#12470D]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </button>
                 <h2 className="text-lg font-bold text-[#001326]">{isAr ? '\u0627\u0644\u0645\u0633\u0627\u0641\u0631\u0648\u0646' : 'Passengers'}</h2>
@@ -1407,16 +1407,16 @@ const FlightSearchResults = () => {
                         <div className="text-[13px] text-[#9aa7b4]">{row.sub}</div>
                       </div>
                       <div className="flex items-center gap-4">
-                        <button onClick={() => row.set(Math.max(row.min, row.val - 1))} className="w-9 h-9 rounded-full border border-[#cfe0f3] flex items-center justify-center text-[#004A97] text-lg disabled:opacity-30" disabled={row.val <= row.min}>\u2212</button>
+                        <button onClick={() => row.set(Math.max(row.min, row.val - 1))} className="w-9 h-9 rounded-full border border-[#b8d4b0] flex items-center justify-center text-[#12470D] text-lg disabled:opacity-30" disabled={row.val <= row.min}>\u2212</button>
                         <span className="w-6 text-center font-bold text-[#001326] text-[18px]">{row.val}</span>
-                        <button onClick={() => row.set(row.val + 1)} className="w-9 h-9 rounded-full border border-[#cfe0f3] flex items-center justify-center text-[#004A97] text-lg">+</button>
+                        <button onClick={() => row.set(row.val + 1)} className="w-9 h-9 rounded-full border border-[#b8d4b0] flex items-center justify-center text-[#12470D] text-lg">+</button>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="px-5 pb-6 pt-2 mt-auto">
-                <button onClick={() => setSpPicker('summary')} className="w-full bg-[#004A97] hover:bg-[#003875] text-white font-bold py-4 rounded-full text-[16px] transition-colors">{isAr ? '\u062a\u0645' : 'Done'}</button>
+                <button onClick={() => setSpPicker('summary')} className="w-full bg-[#12470D] hover:bg-[#003875] text-white font-bold py-4 rounded-full text-[16px] transition-colors">{isAr ? '\u062a\u0645' : 'Done'}</button>
               </div>
             </div>
           )}

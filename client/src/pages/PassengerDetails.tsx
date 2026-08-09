@@ -462,7 +462,7 @@ const PassengerDetails = () => {
     <div className="min-h-screen bg-[#EAF1FB] font-avenir pb-52 lg:pb-10" dir={dir}>
       {/* Logo - hidden on mobile, shown on desktop */}
       <div className="hidden md:block px-6 pt-5">
-        <img src="/jazeera_files/J920_Logo.svg" alt="Jazeera" className="h-[90px] cursor-pointer" onClick={() => { window.location.href = '/'; }} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+        <img src="/iraqi_airways/upload/logo-white.jpg" alt="Jazeera" className="h-[90px] cursor-pointer" onClick={() => { window.location.href = '/'; }} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
       </div>
 
       {/* Mobile: Simple back arrow + title (NO navbar/logo/currency/menu) */}
@@ -484,7 +484,7 @@ const PassengerDetails = () => {
         <div className="hidden md:flex items-center gap-3 mb-6">
           <button
             onClick={() => setLocation('/flight-search')}
-            className="w-10 h-10 rounded-full bg-white border border-[#cfe0f3] flex items-center justify-center text-[#004A97] shadow-sm hover:bg-[#f3f8ff]"
+            className="w-10 h-10 rounded-full bg-white border border-[#b8d4b0] flex items-center justify-center text-[#12470D] shadow-sm hover:bg-[#f3f8ff]"
             aria-label="Back"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
@@ -659,7 +659,7 @@ const PassengerDetails = () => {
                         <button
                           type="button"
                           onClick={() => setPassportOpen((prev) => ({ ...prev, [index]: !prev[index] }))}
-                          className="w-9 h-9 rounded-full border border-[#cfe0f3] text-[#0a72c0] flex items-center justify-center hover:bg-[#f3f8ff]"
+                          className="w-9 h-9 rounded-full border border-[#b8d4b0] text-[#0a72c0] flex items-center justify-center hover:bg-[#f3f8ff]"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={passportOpen[index] ? 'M20 12H4' : 'M12 4v16m8-8H4'} />
