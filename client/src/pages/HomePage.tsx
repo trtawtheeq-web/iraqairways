@@ -130,20 +130,24 @@ const Home = () => {
 
             {/* Return Date */}
             {tripType === 'round' && (
-              <div style={{ position: 'relative', border: '1px solid #ccc', borderRadius: 15, padding: '10px 15px', display: 'flex', alignItems: 'center', gap: 6, direction: 'rtl', height: 50, minWidth: 160 }}>
-                <img src="/iraqi_airways/search/imgs/add.svg" alt="" style={{ width: 18 }} />
-                <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} style={{ border: 'none', outline: 'none', flex: 1, fontFamily: "'Cairo', sans-serif", fontSize: 12, fontWeight: 'bold', width: 100 }} />
-                <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 20 }} />
-                <label style={{ position: 'absolute', top: -10, right: 50, background: '#fff', padding: '0 5px', fontSize: 11, color: '#666' }}>تاريخ العودة</label>
+              <div style={{ position: 'relative', textAlign: 'right', border: '1px solid #ccc', borderRadius: 15, padding: '5px 7px', display: 'flex', alignItems: 'center', height: 50, minWidth: 180 }}>
+                <span style={{ cursor: 'pointer', marginLeft: 5 }}>
+                  <img src="/iraqi_airways/search/imgs/add.svg" alt="" style={{ width: 18 }} />
+                </span>
+                <input type="text" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} placeholder="mm/dd/yyyy" dir="rtl" style={{ border: 'none', padding: '10px', outline: 'none', width: '100%', fontWeight: 'bold', fontSize: 10 }} />
+                <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 20, marginRight: 5 }} />
+                <label style={{ position: 'absolute', top: -12, left: 65, background: '#fff', padding: '0 5px', fontSize: 11, color: '#000', pointerEvents: 'none' }}>تاريخ العودة</label>
               </div>
             )}
 
             {/* Departure Date */}
-            <div style={{ position: 'relative', border: '1px solid #ccc', borderRadius: 15, padding: '10px 15px', display: 'flex', alignItems: 'center', gap: 6, direction: 'rtl', height: 50, minWidth: 160 }}>
-              <img src="/iraqi_airways/search/imgs/add.svg" alt="" style={{ width: 18 }} />
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ border: 'none', outline: 'none', flex: 1, fontFamily: "'Cairo', sans-serif", fontSize: 12, fontWeight: 'bold', width: 100 }} />
-              <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 20 }} />
-              <label style={{ position: 'absolute', top: -10, right: 50, background: '#fff', padding: '0 5px', fontSize: 11, color: '#666' }}>تاريخ المغادرة</label>
+            <div style={{ position: 'relative', textAlign: 'right', border: '1px solid #ccc', borderRadius: 15, padding: '5px 7px', display: 'flex', alignItems: 'center', height: 50, minWidth: 180 }}>
+              <span style={{ cursor: 'pointer', marginLeft: 5 }}>
+                <img src="/iraqi_airways/search/imgs/add.svg" alt="" style={{ width: 18 }} />
+              </span>
+              <input type="text" value={date} onChange={(e) => setDate(e.target.value)} placeholder="mm/dd/yyyy" dir="rtl" style={{ border: 'none', padding: '10px', outline: 'none', width: '100%', fontWeight: 'bold', fontSize: 10 }} />
+              <img src="/iraqi_airways/search/imgs/calendar.svg" alt="" style={{ width: 20, marginRight: 5 }} />
+              <label style={{ position: 'absolute', top: -12, left: 65, background: '#fff', padding: '0 5px', fontSize: 11, color: '#000', pointerEvents: 'none' }}>تاريخ المغادرة</label>
             </div>
 
             {/* To */}
