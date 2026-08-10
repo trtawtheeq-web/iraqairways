@@ -884,50 +884,55 @@ const FlightSearchResults = () => {
                   </div>
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
-                  <div className="hidden md:flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm" dir="ltr">
-                    {/* Left: Business + Economy columns */}
-                    <div className="flex">
-                      {/* Business column */}
-                      <button onClick={() => handleSelectFare(flight, flight.priceKWD * 0.6, 'Business')} className="w-[140px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-4 hover:bg-[#0D3B0F] transition-colors">
-                        <span className="text-sm font-bold">Business</span>
-                        <span className="text-xs mt-1">from</span>
-                        <span className="text-xs">IQD</span>
-                        <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
-                        <svg className="w-4 h-4 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                      </button>
-                      {/* Economy column */}
-                      <button onClick={() => handleSelectFare(flight, 0, 'Basic')} className="w-[140px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-4 hover:bg-[#1B5E20] transition-colors border-l border-[#4CAF50]/30">
-                        {isFirstFlight && <span className="text-[10px] bg-[#FFC107] text-black px-2 py-0.5 rounded mb-1">{isAr ? '8 مقاعد متبقية' : '8 seats left'}</span>}
-                        <span className="text-sm font-bold">Economy</span>
-                        <span className="text-xs mt-1">from</span>
-                        <span className="text-xs">IQD</span>
-                        <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
-                        <svg className="w-4 h-4 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                      </button>
-                    </div>
-                    {/* Right: Flight info */}
-                    <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
-                      <div className="ml-4 text-sm text-gray-600">
-                        <p className="flex items-center gap-1"><span>⏱</span> Duration {flight.duration}</p>
-                        <p className="flex items-center gap-1 mt-1"><span>✈</span> Operated by Iraqi Airways</p>
-                        <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#4CAF50] underline mt-1">↗ See itinerary details</button>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-800 leading-none">
-                          {flight.arrivalTime}
-                          {flight.arrivesNextDay && <sup className="text-[10px] text-red-500 ml-0.5">+1</sup>}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-1">{currentLeg.destination}</p>
-                      </div>
-                      <div className="flex-1 flex flex-col items-center px-3 min-w-[100px]">
-                        <div className="w-full flex items-center">
-                          <div className="flex-1 border-t-2 border-dashed border-gray-300"></div>
+                  <div className="hidden md:block relative" dir="ltr">
+                    {isFirstFlight && <span className="absolute -top-3 right-4 text-[11px] bg-[#FFC107] text-black px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span>}
+                    <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                      {/* Left: Flight times */}
+                      <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
+                        <div className="text-left">
+                          <p className="text-2xl font-bold text-gray-800 leading-none">{flight.departureTime}</p>
+                          <p className="text-sm text-gray-600 mt-1">{currentLeg.origin}</p>
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">nonstop</p>
+                        <div className="flex-1 flex flex-col items-center px-3 min-w-[80px]">
+                          <div className="w-full flex items-center">
+                            <div className="flex-1 border-t-2 border-dashed border-gray-300"></div>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">nonstop</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-gray-800 leading-none">
+                            {flight.arrivalTime}
+                            {flight.arrivesNextDay && <sup className="text-[10px] text-red-500 ml-0.5">+1</sup>}
+                          </p>
+                          <p className="text-sm text-gray-600 mt-1">{currentLeg.destination}</p>
+                        </div>
+                        {/* Vertical separator */}
+                        <div className="w-px bg-gray-300 self-stretch mx-4"></div>
+                        {/* Duration info */}
+                        <div className="text-sm text-gray-600">
+                          <p className="flex items-center gap-1"><span>⏱</span> Duration {flight.duration}</p>
+                          <p className="flex items-center gap-1 mt-1"><span>✈</span> Operated by Iraqi Airways</p>
+                          <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#4CAF50] underline mt-1">See itinerary details ↗</button>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-800 leading-none">{flight.departureTime}</p>
-                        <p className="text-sm text-gray-600 mt-1">{currentLeg.origin}</p>
+                      {/* Right: Economy + Business columns */}
+                      <div className="flex">
+                        {/* Economy column */}
+                        <button onClick={() => handleSelectFare(flight, 0, 'Basic')} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors">
+                          <span className="text-sm font-bold">Economy</span>
+                          <span className="text-xs mt-1">from</span>
+                          <span className="text-xs">IQD</span>
+                          <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                          <svg className="w-4 h-4 mt-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        {/* Business column */}
+                        <button onClick={() => handleSelectFare(flight, flight.priceKWD * 0.6, 'Business')} className="w-[150px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-5 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
+                          <span className="text-sm font-bold">Business</span>
+                          <span className="text-xs mt-1">from</span>
+                          <span className="text-xs">IQD</span>
+                          <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                          <svg className="w-4 h-4 mt-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1062,6 +1067,12 @@ const FlightSearchResults = () => {
             })}
           </div>
         )}
+        {/* Back button */}
+        <div className="mt-6 mb-8">
+          <button onClick={() => window.location.href = '/'} className="bg-[#2E7D32] hover:bg-[#1B5E20] text-white px-6 py-2.5 rounded-full font-medium transition-colors">
+            Back
+          </button>
+        </div>
       </main>
 
       {/* ---- Flight details slide-over panel (matches original) ---- */}
