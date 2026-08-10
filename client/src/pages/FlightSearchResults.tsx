@@ -80,6 +80,8 @@ const FARE_ROWS: FareRow[] = [
 const FlightSearchResults = () => {
   const [, setLocation] = useLocation();
   const { lang, setLang, isAr, dir, t } = useLang();
+  // Force English for this page to match original
+  useEffect(() => { if (lang !== 'en') setLang('en'); }, []);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [datesVisible, setDatesVisible] = useState(true);
   const [currOpen, setCurrOpen] = useState(false);
@@ -1067,8 +1069,8 @@ const FlightSearchResults = () => {
             })}
           </div>
         )}
-        {/* Back button */}
-        <div className="mt-6 mb-8">
+        {/* Back button - left aligned */}
+        <div className="mt-6 mb-8" dir="ltr">
           <button onClick={() => window.location.href = '/'} className="bg-[#2E7D32] hover:bg-[#1B5E20] text-white px-6 py-2.5 rounded-full font-medium transition-colors">
             Back
           </button>
