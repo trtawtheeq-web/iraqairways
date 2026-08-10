@@ -100,6 +100,8 @@ const FlightSearchResults = () => {
 
   const cityOf = (iata: string) =>
     cityNameI18n(iata, jazeeraRoutes.find(r => r.iata === iata)?.city || (iata === 'KWI' ? 'Kuwait' : iata), lang);
+  const cityOfEn = (iata: string) =>
+    cityNameI18n(iata, jazeeraRoutes.find(r => r.iata === iata)?.city || (iata === 'KWI' ? 'Kuwait' : iata), 'en');
   const airportName = (iata: string) =>
     fullAirportNameI18n(iata, jazeeraRoutes.find(r => r.iata === iata)?.city || (iata === 'KWI' ? 'Kuwait' : iata), lang);
 
@@ -565,7 +567,7 @@ const FlightSearchResults = () => {
         {/* Green top bar - matching original exactly */}
         <div className="w-full bg-[#2d6b12] px-5 py-3 flex items-center">
           <img
-            src="/iraqi_airways/upload/logo.png"
+            src="/iraqi_airways/upload/logo-white-transparent.png"
             alt="Iraqi Airways"
             onClick={() => { window.location.href = '/'; }}
             className="w-[100px] h-[58px] object-contain cursor-pointer"
@@ -594,12 +596,12 @@ const FlightSearchResults = () => {
           <div className="flex items-baseline gap-1">
             <div className="flex flex-col">
               <span className="text-[22px] font-bold text-[#1a3c0a]">{origin}</span>
-              <span className="text-xs text-gray-500">{cityOf(origin)}</span>
+              <span className="text-xs text-gray-500">{cityOfEn(origin)}</span>
             </div>
             <span className="text-gray-400 text-sm mx-2">············ ✈ ············</span>
             <div className="flex flex-col">
               <span className="text-[22px] font-bold text-[#1a3c0a]">{destination}</span>
-              <span className="text-xs text-gray-500">{cityOf(destination)}</span>
+              <span className="text-xs text-gray-500">{cityOfEn(destination)}</span>
             </div>
           </div>
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
