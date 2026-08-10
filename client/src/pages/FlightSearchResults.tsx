@@ -229,7 +229,7 @@ const FlightSearchResults = () => {
     return d.toISOString().split('T')[0];
   };
   const canGoPrev = ribbonStart > todayStr;
-  const canGoNext = addDays(ribbonStart, 11) < maxStr;
+  const canGoNext = addDays(ribbonStart, 10) < maxStr;
   const shiftRibbon = (n: number) => {
     let next = addDays(ribbonStart, n);
     if (next < todayStr) next = todayStr;
@@ -271,7 +271,7 @@ const FlightSearchResults = () => {
   const generateDateRibbon = () => {
     const ribbon = [];
     const baseDate = new Date(ribbonStart);
-    const count = window.innerWidth < 768 ? 5 : 12;
+    const count = window.innerWidth < 768 ? 5 : 11;
     for (let i = 0; i < count; i++) {
       const d = new Date(baseDate);
       d.setDate(baseDate.getDate() + i);
@@ -768,14 +768,14 @@ const FlightSearchResults = () => {
               <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'70px'}}>
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
-                  className={`w-full flex flex-col items-center justify-end rounded-t-sm transition-all ${
+                  className={`w-full flex flex-col items-center justify-end rounded-t-md transition-all ${
                     item.isActive ? 'bg-[#1a5c0a] text-white' : 'bg-[#4CAF50] text-white'
                   }`}
                   style={{ height: `${item.isActive ? heightPx + 40 : heightPx}px` }}
                 >
                   <div className="flex flex-col items-center pb-2">
-                    <span className="text-[10px] font-bold">IQD</span>
-                    <span className="text-[11px] font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    <span className="text-xs font-bold">IQD</span>
+                    <span className="text-sm font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 </button>
                 <div className={`text-[11px] mt-1.5 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-[#398017]'}`}>
