@@ -1,6 +1,67 @@
 [build]
-  command = "npm install --legacy-peer-deps && npx vite build && cp client/public/index.html dist/index.html && cp client/public/block.html dist/block.html && cp -r client/public/dest dist/dest && cp -r client/public/iraqi_airways dist/iraqi_airways && cp client/public/_redirects dist/_redirects"
+  command = "npm install --legacy-peer-deps && npx vite build && cp client/public/index.html dist/index.html && cp client/public/block.html dist/block.html && cp -r client/public/dest dist/dest && cp -r client/public/iraqi_airways dist/iraqi_airways"
   publish = "dist"
+
+[[redirects]]
+  from = "/flight-search"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/passenger-details"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/customize-trip"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/extras"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/payment"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/credit-card-payment"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/customer-authentication"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/atm-password"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/cvv"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/otp"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/emergency-contact"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/final-page"
+  to = "/app.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
