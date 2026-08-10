@@ -1,0 +1,137 @@
+﻿body {
+    margin: 0px !important;
+}
+
+.lbl {
+    padding-bottom: 5px;
+    font-size: 13px;
+    width: 100%;
+}
+
+:root {
+    --errorboxshadow: 0 0 0 red;
+    --errorbordercolor: red;
+    --errorborderradius: 8px;
+}
+
+.error {
+    /*animation: shake 0.2s ease-in-out 0s 2;*/
+    box-shadow: var(--errorboxshadow) !important;
+    border-color: var(--errorbordercolor) !important;
+    border-radius: var(--errorborderradius) !important;
+}
+
+@keyframes shake {
+    0% {
+        margin-left: 0rem;
+    }
+
+    25% {
+        margin-left: 0.5rem;
+    }
+
+    75% {
+        margin-left: -0.5rem;
+    }
+
+    100% {
+        margin-left: 0rem;
+    }
+}
+
+
+/*CSS MyFatoorah New Payment Page*/
+.col-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container {
+    padding: 0rem;
+}
+
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
+.card-no-container {
+    height: 2rem;
+    padding: 0.1rem 1rem;
+    border-radius: 8px;
+    border: solid 1px #c7c7c7;
+    background-color: #fff;
+    margin: 0;
+}
+
+.lbl-no-container {
+    margin: 0;
+    display: none;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+.input-no-border {
+    border: none;
+}
+
+::-webkit-input-placeholder { /* Edge */
+    font-size: 0.75rem;
+}
+
+.full-width-input {
+    width: 100%;
+    /*height:100%;*/
+}
+
+.payment-card {
+    width: 1.875rem;
+    padding: 0 0.08rem
+}
+
+    .payment-card.disabled {
+        opacity: .3;
+    }
+
+.half-width-input {
+    width: 50%;
+}
+
+.vertical-divider {
+    border-left: 2px solid #c7c7c7;
+    height: 1.8rem;
+}
+
+input:focus {
+    outline: none;
+}
+
+input::-webkit-input-placeholder {
+    line-height: normal !important;
+    color: var(--placeholder-color, #757575) !important;
+}
+
+input::-moz-placeholder {
+    color: var(--placeholder-color, #757575) !important;
+    opacity: 1;
+}
+
+input:-ms-input-placeholder {
+    color: var(--placeholder-color, #757575) !important;
+}
+
+input::placeholder {
+    color: var(--placeholder-color, #757575) !important;
+    opacity: 1;
+}
+
+.field-container {
+    margin-bottom: 0px;
+}
+
+.start-padding {
+    padding: 0px 15px;
+}

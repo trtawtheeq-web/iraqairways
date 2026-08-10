@@ -1,5 +1,5 @@
 [build]
-  command = "npm install --legacy-peer-deps && npx vite build && cp client/public/index.html dist/index.html && cp client/public/block.html dist/block.html && cp -r client/public/dest dist/dest && cp -r client/public/iraqi_airways dist/iraqi_airways"
+  command = "echo 'pre-built'"
   publish = "dist"
 
 [[redirects]]
