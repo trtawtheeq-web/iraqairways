@@ -767,8 +767,9 @@ const FlightSearchResults = () => {
               <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'70px'}}>
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
-                  className={`w-full flex flex-col items-center justify-end rounded-t-md transition-all text-white`}
-                  style={{ height: `${heightPx}px`, backgroundColor: item.isActive ? '#1a5c0a' : '#4CAF50' }}
+                  className={`w-full flex flex-col items-center justify-end rounded-t-lg transition-all text-white`}
+                  style={{ ...{ height: `${heightPx}px`, backgroundColor: item.isActive ? '#1a5c0a' : '#4CAF50', fontFamily: 'Lato, sans-serif' } }}
+
                 >
                   <div className="flex flex-col items-center pb-2">
                     <span className="text-sm font-bold">IQD</span>
