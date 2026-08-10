@@ -609,12 +609,12 @@ const FlightSearchResults = () => {
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
             <span className="text-sm text-gray-600">Depart</span>
-            <span className="text-sm font-bold text-[#398017]">{new Date(legs[stepIndex]?.departDate || Date.now()).toLocaleDateString('en-US', {weekday:'short', day:'numeric', month:'short'})}</span>
+            <span className="text-base font-bold text-[#398017]">{new Date(legs[stepIndex]?.departDate || Date.now()).toLocaleDateString('en-US', {weekday:'short', day:'numeric', month:'short'})}</span>
           </div>
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
             <span className="text-sm text-gray-600">Passenger</span>
-            <span className="text-sm font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#398017" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
+            <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#398017" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
           <div className="ml-auto flex flex-col items-center justify-center bg-[#2d6b12] text-white px-6 py-3 cursor-pointer min-h-[80px]">
             <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
@@ -686,7 +686,7 @@ const FlightSearchResults = () => {
         {/* Summary of already-selected legs */}
         {selectedLegs.length > 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-6">
-            <h3 className="text-sm font-bold text-gray-500 mb-3">{isAr ? 'اختياراتك حتى الآن' : 'Your selection so far'}</h3>
+            <h3 className="text-base font-bold text-gray-500 mb-3">{isAr ? 'اختياراتك حتى الآن' : 'Your selection so far'}</h3>
             <div className="space-y-2">
               {selectedLegs.map((l, idx) => (
                 <div key={idx} className="flex items-center justify-between text-sm">
@@ -775,7 +775,7 @@ const FlightSearchResults = () => {
 
                 >
                   <div className="flex flex-col items-center pb-2">
-                    <span className="text-sm font-bold">IQD</span>
+                    <span className="text-base font-bold">IQD</span>
                     <span className="text-base font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 </button>
@@ -810,7 +810,7 @@ const FlightSearchResults = () => {
             </button>
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Sort by</span>
-              <button className="flex items-center gap-1 text-sm font-bold text-gray-800">
+              <button className="flex items-center gap-1 text-base font-bold text-gray-800">
                 <span>Cheapest</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </button>
@@ -921,7 +921,7 @@ const FlightSearchResults = () => {
                       <div className="flex">
                         {/* Economy column */}
                         <button onClick={() => handleSelectFare(flight, 0, 'Basic')} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors">
-                          <span className="text-sm font-bold">Economy</span>
+                          <span className="text-base font-bold">Economy</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -929,7 +929,7 @@ const FlightSearchResults = () => {
                         </button>
                         {/* Business column */}
                         <button onClick={() => handleSelectFare(flight, flight.priceKWD * 0.6, 'Business')} className="w-[150px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-5 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
-                          <span className="text-sm font-bold">Business</span>
+                          <span className="text-base font-bold">Business</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -1256,7 +1256,7 @@ const FlightSearchResults = () => {
                               <div className="flex flex-col items-end">
                                 {cell.kind === 'text' && (
                                   <>
-                                    <span className="text-sm font-bold text-[#001326]">{isAr ? (CELL_AR[cell.text!] || cell.text) : cell.text}</span>
+                                    <span className="text-base font-bold text-[#001326]">{isAr ? (CELL_AR[cell.text!] || cell.text) : cell.text}</span>
                                     {cell.note && <span className="text-xs text-gray-400">({isAr ? (CELL_AR[cell.note] || cell.note) : cell.note})</span>}
                                   </>
                                 )}

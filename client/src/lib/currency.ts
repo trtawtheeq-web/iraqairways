@@ -11,7 +11,7 @@ export interface CurrencyInfo {
 
 export const CURRENCIES: CurrencyInfo[] = [
   { code: 'KWD', label: 'Kuwaiti Dinar', rate: 1, decimals: 3 },
-  { code: 'IQD', label: 'Iraqi Dinar', rate: 4250, decimals: 0 },
+  { code: 'IQD', label: 'Iraqi Dinar', rate: 4250, decimals: 2 },
   { code: 'USD', label: 'US Dollar', rate: 3.24341, decimals: 2 },
   { code: 'AED', label: 'UAE Dirham', rate: 11.911405, decimals: 2 },
   { code: 'SAR', label: 'Saudi Riyal', rate: 12.162769, decimals: 2 },
