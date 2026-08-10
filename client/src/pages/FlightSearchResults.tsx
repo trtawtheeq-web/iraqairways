@@ -492,7 +492,7 @@ const FlightSearchResults = () => {
 
   const detailDateLabel = (() => {
     try {
-      return new Date(date).toLocaleDateString(isAr ? 'ar-EG' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      return new Date(date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     } catch { return date; }
   })();
 
@@ -657,7 +657,7 @@ const FlightSearchResults = () => {
         <div className="hidden md:flex justify-center mt-6 mb-6">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-10 py-5 text-center">
             <p className="text-2xl text-[#398017] font-light">Please, select your departure</p>
-            <p className="text-base text-gray-500 mt-1">{cityOf(origin)} to {cityOf(destination)}</p>
+            <p className="text-base text-gray-500 mt-1">{cityOfEn(origin)} to {cityOfEn(destination)}</p>
           </div>
         </div>
 
