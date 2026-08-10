@@ -756,33 +756,32 @@ const FlightSearchResults = () => {
           >
             <span className="text-lg leading-none">{isAr ? '→' : '←'}</span>
           </button>
-          <div className="flex-1 flex items-end bg-[#f0f0f0] rounded-lg p-3 overflow-x-auto no-scrollbar gap-[2px]">
-            {dateRibbon.map((item) => (
-              <button
-                key={item.dateStr}
-                onClick={() => handleDateChange(item.dateStr)}
-                className={`flex-shrink-0 w-[90px] flex flex-col items-center justify-end rounded-t-lg transition-all ${
-                  item.isActive ? 'bg-[#4CAF50] text-white h-[90px]' : 'bg-[#81C784] text-white h-[90px]'
-                } ${item.minPrice <= 0 ? 'bg-gray-200 text-gray-500' : ''}`}
-                style={{ margin: '0 1px' }}
-              >
-                {item.minPrice > 0 ? (
+          <div className="flex-1 flex items-end bg-[#f0f5f0] rounded-lg p-4 overflow-x-auto no-scrollbar gap-1">
+            {dateRibbon.map((item) => {
+              const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
+              const heightPx = minP > 0 ? Math.max(60, Math.min(140, Math.round((minP / 30) * 2))) : 40;
+              const enDate = (() => { try { return new Date(item.dateStr).toLocaleDateString('en-US', {weekday:'short', day:'numeric'}); } catch { return item.displayDate; } })();
+              return (
+              <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'90px'}}>
+                <button
+                  onClick={() => handleDateChange(item.dateStr)}
+                  className={`w-full flex flex-col items-center justify-end rounded-t transition-all ${
+                    item.isActive ? 'bg-[#1a5c0a] text-white' : 'bg-[#4CAF50] text-white'
+                  }`}
+                  style={{ height: `${heightPx}px` }}
+                >
                   <div className="flex flex-col items-center pb-2">
-                    <span className="text-xs font-bold">IQD</span>
-                    <span className="text-sm font-bold">{formatPrice(applyDiscount(item.minPrice), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    <span className="text-[10px] font-bold">IQD</span>
+                    <span className="text-xs font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center pb-2">
-                    <span className="text-xs">No</span>
-                    <span className="text-xs">flights</span>
-                  </div>
-                )}
-                <div className={`text-xs pb-2 ${item.isActive ? 'font-bold' : ''}`}>
-                  {item.isActive && <span className="mr-1">✓</span>}
-                  {item.displayDate}
+                </button>
+                <div className={`text-xs mt-1 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-gray-600'}`}>
+                  {item.isActive && <span className="text-[#398017] mr-0.5">✔</span>}
+                  {enDate}
                 </div>
-              </button>
-            ))}
+              </div>
+              );
+            })}
           </div>
           <button
             onClick={() => canGoNext && shiftRibbon(7)}
