@@ -759,7 +759,7 @@ const FlightSearchResults = () => {
           <div className="flex-1 flex items-end bg-[#eef4ee] rounded-xl pt-[80px] pb-4 px-6 overflow-x-auto no-scrollbar gap-3">
             {dateRibbon.map((item) => {
               const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
-              const maxPrice = Math.max(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const minPrice2 = Math.min(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const range = maxPrice - minPrice2 || 1; const heightPx = minP > 0 ? Math.round(55 + ((minP - minPrice2) / range) * 90) : 30;
+              const prices = dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice)); const avgPrice = prices.reduce((a,b) => a+b, 0) / (prices.length || 1); const heightPx = minP > 0 ? (minP >= avgPrice ? 130 : 70) : 30;
               const enDate = (() => { try { const d = new Date(item.dateStr); return d.toLocaleDateString('en-US', {weekday:'short'}).slice(0,3) + ' ' + d.getDate(); } catch { return item.displayDate; } })();
               return (
               <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'70px'}}>
