@@ -565,7 +565,7 @@ const FlightSearchResults = () => {
         {/* Green top bar */}
         <div className="w-full bg-[#398017] px-6 py-3 flex items-center gap-6">
           <img
-            src="/iraqi_airways/upload/logo-white.jpg"
+            src="/iraqi_airways/upload/logo.png"
             alt="Iraqi Airways"
             onClick={() => { window.location.href = '/'; }}
             className="w-[120px] h-[65px] object-contain cursor-pointer"

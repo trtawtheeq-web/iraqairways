@@ -53,7 +53,7 @@ function resolveSiteLang(): Lang | null {
 }
 
 function readInitialLang(): Lang {
-  return resolveSiteLang() ?? 'ar';
+  return resolveSiteLang() ?? 'en';
 }
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
