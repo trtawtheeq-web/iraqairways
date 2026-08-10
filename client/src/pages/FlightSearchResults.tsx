@@ -745,18 +745,19 @@ const FlightSearchResults = () => {
           </div>
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
-        <div className="hidden md:flex items-center gap-2 mb-4" dir="ltr">
+        <div className="hidden md:block mb-4" dir="ltr">
+          <div className="relative bg-[#eef4ee] border border-gray-200 rounded-xl pt-[80px] pb-4 px-14 overflow-x-auto no-scrollbar">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
             aria-label="Previous days"
-            className={`flex-shrink-0 w-[48px] h-[48px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
+            className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
               canGoPrev ? 'border-[#398017] bg-[#398017] text-white hover:bg-[#2d6b12]' : 'border-gray-300 bg-white text-gray-500 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <div className="flex-1 flex items-end bg-[#eef4ee] rounded-xl pt-[80px] pb-4 px-6 overflow-x-auto no-scrollbar gap-3">
+          <div className="flex items-end gap-3 justify-center">
             {dateRibbon.map((item) => {
               const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
               const prices = dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice)); const avgPrice = prices.reduce((a,b) => a+b, 0) / (prices.length || 1); const heightPx = minP > 0 ? (minP >= avgPrice ? 130 : 70) : 30;
@@ -787,12 +788,13 @@ const FlightSearchResults = () => {
             onClick={() => canGoNext && shiftRibbon(7)}
             disabled={!canGoNext}
             aria-label="Next days"
-            className={`flex-shrink-0 w-[48px] h-[48px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
+            className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
               canGoNext ? 'border-gray-300 bg-white text-gray-500 hover:bg-gray-100' : 'border-gray-200 bg-white text-gray-300 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
           </button>
+          </div>
         </div>
 
         {/* Row: "N flights available" + filter */}
