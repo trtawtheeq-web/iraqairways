@@ -746,13 +746,13 @@ const FlightSearchResults = () => {
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
         <div className="hidden md:block mb-4" dir="ltr">
-          <div className="relative bg-[#e8f0e8] border border-[#c8dcc8] rounded-xl pt-[80px] pb-4 px-14 overflow-x-auto no-scrollbar">
+          <div className="relative bg-[#e9f5e3] border border-[#d0e0c8] rounded-xl pt-[80px] pb-4 px-16 overflow-x-auto no-scrollbar">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
             aria-label="Previous days"
             className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
-              canGoPrev ? 'border-[#398017] bg-[#398017] text-white hover:bg-[#2d6b12]' : 'border-gray-300 bg-white text-gray-500 cursor-not-allowed'
+              canGoPrev ? 'border-[#2d6b12] bg-[#2d6b12] text-white hover:bg-[#1a5c0a]' : 'border-[#2d6b12] bg-[#2d6b12] text-white cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
@@ -789,7 +789,7 @@ const FlightSearchResults = () => {
             disabled={!canGoNext}
             aria-label="Next days"
             className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
-              canGoNext ? 'border-gray-300 bg-white text-gray-500 hover:bg-gray-100' : 'border-gray-200 bg-white text-gray-300 cursor-not-allowed'
+              canGoNext ? 'border-[#2d6b12] bg-[#2d6b12] text-white hover:bg-[#1a5c0a]' : 'border-gray-300 bg-white text-gray-400 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
