@@ -785,7 +785,6 @@ const FlightSearchResults = () => {
               );
             })}
           </div>
-          </div>
           <button
             onClick={() => canGoNext && shiftRibbon(7)}
             disabled={!canGoNext}
