@@ -532,7 +532,7 @@ const FlightSearchResults = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white font-avenir" dir={dir}>
+    <div className="min-h-screen bg-white font-[Lato]" dir={dir}>
       {/* Mobile Top Bar - matches original: back arrow + route pill + KWD */}
       <div className="md:hidden w-full py-3 px-4 flex items-center justify-between sticky top-0 z-[9999] bg-white">
         <button onClick={() => { if (detailsFlight) { setDetailsFlight(null); } else if (expandedId) { setExpandedId(null); } else { window.location.href = '/'; } }} className="w-9 h-9 rounded-full border border-[#12470D]/30 flex items-center justify-center bg-white">
