@@ -124,7 +124,7 @@ const FlightSearchResults = () => {
   const senior = parseInt(searchParams.get('senior') || '0', 10);
   const minor = parseInt(searchParams.get('minor') || '0', 10);
   const duoSeat = parseInt(searchParams.get('duoSeat') || '0', 10) || 0;
-  const currency = (searchParams.get('currency') || (typeof localStorage !== 'undefined' && localStorage.getItem('jz_currency')) || 'KWD').toUpperCase();
+  const currency = (searchParams.get('currency') || (typeof localStorage !== 'undefined' && localStorage.getItem('jz_currency')) || 'IQD').toUpperCase();
   const curCode = getCurrency(currency).code;
 
   let totalPax = adult + child + infant + senior + minor;
