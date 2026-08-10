@@ -229,7 +229,7 @@ const FlightSearchResults = () => {
     return d.toISOString().split('T')[0];
   };
   const canGoPrev = ribbonStart > todayStr;
-  const canGoNext = addDays(ribbonStart, 6) < maxStr;
+  const canGoNext = addDays(ribbonStart, 11) < maxStr;
   const shiftRibbon = (n: number) => {
     let next = addDays(ribbonStart, n);
     if (next < todayStr) next = todayStr;
@@ -271,7 +271,7 @@ const FlightSearchResults = () => {
   const generateDateRibbon = () => {
     const ribbon = [];
     const baseDate = new Date(ribbonStart);
-    const count = window.innerWidth < 768 ? 5 : 7;
+    const count = window.innerWidth < 768 ? 5 : 12;
     for (let i = 0; i < count; i++) {
       const d = new Date(baseDate);
       d.setDate(baseDate.getDate() + i);
@@ -745,37 +745,37 @@ const FlightSearchResults = () => {
           </div>
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
-        <div className="hidden md:flex items-center gap-2 mb-4">
+        <div className="hidden md:flex items-center gap-2 mb-4" dir="ltr">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
             aria-label="Previous days"
-            className={`flex-shrink-0 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors bg-white shadow-sm ${
-              canGoPrev ? 'border-[#398017] bg-[#398017] text-white hover:bg-[#2d6b12]' : 'border-gray-200 text-gray-300 cursor-not-allowed'
+            className={`flex-shrink-0 w-[48px] h-[48px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
+              canGoPrev ? 'border-[#398017] bg-[#398017] text-white hover:bg-[#2d6b12]' : 'border-gray-300 bg-white text-gray-400 cursor-not-allowed'
             }`}
           >
-            <span className="text-lg leading-none">{isAr ? '→' : '←'}</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <div className="flex-1 flex items-end bg-[#f0f5f0] rounded-lg pt-[120px] pb-4 px-4 overflow-x-auto no-scrollbar gap-1">
+          <div className="flex-1 flex items-end bg-[#f0f5f0] rounded-xl pt-[100px] pb-4 px-3 overflow-x-auto no-scrollbar gap-[3px]">
             {dateRibbon.map((item) => {
               const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
-              const maxPrice = Math.max(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const minPrice2 = Math.min(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const range = maxPrice - minPrice2 || 1; const heightPx = minP > 0 ? Math.round(50 + ((minP - minPrice2) / range) * 100) : 30;
-              const enDate = (() => { try { return new Date(item.dateStr).toLocaleDateString('en-US', {weekday:'short', day:'numeric'}); } catch { return item.displayDate; } })();
+              const maxPrice = Math.max(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const minPrice2 = Math.min(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const range = maxPrice - minPrice2 || 1; const heightPx = minP > 0 ? Math.round(55 + ((minP - minPrice2) / range) * 90) : 30;
+              const enDate = (() => { try { const d = new Date(item.dateStr); return d.toLocaleDateString('en-US', {weekday:'short'}).slice(0,3) + ' ' + d.getDate(); } catch { return item.displayDate; } })();
               return (
-              <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'90px'}}>
+              <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'80px'}}>
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
-                  className={`w-full flex flex-col items-center justify-end rounded-t transition-all ${
+                  className={`w-full flex flex-col items-center justify-end rounded-t-sm transition-all ${
                     item.isActive ? 'bg-[#1a5c0a] text-white' : 'bg-[#4CAF50] text-white'
                   }`}
                   style={{ height: `${item.isActive ? heightPx + 40 : heightPx}px` }}
                 >
                   <div className="flex flex-col items-center pb-2">
                     <span className="text-[10px] font-bold">IQD</span>
-                    <span className="text-xs font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    <span className="text-[11px] font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 </button>
-                <div className={`text-xs mt-1 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-gray-600'}`}>
+                <div className={`text-[11px] mt-1.5 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-[#398017]'}`}>
                   {item.isActive && <span className="text-[#398017] mr-0.5">✔</span>}
                   {enDate}
                 </div>
@@ -787,11 +787,11 @@ const FlightSearchResults = () => {
             onClick={() => canGoNext && shiftRibbon(7)}
             disabled={!canGoNext}
             aria-label="Next days"
-            className={`flex-shrink-0 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors bg-white shadow-sm ${
-              canGoNext ? 'border-gray-400 text-gray-700 hover:bg-gray-100' : 'border-gray-200 text-gray-300 cursor-not-allowed'
+            className={`flex-shrink-0 w-[48px] h-[48px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
+              canGoNext ? 'border-gray-300 bg-white text-gray-400 hover:bg-gray-100' : 'border-gray-200 bg-white text-gray-300 cursor-not-allowed'
             }`}
           >
-            <span className="text-lg leading-none">{isAr ? '←' : '→'}</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>
 
