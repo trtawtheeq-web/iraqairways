@@ -775,7 +775,7 @@ const FlightSearchResults = () => {
 
                 >
                   <div className="flex flex-col items-center pb-2">
-                    <span className="text-base font-bold">IQD</span>
+                    <span className="text-base font-bold text-white">IQD</span>
                     <span className="text-base font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 </button>
