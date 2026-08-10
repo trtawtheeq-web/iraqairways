@@ -666,13 +666,7 @@ const FlightSearchResults = () => {
           <p className="text-lg font-bold text-[#398017]">{detailDateLabel}</p>
         </div>
 
-        {/* Hide dates toggle - matches original */}
-        <div className="hidden md:flex justify-center mb-2">
-          <button className="text-sm text-gray-600 flex items-center gap-1">
-            <span>Hide dates</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
-          </button>
-        </div>
+        {/* Hide dates toggle - moved inside box below */}
 
         {/* Page title - hidden */}
         <div className="hidden">
@@ -746,7 +740,15 @@ const FlightSearchResults = () => {
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
         <div className="hidden md:block mb-4" dir="ltr">
-          <div className="relative bg-[#e9f5e3] border border-[#d0e0c8] rounded-xl pt-[80px] pb-4 px-16 overflow-x-auto no-scrollbar">
+          <div className="relative rounded-xl pt-4 pb-6 px-16 overflow-hidden" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
+          {/* Hide dates inside box */}
+          <div className="flex justify-center mb-4">
+            <button className="text-sm text-gray-600 flex items-center gap-1 bg-white px-4 py-1.5 rounded border border-gray-200">
+              <span>Hide dates</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
+            </button>
+          </div>
+          <div style={{minHeight:'160px'}} className="flex items-end">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
@@ -783,6 +785,7 @@ const FlightSearchResults = () => {
               </div>
               );
             })}
+          </div>
           </div>
           <button
             onClick={() => canGoNext && shiftRibbon(7)}
