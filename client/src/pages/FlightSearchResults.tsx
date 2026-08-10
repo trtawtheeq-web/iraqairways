@@ -746,7 +746,7 @@ const FlightSearchResults = () => {
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
         <div className="hidden md:block mb-4" dir="ltr">
-          <div className="relative bg-[#eef4ee] border border-gray-200 rounded-xl pt-[80px] pb-4 px-14 overflow-x-auto no-scrollbar">
+          <div className="relative bg-[#e8f0e8] border border-[#c8dcc8] rounded-xl pt-[80px] pb-4 px-14 overflow-x-auto no-scrollbar">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
