@@ -81,6 +81,7 @@ const FlightSearchResults = () => {
   const [, setLocation] = useLocation();
   const { lang, setLang, isAr, dir, t } = useLang();
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [datesVisible, setDatesVisible] = useState(true);
   const [currOpen, setCurrOpen] = useState(false);
   const currRef = useRef<HTMLDivElement>(null);
 
@@ -741,13 +742,13 @@ const FlightSearchResults = () => {
         <div className="hidden md:block mb-4" dir="ltr">
           <div className="relative rounded-xl pt-4 pb-6 px-16 overflow-hidden" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
           {/* Hide dates inside box */}
-          <div className="flex justify-center mb-4">
-            <button className="text-sm text-gray-600 flex items-center gap-1 bg-white px-4 py-1.5 rounded border border-gray-200">
-              <span>Hide dates</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
+          <div className="flex justify-center -mt-4 mb-4 relative -top-4">
+            <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1 bg-white px-4 py-1.5 rounded border border-gray-200 relative z-20">
+              <span>{datesVisible ? 'Hide dates' : 'Show dates'}</span>
+              <svg className={`w-4 h-4 transition-transform ${datesVisible ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
             </button>
           </div>
-          <div style={{minHeight:'160px'}} className="flex items-end">
+          {datesVisible && <div style={{minHeight:'160px'}} className="flex items-end">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
@@ -795,6 +796,7 @@ const FlightSearchResults = () => {
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
           </button>
+          </div>}
           </div>
         </div>
 
