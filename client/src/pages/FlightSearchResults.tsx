@@ -900,7 +900,7 @@ const FlightSearchResults = () => {
                     {/* Right: Economy + Business columns */}
                     <div className="flex">
                       {/* Economy column */}
-                      <button onClick={() => setExpandedId(open ? null : flight.id)} className="w-[140px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-4 hover:bg-[#1B5E20] transition-colors">
+                      <button onClick={() => handleSelectFare(flight, 0, 'Basic')} className="w-[140px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-4 hover:bg-[#1B5E20] transition-colors">
                         {isFirstFlight && <span className="text-[10px] bg-[#FFC107] text-black px-2 py-0.5 rounded mb-1">{isAr ? '8 مقاعد متبقية' : '8 seats left'}</span>}
                         <span className="text-sm font-bold">Economy</span>
                         <span className="text-xs mt-1">from</span>
@@ -909,7 +909,7 @@ const FlightSearchResults = () => {
                         <svg className={`w-4 h-4 mt-1 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                       </button>
                       {/* Business column */}
-                      <button onClick={() => setExpandedId(open ? null : flight.id)} className="w-[140px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-4 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
+                      <button onClick={() => handleSelectFare(flight, flight.priceKWD * 0.6, 'Business')} className="w-[140px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-4 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
                         <span className="text-sm font-bold">Business</span>
                         <span className="text-xs mt-1">from</span>
                         <span className="text-xs">IQD</span>
