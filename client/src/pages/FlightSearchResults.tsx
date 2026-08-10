@@ -764,7 +764,7 @@ const FlightSearchResults = () => {
               const prices = dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice)); const avgPrice = prices.reduce((a,b) => a+b, 0) / (prices.length || 1); const heightPx = minP > 0 ? (minP >= avgPrice ? 130 : 70) : 30;
               const enDate = (() => { try { const d = new Date(item.dateStr); return d.toLocaleDateString('en-US', {weekday:'short'}).slice(0,3) + ' ' + d.getDate(); } catch { return item.displayDate; } })();
               return (
-              <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'70px'}}>
+              <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'85px'}}>
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
                   className={`w-full flex flex-col items-center justify-end rounded-t-lg transition-all text-white`}
