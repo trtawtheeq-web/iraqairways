@@ -560,73 +560,51 @@ const FlightSearchResults = () => {
         </div>
       </div>
 
-      {/* Header (Hidden on mobile) — matches original results-page header exactly */}
-      <header className="hidden md:block relative w-full h-[98px] bg-[#f5f5f5]">
-        {/* Logo, pinned to the inline-start corner (left in EN, right in AR) */}
-        <img
-          src="/iraqi_airways/upload/logo-white.jpg"
-          alt="Jazeera"
-          onClick={() => { window.location.href = '/'; }}
-          className="absolute top-4 w-[126px] h-[71px] object-contain cursor-pointer z-10"
-          style={{ insetInlineStart: '16px' }}
-        />
-
-        {/* Centered white route capsule */}
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center">
-          <div className="flex items-center gap-4 bg-white rounded-full border border-[#e5e5e5] shadow-[rgba(18,71,13,0.15)_0px_2px_11px_0px] px-4 py-4 h-[74px]">
-            <div className="flex items-center gap-2">
-              {/* origin + destination group */}
-              <div className="flex items-center gap-2">
-                <button onClick={() => openHomePicker('origin')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
-                  <img src="/jazeera_files/orig_takeOff.svg" alt="takeoff" className="w-4 h-4" />
-                  <span className="text-[#12470D]">{origin}</span>
-                </button>
-                <span className="hidden sm:inline"><img src="/jazeera_files/orig_fsaLine.svg" alt="" className="w-[21px]" /></span>
-                <button onClick={() => openHomePicker('destination')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
-                  <img src="/jazeera_files/orig_landing.svg" alt="land" className="w-4 h-4" />
-                  <span className="text-[#12470D]">{destination}</span>
-                </button>
-              </div>
-              <div className="hidden sm:block"><img src="/jazeera_files/orig_fsaLine.svg" alt="" className="w-[21px]" /></div>
-              <button onClick={() => openHomePicker('date')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
-                <img src="/jazeera_files/orig_calendar.svg" alt="date" className="w-4 h-4" />
-                <span className="text-[#12470D] whitespace-nowrap">{capsuleDateLabel}</span>
-              </button>
-              <div className="hidden sm:block"><img src="/jazeera_files/orig_fsaLine.svg" alt="" className="w-[21px]" /></div>
-              <button onClick={() => openHomePicker('pax')} className="flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium bg-[rgba(65,180,230,0.15)] hover:bg-[rgba(65,180,230,0.28)] transition-colors">
-                <img src="/jazeera_files/orig_passenger.svg" alt="pax" className="w-4 h-4" />
-                <span className="text-[#12470D]">{passengers}</span>
-              </button>
-            </div>
-            {/* edit / search button */}
-            <button onClick={() => openHomePicker('origin')} className="flex items-center justify-center" aria-label="Edit search">
-              <img src="/jazeera_files/orig_rail-arrow-button.svg" alt="search" className="w-[38px] h-[38px]" />
-            </button>
-          </div>
-        </div>
-
-        {/* Language pill, pinned to the inline-end corner (right in EN, left in AR) */}
-        <div className="absolute top-[30px]" style={{ insetInlineEnd: '24px' }}>
-          <div className="relative">
+      {/* Header - Iraqi Airways Original Style */}
+      <header className="hidden md:block w-full">
+        {/* Green top bar */}
+        <div className="w-full bg-[#398017] px-6 py-3 flex items-center gap-6">
+          <img
+            src="/iraqi_airways/upload/logo-white.jpg"
+            alt="Iraqi Airways"
+            onClick={() => { window.location.href = '/'; }}
+            className="w-[80px] h-[45px] object-contain cursor-pointer"
+          />
+          <a href="/" className="text-white text-sm font-medium hover:underline">Home</a>
+          <div className="relative ml-auto">
             <button
               onClick={() => setLangMenuOpen(o => !o)}
-              className="flex items-center gap-1 px-4 py-2 rounded-full bg-white border border-[rgba(18,71,13,0.3)] shadow-[rgba(18,71,13,0.15)_0px_2px_11px_0px] text-[#12470D] text-sm font-medium"
+              className="flex items-center gap-1 text-white text-sm font-medium"
             >
-              <span>{isAr ? 'AR-JO' : 'EN-JO'}</span>
-              <svg className={`w-3.5 h-3.5 transition-transform ${langMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <span>English</span>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             {langMenuOpen && (
-              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ insetInlineEnd: 0 }}>
-                <button
-                  onClick={() => { setLang('ar'); setLangMenuOpen(false); }}
-                  className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${isAr ? 'text-[#12470D] font-bold bg-blue-50/60' : 'text-gray-700'}`}
-                >العربية</button>
-                <button
-                  onClick={() => { setLang('en'); setLangMenuOpen(false); }}
-                  className={`block w-full text-start px-4 py-2.5 text-sm hover:bg-blue-50 ${!isAr ? 'text-[#12470D] font-bold bg-blue-50/60' : 'text-gray-700'}`}
-                >English</button>
+              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ right: 0 }}>
+                <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">العربية</button>
+                <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">English</button>
               </div>
             )}
+          </div>
+        </div>
+        {/* Flight info bar */}
+        <div className="w-full bg-white border-b border-gray-200 px-6 py-4 flex items-center">
+          <div className="flex items-center gap-3">
+            <span className="text-xl font-bold text-[#398017]">{origin}</span>
+            <span className="text-gray-400">·····✈·····</span>
+            <span className="text-xl font-bold text-[#398017]">{destination}</span>
+          </div>
+          <div className="flex items-center gap-2 ml-6 pl-6 border-l border-gray-300">
+            <span className="text-sm text-gray-600">Depart</span>
+            <span className="text-sm font-bold text-[#398017]">{capsuleDateLabel}</span>
+          </div>
+          <div className="flex items-center gap-2 ml-6 pl-6 border-l border-gray-300">
+            <span className="text-sm text-gray-600">Passenger</span>
+            <span className="text-sm font-bold text-[#398017]">{passengers} 👤</span>
+          </div>
+          <div className="ml-auto flex items-center gap-2 bg-[#398017] text-white px-4 py-2 rounded cursor-pointer">
+            <span>🛒</span>
+            <span className="text-sm font-medium">Your booking</span>
           </div>
         </div>
       </header>
