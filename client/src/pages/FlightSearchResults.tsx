@@ -561,7 +561,7 @@ const FlightSearchResults = () => {
       </div>
 
       {/* Header - Iraqi Airways Original Style */}
-      <header className="hidden md:block w-full">
+      <header className="hidden md:block w-full" dir="ltr">
         {/* Green top bar */}
         <div className="w-full bg-[#398017] px-6 py-3 flex items-center gap-6">
           <img
@@ -641,9 +641,29 @@ const FlightSearchResults = () => {
 
       <main className="max-w-5xl mx-auto px-4 md:px-4 pb-4">
 
-        {/* Page title — "Kuwait to Mumbai" with plane icon, matches original */}
-        {/* Page title - hidden on mobile, shown on desktop */}
-        <div className="hidden md:flex items-center gap-3 mt-3 mb-2">
+        {/* "Please, select your departure" box - matches original */}
+        <div className="hidden md:flex justify-center mt-6 mb-6">
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-10 py-5 text-center">
+            <p className="text-2xl text-[#398017] font-light">Please, select your departure</p>
+            <p className="text-base text-gray-500 mt-1">{cityOf(origin)} to {cityOf(destination)}</p>
+          </div>
+        </div>
+
+        {/* Full date - matches original */}
+        <div className="hidden md:block text-center mb-4">
+          <p className="text-lg font-bold text-[#398017]">{detailDateLabel}</p>
+        </div>
+
+        {/* Hide dates toggle - matches original */}
+        <div className="hidden md:flex justify-center mb-2">
+          <button className="text-sm text-gray-600 flex items-center gap-1">
+            <span>Hide dates</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
+          </button>
+        </div>
+
+        {/* Page title - hidden */}
+        <div className="hidden">
           <button
             onClick={() => { window.location.href = '/'; }}
             aria-label="Back"
