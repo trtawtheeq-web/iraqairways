@@ -294,7 +294,6 @@ const FlightSearchResults = () => {
     setIsLoading(true);
     setExpandedId(null);
     setDate(newDate);
-    setRibbonStart(newDate);
   };
 
   useEffect(() => {
@@ -768,10 +767,8 @@ const FlightSearchResults = () => {
               <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'70px'}}>
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
-                  className={`w-full flex flex-col items-center justify-end rounded-t-md transition-all ${
-                    item.isActive ? 'bg-[#1a5c0a] text-white' : 'bg-[#4CAF50] text-white'
-                  }`}
-                  style={{ height: `${item.isActive ? heightPx + 40 : heightPx}px` }}
+                  className={`w-full flex flex-col items-center justify-end rounded-t-md transition-all text-white`}
+                  style={{ height: `${item.isActive ? heightPx + 40 : heightPx}px`, backgroundColor: item.isActive ? '#1a5c0a' : '#4CAF50' }}
                 >
                   <div className="flex flex-col items-center pb-2">
                     <span className="text-xs font-bold">IQD</span>
