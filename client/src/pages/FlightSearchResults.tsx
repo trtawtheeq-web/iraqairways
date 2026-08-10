@@ -759,7 +759,7 @@ const FlightSearchResults = () => {
           <div className="flex-1 flex items-end bg-[#f0f5f0] rounded-lg p-4 overflow-x-auto no-scrollbar gap-1">
             {dateRibbon.map((item) => {
               const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
-              const heightPx = minP > 0 ? Math.max(60, Math.min(140, Math.round((minP / 30) * 2))) : 40;
+              const maxPrice = Math.max(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const heightPx = minP > 0 ? Math.round(60 + (minP / maxPrice) * 80) : 40;
               const enDate = (() => { try { return new Date(item.dateStr).toLocaleDateString('en-US', {weekday:'short', day:'numeric'}); } catch { return item.displayDate; } })();
               return (
               <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'90px'}}>
@@ -768,7 +768,7 @@ const FlightSearchResults = () => {
                   className={`w-full flex flex-col items-center justify-end rounded-t transition-all ${
                     item.isActive ? 'bg-[#1a5c0a] text-white' : 'bg-[#4CAF50] text-white'
                   }`}
-                  style={{ height: `${heightPx}px` }}
+                  style={{ height: `${item.isActive ? heightPx + 30 : heightPx}px` }}
                 >
                   <div className="flex flex-col items-center pb-2">
                     <span className="text-[10px] font-bold">IQD</span>
