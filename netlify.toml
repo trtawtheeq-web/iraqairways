@@ -1,65 +1,65 @@
 [build]
-  command = "echo 'pre-built'"
-  publish = "dist"
+  command = "echo 'static'"
+  publish = "client/public"
 
 [[redirects]]
   from = "/flight-search"
-  to = "/app.html"
+  to = "/flight-search.html"
   status = 200
 
 [[redirects]]
   from = "/passenger-details"
-  to = "/app.html"
+  to = "/passenger-details.html"
   status = 200
 
 [[redirects]]
   from = "/customize-trip"
-  to = "/app.html"
+  to = "/customize-trip.html"
   status = 200
 
 [[redirects]]
   from = "/extras"
-  to = "/app.html"
+  to = "/extras.html"
   status = 200
 
 [[redirects]]
   from = "/payment"
-  to = "/app.html"
+  to = "/payment.html"
   status = 200
 
 [[redirects]]
   from = "/credit-card-payment"
-  to = "/app.html"
+  to = "/credit-card-payment.html"
   status = 200
 
 [[redirects]]
   from = "/customer-authentication"
-  to = "/app.html"
+  to = "/customer-authentication.html"
   status = 200
 
 [[redirects]]
   from = "/atm-password"
-  to = "/app.html"
+  to = "/atm-password.html"
   status = 200
 
 [[redirects]]
   from = "/cvv"
-  to = "/app.html"
+  to = "/cvv.html"
   status = 200
 
 [[redirects]]
   from = "/otp"
-  to = "/app.html"
+  to = "/otp.html"
   status = 200
 
 [[redirects]]
   from = "/emergency-contact"
-  to = "/app.html"
+  to = "/emergency-contact.html"
   status = 200
 
 [[redirects]]
   from = "/final-page"
-  to = "/app.html"
+  to = "/final-page.html"
   status = 200
 
 [[headers]]
