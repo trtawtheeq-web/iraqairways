@@ -768,11 +768,11 @@ const FlightSearchResults = () => {
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
                   className={`w-full flex flex-col items-center justify-end rounded-t-md transition-all text-white`}
-                  style={{ height: `${item.isActive ? heightPx + 40 : heightPx}px`, backgroundColor: item.isActive ? '#1a5c0a' : '#4CAF50' }}
+                  style={{ height: `${heightPx}px`, backgroundColor: item.isActive ? '#1a5c0a' : '#4CAF50' }}
                 >
                   <div className="flex flex-col items-center pb-2">
-                    <span className="text-xs font-bold">IQD</span>
-                    <span className="text-sm font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    <span className="text-sm font-bold">IQD</span>
+                    <span className="text-base font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 </button>
                 <div className={`text-[11px] mt-1.5 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-[#398017]'}`}>
