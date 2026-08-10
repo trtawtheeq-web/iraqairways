@@ -740,19 +740,19 @@ const FlightSearchResults = () => {
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
             aria-label="Previous days"
-            className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
-              canGoPrev ? 'border-[#12470D] text-[#12470D] hover:bg-blue-50' : 'border-gray-300 text-gray-300 cursor-not-allowed'
+            className={`flex-shrink-0 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors bg-white shadow-sm ${
+              canGoPrev ? 'border-gray-400 text-gray-700 hover:bg-gray-100' : 'border-gray-200 text-gray-300 cursor-not-allowed'
             }`}
           >
             <span className="text-lg leading-none">{isAr ? '→' : '←'}</span>
           </button>
-          <div className="flex-1 flex border-b border-gray-200 overflow-x-auto no-scrollbar">
+          <div className="flex-1 flex items-end bg-[#f0f0f0] rounded-lg p-3 overflow-x-auto no-scrollbar gap-[2px]">
             {dateRibbon.map((item) => (
               <button
                 key={item.dateStr}
                 onClick={() => handleDateChange(item.dateStr)}
                 className={`flex-shrink-0 w-[90px] flex flex-col items-center justify-end rounded-t-lg transition-all ${
-                  item.isActive ? 'bg-[#4CAF50] text-white h-[140px]' : 'bg-[#81C784] text-white h-[100px]'
+                  item.isActive ? 'bg-[#4CAF50] text-white h-[120px]' : 'bg-[#81C784] text-white h-[90px]'
                 } ${item.minPrice <= 0 ? 'bg-gray-200 text-gray-500' : ''}`}
                 style={{ margin: '0 1px' }}
               >
@@ -778,8 +778,8 @@ const FlightSearchResults = () => {
             onClick={() => canGoNext && shiftRibbon(7)}
             disabled={!canGoNext}
             aria-label="Next days"
-            className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
-              canGoNext ? 'border-[#12470D] text-[#12470D] hover:bg-blue-50' : 'border-gray-300 text-gray-300 cursor-not-allowed'
+            className={`flex-shrink-0 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors bg-white shadow-sm ${
+              canGoNext ? 'border-gray-400 text-gray-700 hover:bg-gray-100' : 'border-gray-200 text-gray-300 cursor-not-allowed'
             }`}
           >
             <span className="text-lg leading-none">{isAr ? '←' : '→'}</span>
