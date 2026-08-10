@@ -532,9 +532,9 @@ const FlightSearchResults = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#EBF3FF] font-avenir" dir={dir}>
+    <div className="min-h-screen bg-white font-avenir" dir={dir}>
       {/* Mobile Top Bar - matches original: back arrow + route pill + KWD */}
-      <div className="md:hidden w-full py-3 px-4 flex items-center justify-between sticky top-0 z-[9999] bg-[#EBF3FF]">
+      <div className="md:hidden w-full py-3 px-4 flex items-center justify-between sticky top-0 z-[9999] bg-white">
         <button onClick={() => { if (detailsFlight) { setDetailsFlight(null); } else if (expandedId) { setExpandedId(null); } else { window.location.href = '/'; } }} className="w-9 h-9 rounded-full border border-[#12470D]/30 flex items-center justify-center bg-white">
           <svg className="w-4 h-4 text-[#12470D]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
@@ -561,7 +561,7 @@ const FlightSearchResults = () => {
       </div>
 
       {/* Header (Hidden on mobile) — matches original results-page header exactly */}
-      <header className="hidden md:block relative w-full h-[98px] bg-[#EBF3FF]">
+      <header className="hidden md:block relative w-full h-[98px] bg-[#f5f5f5]">
         {/* Logo, pinned to the inline-start corner (left in EN, right in AR) */}
         <img
           src="/iraqi_airways/upload/logo-white.jpg"
@@ -674,7 +674,7 @@ const FlightSearchResults = () => {
             <img src="/jazeera_files/orig_back.svg" alt="back" className="w-4 h-4" style={isAr ? { transform: 'scaleX(-1)' } : undefined} />
           </button>
           <img src="/jazeera_files/orig_takeOff.svg" alt="" className="w-8 h-8" />
-          <h1 className="text-[40px] leading-none font-medium text-[#12470D]">{headerTitle}</h1>
+          <h1 className="text-[28px] leading-none font-medium text-gray-800">{headerTitle}</h1>
         </div>
 
         {/* Summary of already-selected legs */}
@@ -700,7 +700,7 @@ const FlightSearchResults = () => {
         )}
 
         {/* Date strip — mobile: scrollable for 1 year */}
-        <div className="md:hidden border-b border-[#cdddf0] mb-4 relative">
+        <div className="md:hidden border-b border-gray-200 mb-4 relative">
           <div
             className="flex overflow-x-auto no-scrollbar"
             ref={(el) => {
@@ -721,7 +721,7 @@ const FlightSearchResults = () => {
                   item.isActive ? 'border-[#12470D]' : 'border-transparent'
                 }`}
               >
-                <div className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#12470D]' : 'font-medium text-[#0B84C6]'}`}>{item.displayDate}</div>
+                <div className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#12470D]' : 'font-medium text-gray-700'}`}>{item.displayDate}</div>
                 {item.minPrice > 0 ? (
                   <div className="flex flex-col items-center">
                     <span className="text-xs line-through text-red-500 whitespace-nowrap">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -746,24 +746,31 @@ const FlightSearchResults = () => {
           >
             <span className="text-lg leading-none">{isAr ? '→' : '←'}</span>
           </button>
-          <div className="flex-1 flex border-b border-[#cdddf0] overflow-x-auto no-scrollbar">
+          <div className="flex-1 flex border-b border-gray-200 overflow-x-auto no-scrollbar">
             {dateRibbon.map((item) => (
               <button
                 key={item.dateStr}
                 onClick={() => handleDateChange(item.dateStr)}
-                className={`flex-1 pb-2 flex flex-col items-center justify-center gap-1 border-b-2 transition-colors ${
-                  item.isActive ? 'border-[#00264D]' : 'border-transparent hover:border-[#cdddf0]'
-                }`}
+                className={`flex-shrink-0 w-[90px] flex flex-col items-center justify-end rounded-t-lg transition-all ${
+                  item.isActive ? 'bg-[#4CAF50] text-white h-[140px]' : 'bg-[#81C784] text-white h-[100px]'
+                } ${item.minPrice <= 0 ? 'bg-gray-200 text-gray-500' : ''}`}
+                style={{ margin: '0 1px' }}
               >
-                <div className="text-base font-medium text-[#0B84C6] whitespace-nowrap">{item.displayDate}</div>
                 {item.minPrice > 0 ? (
-                  <>
-                    <div className="text-xs leading-none line-through text-[#E63946] whitespace-nowrap">{formatPrice(item.minPrice, curCode)}</div>
-                    <div className="text-base font-bold text-[#001326] whitespace-nowrap">{formatPrice(applyDiscount(item.minPrice), curCode)}</div>
-                  </>
+                  <div className="flex flex-col items-center pb-2">
+                    <span className="text-xs font-bold">IQD</span>
+                    <span className="text-sm font-bold">{formatPrice(applyDiscount(item.minPrice), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                  </div>
                 ) : (
-                  <div className="text-base font-medium text-[#001326]">-</div>
+                  <div className="flex flex-col items-center pb-2">
+                    <span className="text-xs">No</span>
+                    <span className="text-xs">flights</span>
+                  </div>
                 )}
+                <div className={`text-xs pb-2 ${item.isActive ? 'font-bold' : ''}`}>
+                  {item.isActive && <span className="mr-1">✓</span>}
+                  {item.displayDate}
+                </div>
               </button>
             ))}
           </div>
@@ -782,15 +789,16 @@ const FlightSearchResults = () => {
         {/* Row: "N flights available" + filter */}
         {!isLoading && (
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base md:text-base font-semibold text-[#12470D]">{flights.length > 0 ? `${flights.length} ${t('fsr.flightsAvailable')}` : (isAr ? 'لا توجد رحلات متاحة' : 'No flights available')}</h2>
-            <div className="flex items-center gap-2 md:gap-3">
-              {/* Mobile: just filter icon */}
-              <button className="md:hidden w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center bg-white">
-                <svg className="w-5 h-5 text-[#12470D]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h18M6 8h12M9 12h6M11 16h2"/></svg>
+            <button className="flex items-center gap-2 bg-[#4CAF50] hover:bg-[#388E3C] text-white px-5 py-2.5 rounded-full font-medium transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h18M6 8h12M9 12h6M11 16h2"/></svg>
+              <span>Filters</span>
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Sort by</span>
+              <button className="flex items-center gap-1 text-sm font-bold text-gray-800">
+                <span>Cheapest</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </button>
-              {/* Desktop: text buttons */}
-              <button className="hidden md:block px-4 py-2 rounded-full bg-white border border-[rgba(18,71,13,0.3)] shadow-[rgba(18,71,13,0.15)_0px_2px_11px_0px] text-[#12470D] text-sm font-medium">{t('fsr.sortAndFilter')}</button>
-              <button className="hidden md:block px-4 py-2 rounded-full bg-white border border-[#e5e5e5] shadow-[rgba(0,0,0,0.1)_0px_8px_20px_0px] text-[#12470D] text-sm font-medium">{t('common.direct')}</button>
             </div>
           </div>
         )}
@@ -841,7 +849,7 @@ const FlightSearchResults = () => {
                       <span className="text-sm text-gray-600">{currentLeg.origin}</span>
                       <button
                         onClick={(e) => { e.stopPropagation(); setDetailsFlight(flight); }}
-                        className="text-sm text-[#0B84C6] underline font-medium"
+                        className="text-sm text-gray-700 underline font-medium"
                       >
                         {isAr ? 'مباشر' : 'Direct'} • {flight.duration}
                       </button>
@@ -862,36 +870,58 @@ const FlightSearchResults = () => {
                     </div>
                   </div>
 
-                  {/* ---- Desktop card row ---- */}
-                  <div className="hidden md:flex px-6 py-5 flex-col lg:flex-row items-center gap-4 lg:gap-2">
-                    {/* Times + route line */}
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                  {/* ---- Desktop card row - Iraqi Airways style ---- */}
+                  <div className="hidden md:flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    {/* Left: Flight info */}
+                    <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
                       <div className="text-left">
                         <p className="text-2xl font-bold text-gray-800 leading-none">{flight.departureTime}</p>
-                        <p className="text-sm font-semibold text-gray-700 mt-1">{currentLeg.origin}</p>
+                        <p className="text-sm text-gray-600 mt-1">{currentLeg.origin}</p>
                       </div>
-                      <div className="flex-1 flex flex-col items-center px-3 min-w-[120px]">
+                      <div className="flex-1 flex flex-col items-center px-3 min-w-[100px]">
                         <div className="w-full flex items-center">
-                          <div className="flex-1 h-[2px] bg-gray-300"></div>
-                          <svg className="w-5 h-5 text-[#41B4E6] mx-1" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5L21 16z"/></svg>
-                          <div className="flex-1 h-[2px] bg-gray-300"></div>
+                          <div className="flex-1 border-t-2 border-dashed border-gray-300"></div>
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">{isAr ? 'مباشر' : 'Direct'} • {flight.duration}</p>
+                        <p className="text-xs text-gray-500 mt-1">nonstop</p>
                       </div>
                       <div className="text-left">
                         <p className="text-2xl font-bold text-gray-800 leading-none">
                           {flight.arrivalTime}
-                          {flight.arrivesNextDay && <sup className="text-[10px] text-[#12470D] ml-0.5">+1</sup>}
+                          {flight.arrivesNextDay && <sup className="text-[10px] text-red-500 ml-0.5">+1</sup>}
                         </p>
-                        <p className="text-sm font-semibold text-gray-700 mt-1">{currentLeg.destination}</p>
+                        <p className="text-sm text-gray-600 mt-1">{currentLeg.destination}</p>
+                      </div>
+                      <div className="ml-4 text-sm text-gray-600">
+                        <p className="flex items-center gap-1"><span>⏱</span> Duration {flight.duration}</p>
+                        <p className="flex items-center gap-1 mt-1"><span>✈</span> Operated by Iraqi Airways</p>
+                        <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#4CAF50] underline mt-1">See itinerary details ↗</button>
                       </div>
                     </div>
-                    <div className="hidden lg:block w-px self-stretch bg-gray-200 mx-2"></div>
-                    <div className="text-center min-w-[120px]">
-                      <p className="text-sm text-gray-600">{flight.flightNumber}</p>
-                      <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#0070C0] underline hover:text-[#12470D]">{t('fsr.flightDetails')}</button>
+                    {/* Right: Economy + Business columns */}
+                    <div className="flex">
+                      {/* Economy column */}
+                      <button onClick={() => setExpandedId(open ? null : flight.id)} className="w-[140px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-4 hover:bg-[#1B5E20] transition-colors">
+                        {isFirstFlight && <span className="text-[10px] bg-[#FFC107] text-black px-2 py-0.5 rounded mb-1">{isAr ? '8 مقاعد متبقية' : '8 seats left'}</span>}
+                        <span className="text-sm font-bold">Economy</span>
+                        <span className="text-xs mt-1">from</span>
+                        <span className="text-xs">IQD</span>
+                        <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                        <svg className={`w-4 h-4 mt-1 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                      </button>
+                      {/* Business column */}
+                      <button onClick={() => setExpandedId(open ? null : flight.id)} className="w-[140px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-4 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
+                        <span className="text-sm font-bold">Business</span>
+                        <span className="text-xs mt-1">from</span>
+                        <span className="text-xs">IQD</span>
+                        <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                        <svg className={`w-4 h-4 mt-1 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                      </button>
                     </div>
-                    <div className="hidden lg:block w-px self-stretch bg-gray-200 mx-2"></div>
+                  </div>
+                  {/* Keep old desktop card hidden - replaced above */}
+                  <div className="hidden">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                    </div>
                     <div className="min-w-[180px] flex flex-col items-end">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm text-gray-600">{t('common.economy')}</span>
@@ -914,7 +944,7 @@ const FlightSearchResults = () => {
 
                   {/* ---- Expanded: Mobile vertical cards ---- */}
                   {open && (
-                    <div className="md:hidden border-t border-gray-100 bg-[#EBF3FF] px-4 pb-4 pt-4">
+                    <div className="md:hidden border-t border-gray-100 bg-white px-4 pb-4 pt-4">
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-bold text-[#001326]">{isAr ? 'خيارات الأسعار' : 'Fare options'}</h3>
                         <button onClick={() => setExpandedId(null)} className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white">
@@ -1152,7 +1182,7 @@ const FlightSearchResults = () => {
 
       {/* ---- Fare Details Fullscreen (swipeable cards matching original) ---- */}
       {fareDetailOpen && (
-        <div className="fixed inset-0 z-[10002] bg-[#EBF3FF] flex flex-col">
+        <div className="fixed inset-0 z-[10002] bg-white flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-4">
             <button onClick={() => setFareDetailOpen(null)} className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center bg-white">
@@ -1248,7 +1278,7 @@ const FlightSearchResults = () => {
 
       {/* ---- Smooth Planning Overlay (matches original jazeeraairways.com) ---- */}
       {smoothPlanningOpen && (
-        <div className="fixed inset-0 z-[10003] bg-[#EBF3FF] flex flex-col overflow-y-auto">
+        <div className="fixed inset-0 z-[10003] bg-white flex flex-col overflow-y-auto">
 
           {/* === SUMMARY VIEW === */}
           {spPicker === 'summary' && (
@@ -1269,7 +1299,7 @@ const FlightSearchResults = () => {
                   <div className="flex items-center gap-3">
                     <img src="/jazeera_files/orig_takeOff.svg" alt="" className="w-5 h-5" />
                     <div>
-                      <p className="text-xs font-medium text-[#0B84C6]">{isAr ? '\u0645\u0646' : 'From'}</p>
+                      <p className="text-xs font-medium text-gray-700">{isAr ? '\u0645\u0646' : 'From'}</p>
                       <p className="text-base font-bold text-[#001326]">{cityOf(spOrigin)}</p>
                     </div>
                   </div>
@@ -1278,7 +1308,7 @@ const FlightSearchResults = () => {
                   <div className="flex items-center gap-3">
                     <img src="/jazeera_files/orig_landing.svg" alt="" className="w-5 h-5" />
                     <div>
-                      <p className="text-xs font-medium text-[#0B84C6]">{isAr ? '\u0625\u0644\u0649' : 'To'}</p>
+                      <p className="text-xs font-medium text-gray-700">{isAr ? '\u0625\u0644\u0649' : 'To'}</p>
                       <p className="text-base font-bold text-[#001326]">{cityOf(spDestination)}</p>
                     </div>
                   </div>
@@ -1287,7 +1317,7 @@ const FlightSearchResults = () => {
                   <div className="flex items-center gap-3">
                     <img src="/jazeera_files/orig_calendar.svg" alt="" className="w-5 h-5" />
                     <div>
-                      <p className="text-xs font-medium text-[#0B84C6]">{isAr ? '\u062a\u0648\u0627\u0631\u064a\u062e \u0627\u0644\u0631\u062d\u0644\u0629' : 'Trip dates'}</p>
+                      <p className="text-xs font-medium text-gray-700">{isAr ? '\u062a\u0648\u0627\u0631\u064a\u062e \u0627\u0644\u0631\u062d\u0644\u0629' : 'Trip dates'}</p>
                       <p className="text-base font-bold text-[#001326]">{(() => { try { const d = new Date(spDate); return d.toLocaleDateString(isAr ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return spDate; } })()}</p>
                     </div>
                   </div>
@@ -1296,7 +1326,7 @@ const FlightSearchResults = () => {
                   <div className="flex items-center gap-3">
                     <img src="/jazeera_files/orig_passenger.svg" alt="" className="w-5 h-5" />
                     <div>
-                      <p className="text-xs font-medium text-[#0B84C6]">{isAr ? '\u0627\u0644\u0645\u0633\u0627\u0641\u0631\u0648\u0646' : 'Passengers'}</p>
+                      <p className="text-xs font-medium text-gray-700">{isAr ? '\u0627\u0644\u0645\u0633\u0627\u0641\u0631\u0648\u0646' : 'Passengers'}</p>
                       <p className="text-base font-bold text-[#001326]">{spPaxSummary}</p>
                     </div>
                   </div>
