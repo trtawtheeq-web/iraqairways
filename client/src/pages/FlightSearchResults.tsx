@@ -568,7 +568,7 @@ const FlightSearchResults = () => {
             src="/iraqi_airways/upload/logo-white.jpg"
             alt="Iraqi Airways"
             onClick={() => { window.location.href = '/'; }}
-            className="w-[80px] h-[45px] object-contain cursor-pointer"
+            className="w-[120px] h-[65px] object-contain cursor-pointer"
           />
           <a href="/" className="text-white text-sm font-medium hover:underline">Home</a>
           <div className="relative ml-auto">
@@ -750,7 +750,7 @@ const FlightSearchResults = () => {
                 key={item.dateStr}
                 onClick={() => handleDateChange(item.dateStr)}
                 className={`flex-shrink-0 w-[90px] flex flex-col items-center justify-end rounded-t-lg transition-all ${
-                  item.isActive ? 'bg-[#4CAF50] text-white h-[120px]' : 'bg-[#81C784] text-white h-[90px]'
+                  item.isActive ? 'bg-[#4CAF50] text-white h-[90px]' : 'bg-[#81C784] text-white h-[90px]'
                 } ${item.minPrice <= 0 ? 'bg-gray-200 text-gray-500' : ''}`}
                 style={{ margin: '0 1px' }}
               >
