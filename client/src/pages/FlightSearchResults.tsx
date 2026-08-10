@@ -1480,6 +1480,50 @@ const FlightSearchResults = () => {
         </div>
       )}
 
+            {/* Footer - matching original */}
+      <footer className="bg-[#398017] text-white mt-8" dir="ltr">
+        <div className="max-w-6xl mx-auto px-6 py-10">
+          <div className="flex justify-between mb-8">
+            <div>
+              <h4 className="font-bold text-lg mb-2">Plan and booking</h4>
+              <a href="/" className="text-white underline text-sm">Book trip ↗</a>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-2">Contact us</h4>
+              <a href="/" className="text-white underline text-sm block">Contact us ↗</a>
+              <a href="/" className="text-white underline text-sm block mt-1">Iraqi airways offers ↗</a>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-2">About us</h4>
+              <a href="/" className="text-white underline text-sm">Our fleet ↗</a>
+            </div>
+          </div>
+          <div className="text-center">
+            <h4 className="font-bold text-lg mb-3">Secured payment</h4>
+            <div className="flex justify-center gap-2 mb-2">
+              <div className="bg-white rounded px-2 py-1"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/50px-American_Express_logo_%282018%29.svg.png" alt="Amex" className="h-6" /></div>
+              <div className="bg-white rounded px-2 py-1"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/60px-Visa_Inc._logo.svg.png" alt="Visa" className="h-6" /></div>
+              <div className="bg-white rounded px-2 py-1"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/50px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6" /></div>
+              <div className="bg-white rounded px-2 py-1"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/60px-PayPal.svg.png" alt="PayPal" className="h-6" /></div>
+              <div className="bg-white rounded px-2 py-1"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Diners_Club_Logo3.svg/50px-Diners_Club_Logo3.svg.png" alt="Diners" className="h-6" /></div>
+            </div>
+            <p className="text-sm text-white/80">Credit card fees may occur.</p>
+          </div>
+          <div className="text-center mt-6">
+            <h4 className="font-bold text-lg mb-3">Follow us</h4>
+            <div className="flex justify-center gap-4">
+              <a href="#" className="text-white text-2xl">📘</a>
+              <a href="#" className="text-white text-2xl">📷</a>
+              <a href="#" className="text-white text-2xl">▶️</a>
+              <a href="#" className="text-white text-2xl">✈️</a>
+            </div>
+          </div>
+          <div className="text-center mt-6">
+            <a href="#" className="text-white underline text-sm">Technical details</a>
+          </div>
+        </div>
+      </footer>
+
       <style>{`
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
         @keyframes badgeFade1 { 0%,45% { opacity:1; } 50%,95% { opacity:0; } 100% { opacity:1; } }
@@ -1490,5 +1534,4 @@ const FlightSearchResults = () => {
     </div>
   );
 };
-
 export default FlightSearchResults;
