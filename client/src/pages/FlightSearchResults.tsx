@@ -562,48 +562,58 @@ const FlightSearchResults = () => {
 
       {/* Header - Iraqi Airways Original Style */}
       <header className="hidden md:block w-full" dir="ltr">
-        {/* Green top bar */}
-        <div className="w-full bg-[#398017] px-6 py-3 flex items-center gap-6">
+        {/* Green top bar - matching original exactly */}
+        <div className="w-full bg-[#2d6b12] px-5 py-3 flex items-center">
           <img
-            src="/iraqi_airways/upload/logo.png"
+            src="/iraqi_airways/upload/logo-white.jpg"
             alt="Iraqi Airways"
             onClick={() => { window.location.href = '/'; }}
-            className="w-[120px] h-[65px] object-contain cursor-pointer"
+            className="w-[85px] h-[50px] object-contain cursor-pointer"
           />
-          <a href="/" className="text-white text-sm font-medium hover:underline">Home</a>
-          <div className="relative ml-auto">
+          <span className="mx-4 h-6 w-px bg-white/40"></span>
+          <a href="/" className="text-white text-[15px] font-medium hover:underline">Home</a>
+          <span className="mx-4 h-6 w-px bg-white/40"></span>
+          <div className="relative">
             <button
               onClick={() => setLangMenuOpen(o => !o)}
-              className="flex items-center gap-1 text-white text-sm font-medium"
+              className="flex items-center gap-1.5 text-white text-[15px] font-medium"
             >
               <span>English</span>
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             {langMenuOpen && (
-              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ right: 0 }}>
+              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ left: 0 }}>
                 <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">العربية</button>
                 <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">English</button>
               </div>
             )}
           </div>
         </div>
-        {/* Flight info bar */}
+        {/* Flight info bar - matching original exactly */}
         <div className="w-full bg-white border-b border-gray-200 px-6 py-4 flex items-center">
-          <div className="flex items-center gap-3">
-            <span className="text-xl font-bold text-[#398017]">{origin}</span>
-            <span className="text-gray-400">·····✈·····</span>
-            <span className="text-xl font-bold text-[#398017]">{destination}</span>
+          <div className="flex items-baseline gap-1">
+            <div className="flex flex-col">
+              <span className="text-[22px] font-bold text-[#1a3c0a]">{origin}</span>
+              <span className="text-xs text-gray-500">{cityOf(origin)}</span>
+            </div>
+            <span className="text-gray-400 text-sm mx-2">············ ✈ ············</span>
+            <div className="flex flex-col">
+              <span className="text-[22px] font-bold text-[#1a3c0a]">{destination}</span>
+              <span className="text-xs text-gray-500">{cityOf(destination)}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 ml-6 pl-6 border-l border-gray-300">
+          <span className="mx-5 h-10 w-px bg-gray-300"></span>
+          <div className="flex flex-col">
             <span className="text-sm text-gray-600">Depart</span>
             <span className="text-sm font-bold text-[#398017]">{capsuleDateLabel}</span>
           </div>
-          <div className="flex items-center gap-2 ml-6 pl-6 border-l border-gray-300">
+          <span className="mx-5 h-10 w-px bg-gray-300"></span>
+          <div className="flex flex-col">
             <span className="text-sm text-gray-600">Passenger</span>
-            <span className="text-sm font-bold text-[#398017]">{passengers} 👤</span>
+            <span className="text-sm font-bold text-[#1a3c0a]">1 👤</span>
           </div>
-          <div className="ml-auto flex items-center gap-2 bg-[#398017] text-white px-4 py-2 rounded cursor-pointer">
-            <span>🛒</span>
+          <div className="ml-auto flex items-center gap-2 bg-[#2d6b12] text-white px-5 py-3 cursor-pointer">
+            <span className="text-lg">🛒</span>
             <span className="text-sm font-medium">Your booking</span>
           </div>
         </div>
