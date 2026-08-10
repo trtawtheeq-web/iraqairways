@@ -751,18 +751,18 @@ const FlightSearchResults = () => {
             disabled={!canGoPrev}
             aria-label="Previous days"
             className={`flex-shrink-0 w-[48px] h-[48px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
-              canGoPrev ? 'border-[#398017] bg-[#398017] text-white hover:bg-[#2d6b12]' : 'border-gray-300 bg-white text-gray-400 cursor-not-allowed'
+              canGoPrev ? 'border-[#398017] bg-[#398017] text-white hover:bg-[#2d6b12]' : 'border-gray-300 bg-white text-gray-500 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <div className="flex-1 flex items-end bg-[#f0f5f0] rounded-xl pt-[100px] pb-4 px-3 overflow-x-auto no-scrollbar gap-[3px]">
+          <div className="flex-1 flex items-end bg-[#eef4ee] rounded-xl pt-[80px] pb-4 px-6 overflow-x-auto no-scrollbar gap-3">
             {dateRibbon.map((item) => {
               const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
               const maxPrice = Math.max(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const minPrice2 = Math.min(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const range = maxPrice - minPrice2 || 1; const heightPx = minP > 0 ? Math.round(55 + ((minP - minPrice2) / range) * 90) : 30;
               const enDate = (() => { try { const d = new Date(item.dateStr); return d.toLocaleDateString('en-US', {weekday:'short'}).slice(0,3) + ' ' + d.getDate(); } catch { return item.displayDate; } })();
               return (
-              <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'80px'}}>
+              <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'70px'}}>
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
                   className={`w-full flex flex-col items-center justify-end rounded-t-sm transition-all ${
@@ -788,7 +788,7 @@ const FlightSearchResults = () => {
             disabled={!canGoNext}
             aria-label="Next days"
             className={`flex-shrink-0 w-[48px] h-[48px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
-              canGoNext ? 'border-gray-300 bg-white text-gray-400 hover:bg-gray-100' : 'border-gray-200 bg-white text-gray-300 cursor-not-allowed'
+              canGoNext ? 'border-gray-300 bg-white text-gray-500 hover:bg-gray-100' : 'border-gray-200 bg-white text-gray-300 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
