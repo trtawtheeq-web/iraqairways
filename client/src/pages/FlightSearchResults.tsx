@@ -1501,11 +1501,11 @@ const FlightSearchResults = () => {
           <div className="text-center">
             <h4 className="font-bold text-lg mb-3">Secured payment</h4>
             <div className="flex justify-center gap-3 mb-2">
-              <div className="bg-white rounded px-3 py-2 flex items-center justify-center" style={{minWidth:'60px',minHeight:'38px'}}><span className="text-[10px] font-bold text-blue-800">AMERICAN<br/>EXPRESS</span></div>
-              <div className="bg-white rounded px-3 py-2 flex items-center justify-center" style={{minWidth:'60px',minHeight:'38px'}}><span className="text-lg font-bold text-blue-900 italic">VISA</span></div>
-              <div className="bg-white rounded px-3 py-2 flex items-center justify-center" style={{minWidth:'60px',minHeight:'38px'}}><span className="text-xs font-bold"><span className="text-red-500">●</span><span className="text-yellow-500">●</span> MasterCard</span></div>
-              <div className="bg-white rounded px-3 py-2 flex items-center justify-center" style={{minWidth:'60px',minHeight:'38px'}}><span className="text-sm font-bold text-blue-700">Pay<span className="text-blue-400">Pal</span></span></div>
-              <div className="bg-white rounded px-3 py-2 flex items-center justify-center" style={{minWidth:'60px',minHeight:'38px'}}><span className="text-[10px] font-bold text-blue-800">Diners Club<br/>INTERNATIONAL</span></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/americanexpress.png" alt="American Express" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/visa.png" alt="Visa" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/mastercard.png" alt="Mastercard" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/dinersclub.png" alt="Diners Club" className="h-10" /></div>
             </div>
             <p className="text-sm text-white/80">Credit card fees may occur.</p>
           </div>
