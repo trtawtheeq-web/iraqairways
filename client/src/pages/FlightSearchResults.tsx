@@ -751,15 +751,15 @@ const FlightSearchResults = () => {
             disabled={!canGoPrev}
             aria-label="Previous days"
             className={`flex-shrink-0 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors bg-white shadow-sm ${
-              canGoPrev ? 'border-gray-400 text-gray-700 hover:bg-gray-100' : 'border-gray-200 text-gray-300 cursor-not-allowed'
+              canGoPrev ? 'border-[#398017] bg-[#398017] text-white hover:bg-[#2d6b12]' : 'border-gray-200 text-gray-300 cursor-not-allowed'
             }`}
           >
             <span className="text-lg leading-none">{isAr ? '→' : '←'}</span>
           </button>
-          <div className="flex-1 flex items-end bg-[#f0f5f0] rounded-lg p-4 overflow-x-auto no-scrollbar gap-1">
+          <div className="flex-1 flex items-end bg-[#f0f5f0] rounded-lg pt-[120px] pb-4 px-4 overflow-x-auto no-scrollbar gap-1">
             {dateRibbon.map((item) => {
               const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
-              const maxPrice = Math.max(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const heightPx = minP > 0 ? Math.round(60 + (minP / maxPrice) * 80) : 40;
+              const maxPrice = Math.max(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const minPrice2 = Math.min(...dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice))); const range = maxPrice - minPrice2 || 1; const heightPx = minP > 0 ? Math.round(50 + ((minP - minPrice2) / range) * 100) : 30;
               const enDate = (() => { try { return new Date(item.dateStr).toLocaleDateString('en-US', {weekday:'short', day:'numeric'}); } catch { return item.displayDate; } })();
               return (
               <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'90px'}}>
@@ -768,7 +768,7 @@ const FlightSearchResults = () => {
                   className={`w-full flex flex-col items-center justify-end rounded-t transition-all ${
                     item.isActive ? 'bg-[#1a5c0a] text-white' : 'bg-[#4CAF50] text-white'
                   }`}
-                  style={{ height: `${item.isActive ? heightPx + 30 : heightPx}px` }}
+                  style={{ height: `${item.isActive ? heightPx + 40 : heightPx}px` }}
                 >
                   <div className="flex flex-col items-center pb-2">
                     <span className="text-[10px] font-bold">IQD</span>
