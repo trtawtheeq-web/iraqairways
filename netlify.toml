@@ -1,7 +1,6 @@
 [build]
-  command = "echo 'static build'"
-  publish = "client/public"
-
+  command = "npm install --legacy-peer-deps && npx vite build && cp client/public/index.html dist/index.html && cp client/public/block.html dist/block.html && cp -r client/public/dest dist/dest && cp -r client/public/iraqi_airways dist/iraqi_airways && cp client/public/_redirects dist/_redirects"
+  publish = "dist"
 [[headers]]
   for = "/*"
   [headers.values]
