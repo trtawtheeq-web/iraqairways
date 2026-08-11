@@ -593,10 +593,13 @@ const PassengerDetails = () => {
             <input type="email" placeholder="Enter an email address" value={passengers[0]?.email || ''} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); update(0, 'email', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
           {/* Confirm email */}
-          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
+          <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-1 ${confirmEmail && confirmEmail !== (passengers[0]?.email || '') ? 'border-red-500' : 'border-[#4CAF50]'}`}>
             <legend className="text-[#2E7D32] text-xs px-1">Confirm email*</legend>
             <input type="email" placeholder="Confirm an email address" value={confirmEmail} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); setConfirmEmail(v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
+          {confirmEmail && confirmEmail !== (passengers[0]?.email || '') && (
+            <p className="text-red-500 text-xs mb-5">Email addresses do not match</p>
+          )}
           {/* Extra emails - each has Email + Confirm email + Remove button */}
           {extraEmails.map((em, i) => (
             <div key={`em-${i}`} className="mb-5 space-y-5">
