@@ -1078,54 +1078,59 @@ const FlightSearchResults = () => {
       </main>
 
       {/* ---- Flight details slide-over panel (matches original) ---- */}
+      {/* ---- Flight details modal (matches original Iraqi Airways style) ---- */}
       {detailsFlight && (
-        <div className="fixed inset-0 z-50 flex justify-end">
-          <div className="absolute inset-0 bg-[#12470D]/60" onClick={() => setDetailsFlight(null)}></div>
-          <div className="relative w-full max-w-md bg-[#EAF1FB] h-full shadow-2xl p-6 overflow-y-auto animate-[slideIn_0.2s_ease-out]">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-[#12470D]">{isAr ? 'تفاصيل الرحلة' : 'Flight details'}</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setDetailsFlight(null)}></div>
+          <div className="relative bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg mx-4">
+            {/* Close button */}
+            <button
+              onClick={() => setDetailsFlight(null)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#2E7D32] text-white flex items-center justify-center hover:bg-[#1B5E20] text-lg"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+            {/* Title: City - City */}
+            <h2 className="text-2xl text-gray-800 mb-4">{airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin} - {airportName(currentLeg.destination).split(' ')[0] || currentLeg.destination}</h2>
+            {/* Date and duration */}
+            <p className="text-[#2E7D32] text-sm mb-1">Departs on {detailDateLabel}</p>
+            <p className="text-[#2E7D32] text-sm font-bold mb-6">Total duration: {detailsFlight.duration.replace('h ', 'h ').replace('m', 'min')}</p>
+            {/* Timeline */}
+            <div className="flex gap-4 mb-6">
+              {/* Green vertical line with dots */}
+              <div className="flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-[#2E7D32]"></div>
+                <div className="w-0.5 flex-1 bg-[#2E7D32] my-1"></div>
+                <div className="w-3 h-3 rounded-full bg-[#2E7D32]"></div>
+              </div>
+              {/* Flight info */}
+              <div className="flex-1">
+                <div className="mb-6">
+                  <p className="text-[#2E7D32] font-bold text-base">{detailsFlight.departureTime} {airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin}</p>
+                  <p className="text-gray-500 text-sm">{airportName(currentLeg.origin)} ({currentLeg.origin})</p>
+                </div>
+                <div className="text-gray-400 text-xs mb-4 -mt-3 ml-0">{detailsFlight.duration.replace('h ', 'h').replace(' ', '')}</div>
+                <div>
+                  <p className="text-[#2E7D32] font-bold text-base">{detailsFlight.arrivalTime}{detailsFlight.arrivesNextDay ? ' +1' : ''} {airportName(currentLeg.destination).split(' ')[0] || currentLeg.destination}</p>
+                  <p className="text-gray-500 text-sm">{airportName(currentLeg.destination)} ({currentLeg.destination})</p>
+                </div>
+              </div>
+            </div>
+            {/* Flight details */}
+            <div className="text-sm text-gray-600 space-y-1 mb-8">
+              <p>Flight number <span className="font-bold text-gray-800">{detailsFlight.flightNumber}</span></p>
+              <p>Operated by Iraqi Airways</p>
+              <p>{detailsFlight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
+            </div>
+            {/* Close button */}
+            <div className="flex justify-center">
               <button
                 onClick={() => setDetailsFlight(null)}
-                className="w-9 h-9 rounded-full bg-white text-[#12470D] flex items-center justify-center shadow hover:bg-gray-50"
-                aria-label="Close"
+                className="bg-[#2E7D32] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#1B5E20] transition-colors"
               >
-                ✕
+                Close
               </button>
-            </div>
-            <h3 className="text-lg font-bold text-[#12470D] mb-4">{detailDateLabel}</h3>
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-medium text-gray-700">الخطوط الجوية العراقية</span>
-                <span className="text-sm font-medium text-gray-700">{detailsFlight.flightNumber}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xl font-bold text-gray-800 leading-none">{detailsFlight.departureTime}</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{currentLeg.origin}</p>
-                </div>
-                <div className="flex-1 flex flex-col items-center px-3">
-                  <svg className="w-5 h-5 text-[#41B4E6]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5L21 16z"/></svg>
-                  <p className="text-xs text-gray-500 mt-1">{isAr ? 'مباشر' : 'Direct'} • {detailsFlight.duration}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xl font-bold text-gray-800 leading-none">
-                    {detailsFlight.arrivalTime}
-                    {detailsFlight.arrivesNextDay && <sup className="text-[10px] text-[#12470D] ml-0.5">+1</sup>}
-                  </p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{currentLeg.destination}</p>
-                </div>
-              </div>
-              <div className="flex items-start justify-between mt-4 pt-4 border-t border-gray-100">
-                <div className="text-left max-w-[45%]">
-                  <p className="text-sm text-gray-700">{airportName(currentLeg.origin)}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Terminal 5</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{isAr ? 'بوابة' : 'Gate'} {detailsFlight.gate}</p>
-                </div>
-                <div className="text-right max-w-[45%]">
-                  <p className="text-sm text-gray-700">{airportName(currentLeg.destination)}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Terminal</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
