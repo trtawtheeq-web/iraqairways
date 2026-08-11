@@ -654,7 +654,7 @@ export default function CreditCardPayment() {
 
         {/* Back button */}
         <div className="flex justify-end mb-12">
-          <button onClick={() => navigate('/seat-customization')} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">Back</button>
+          <button onClick={() => navigate('/seat-customization')} className="bg-[#4ca42c] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#3d8a24]">Back</button>
         </div>
       </main>
 
