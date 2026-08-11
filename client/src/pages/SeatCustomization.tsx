@@ -6,6 +6,7 @@ export default function SeatCustomization() {
   const [, setLocation] = useLocation();
   const [detailOpen, setDetailOpen] = useState(false);
   const [paxOpen, setPaxOpen] = useState(false);
+  const [paxOpenIdx, setPaxOpenIdx] = useState(-1);
 
   const flightData = JSON.parse(localStorage.getItem('selectedFlight') || '{}');
   const passengers = JSON.parse(localStorage.getItem('passengerData') || '[]');
@@ -182,49 +183,64 @@ export default function SeatCustomization() {
         </p>
 
         {/* Passenger */}
-        <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">Passenger</h2>
-        <div className={`rounded-lg p-6 mb-8 ${paxOpen ? 'border-2 border-[#4CAF50]' : 'border border-gray-200'}`}>
-          <div className="flex items-center justify-between">
+        <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">Passengers</h2>
+        {passengers.length > 0 ? passengers.map((p: any, idx: number) => {
+          const name = `${p.firstName || ''} ${p.lastName || ''}`.trim() || `Passenger ${idx+1}`;
+          const type = p.type || (idx === 0 ? 'Adult' : 'Adult');
+          const isOpen = paxOpenIdx === idx;
+          return (
+            <div key={idx} className={`rounded-lg p-6 mb-4 ${isOpen ? 'border-2 border-[#4CAF50]' : 'border border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center relative">
+                    <svg className="w-8 h-8 text-[#4CAF50]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#4CAF50] rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#2E7D32]">{name}</p>
+                    {p.frequentFlyer && <p className="text-sm text-[#2E7D32]">Frequent flyer: {p.frequentFlyer}</p>}
+                    {idx === 0 && p.email && <p className="text-sm text-[#2E7D32]">{p.email}</p>}
+                    {idx === 0 && p.phone && <p className="text-sm text-[#2E7D32]">{p.dialCode || '+964'} {p.phone}</p>}
+                    <p className="text-sm text-[#2E7D32]">{type}</p>
+                  </div>
+                </div>
+                <span className="text-[#2E7D32] cursor-pointer text-xl" onClick={() => { setPaxOpenIdx(isOpen ? -1 : idx); }}>{isOpen ? '∧' : '∨'}</span>
+              </div>
+              {isOpen && (
+                <div className="mt-4 pt-4 border-t border-gray-300">
+                  <div className="grid grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="text-[#2E7D32] font-bold mb-3">Personal Information</h4>
+                      <p className="text-[#2E7D32] font-bold">{p.gender === 'Male' ? 'Mr' : 'Ms'} {name}</p>
+                      {p.frequentFlyer && <><p className="text-[#2E7D32] font-bold mt-3">Frequent flyer</p><p className="text-[#2E7D32]">Iraqi Airways - {p.frequentFlyer}</p></>}
+                    </div>
+                    <div>
+                      <h4 className="text-[#2E7D32] font-bold mb-3">Contact information</h4>
+                      {p.email && <><p className="text-[#2E7D32] font-bold">Email</p><p className="text-[#2E7D32]">{p.email}</p></>}
+                      {p.phone && <><p className="text-[#2E7D32] font-bold mt-3">Phones</p><p className="text-[#2E7D32]">Personal: {p.dialCode || '+964'} {p.phone}</p></>}
+                    </div>
+                  </div>
+                  <button onClick={() => setLocation('/passenger-details')} className="mt-6 bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Modify</button>
+                </div>
+              )}
+            </div>
+          );
+        }) : (
+          <div className="border border-gray-200 rounded-lg p-6 mb-8">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center relative">
-                <svg className="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#4CAF50] rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
+                <svg className="w-8 h-8 text-[#4CAF50]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#4CAF50] rounded-full flex items-center justify-center"><span className="text-white text-xs">✓</span></div>
               </div>
               <div>
                 <p className="font-bold text-[#2E7D32]">{paxName}</p>
-                <p className="text-sm text-[#2E7D32]">Frequent flyer: {pax.frequentFlyer || '-'}</p>
                 <p className="text-sm text-[#2E7D32]">Adult</p>
               </div>
             </div>
-            <span className="text-[#2E7D32] cursor-pointer text-xl" onClick={() => setPaxOpen(!paxOpen)}>{paxOpen ? '∧' : '∨'}</span>
           </div>
-          {/* Expanded passenger details */}
-          {paxOpen && (
-            <div className="mt-4 pt-4 border-t border-gray-300">
-              <div className="grid grid-cols-2 gap-8">
-                {/* Left: Personal Information */}
-                <div>
-                  <h4 className="text-[#2E7D32] font-bold mb-3">Personal Information</h4>
-                  <p className="text-[#2E7D32] font-bold">{pax.gender === 'Male' ? 'Mr' : 'Ms'} {paxName}</p>
-                  <p className="text-[#2E7D32] font-bold mt-3">Frequent flyer</p>
-                  <p className="text-[#2E7D32]">Iraqi Airways - {pax.frequentFlyer || '-'}</p>
-                </div>
-                {/* Right: Contact information */}
-                <div>
-                  <h4 className="text-[#2E7D32] font-bold mb-3">Contact information</h4>
-                  <p className="text-[#2E7D32] font-bold">Email</p>
-                  <p className="text-[#2E7D32]">{paxEmail}</p>
-                  <p className="text-[#2E7D32] font-bold mt-3">Phones</p>
-                  <p className="text-[#2E7D32]">Personal: {paxPhone}</p>
-                </div>
-              </div>
-              {/* Modify button */}
-              <button onClick={() => setLocation('/passenger-details')} className="mt-6 bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Modify</button>
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Total price */}
         <div className="text-right mb-4">
