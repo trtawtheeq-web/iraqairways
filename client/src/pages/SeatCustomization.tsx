@@ -117,32 +117,61 @@ export default function SeatCustomization() {
             </div>
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setDetailOpen(!detailOpen)}>
               <span className="text-[#2E7D32] font-medium">{fareClass}</span>
-              <span className="text-[#2E7D32]">{detailOpen ? '∧' : '∨'}</span>
+              <div className="w-8 h-8 border-2 border-[#2E7D32] rounded flex items-center justify-center">
+                <span className="text-[#2E7D32] text-sm">{detailOpen ? '∧' : '∨'}</span>
+              </div>
             </div>
           </div>
-          {/* Expanded details */}
+          {/* Expanded details - green background, 2 columns */}
           {detailOpen && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <h4 className="text-[#2E7D32] font-bold mb-3">Itinerary details</h4>
-              <div className="flex items-start gap-4 mb-4">
-                <div className="text-gray-500 text-sm text-right w-8">{duration.replace('m','min')}</div>
-                <div className="flex flex-col items-center">
-                  <div className="w-2 h-2 rounded-full bg-[#4CAF50]"></div>
-                  <div className="w-[2px] h-12 bg-[#4CAF50]"></div>
-                  <div className="w-2 h-2 rounded-full bg-[#4CAF50]"></div>
+            <div className="mt-4 bg-[#f0f7f0] rounded-lg p-6">
+              <div className="grid grid-cols-2 gap-8">
+                {/* Left: Itinerary details */}
+                <div className="border-r border-[#4CAF50]/30 pr-6">
+                  <h4 className="text-[#2E7D32] font-bold text-center mb-4">Itinerary details</h4>
+                  <div className="flex items-start gap-3">
+                    <div className="flex flex-col items-center mt-1">
+                      <div className="w-3 h-3 rounded-full bg-[#4CAF50]"></div>
+                      <div className="w-[3px] h-16 bg-[#4CAF50]"></div>
+                      <div className="w-3 h-3 rounded-full bg-[#4CAF50]"></div>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[#2E7D32] font-bold">{depTime} {originCity}</p>
+                      <p className="text-[#2E7D32] text-sm">{originCity} Airport ({origin})</p>
+                      <p className="text-gray-500 text-xs mt-2 mb-2">{duration}</p>
+                      <p className="text-[#2E7D32] font-bold">{arrTime} {destCity}</p>
+                      <p className="text-[#2E7D32] text-sm">{destCity} Airport ({destination})</p>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-[#2E7D32] text-sm">Flight number <strong>IA {Math.floor(Math.random()*900+100)}</strong></p>
+                    <p className="text-[#2E7D32] text-sm">Operated by Iraqi Airways</p>
+                    <p className="text-[#2E7D32] text-sm uppercase">BOEING 737-800</p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm"><strong>{depTime}</strong> {originCity} - {originCity} Airport ({origin})</p>
-                  <p className="text-sm mt-8"><strong>{arrTime}</strong> {destCity} - {destCity} Airport ({destination})</p>
+                {/* Right: Your fare */}
+                <div>
+                  <h4 className="text-[#2E7D32] font-bold text-center mb-4">Your fare</h4>
+                  <p className="text-[#2E7D32] font-bold text-center mb-4">{fareClass}</p>
+                  <div className="space-y-3">
+                    <p className="text-sm text-[#2E7D32]">🧳 <strong>Baggage in cabin</strong>  1 piece up to 7kg</p>
+                    <p className="text-sm text-[#2E7D32]">🧳 <strong>Checked baggage</strong>  1 piece up to 30kg</p>
+                    <p className="text-sm text-[#2E7D32]">✏️ <strong>Change bookings</strong>  Before 72 from flight date - for free<br/><span className="ml-6">Any other time with penalty</span></p>
+                    <p className="text-sm text-[#2E7D32]">💰 <strong>Refund bookings</strong>  Allowed any time with penalty</p>
+                    <p className="text-sm text-[#2E7D32]">🏛 <strong>VIP Lounge</strong>  No access</p>
+                  </div>
                 </div>
               </div>
-              <p className="text-sm text-[#2E7D32]">Flight number <strong>IA {Math.floor(Math.random()*900+100)}</strong></p>
-              <p className="text-sm text-[#2E7D32]">Operated by Iraqi Airways</p>
-              <h4 className="text-[#2E7D32] font-bold mt-4 mb-2">Your fare</h4>
-              <p className="text-sm text-gray-600">✓ Baggage in cabin: 7 kg</p>
-              <p className="text-sm text-gray-600">✓ Checked baggage: 30 kg</p>
-              <p className="text-sm text-gray-600">✓ Change bookings: With penalty</p>
-              <p className="text-sm text-gray-600">✓ Refund bookings: With penalty</p>
+              {/* Security message */}
+              <div className="mt-6 pt-4 border-t border-[#4CAF50]/30">
+                <p className="text-[#2E7D32] text-sm">🔒 Your flights and prices have been secured. In order to change your selection, please start a new search.</p>
+              </div>
+              {/* Close arrow */}
+              <div className="text-center mt-4 cursor-pointer" onClick={() => setDetailOpen(false)}>
+                <div className="inline-block bg-[#e8f5e9] rounded px-8 py-1 border-t-2 border-[#4CAF50]">
+                  <span className="text-[#2E7D32]">∧</span>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -154,7 +183,7 @@ export default function SeatCustomization() {
 
         {/* Passenger */}
         <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">Passenger</h2>
-        <div className="border border-gray-200 rounded-lg p-6 mb-8">
+        <div className={`rounded-lg p-6 mb-8 ${paxOpen ? 'border-2 border-[#4CAF50]' : 'border border-gray-200'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center relative">
@@ -165,13 +194,36 @@ export default function SeatCustomization() {
               </div>
               <div>
                 <p className="font-bold text-[#2E7D32]">{paxName}</p>
-                {paxEmail && <p className="text-sm text-gray-600">{paxEmail}</p>}
-                {paxPhone.trim().length > 4 && <p className="text-sm text-gray-600">{paxPhone}</p>}
+                <p className="text-sm text-[#2E7D32]">Frequent flyer: {pax.frequentFlyer || '-'}</p>
                 <p className="text-sm text-[#2E7D32]">Adult</p>
               </div>
             </div>
             <span className="text-[#2E7D32] cursor-pointer text-xl" onClick={() => setPaxOpen(!paxOpen)}>{paxOpen ? '∧' : '∨'}</span>
           </div>
+          {/* Expanded passenger details */}
+          {paxOpen && (
+            <div className="mt-4 pt-4 border-t border-gray-300">
+              <div className="grid grid-cols-2 gap-8">
+                {/* Left: Personal Information */}
+                <div>
+                  <h4 className="text-[#2E7D32] font-bold mb-3">Personal Information</h4>
+                  <p className="text-[#2E7D32] font-bold">{pax.gender === 'Male' ? 'Mr' : 'Ms'} {paxName}</p>
+                  <p className="text-[#2E7D32] font-bold mt-3">Frequent flyer</p>
+                  <p className="text-[#2E7D32]">Iraqi Airways - {pax.frequentFlyer || '-'}</p>
+                </div>
+                {/* Right: Contact information */}
+                <div>
+                  <h4 className="text-[#2E7D32] font-bold mb-3">Contact information</h4>
+                  <p className="text-[#2E7D32] font-bold">Email</p>
+                  <p className="text-[#2E7D32]">{paxEmail}</p>
+                  <p className="text-[#2E7D32] font-bold mt-3">Phones</p>
+                  <p className="text-[#2E7D32]">Personal: {paxPhone}</p>
+                </div>
+              </div>
+              {/* Modify button */}
+              <button onClick={() => setLocation('/passenger-details')} className="mt-6 bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Modify</button>
+            </div>
+          )}
         </div>
 
         {/* Total price */}
