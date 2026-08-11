@@ -434,7 +434,7 @@ export default function CreditCardPayment() {
             {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* Top row: Card preview left + Card type & Card number right */}
-              <div className="flex gap-6 items-start mb-4">
+              <div className="flex gap-6 items-start">
                 {/* Card preview */}
                 <div className="w-64 min-w-[256px] h-40 bg-gradient-to-br from-[#8e9eab] to-[#6a7b8b] rounded-xl p-5 text-white flex flex-col justify-between relative flex-shrink-0">
                   {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
@@ -470,10 +470,10 @@ export default function CreditCardPayment() {
               </div>
 
               {/* All fields below - same width as Card type column */}
-              <div style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
+              <div className="space-y-4 mt-4" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
-              <div className="flex gap-4 mb-4 items-stretch">
+              <div className="flex gap-4 items-stretch">
                 <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-1/2 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center">
@@ -490,10 +490,10 @@ export default function CreditCardPayment() {
                   </div>
                 </fieldset>
               </div>
-              {expiryError && <p className="text-red-500 text-xs mb-4">{expiryError}</p>}
+              {expiryError && <p className="text-red-500 text-xs">{expiryError}</p>}
 
               {/* Cardholder name */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4 w-full">
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-full">
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
                 <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
