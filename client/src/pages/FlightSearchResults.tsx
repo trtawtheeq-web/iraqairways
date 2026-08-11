@@ -742,15 +742,15 @@ const FlightSearchResults = () => {
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
         <div className="hidden md:block mb-4" dir="ltr">
-          <div className="relative rounded-xl pb-6 px-16 overflow-hidden" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
-          {/* Hide dates inside box at top */}
-          <div className="flex justify-center py-3">
-            <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1">
+          <div className="relative rounded-xl pb-6 px-16" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
+          {/* Hide dates on top border - half above half below */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
+            <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1.5 bg-white px-5 py-2 rounded border border-gray-200 shadow-sm whitespace-nowrap">
               <span>{datesVisible ? 'Hide dates' : 'Show dates'}</span>
               <svg className={`w-4 h-4 transition-transform ${datesVisible ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
             </button>
           </div>
-          {datesVisible && <div style={{minHeight:'160px'}} className="flex items-end">
+          {datesVisible && <div style={{minHeight:'160px'}} className="flex items-end overflow-hidden mt-6">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
             disabled={!canGoPrev}
@@ -886,8 +886,8 @@ const FlightSearchResults = () => {
                   </div>
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
-                  <div className={`hidden md:block ${isFirstFlight ? 'mt-4' : ''}`} dir="ltr">
-                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-[#e8f5e0] text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span></div>}
+                  <div className={`hidden md:block ${isFirstFlight ? 'pt-5' : ''}`} dir="ltr">
+                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span></div>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
                       <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
