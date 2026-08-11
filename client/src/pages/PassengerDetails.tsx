@@ -546,10 +546,10 @@ const PassengerDetails = () => {
                 <legend className="text-[#2E7D32] text-xs px-1">Last name*</legend>
                 <input type="text" placeholder="Enter a last name" value={p.lastName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'lastName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
-              {/* Date of birth - numbers and / only */}
+              {/* Date of birth - auto-format DD/MM/YYYY */}
               <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                 <legend className="text-[#2E7D32] text-xs px-1">Date of birth</legend>
-                <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { const v = e.target.value.replace(/[^0-9/]/g, ''); update(index, 'dob', v); }} maxLength={10} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
               <p className="text-gray-400 text-xs">Example: 31/01/2025</p>
             </div>
