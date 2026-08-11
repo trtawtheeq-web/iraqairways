@@ -593,7 +593,7 @@ export default function CreditCardPayment() {
               <div className="cc-fields-below" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
-              <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 sm:items-stretch mb-3">
+              <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 sm:items-stretch">
                 <fieldset className={`border rounded px-3 py-2 bg-[#f5faf0] ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{flex:'1 1 0', minWidth:0}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center">
@@ -613,7 +613,7 @@ export default function CreditCardPayment() {
               {expiryError && <p className="text-red-500 text-xs">{expiryError}</p>}
 
               {/* Cardholder name */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0] w-full">
+              <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0] w-full mt-3">
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
                 <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
