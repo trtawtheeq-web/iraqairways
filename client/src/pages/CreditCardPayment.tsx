@@ -470,11 +470,11 @@ export default function CreditCardPayment() {
               </div>
 
               {/* All fields below - same width as Card type column */}
-              <div className="space-y-4 mt-4" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
+              <div style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
-              <div className="flex gap-4 items-stretch">
-                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-1/2 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
+              <div className="flex gap-4 items-stretch mb-4">
+                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{width:'calc(50% - 8px)'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center">
                     <input type="text" placeholder="Month" value={expiryMonth} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryMonth(v); if (v.length === 2 && expiryYear.length === 2) { setValue('expiryDate', v + '/' + expiryYear); const m = parseInt(v); const y = parseInt(expiryYear); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', v + '/' + expiryYear); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
@@ -482,7 +482,7 @@ export default function CreditCardPayment() {
                     <input type="text" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
                   </div>
                 </fieldset>
-                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-1/2 ${!watch('cvv') ? 'border-red-500' : 'border-[#4CAF50]'}`}>
+                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${!watch('cvv') ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{width:'calc(50% - 8px)'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
                   <div className="flex items-center">
                     <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
@@ -493,7 +493,7 @@ export default function CreditCardPayment() {
               {expiryError && <p className="text-red-500 text-xs">{expiryError}</p>}
 
               {/* Cardholder name */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-full">
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-full mb-4">
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
                 <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
