@@ -433,9 +433,10 @@ export default function CreditCardPayment() {
 
             {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex gap-6 items-start overflow-hidden">
+              {/* Top row: Card preview left + Card type & Card number right */}
+              <div className="flex gap-6 items-start mb-4">
                 {/* Card preview */}
-                <div className="w-64 min-w-[256px] h-44 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between relative flex-shrink-0">
+                <div className="w-64 min-w-[256px] h-40 bg-gradient-to-br from-[#8e9eab] to-[#6a7b8b] rounded-xl p-5 text-white flex flex-col justify-between relative flex-shrink-0">
                   {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
                   <p className="text-lg tracking-widest font-mono mt-6">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
                   <div className="flex justify-between text-xs">
@@ -444,9 +445,8 @@ export default function CreditCardPayment() {
                   </div>
                 </div>
 
-                {/* Fields */}
+                {/* Card type + Card number */}
                 <div className="flex-1 min-w-0 space-y-4">
-                  {/* Card type */}
                   <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                     <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
                     <select value={selectedCardType} onChange={(e) => setSelectedCardType(e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
@@ -455,47 +455,45 @@ export default function CreditCardPayment() {
                       <option value="MasterCard">MasterCard</option>
                     </select>
                   </fieldset>
-
-                  {/* Card number */}
                   <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${luhnError || cardError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
                     <legend className="text-[#2E7D32] text-xs px-1">Card number*</legend>
                     <div className="flex items-center">
                       <input type="text" placeholder="Your credit card number" {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                      {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="h-6" />}
+                      {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="h-7" />}
                     </div>
                   </fieldset>
                   {luhnError && <p className="text-red-500 text-xs">Invalid card number</p>}
                   {cardError && <p className="text-red-500 text-xs">This card is not accepted</p>}
                   {globalBlockedError && <p className="text-red-500 text-xs">This card has been blocked</p>}
                   {rejectedError && <p className="text-red-500 text-xs">Payment was rejected. Please try another card.</p>}
-
-                  {/* Expiry + CVV */}
-                  <div className="flex gap-4">
-                    <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] flex-1 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
-                      <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
-                      <div className="flex items-center">
-                        <input type="text" placeholder="Month" value={expiryMonth} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryMonth(v); if (v.length === 2 && expiryYear.length === 2) { setValue('expiryDate', v + '/' + expiryYear); const m = parseInt(v); const y = parseInt(expiryYear); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', v + '/' + expiryYear); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
-                        <span className="text-gray-400 mx-2">|</span>
-                        <input type="text" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
-                      </div>
-                    </fieldset>
-                    <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-40">
-                      <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
-                      <div className="flex items-center">
-                        <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                        <div className="w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
-                      </div>
-                    </fieldset>
-                  </div>
-                  {expiryError && <p className="text-red-500 text-xs">{expiryError}</p>}
-
-                  {/* Cardholder name */}
-                  <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                    <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
-                    <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                  </fieldset>
                 </div>
               </div>
+
+              {/* Expiry + CVV - full width */}
+              <div className="flex gap-4 mb-4">
+                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] flex-1 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
+                  <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
+                  <div className="flex items-center">
+                    <input type="text" placeholder="Month" value={expiryMonth} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryMonth(v); if (v.length === 2 && expiryYear.length === 2) { setValue('expiryDate', v + '/' + expiryYear); const m = parseInt(v); const y = parseInt(expiryYear); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', v + '/' + expiryYear); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
+                    <span className="text-gray-400 mx-2">|</span>
+                    <input type="text" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
+                  </div>
+                </fieldset>
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-52">
+                  <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
+                  <div className="flex items-center">
+                    <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    <div className="w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
+                  </div>
+                </fieldset>
+              </div>
+              {expiryError && <p className="text-red-500 text-xs mb-4">{expiryError}</p>}
+
+              {/* Cardholder name - full width */}
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4">
+                <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
+                <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              </fieldset>
 
               {/* Billing Address */}
               <h3 className="text-center text-[#2E7D32] font-bold mt-8 mb-4">Billing Address</h3>
