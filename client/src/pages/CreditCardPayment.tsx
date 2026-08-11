@@ -359,7 +359,29 @@ export default function CreditCardPayment() {
   const destination = tripSummary.destCode || 'EBL';
   const originCity = cityNames[origin] || origin;
   const destCity = cityNames[destination] || destination;
-  const paxCount = tripSummary.paxCount || 1;
+  const paxCount = tripSummary.passengerCount || tripSummary.paxCount || 1;
+  const flightsConv = tripSummary.flightsConv || 0;
+  const taxesConv = tripSummary.taxesConv || 0;
+  const baseTotalConv = tripSummary.baseTotalConv || 0;
+  const curCode = tripSummary.curCode || 'IQD';
+  const [priceDetailOpen, setPriceDetailOpen] = useState(false);
+  const [adultDetailOpen, setAdultDetailOpen] = useState(false);
+  const [childDetailOpen, setChildDetailOpen] = useState(false);
+  // Parse pax from flightData
+  const flightData = JSON.parse(localStorage.getItem('flightData') || '{}');
+  const px = flightData.pax || { adult: paxCount, child: 0, infant: 0 };
+  const numAdults = px.adult || paxCount;
+  const numChildren = px.child || 0;
+  const numInfants = px.infant || 0;
+  // Calculate per-type prices
+  const baseFarePerPerson = flightsConv / (numAdults + numChildren) || 0;
+  const taxPerAdult = taxesConv / (numAdults + numChildren) || 0;
+  const pricePerAdult = baseFarePerPerson + taxPerAdult;
+  const totalAdults = pricePerAdult * numAdults;
+  const pricePerChild = baseFarePerPerson * 0.75; // children ~75% of adult
+  const taxPerChild = 0; // children no departure tax
+  const totalChildren = (pricePerChild + taxPerChild) * numChildren;
+  const fmtPrice = (n: number) => n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
   const flightDate = tripSummary.firstDate || '';
   const formatShortDate = (d: string) => { try { const dt = new Date(d.includes('T') ? d : d+'T00:00:00'); return dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); } catch { return d; } };
 
@@ -414,9 +436,47 @@ export default function CreditCardPayment() {
 
         {/* Total price card */}
         <div className="border border-gray-200 rounded-lg p-6 mb-8">
-          <p className="text-[#2E7D32]">Total price: <span className="text-[#2E7D32] font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong></p>
-          <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts).</p>
-          <a href="#" className="text-[#2E7D32] text-sm underline">Detailed baggage policy ↗</a>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-[#2E7D32]">Total price: <span className="font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong></p>
+              <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts).</p>
+              <a href="#" className="text-[#2E7D32] text-sm underline">Detailed baggage policy ↗</a>
+            </div>
+            <button onClick={() => setPriceDetailOpen(!priceDetailOpen)} className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-[#2E7D32]">
+              <span className={`text-xl transition-transform ${priceDetailOpen ? 'rotate-180' : ''}`}>∨</span>
+            </button>
+          </div>
+          {priceDetailOpen && <div className="mt-4">
+            {/* Adults */}
+            <div className="rounded overflow-hidden mb-2">
+              <div className="bg-[#4a8c2a] text-white px-4 py-2 flex justify-between items-center cursor-pointer" onClick={() => setAdultDetailOpen(!adultDetailOpen)}>
+                <span className="font-bold">{numAdults} Adult{numAdults > 1 ? 's' : ''}</span>
+                <span className="font-bold">IQD {fmtPrice(totalAdults)} {adultDetailOpen ? '∧' : '∨'}</span>
+              </div>
+              {adultDetailOpen && <div className="bg-[#f0f7f0] p-4">
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Air Transportation Charges</span><span>IQD {fmtPrice(baseFarePerPerson * numAdults)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>Base fare</span><span>IQD {fmtPrice(baseFarePerPerson * numAdults)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Taxes, fees and charges</span><span>IQD {fmtPrice(taxPerAdult * numAdults)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>Domestic Departure Tax</span><span>IQD {fmtPrice(taxPerAdult * numAdults)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mt-2"><span>Total price per adult</span><span>IQD {fmtPrice(pricePerAdult)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 ml-2"><span>× {numAdults} Adult{numAdults > 1 ? 's' : ''}</span><span>IQD {fmtPrice(totalAdults)}</span></div>
+              </div>}
+            </div>
+            {/* Children */}
+            {numChildren > 0 && <div className="rounded overflow-hidden mb-2">
+              <div className="bg-[#4a8c2a] text-white px-4 py-2 flex justify-between items-center cursor-pointer" onClick={() => setChildDetailOpen(!childDetailOpen)}>
+                <span className="font-bold">{numChildren} Child{numChildren > 1 ? 'ren' : ''}</span>
+                <span className="font-bold">IQD {fmtPrice(totalChildren)} {childDetailOpen ? '∧' : '∨'}</span>
+              </div>
+              {childDetailOpen && <div className="bg-[#f0f7f0] p-4">
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Air Transportation Charges</span><span>IQD {fmtPrice(pricePerChild * numChildren)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>Base fare</span><span>IQD {fmtPrice(pricePerChild * numChildren)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Taxes, fees and charges</span><span>IQD 0.00</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mt-2"><span>Total price per child</span><span>IQD {fmtPrice(pricePerChild)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 ml-2"><span>× {numChildren} Child{numChildren > 1 ? 'ren' : ''}</span><span>IQD {fmtPrice(totalChildren)}</span></div>
+              </div>}
+            </div>}
+          </div>}
         </div>
 
         {/* Select payment method */}
