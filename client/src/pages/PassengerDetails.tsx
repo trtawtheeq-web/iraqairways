@@ -474,43 +474,43 @@ const PassengerDetails = () => {
           <span className="text-white/40">|</span>
           <span className="text-white">English <span className="text-xs">▼</span></span>
         </div>
-        {/* Flight info bar - same green as header, no separate bg */}
-        <div className="py-3 border-t border-white/20">
-          <div className="max-w-7xl mx-auto px-6 flex items-center">
-            {/* Route */}
-            <div className="flex items-center gap-4">
-              <div className="text-center">
-                <span className="text-2xl font-bold">{flightData?.origin || 'BGW'}</span>
-                <p className="text-xs text-white/70">{cityName(flightData?.origin || 'BGW')}</p>
-              </div>
-              <span className="text-white/50 text-lg">·········· ✈ ··········</span>
-              <div className="text-center">
-                <span className="text-2xl font-bold">{flightData?.destination || 'EBL'}</span>
-                <p className="text-xs text-white/70">{cityName(flightData?.destination || 'EBL')}</p>
-              </div>
-            </div>
-            {/* Separator */}
-            <span className="mx-6 text-white/30 text-2xl">|</span>
-            {/* Depart */}
+      </header>
+      {/* Flight info bar - white background, green text like original */}
+      <div className="bg-white border-b border-gray-200 py-4">
+        <div className="max-w-7xl mx-auto px-6 flex items-center">
+          {/* Route */}
+          <div className="flex items-center gap-4">
             <div>
-              <p className="text-sm text-white/70">Depart</p>
-              <p className="font-bold">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+              <span className="text-2xl font-bold text-[#1B5E20]">{flightData?.origin || 'BGW'}</span>
+              <p className="text-xs text-[#1B5E20]">{cityName(flightData?.origin || 'BGW')}</p>
             </div>
-            {/* Separator */}
-            <span className="mx-6 text-white/30 text-2xl">|</span>
-            {/* Passenger */}
+            <span className="text-[#1B5E20]/40 text-sm">··············· ✈ ···············</span>
             <div>
-              <p className="text-sm text-white/70">Passenger</p>
-              <p className="font-bold">{totalCount} 👤</p>
-            </div>
-            {/* Your booking - right, darker green box */}
-            <div className="ml-auto bg-[#1B5E20] px-5 py-3 rounded flex items-center gap-2">
-              <span className="text-xl">🛒</span>
-              <span className="font-bold text-sm">Your booking</span>
+              <span className="text-2xl font-bold text-[#1B5E20]">{flightData?.destination || 'EBL'}</span>
+              <p className="text-xs text-[#1B5E20]">{cityName(flightData?.destination || 'EBL')}</p>
             </div>
           </div>
+          {/* Separator */}
+          <span className="mx-6 text-gray-300 text-2xl">|</span>
+          {/* Depart */}
+          <div>
+            <p className="text-sm text-[#1B5E20]">Depart</p>
+            <p className="font-bold text-[#1B5E20]">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+          </div>
+          {/* Separator */}
+          <span className="mx-6 text-gray-300 text-2xl">|</span>
+          {/* Passenger */}
+          <div>
+            <p className="text-sm text-[#1B5E20]">Passenger</p>
+            <p className="font-bold text-[#1B5E20]">{totalCount} 👤</p>
+          </div>
+          {/* Your booking - right, tall green box like original */}
+          <div className="ml-auto bg-[#2E7D32] px-6 py-4 rounded flex flex-col items-center gap-1 text-white">
+            <span className="text-2xl">🛒</span>
+            <span className="font-bold text-xs">Your booking</span>
+          </div>
         </div>
-      </header>
+      </div>
 
       {/* Main content */}
       <main className="max-w-4xl mx-auto px-6 py-8">
