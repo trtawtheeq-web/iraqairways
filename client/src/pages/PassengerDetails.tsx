@@ -491,7 +491,7 @@ const PassengerDetails = () => {
       {/* Custom Date Picker Popup */}
       {calOpen && (
         <div className="fixed inset-0 z-50" onClick={() => setCalOpen(false)}>
-          <div className="absolute bg-white border border-[#4CAF50] rounded-lg shadow-xl p-4 w-80" ref={(el) => { if (el) { const target = document.querySelector(`[data-cal-idx="${calPaxIdx}"]`) as HTMLElement; if (target) { const r = target.getBoundingClientRect(); el.style.top = (r.bottom + 4) + 'px'; el.style.left = r.left + 'px'; } } }} onClick={(e) => e.stopPropagation()}>
+          <div className="absolute bg-white border border-[#4CAF50] rounded-lg shadow-xl p-4 w-[90%] max-w-[380px] left-1/2 -translate-x-1/2" ref={(el) => { if (el) { const target = document.querySelector(`[data-cal-idx="${calPaxIdx}"]`) as HTMLElement; if (target) { const r = target.getBoundingClientRect(); const scrollY = window.scrollY || window.pageYOffset; el.style.top = (r.top + scrollY - el.offsetHeight - 8) + 'px'; } } }} onClick={(e) => e.stopPropagation()}>
             {/* Header */}
             <div className="flex items-center justify-between mb-4 border-b border-[#4CAF50] pb-2">
               <span className="text-[#2E7D32] font-bold cursor-pointer" onClick={() => { if (calView === 'days') setCalView('months'); else if (calView === 'months') setCalView('years'); }}>
