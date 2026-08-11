@@ -53,6 +53,12 @@ const PassengerDetails = () => {
   const [formError, setFormError] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [specialAssistance, setSpecialAssistance] = useState<Record<string, any>>({});
+  const [calOpen, setCalOpen] = useState(false);
+  const [calView, setCalView] = useState<'years'|'months'|'days'>('years');
+  const [calYear, setCalYear] = useState(2000);
+  const [calMonth, setCalMonth] = useState(0);
+  const [calYearRange, setCalYearRange] = useState(1991);
+  const [calPaxIdx, setCalPaxIdx] = useState(0);
 
   useEffect(() => {
     const ec = localStorage.getItem('emergencyContact');
@@ -481,6 +487,53 @@ const PassengerDetails = () => {
 
   return (
     <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
+      {/* Custom Date Picker Popup */}
+      {calOpen && (
+        <div className="fixed inset-0 z-50 flex items-start justify-start pt-20 pl-8" onClick={() => setCalOpen(false)}>
+          <div className="bg-white border border-[#4CAF50] rounded-lg shadow-xl p-4 w-80" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4 border-b border-[#4CAF50] pb-2">
+              <span className="text-[#2E7D32] font-bold cursor-pointer" onClick={() => { if (calView === 'days') setCalView('months'); else if (calView === 'months') setCalView('years'); }}>
+                {calView === 'years' && `${calYearRange} \u2013 ${calYearRange + 23}`}
+                {calView === 'months' && calYear}
+                {calView === 'days' && `${['January','February','March','April','May','June','July','August','September','October','November','December'][calMonth]} ${calYear}`}
+                {' \u25B4'}
+              </span>
+              <div className="flex gap-3">
+                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r - 24); else if (calView === 'months') setCalYear(y => y - 1); else setCalMonth(m => m === 0 ? (setCalYear(y => y-1), 11) : m - 1); }}>\u2039</span>
+                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r + 24); else if (calView === 'months') setCalYear(y => y + 1); else { if (calMonth === 11) { setCalYear(y => y+1); setCalMonth(0); } else setCalMonth(m => m+1); } }}>\u203A</span>
+              </div>
+            </div>
+            {/* Years view */}
+            {calView === 'years' && (
+              <div className="grid grid-cols-4 gap-2">
+                {Array.from({length: 24}, (_, i) => calYearRange + i).map(y => (
+                  <button key={y} onClick={() => { setCalYear(y); setCalView('months'); }} className="text-[#2E7D32] text-sm py-2 hover:bg-[#e8f5e9] rounded">{y}</button>
+                ))}
+              </div>
+            )}
+            {/* Months view */}
+            {calView === 'months' && (
+              <div className="grid grid-cols-4 gap-2">
+                {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, i) => (
+                  <button key={m} onClick={() => { setCalMonth(i); setCalView('days'); }} className="text-[#2E7D32] text-sm py-2 hover:bg-[#e8f5e9] rounded">{m}</button>
+                ))}
+              </div>
+            )}
+            {/* Days view */}
+            {calView === 'days' && (
+              <div className="grid grid-cols-7 gap-1">
+                {['Su','Mo','Tu','We','Th','Fr','Sa'].map(d => <span key={d} className="text-[#2E7D32] text-xs text-center font-bold">{d}</span>)}
+                {Array.from({length: new Date(calYear, calMonth, 1).getDay()}, (_, i) => <span key={`e${i}`}></span>)}
+                {Array.from({length: new Date(calYear, calMonth + 1, 0).getDate()}, (_, i) => (
+                  <button key={i+1} onClick={() => { const dd = String(i+1).padStart(2,'0'); const mm = String(calMonth+1).padStart(2,'0'); update(calPaxIdx, 'dob', `${dd}/${mm}/${calYear}`); setCalOpen(false); }} className="text-[#2E7D32] text-sm py-1 hover:bg-[#e8f5e9] rounded">{i+1}</button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Header - matching original exactly */}
       <header className="bg-[#398017] text-white">
         {/* Top bar: Logo + Home + English */}
@@ -560,18 +613,15 @@ const PassengerDetails = () => {
                 <legend className="text-[#2E7D32] text-xs px-1">Last name*</legend>
                 <input type="text" placeholder="Enter a last name" value={p.lastName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'lastName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
-              {/* Date of birth - auto-format DD/MM/YYYY */}
+              {/* Date of birth - custom date picker */}
               <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] relative">
                 <legend className="text-[#2E7D32] text-xs px-1">Date of birth</legend>
                 <div className="flex items-center">
                   <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                  <div className="relative">
-                    <input type="date" className="absolute inset-0 w-8 h-8 opacity-0 cursor-pointer" onChange={(e) => { const d = e.target.value; if (d) { const [y,m,dd] = d.split('-'); update(index, 'dob', `${dd}/${m}/${y}`); } }} />
-                    <svg className="w-6 h-6 text-[#2E7D32] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                  </div>
+                  <svg onClick={() => { setCalPaxIdx(index); setCalView('years'); setCalYearRange(1991); setCalOpen(true); }} className="w-6 h-6 text-[#2E7D32] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
               </fieldset>
-              <p className="text-gray-400 text-xs">Example: 31/01/2025</p>
+              <p className="text-[#2E7D32] text-xs">Example: 31/01/2025</p>
             </div>
           ))}
 
