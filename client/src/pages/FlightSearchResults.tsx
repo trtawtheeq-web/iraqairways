@@ -470,11 +470,11 @@ const FlightSearchResults = () => {
     setExpandedId(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  // Proceed from Shopping Cart to passenger details
+  // Proceed from Shopping Cart directly to passenger details (skip comfort popup)
   const handleFillPassengerDetails = () => {
     if (!selectedLegs.length) return;
     setShowCart(false);
-    setComfortLegs(selectedLegs);
+    finalize(selectedLegs, false);
   };
 
   // Disruption Assistance pricing
