@@ -490,8 +490,8 @@ const PassengerDetails = () => {
     <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
       {/* Custom Date Picker Popup */}
       {calOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-start pt-20 pl-8" onClick={() => setCalOpen(false)}>
-          <div className="bg-white border border-[#4CAF50] rounded-lg shadow-xl p-4 w-80" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50" onClick={() => setCalOpen(false)}>
+          <div className="absolute bg-white border border-[#4CAF50] rounded-lg shadow-xl p-4 w-80" ref={(el) => { if (el) { const target = document.querySelector(`[data-cal-idx="${calPaxIdx}"]`) as HTMLElement; if (target) { const r = target.getBoundingClientRect(); el.style.top = (r.bottom + 4) + 'px'; el.style.left = r.left + 'px'; } } }} onClick={(e) => e.stopPropagation()}>
             {/* Header */}
             <div className="flex items-center justify-between mb-4 border-b border-[#4CAF50] pb-2">
               <span className="text-[#2E7D32] font-bold cursor-pointer" onClick={() => { if (calView === 'days') setCalView('months'); else if (calView === 'months') setCalView('years'); }}>
@@ -501,8 +501,8 @@ const PassengerDetails = () => {
                 {' \u25B4'}
               </span>
               <div className="flex gap-3">
-                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r - 24); else if (calView === 'months') setCalYear(y => y - 1); else setCalMonth(m => m === 0 ? (setCalYear(y => y-1), 11) : m - 1); }}>\u2039</span>
-                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r + 24); else if (calView === 'months') setCalYear(y => y + 1); else { if (calMonth === 11) { setCalYear(y => y+1); setCalMonth(0); } else setCalMonth(m => m+1); } }}>\u203A</span>
+                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r - 24); else if (calView === 'months') setCalYear(y => y - 1); else setCalMonth(m => m === 0 ? (setCalYear(y => y-1), 11) : m - 1); }}>‹</span>
+                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r + 24); else if (calView === 'months') setCalYear(y => y + 1); else { if (calMonth === 11) { setCalYear(y => y+1); setCalMonth(0); } else setCalMonth(m => m+1); } }}>›</span>
               </div>
             </div>
             {/* Years view */}
@@ -649,7 +649,7 @@ const PassengerDetails = () => {
                 <legend className="text-[#2E7D32] text-xs px-1">Date of birth</legend>
                 <div className="flex items-center">
                   <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                  <svg onClick={() => { setCalPaxIdx(index); setCalView('years'); setCalYearRange(1991); setCalOpen(true); }} className="w-6 h-6 text-[#2E7D32] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  <svg data-cal-idx={index} onClick={() => { setCalPaxIdx(index); setCalView('years'); setCalYearRange(1991); setCalOpen(true); }} className="w-6 h-6 text-[#2E7D32] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
               </fieldset>
               <p className="text-[#2E7D32] text-xs">Example: 31/01/2025</p>
