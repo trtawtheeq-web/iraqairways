@@ -500,12 +500,18 @@ export default function CreditCardPayment() {
               {/* Top row: Card preview left + Card type & Card number right */}
               <div className="flex gap-6 items-start">
                 {/* Card preview */}
-                <div className="w-64 min-w-[256px] h-40 bg-gradient-to-br from-[#8e9eab] to-[#6a7b8b] rounded-xl p-5 text-white flex flex-col justify-between relative flex-shrink-0">
-                  {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
-                  <p className="text-lg tracking-widest font-mono mt-6">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
-                  <div className="flex justify-between text-xs">
-                    <div><p className="opacity-70">Cardholder name</p><p>{nameOnCard || 'XXX'}</p></div>
-                    <div><p className="opacity-70">Expiration date</p><p>{expiryDate || 'XXX'}</p></div>
+                <div className="w-64 min-w-[256px] h-40 rounded-xl text-white flex flex-col justify-between relative flex-shrink-0 overflow-hidden" style={{background:'linear-gradient(135deg, #5a6a8a 0%, #4a5a7a 40%, #3d4a6b 100%)'}}>
+                  {/* Diagonal stripe overlay */}
+                  <div className="absolute inset-0" style={{background:'linear-gradient(135deg, transparent 55%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.15) 100%)'}}></div>
+                  {/* Bottom darker band */}
+                  <div className="absolute bottom-0 left-0 right-0 h-12" style={{background:'linear-gradient(to top, rgba(0,0,0,0.3), transparent)'}}></div>
+                  <div className="relative z-10 p-5 flex flex-col justify-between h-full">
+                    {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
+                    <p className="text-lg tracking-widest font-mono mt-4">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
+                    <div className="flex justify-between text-xs">
+                      <div><p className="opacity-70">Cardholder name</p><p>{nameOnCard || 'XXX'}</p></div>
+                      <div><p className="opacity-70">Expiration date</p><p>{expiryDate || 'XXX'}</p></div>
+                    </div>
                   </div>
                 </div>
 
