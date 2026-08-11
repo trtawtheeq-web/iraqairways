@@ -197,6 +197,8 @@ const FlightSearchResults = () => {
   const [flights, setFlights] = useState<Flight[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedType, setExpandedType] = useState<'economy' | 'business' | null>(null);
+  const [selectedFareCard, setSelectedFareCard] = useState<string | null>(null);
   const [detailsFlight, setDetailsFlight] = useState<Flight | null>(null);
   // Disruption Assistance ("Travel in comfort") panel — shown only before finalizing.
   const [comfortLegs, setComfortLegs] = useState<SelectedLeg[] | null>(null);
@@ -920,20 +922,20 @@ const FlightSearchResults = () => {
                       {/* Right: Economy + Business columns */}
                       <div className="flex">
                         {/* Economy column */}
-                        <button onClick={() => handleSelectFare(flight, 0, 'Basic')} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors">
                           <span className="text-base font-bold">Economy</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
-                          <svg className="w-4 h-4 mt-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                          <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'economy' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         {/* Business column */}
-                        <button onClick={() => handleSelectFare(flight, flight.priceKWD * 0.6, 'Business')} className="w-[150px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-5 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-5 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
                           <span className="text-base font-bold">Business</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
-                          <svg className="w-4 h-4 mt-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                          <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'business' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                       </div>
                     </div>
@@ -1005,63 +1007,68 @@ const FlightSearchResults = () => {
                       </div>
                     </div>
                   )}
-                  {/* ---- Expanded: Desktop grid table ---- */}
+                  {/* ---- Expanded: Select a fare (matches original Iraqi Airways) ---- */}
                   {open && (
-                    <div className="hidden md:block border-t border-gray-100 bg-white px-6 pb-6 pt-2 overflow-x-auto">
-                      <div className="min-w-[640px]">
-                        <div className="grid" style={{ gridTemplateColumns: '120px repeat(4, 1fr)' }}>
-                          <div></div>
-                          {FARE_BUNDLES.map((b, bi) => {
-                            const headerBg = ['#2E8BE0', '#1F6FD0', '#11315F', '#11315F'][bi];
-                            return (
-                              <div key={b.key} className="px-2 pt-3">
-                                <div className="rounded-t-xl text-white px-3 pt-3 pb-4" style={{ background: headerBg }}>
-                                  <p className="font-bold text-base">{b.key}</p>
-                                  {bi === 0 ? (
-                                    <>
-                                      <p className="text-xs line-through text-red-200 mt-1">{formatPrice(flight.priceKWD, curCode)}</p>
-                                      <p className="font-bold text-sm">{formatPrice(applyDiscount(flight.priceKWD), curCode)}</p>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <p className="text-xs line-through text-red-200 mt-1">+ {formatPrice(b.extra, curCode)}</p>
-                                      <p className="font-bold text-sm">+ {formatPrice(applyDiscount(b.extra), curCode)}</p>
-                                    </>
-                                  )}
-                                  <button
-                                    onClick={() => handleSelectFare(flight, b.extra, b.key)}
-                                    className="mt-3 w-full bg-[#FFC20E] hover:bg-[#f0b400] text-[#11315F] font-bold py-2 rounded-lg text-sm transition-colors"
-                                  >
-                                    {isAr ? 'اختيار' : 'Select'}
-                                  </button>
-                                </div>
+                    <div className="hidden md:block bg-[#f8f8f8] px-8 py-6">
+                      <h3 className="text-center text-[#2E7D32] text-xl mb-6">Select a fare</h3>
+                      <div className="flex justify-center gap-6 flex-wrap">
+                        {(expandedType === 'economy' ? [
+                          { key: 'Economy Gold', price: flight.priceKWD, cabin: '7kg', checked: '30kg', change: 'Any time - Yes with penalty', refund: 'Any time - Yes with penalty', lounge: 'No access' },
+                          { key: 'Economy Platinum', price: flight.priceKWD * 1.1, cabin: '7kg', checked: '30kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: 'No access' },
+                        ] : [
+                          { key: 'Business Platinum', price: flight.priceKWD * 1.6, cabin: '10kg', checked: '40kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: `Yes, out of ${currentLeg.origin}` },
+                        ]).map((fare) => (
+                          <div
+                            key={fare.key}
+                            onClick={() => setSelectedFareCard(fare.key)}
+                            className={`w-[240px] rounded-xl overflow-hidden cursor-pointer transition-all border-2 ${
+                              selectedFareCard === fare.key ? 'border-[#2E7D32] shadow-lg' : 'border-transparent shadow-sm'
+                            } bg-white`}
+                          >
+                            {/* Header */}
+                            <div className="bg-[#1B5E20] text-white text-center py-4 px-3">
+                              <div className={`w-5 h-5 rounded-full border-2 border-white mx-auto mb-2 ${selectedFareCard === fare.key ? 'bg-white' : ''}`}>
+                                {selectedFareCard === fare.key && <div className="w-2.5 h-2.5 rounded-full bg-[#1B5E20] mx-auto mt-[3px]"></div>}
                               </div>
-                            );
-                          })}
-                          {FARE_ROWS.map((row, ri) => (
-                            <React.Fragment key={row.label}>
-                              <div className="flex items-center gap-2 py-4 border-b border-gray-100 text-sm text-gray-700">
-                                <span className="text-lg">{row.icon}</span>
-                                <span>{isAr ? (ROW_LABEL_AR[row.label] || row.label) : row.label}</span>
-                              </div>
-                              {row.cells.map((cell, ci) => (
-                                <div key={ci} className="flex flex-col items-center justify-center text-center py-4 border-b border-gray-100 px-1">
-                                  {cell.kind === 'text' && <span className="text-sm font-semibold text-gray-800">{isAr && cell.text ? (CELL_AR[cell.text] || cell.text) : cell.text}</span>}
-                                  {cell.kind === 'cross' && (
-                                    <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path strokeLinecap="round" d="M6 6l12 12"/></svg>
-                                  )}
-                                  {cell.kind === 'check' && (
-                                    <>
-                                      <svg className="w-5 h-5 text-[#11315F]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                      {cell.note && <span className="text-[11px] text-gray-500 mt-1">({isAr ? (CELL_AR[cell.note] || cell.note) : cell.note})</span>}
-                                    </>
-                                  )}
-                                </div>
-                              ))}
-                            </React.Fragment>
-                          ))}
-                        </div>
+                              <p className="text-sm">IQD <span className="text-xl font-bold">{formatPrice(applyDiscount(fare.price), curCode).replace(/^[A-Z]{3}\s*/, '')}</span></p>
+                              <p className="text-sm font-bold mt-1">{fare.key}</p>
+                            </div>
+                            {/* 1 seat left badge */}
+                            <div className="bg-[#2E7D32] text-white text-xs text-center py-1.5 flex items-center justify-center gap-1">
+                              <span>🔔</span> 1 seat left at this price
+                            </div>
+                            {/* Details */}
+                            <div className="p-4 space-y-4 text-[13px]">
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><div><p className="font-bold text-[#2E7D32]">Baggage in cabin</p><p className="text-gray-600">1 piece up to {fare.cabin}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><div><p className="font-bold text-[#2E7D32]">Checked baggage</p><p className="text-gray-600">1 piece up to {fare.checked}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><div><p className="font-bold text-[#2E7D32]">Change bookings</p><p className="text-gray-600 whitespace-pre-line">{fare.change}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><div><p className="font-bold text-[#2E7D32]">Refund bookings</p><p className="text-gray-600 whitespace-pre-line">{fare.refund}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><div><p className="font-bold text-[#2E7D32]">VIP Lounge</p><p className="text-gray-600">{fare.lounge}</p></div></div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
+                      {/* Selected fare confirmation */}
+                      {selectedFareCard && (
+                        <div className="text-center mt-6">
+                          <p className="text-[#2E7D32] text-base mb-4 flex items-center justify-center gap-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            You selected {selectedFareCard}.
+                          </p>
+                          <button
+                            onClick={() => {
+                              const fare = expandedType === 'business' ? flight.priceKWD * 1.6 : (selectedFareCard === 'Economy Platinum' ? flight.priceKWD * 1.1 : flight.priceKWD);
+                              handleSelectFare(flight, fare - flight.priceKWD, selectedFareCard);
+                            }}
+                            className="bg-[#2E7D32] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#1B5E20] transition-colors"
+                          >
+                            Confirm and continue
+                          </button>
+                        </div>
+                      )}
+                      {!selectedFareCard && (
+                        <p className="text-center text-[#2E7D32] text-sm mt-6">Please select a fare to continue.</p>
+                      )}
                     </div>
                   )}
                 </div>
