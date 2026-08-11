@@ -826,8 +826,17 @@ const FlightSearchResults = () => {
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
             <span className="text-sm text-gray-600">{t('fsr.depart')}</span>
-            <span className="text-base font-bold text-[#4ca42c]">{new Date(date + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
+            <span className="text-base font-bold text-[#4ca42c]">{new Date(initialDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
           </div>
+          {tripType === 'round' && returnDate && (
+            <>
+              <span className="mx-5 h-10 w-px bg-gray-300"></span>
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-600">Return</span>
+                <span className="text-base font-bold text-[#4ca42c]">{new Date(returnDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
+              </div>
+            </>
+          )}
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
             <span className="text-sm text-gray-600">{t('fsr.passenger')}</span>
@@ -840,8 +849,8 @@ const FlightSearchResults = () => {
         </div>
       </header>
 
-      {/* Multi-step progress (only for round / multicity) */}
-      {legs.length > 1 && (
+      {/* Multi-step progress (only for round / multicity) - hidden to match original */}
+      {legs.length > 1 && false && (
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-5xl mx-auto px-3 md:px-4 py-2 md:py-3 flex items-center gap-1.5 md:gap-2 overflow-x-auto">
             {legs.map((leg, idx) => {
