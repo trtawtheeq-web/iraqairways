@@ -433,9 +433,9 @@ export default function CreditCardPayment() {
 
             {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex gap-6">
+              <div className="grid grid-cols-[280px_1fr] gap-6 items-start">
                 {/* Card preview */}
-                <div className="w-64 h-40 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between flex-shrink-0 relative">
+                <div className="w-full h-44 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between relative">
                   {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
                   <p className="text-lg tracking-widest font-mono mt-6">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
                   <div className="flex justify-between text-xs">
@@ -445,7 +445,7 @@ export default function CreditCardPayment() {
                 </div>
 
                 {/* Fields */}
-                <div className="flex-1 space-y-4">
+                <div className="space-y-4">
                   {/* Card type */}
                   <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                     <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
@@ -483,7 +483,7 @@ export default function CreditCardPayment() {
                       <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
                       <div className="flex items-center">
                         <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                        <div className="w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center"><span className="text-white text-xs font-bold">i</span></div>
+                        <div className="w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
                       </div>
                     </fieldset>
                   </div>
