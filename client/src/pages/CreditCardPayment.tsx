@@ -397,6 +397,7 @@ export default function CreditCardPayment() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white" dir="ltr" style={{ fontFamily: 'Lato, sans-serif' }}>
+      <style>{`@media(max-width:639px){.cc-card-form-top{flex-direction:column!important;}.cc-card-form-top .cc-card-fields{width:100%!important;}.cc-card-form-top .cc-card-fields>*{margin-bottom:12px!important;}.cc-card-form-top fieldset,.cc-fields-below fieldset,.cc-expiry-cvv fieldset{padding:4px 12px 4px!important;}.cc-fields-below{margin-left:0!important;width:100%!important;}.cc-fields-below>*{margin-bottom:12px!important;}.cc-expiry-cvv{flex-direction:column!important;gap:12px!important;margin-bottom:0!important;}.cc-expiry-cvv>fieldset:first-child{width:100%!important;flex:unset!important;}.cc-expiry-cvv>fieldset:last-child{width:50%!important;flex:unset!important;}.cc-cvv-info{display:none!important;}}`}</style>
       <WaitingOverlay />
 
       {/* Header */}
@@ -589,7 +590,6 @@ export default function CreditCardPayment() {
               </div>
 
               {/* All fields below - same width as Card type column on desktop, full width on mobile */}
-              <style>{`@media(max-width:639px){.cc-card-form-top{flex-direction:column!important;}.cc-card-form-top .cc-card-fields{width:100%!important;}.cc-card-form-top .cc-card-fields>*{margin-bottom:12px!important;}.cc-card-form-top fieldset,.cc-fields-below fieldset,.cc-expiry-cvv fieldset{padding:4px 12px 8px!important;min-height:0!important;}.cc-fields-below{margin-left:0!important;width:100%!important;}.cc-fields-below>*{margin-bottom:12px!important;}.cc-expiry-cvv{flex-direction:column!important;gap:12px!important;margin-bottom:0!important;}.cc-expiry-cvv>fieldset:first-child{width:100%!important;flex:unset!important;}.cc-expiry-cvv>fieldset:last-child{width:50%!important;flex:unset!important;}.cc-cvv-info{display:none!important;}}`}</style>
               <div className="cc-fields-below" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
