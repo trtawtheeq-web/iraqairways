@@ -469,8 +469,8 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
-              {/* Expiry + CVV - aligned with card type */}
-              <div className="flex gap-4 mb-4 items-stretch" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
+              {/* Expiry + CVV */}
+              <div className="flex gap-4 mb-4 items-stretch">
                 <fieldset className={`border rounded px-3 py-3 bg-[#f5faf0] flex-1 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center">
@@ -489,14 +489,14 @@ export default function CreditCardPayment() {
               </div>
               {expiryError && <p className="text-red-500 text-xs mb-4">{expiryError}</p>}
 
-              {/* Cardholder name - aligned */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
+              {/* Cardholder name */}
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4">
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
                 <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
 
               {/* Billing Address */}
-              <div style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
+              <div>
               <h3 className="text-center text-[#2E7D32] font-bold mt-8 mb-4">Billing Address</h3>
               <div className="space-y-4">
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
@@ -522,20 +522,20 @@ export default function CreditCardPayment() {
               </div>
               </div>
               {/* Terms checkbox */}
-              <div className="mt-6 flex items-start gap-3" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
+              <div className="mt-6 flex items-start gap-3">
                 <input type="checkbox" required className="mt-0.5 w-6 h-6 min-w-[24px]" style={{ accentColor: '#4CAF50' }} />
                 <span className="text-[#2E7D32] text-sm">I understand and accept the terms and conditions of carriage, the terms and conditions of seat selection, the privacy policy and the fare rules of Iraqi Airways.*</span>
               </div>
 
               {/* Pay button */}
-              <div className="mt-6 text-center" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
+              <div className="mt-6 text-center">
                 <button type="submit" disabled={!isFormValid} className={`px-10 py-3 rounded-full text-lg font-medium text-white ${isFormValid ? 'bg-[#1B5E20] hover:bg-[#0D3B0F]' : 'bg-gray-400 cursor-not-allowed'}`}>
                   Pay IQD {displayAmountStr}
                 </button>
               </div>
 
               {/* Secured transaction bar - only show when card type selected */}
-              {selectedCardType && <div className="mt-6 flex items-center justify-between bg-[#e8f5e9] rounded px-4 py-3" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
+              {selectedCardType && <div className="mt-6 flex items-center justify-between bg-[#e8f5e9] rounded px-4 py-3">
                 <div className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-[#4CAF50]" fill="currentColor" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
                   <span className="text-[#2E7D32] text-sm font-medium">Secured transaction</span>
