@@ -410,21 +410,18 @@ a { text-decoration: none; outline: none; }
   .cc-card-fields fieldset,
   .cc-fields-below fieldset,
   .cc-expiry-cvv fieldset {
-    height: auto !important;
-    min-height: 48px !important;
-    padding: 2px 12px 6px !important;
-    display: block !important;
+    height: 52px !important;
+    padding: 0 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
     box-sizing: border-box !important;
     margin-bottom: 12px !important;
-    overflow: visible !important;
   }
   .cc-card-fields fieldset legend,
   .cc-fields-below fieldset legend,
   .cc-expiry-cvv fieldset legend {
-    margin-bottom: 0 !important;
-    display: block !important;
-    width: auto !important;
-    padding: 0 4px !important;
+    margin-bottom: -4px !important;
   }
   .cc-card-fields fieldset input,
   .cc-fields-below fieldset input,
