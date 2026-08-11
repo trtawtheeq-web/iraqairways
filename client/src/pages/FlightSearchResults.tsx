@@ -548,6 +548,7 @@ const FlightSearchResults = () => {
   };
 
   // ---- Shopping Cart / Your Selection page (matches original) ----
+  const [cartExpanded, setCartExpanded] = useState(false);
   if (showCart && cartFlight) {
     const cf = cartFlight;
     const cartDateLabel = (() => { try { return new Date(cf.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return cf.date; } })();
@@ -593,14 +594,14 @@ const FlightSearchResults = () => {
                   <p>⏱ Duration {cf.flight.duration.replace('h ', 'h ').replace('m', 'min')}</p>
                   <p>✈ Operated by Iraqi Airways</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex items-center gap-2">
                   <span className="text-[#2E7D32] font-bold">{cf.fare}</span>
-                  <button className="ml-2 text-gray-400"><svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+                  <button onClick={() => setCartExpanded(!cartExpanded)} className="text-gray-400 hover:text-gray-600"><svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
                 </div>
               </div>
             </div>
-            {/* Expanded itinerary + fare details */}
-            <div className="bg-[#f0f7f0] px-6 py-6">
+            {/* Expanded itinerary + fare details - toggle */}
+            {cartExpanded && <div className="bg-[#f0f7f0] px-6 py-6">
               <div className="flex gap-8">
                 {/* Itinerary details */}
                 <div className="flex-1">
@@ -644,7 +645,7 @@ const FlightSearchResults = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div>}
             {/* Change flight button */}
             <div className="px-6 py-4">
               <button onClick={() => { setShowCart(false); setCartFlight(null); }} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Change flight</button>
