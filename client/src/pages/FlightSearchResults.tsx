@@ -1055,6 +1055,22 @@ const FlightSearchResults = () => {
           </div>
         </div>
 
+        {/* Mobile Economy/Business tabs - visible on mobile only, matches original */}
+        {!isLoading && flights.length > 0 && (
+          <div className="sm:hidden flex mb-4 rounded-lg overflow-hidden border border-gray-200">
+            <button onClick={() => { setExpandedType('economy'); setExpandedId(null); setSelectedFareCard(null); }} className={`flex-1 flex flex-col items-center py-3 ${expandedType !== 'business' ? 'bg-[#4ca42c] text-white' : 'bg-[#4ca42c]/80 text-white/80'}`}>
+              <span className="font-bold">Economy</span>
+              <span className="text-xs">from</span>
+              <span className="text-xs">IQD {flights[0] ? formatPrice(applyDiscount(flights[0].priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '') : ''}</span>
+            </button>
+            <button onClick={() => { setExpandedType('business'); setExpandedId(null); setSelectedFareCard(null); }} className={`flex-1 flex flex-col items-center py-3 ${expandedType === 'business' ? 'bg-[#2E7D32] text-white' : 'bg-[#2E7D32]/80 text-white/80'}`}>
+              <span className="font-bold">Business</span>
+              <span className="text-xs">from</span>
+              <span className="text-xs">IQD {flights[0] ? formatPrice(applyDiscount(flights[0].priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '') : ''}</span>
+            </button>
+          </div>
+        )}
+
         {/* Row: "N flights available" + filter */}
         {!isLoading && (
           <div className="flex items-center justify-between mb-4">
@@ -1144,7 +1160,7 @@ const FlightSearchResults = () => {
                     {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#4ca42c] border border-[#4ca42c] px-2.5 py-0.5 rounded z-10 font-medium">{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1} seat{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1 > 1 ? 's' : ''} left</span></div>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
-                      <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
+                      <div className="flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 px-3 sm:px-6 py-4 sm:py-5 bg-white">
                         <div className="text-left">
                           <p className="text-2xl font-bold text-gray-800 leading-none">{flight.departureTime}</p>
                           <p className="text-sm text-gray-600 mt-1">{currentLeg.origin}</p>
@@ -1171,10 +1187,10 @@ const FlightSearchResults = () => {
                           <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#4CAF50] underline mt-1">{t('fsr.seeItinerary')} ↗</button>
                         </div>
                       </div>
-                      {/* Right: Economy + Business columns */}
-                      <div className="flex flex-col sm:flex-row w-full sm:w-auto">
+                      {/* Right: Economy + Business columns - desktop */}
+                      <div className="hidden sm:flex flex-row w-auto">
                         {/* Economy column */}
-                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-full sm:w-[150px] flex flex-col items-center justify-center bg-[#4ca42c] text-white px-3 py-4 sm:py-5 hover:bg-[#3d8c22] transition-colors">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#4ca42c] text-white px-3 py-5 hover:bg-[#3d8c22] transition-colors">
                           <span className="text-base font-bold">{t('fsr.economy')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
@@ -1182,7 +1198,7 @@ const FlightSearchResults = () => {
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'economy' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         {/* Business column */}
-                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-full sm:w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-4 sm:py-5 hover:bg-[#1B5E20] transition-colors border-t sm:border-t-0 sm:border-l border-[#4CAF50]/30">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors border-l border-[#4CAF50]/30">
                           <span className="text-base font-bold">{t('fsr.business')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
@@ -1190,6 +1206,13 @@ const FlightSearchResults = () => {
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'business' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                       </div>
+                      {/* Right: Mobile price box */}
+                      <button onClick={() => { setExpandedId(expandedId === flight.id ? null : flight.id); if (!expandedType) setExpandedType('economy'); setSelectedFareCard(null); }} className="sm:hidden flex flex-col items-center justify-center bg-[#e8f5e9] text-[#2E7D32] px-4 py-3 min-w-[110px]">
+                        <span className="text-xs">from</span>
+                        <span className="text-xs">IQD</span>
+                        <span className="text-lg font-bold">{formatPrice(applyDiscount(expandedType === 'business' ? flight.priceKWD * 1.6 : flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                        <svg className={`w-4 h-4 mt-1 transition-transform ${expandedId === flight.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                      </button>
                     </div>
                   </div>
                   {/* Keep old desktop card hidden - replaced above */}
