@@ -28,7 +28,8 @@ interface Passenger {
 
 const PassengerDetails = () => {
   const [, setLocation] = useLocation();
-  const { isAr, dir, t, lang } = useLang();
+  const { isAr, dir, t, lang, setLang } = useLang();
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [flightData, setFlightData] = useState<any>(null);
   const [passengers, setPassengers] = useState<Passenger[]>([]);
   const [openIndex, setOpenIndex] = useState(0);
@@ -542,7 +543,18 @@ const PassengerDetails = () => {
           <span className="text-white/40">|</span>
           <a href="/" className="text-white font-medium">Home</a>
           <span className="text-white/40">|</span>
-          <span className="text-white">English <span className="text-xs">▼</span></span>
+          <div className="relative">
+            <button onClick={() => setLangMenuOpen(o => !o)} className="text-white flex items-center gap-1">
+              <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
+              <span className="text-xs">▼</span>
+            </button>
+            {langMenuOpen && (
+              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ left: 0 }}>
+                <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">العربية</button>
+                <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">English</button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
       {/* Flight info bar - white background, green text like original */}

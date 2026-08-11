@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { sendData } from '../lib/store';
+import { useLang } from '../contexts/LanguageContext';
 
 export default function SeatCustomization() {
   const [, setLocation] = useLocation();
+  const { lang, setLang } = useLang();
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
   const [paxOpen, setPaxOpen] = useState(false);
   const [paxOpenIdx, setPaxOpenIdx] = useState(-1);
@@ -74,7 +77,18 @@ export default function SeatCustomization() {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
           <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
           <span className="border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => setLocation('/')}>Home</span>
-          <span className="text-sm">English ▼</span>
+          <div className="relative">
+            <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1">
+              <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
+              <span className="text-xs">▼</span>
+            </button>
+            {langMenuOpen && (
+              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ left: 0 }}>
+                <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">العربية</button>
+                <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">English</button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
