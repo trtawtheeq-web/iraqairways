@@ -494,7 +494,7 @@ const FlightSearchResults = () => {
 
   const detailDateLabel = (() => {
     try {
-      return new Date(date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      return new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     } catch { return date; }
   })();
 
@@ -609,7 +609,7 @@ const FlightSearchResults = () => {
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
             <span className="text-sm text-gray-600">Depart</span>
-            <span className="text-base font-bold text-[#398017]">{new Date(legs[stepIndex]?.departDate || Date.now()).toLocaleDateString('en-US', {weekday:'short', day:'numeric', month:'short'})}</span>
+            <span className="text-base font-bold text-[#398017]">{new Date(date + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
           </div>
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
