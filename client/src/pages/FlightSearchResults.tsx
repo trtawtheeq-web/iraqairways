@@ -886,8 +886,8 @@ const FlightSearchResults = () => {
                   </div>
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
-                  <div className="hidden md:block relative overflow-visible" dir="ltr">
-                    {isFirstFlight && <span className="absolute top-0 right-4 -translate-y-1/2 text-[11px] bg-[#e8f5e0] text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span>}
+                  <div className={`hidden md:block ${isFirstFlight ? 'mt-4' : ''}`} dir="ltr">
+                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-[#e8f5e0] text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span></div>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
                       <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
