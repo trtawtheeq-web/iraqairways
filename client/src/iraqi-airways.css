@@ -395,12 +395,7 @@ a { text-decoration: none; outline: none; }
     flex-direction: column !important;
     gap: 16px !important;
     margin-bottom: 0 !important;
-    align-items: flex-start !important;
-  }
-  .cc-card-form-top fieldset,
-  .cc-fields-below fieldset,
-  .cc-expiry-cvv fieldset {
-    padding: 4px 12px 8px !important;
+    align-items: stretch !important;
   }
   .cc-expiry-cvv > fieldset:first-child {
     width: 100% !important;
