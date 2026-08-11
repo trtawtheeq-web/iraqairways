@@ -464,27 +464,49 @@ const PassengerDetails = () => {
 
   return (
     <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
-      {/* Header - same green bar as original */}
+      {/* Header - matching original exactly */}
       <header className="bg-[#398017] text-white">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-6">
-          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-12" />
-          <a href="/" className="text-white font-medium border-b border-white/50 pb-0.5">Home</a>
-          <span className="text-white/80">English</span>
+        {/* Top bar: Logo + Home + English */}
+        <div className="max-w-7xl mx-auto px-6 py-2 flex items-center gap-4">
+          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
+          <span className="text-white/40">|</span>
+          <a href="/" className="text-white font-medium">Home</a>
+          <span className="text-white/40">|</span>
+          <span className="text-white">English <span className="text-xs">▼</span></span>
         </div>
-        {/* Flight info bar */}
-        <div className="bg-[#2d6b12] py-2">
-          <div className="max-w-7xl mx-auto px-6 flex items-center gap-8 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="font-bold">{flightData?.origin || 'BGW'}</span>
-              <span className="text-white/60">······ ✈ ······</span>
-              <span className="font-bold">{flightData?.destination || 'EBL'}</span>
+        {/* Flight info bar - larger text like original */}
+        <div className="bg-[#2d6b12] py-3 border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-6 flex items-center">
+            {/* Route */}
+            <div className="flex items-center gap-4">
+              <div className="text-center">
+                <span className="text-2xl font-bold">{flightData?.origin || 'BGW'}</span>
+                <p className="text-xs text-white/70">{cityName(flightData?.origin || 'BGW')}</p>
+              </div>
+              <span className="text-white/50 text-lg">·········· ✈ ··········</span>
+              <div className="text-center">
+                <span className="text-2xl font-bold">{flightData?.destination || 'EBL'}</span>
+                <p className="text-xs text-white/70">{cityName(flightData?.destination || 'EBL')}</p>
+              </div>
             </div>
-            <span>|</span>
-            <div><span className="text-white/70">Depart</span> <span className="font-bold">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</span></div>
-            <span>|</span>
-            <div><span className="text-white/70">Passenger</span> <span className="font-bold">{totalCount} 👤</span></div>
-            <div className="ml-auto flex items-center gap-2">
-              <span>🛒</span> <span className="font-bold">Your booking</span>
+            {/* Separator */}
+            <span className="mx-6 text-white/30 text-2xl">|</span>
+            {/* Depart */}
+            <div>
+              <p className="text-sm text-white/70">Depart</p>
+              <p className="font-bold">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+            </div>
+            {/* Separator */}
+            <span className="mx-6 text-white/30 text-2xl">|</span>
+            {/* Passenger */}
+            <div>
+              <p className="text-sm text-white/70">Passenger</p>
+              <p className="font-bold">{totalCount} 👤</p>
+            </div>
+            {/* Your booking - right */}
+            <div className="ml-auto bg-[#2E7D32] px-4 py-2 rounded flex items-center gap-2">
+              <span className="text-xl">🛒</span>
+              <span className="font-bold text-sm">Your booking</span>
             </div>
           </div>
         </div>
