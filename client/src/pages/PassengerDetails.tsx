@@ -50,6 +50,8 @@ const PassengerDetails = () => {
   const [showEmergency, setShowEmergency] = useState(false);
   const [rememberPassenger, setRememberPassenger] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');
   const [specialAssistance, setSpecialAssistance] = useState<Record<string, any>>({});
 
   useEffect(() => {
@@ -202,16 +204,22 @@ const PassengerDetails = () => {
 
   const handleContinue = () => {
     const primary = passengers[primaryIndex];
-    if (!privacyAccepted) {
-      alert('Please accept the privacy policy to continue.');
-      return;
-    }
+    setFormError('');
     const isValid = passengers.every((p) => p.firstName.trim() && p.lastName.trim())
       && primary.email.trim() && primary.phone.trim();
     if (!isValid) {
-      alert('Please complete all required passenger fields, including the primary guest contact details.');
+      setFormError('Please complete all required passenger fields, including the primary guest contact details.');
       return;
     }
+    if (primary.email !== confirmEmail) {
+      setFormError('Email addresses do not match. Please check and try again.');
+      return;
+    }
+    if (!privacyAccepted) {
+      setFormError('Please accept the privacy policy to continue.');
+      return;
+    }
+    setFormError('');
     localStorage.setItem('passengerData', JSON.stringify(passengers));
     localStorage.setItem('cancelForAnyReason', cancelChoice === 'refundable' ? '1' : '0');
     const summaryLegs = legs.map((leg: any) => {
@@ -587,7 +595,7 @@ const PassengerDetails = () => {
           {/* Confirm email */}
           <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
             <legend className="text-[#2E7D32] text-xs px-1">Confirm email*</legend>
-            <input type="email" placeholder="Confirm an email address" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+            <input type="email" placeholder="Confirm an email address" value={confirmEmail} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); setConfirmEmail(v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
           {/* Extra emails - each has Email + Confirm email + Remove button */}
           {extraEmails.map((em, i) => (
@@ -793,6 +801,13 @@ const PassengerDetails = () => {
             <span className="text-gray-700 text-sm">I understand and accept that my personal data will be processed in accordance with the applicable carrier's privacy policy <a href="#" className="text-[#2E7D32] underline">more</a></span>
           </label>
         </div>
+
+        {/* Error message */}
+        {formError && (
+          <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+            {formError}
+          </div>
+        )}
 
         {/* Back + Confirm buttons - right aligned */}
         <div className="flex justify-end gap-3 mb-12">
