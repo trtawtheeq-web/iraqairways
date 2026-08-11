@@ -41,10 +41,13 @@ const PassengerDetails = () => {
   const [emergency, setEmergency] = useState({
     firstName: '',
     lastName: '',
-    dialCode: '+965',
+    dialCode: '+964',
     phone: '',
     email: '',
   });
+  const [extraEmails, setExtraEmails] = useState<string[]>([]);
+  const [extraPhones, setExtraPhones] = useState<{code: string; number: string}[]>([]);
+  const [showEmergency, setShowEmergency] = useState(false);
   const [specialAssistance, setSpecialAssistance] = useState<Record<string, any>>({});
 
   useEffect(() => {
@@ -580,9 +583,16 @@ const PassengerDetails = () => {
             <legend className="text-[#2E7D32] text-xs px-1">Confirm email*</legend>
             <input type="email" placeholder="Confirm an email address" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
+          {/* Extra emails */}
+          {extraEmails.map((em, i) => (
+            <fieldset key={`em-${i}`} className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
+              <legend className="text-[#2E7D32] text-xs px-1">Additional email</legend>
+              <input type="email" placeholder="Enter an email address" value={em} onChange={(e) => { const arr = [...extraEmails]; arr[i] = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); setExtraEmails(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+            </fieldset>
+          ))}
           {/* Add another email */}
           <div className="text-center mb-6">
-            <button className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another email address</button>
+            <button type="button" onClick={() => setExtraEmails([...extraEmails, ''])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another email address</button>
           </div>
           {/* Phone type */}
           <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
@@ -603,15 +613,47 @@ const PassengerDetails = () => {
               <input type="tel" placeholder="Enter a mobile phone" value={passengers[0]?.phone || ''} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); update(0, 'phone', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
             </fieldset>
           </div>
+          {/* Extra phones */}
+          {extraPhones.map((ph, i) => (
+            <div key={`ph-${i}`} className="grid grid-cols-2 gap-4 mb-5">
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <legend className="text-[#2E7D32] text-xs px-1">Country calling code</legend>
+                <input type="text" placeholder="+964" value={ph.code} onChange={(e) => { const arr = [...extraPhones]; arr[i].code = e.target.value.replace(/[^0-9+]/g, ''); setExtraPhones(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              </fieldset>
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <legend className="text-[#2E7D32] text-xs px-1">Phone number</legend>
+                <input type="tel" placeholder="Enter a mobile phone" value={ph.number} onChange={(e) => { const arr = [...extraPhones]; arr[i].number = e.target.value.replace(/[^0-9]/g, ''); setExtraPhones(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              </fieldset>
+            </div>
+          ))}
           {/* Add another phone */}
           <div className="text-center mb-6">
-            <button className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another phone number</button>
+            <button type="button" onClick={() => setExtraPhones([...extraPhones, {code: '+964', number: ''}])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another phone number</button>
           </div>
           {/* Fill emergency contact toggle */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-5 bg-gray-400 rounded-full relative cursor-pointer"><div className="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5"></div></div>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setShowEmergency(!showEmergency)}>
+            <div className={`w-10 h-5 rounded-full relative transition-colors ${showEmergency ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${showEmergency ? 'left-[22px]' : 'left-0.5'}`}></div></div>
             <span className="text-gray-600 text-sm">Fill emergency contact</span>
           </div>
+          {/* Emergency contact fields */}
+          {showEmergency && (
+            <div className="mt-5 space-y-5">
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <legend className="text-[#2E7D32] text-xs px-1">Emergency contact name*</legend>
+                <input type="text" placeholder="Enter full name" value={emergency.firstName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); setEmergency({...emergency, firstName: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              </fieldset>
+              <div className="grid grid-cols-2 gap-4">
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                  <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
+                  <input type="text" placeholder="+964" value={emergency.dialCode} onChange={(e) => { const v = e.target.value.replace(/[^0-9+]/g, ''); setEmergency({...emergency, dialCode: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                </fieldset>
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                  <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
+                  <input type="tel" placeholder="Enter a mobile phone" value={emergency.phone} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setEmergency({...emergency, phone: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                </fieldset>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Remember passenger information */}
