@@ -533,20 +533,20 @@ const PassengerDetails = () => {
                   <option value="Ms">Ms</option>
                 </select>
               </fieldset>
-              {/* First name */}
+              {/* First name - English letters only */}
               <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                 <legend className="text-[#2E7D32] text-xs px-1">First name*</legend>
-                <input type="text" placeholder="Enter a first name" value={p.firstName} onChange={(e) => update(index, 'firstName', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <input type="text" placeholder="Enter a first name" value={p.firstName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'firstName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
-              {/* Last name */}
+              {/* Last name - English letters only */}
               <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                 <legend className="text-[#2E7D32] text-xs px-1">Last name*</legend>
-                <input type="text" placeholder="Enter a last name" value={p.lastName} onChange={(e) => update(index, 'lastName', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <input type="text" placeholder="Enter a last name" value={p.lastName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'lastName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
-              {/* Date of birth */}
+              {/* Date of birth - numbers and / only */}
               <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                 <legend className="text-[#2E7D32] text-xs px-1">Date of birth</legend>
-                <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => update(index, 'dob', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { const v = e.target.value.replace(/[^0-9/]/g, ''); update(index, 'dob', v); }} maxLength={10} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
               <p className="text-gray-400 text-xs">Example: 31/01/2025</p>
             </div>
@@ -573,7 +573,7 @@ const PassengerDetails = () => {
           {/* Email */}
           <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
             <legend className="text-[#2E7D32] text-xs px-1">Email*</legend>
-            <input type="email" placeholder="Enter an email address" value={passengers[0]?.email || ''} onChange={(e) => update(0, 'email', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+            <input type="email" placeholder="Enter an email address" value={passengers[0]?.email || ''} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); update(0, 'email', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
           {/* Confirm email */}
           <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
@@ -596,11 +596,11 @@ const PassengerDetails = () => {
           <div className="grid grid-cols-2 gap-4 mb-5">
             <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
               <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
-              <input type="text" placeholder="Enter a country calling code" value={passengers[0]?.dialCode || '+964'} onChange={(e) => update(0, 'dialCode', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <input type="text" placeholder="Enter a country calling code" value={passengers[0]?.dialCode || '+964'} onChange={(e) => { const v = e.target.value.replace(/[^0-9+]/g, ''); update(0, 'dialCode', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
             </fieldset>
             <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
               <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
-              <input type="tel" placeholder="Enter a mobile phone" value={passengers[0]?.phone || ''} onChange={(e) => update(0, 'phone', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <input type="tel" placeholder="Enter a mobile phone" value={passengers[0]?.phone || ''} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); update(0, 'phone', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
             </fieldset>
           </div>
           {/* Add another phone */}
