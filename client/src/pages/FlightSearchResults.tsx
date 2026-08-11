@@ -1096,23 +1096,26 @@ const FlightSearchResults = () => {
             {/* Date and duration - green */}
             <p className="text-[#398017] text-[14px] leading-tight">Departs on {detailDateLabel}</p>
             <p className="text-[#398017] text-[14px] font-bold leading-tight mb-6">Total duration: {detailsFlight.duration.replace(' 0', ' ').replace('h ', 'h ').replace('m', 'min')}</p>
-            {/* Timeline with green vertical line */}
-            <div className="relative pl-8 mb-6">
-              {/* Vertical green line */}
-              <div className="absolute left-[11px] top-[6px] bottom-[6px] w-[3px] bg-[#398017]"></div>
-              {/* Departure dot + info */}
-              <div className="relative mb-8">
-                <div className="absolute -left-8 top-[6px] w-[10px] h-[10px] rounded-full bg-[#398017]"></div>
-                <p className="text-[#398017] font-bold text-[15px]">{detailsFlight.departureTime} {airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin}</p>
-                <p className="text-gray-500 text-[13px]">{airportName(currentLeg.origin)} ({currentLeg.origin})</p>
+            {/* Timeline: duration left | green line+dots center | info right */}
+            <div className="flex gap-3 mb-6">
+              {/* Duration on the left */}
+              <div className="flex items-center justify-end w-8 text-gray-400 text-xs">{detailsFlight.duration.split(' ')[0]}</div>
+              {/* Green vertical line with dots */}
+              <div className="flex flex-col items-center py-1">
+                <div className="w-[10px] h-[10px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
+                <div className="w-[3px] flex-1 bg-[#4CAF50] my-0.5"></div>
+                <div className="w-[10px] h-[10px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
               </div>
-              {/* Duration label on the left side */}
-              <div className="absolute left-[-18px] top-1/2 -translate-y-1/2 text-gray-400 text-xs">{detailsFlight.duration.split(' ')[0]}</div>
-              {/* Arrival dot + info */}
-              <div className="relative">
-                <div className="absolute -left-8 top-[6px] w-[10px] h-[10px] rounded-full bg-[#398017]"></div>
-                <p className="text-[#398017] font-bold text-[15px]">{detailsFlight.arrivalTime}{detailsFlight.arrivesNextDay ? ' +1' : ''} {airportName(currentLeg.destination).split(' ')[0] || currentLeg.destination}</p>
-                <p className="text-gray-500 text-[13px]">{airportName(currentLeg.destination)} ({currentLeg.destination})</p>
+              {/* Flight info on the right */}
+              <div className="flex-1">
+                <div className="mb-6">
+                  <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.departureTime} {airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin}</p>
+                  <p className="text-gray-500 text-[13px]">{airportName(currentLeg.origin)} ({currentLeg.origin})</p>
+                </div>
+                <div>
+                  <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.arrivalTime}{detailsFlight.arrivesNextDay ? ' +1' : ''} {airportName(currentLeg.destination).split(' ')[0] || currentLeg.destination}</p>
+                  <p className="text-gray-500 text-[13px]">{airportName(currentLeg.destination)} ({currentLeg.destination})</p>
+                </div>
               </div>
             </div>
             {/* Flight info */}
