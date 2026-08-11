@@ -523,8 +523,8 @@ export default function CreditCardPayment() {
               </div>
               {/* Terms checkbox */}
               <div className="mt-6 flex items-start gap-3" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
-                <input type="checkbox" required className="mt-1 w-4 h-4" style={{ accentColor: '#4CAF50' }} />
-                <span className="text-gray-700 text-sm">I understand and accept the terms and conditions of carriage, the terms and conditions of seat selection, the privacy policy and the fare rules of Iraqi Airways.*</span>
+                <input type="checkbox" required className="mt-1 w-5 h-5" style={{ accentColor: '#4CAF50' }} />
+                <span className="text-[#2E7D32] text-sm">I understand and accept the terms and conditions of carriage, the terms and conditions of seat selection, the privacy policy and the fare rules of Iraqi Airways.*</span>
               </div>
 
               {/* Pay button */}
