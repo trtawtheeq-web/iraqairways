@@ -571,9 +571,12 @@ const FlightSearchResults = () => {
   const [cartExpanded, setCartExpanded] = useState(false);
   if (showCart && cartFlight) {
     const cf = cartFlight;
+    // For round trips, show all legs
+    const allCartLegs = selectedLegs.length > 0 ? selectedLegs : [{ origin: cf.origin, destination: cf.destination, date: cf.date, flight: cf.flight, fare: cf.fare }];
+    const grandCartTotal = formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode);
     const cartDateLabel = (() => { try { return new Date(cf.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return cf.date; } })();
     const cartPrice = formatPrice(cf.flight.priceKWD, curCode);
-    const cartTotal = formatPrice(computeTotal(cf.flight.priceKWD), curCode);
+    const cartTotal = grandCartTotal;
     const fareDetails = cf.fare.includes('Business') 
       ? { cabin: '10kg', checked: '40kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: `Yes, out of ${cf.origin}` }
       : cf.fare.includes('Platinum')
@@ -593,29 +596,37 @@ const FlightSearchResults = () => {
         <div className="max-w-4xl mx-auto mt-10 mb-6 text-center">
           <div className="inline-block border border-gray-200 rounded-xl px-12 py-6 shadow-sm">
             <h1 className="text-2xl text-[#2E7D32] font-light">Your selection</h1>
-            <p className="text-[#2E7D32] text-base mt-1">{airportName(cf.origin).split(' ')[0]} to {airportName(cf.destination).split(' ')[0]}</p>
+            <p className="text-[#2E7D32] text-base mt-1">{airportName(allCartLegs[0].origin).split(' ')[0]} to {airportName(allCartLegs[0].destination).split(' ')[0]}{allCartLegs.length > 1 ? ` (Round trip)` : ''}</p>
           </div>
         </div>
         {/* Your flight */}
         <div className="max-w-4xl mx-auto">
           <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">Your flight</h2>
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
+          {allCartLegs.map((leg, legIdx) => {
+            const legDateLabel = (() => { try { return new Date(leg.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return leg.date; } })();
+            const legFareDetails = (leg.fare || '').includes('Business') 
+              ? { cabin: '10kg', checked: '40kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: `Yes, out of ${leg.origin}` }
+              : (leg.fare || '').includes('Platinum')
+                ? { cabin: '7kg', checked: '30kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: 'No access' }
+                : { cabin: '7kg', checked: '30kg', change: 'Any time - Yes with penalty', refund: 'Any time - Yes with penalty', lounge: 'No access' };
+            return (
+          <div key={legIdx} className="border border-gray-200 rounded-lg overflow-hidden mb-4">
             {/* Flight summary row */}
             <div className="px-6 py-4">
-              <p className="text-[#2E7D32] font-bold">{airportName(cf.origin).split(' ')[0]} to {airportName(cf.destination).split(' ')[0]} - <span className="font-normal text-[#2E7D32]">{cartDateLabel}</span></p>
+              <p className="text-[#2E7D32] font-bold">{airportName(leg.origin).split(' ')[0]} to {airportName(leg.destination).split(' ')[0]} - <span className="font-normal text-[#2E7D32]">{legDateLabel}</span></p>
               <hr className="border-[#2E7D32] mt-3" />
               <div className="flex items-center mt-4 gap-4">
                 <div className="flex items-center gap-3 flex-1">
-                  <span className="text-2xl font-bold text-gray-800">{cf.flight.departureTime}</span>
+                  <span className="text-2xl font-bold text-gray-800">{leg.flight.departureTime}</span>
                   <span className="text-gray-400 text-sm flex-1 text-center">··········· nonstop ···········</span>
-                  <span className="text-2xl font-bold text-gray-800">{cf.flight.arrivalTime}</span>
+                  <span className="text-2xl font-bold text-gray-800">{leg.flight.arrivalTime}</span>
                 </div>
                 <div className="text-sm text-gray-600">
-                  <p>⏱ {t('fsr.duration')} {cf.flight.duration.replace('h ', 'h ').replace('m', 'min')}</p>
+                  <p>⏱ {t('fsr.duration')} {leg.flight.duration.replace('h ', 'h ').replace('m', 'min')}</p>
                   <p>✈ {t('fsr.operatedBy')}</p>
                 </div>
                 <div className="text-right flex items-center gap-2">
-                  <span className="text-[#2E7D32] font-bold">{cf.fare}</span>
+                  <span className="text-[#2E7D32] font-bold">{leg.fare}</span>
                   <button onClick={() => setCartExpanded(!cartExpanded)} className="text-gray-400 hover:text-gray-600"><svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
                 </div>
               </div>
@@ -627,7 +638,7 @@ const FlightSearchResults = () => {
                 <div className="flex-1">
                   <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">Itinerary details</h3>
                   <div className="flex gap-2 ml-4">
-                    <div className="flex items-center justify-end w-6 text-gray-500 text-xs">{cf.flight.duration.split(' ')[0]}</div>
+                    <div className="flex items-center justify-end w-6 text-gray-500 text-xs">{leg.flight.duration.split(' ')[0]}</div>
                     <div className="flex flex-col items-center" style={{minHeight:'70px'}}>
                       <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
                       <div className="w-[2px] flex-1 bg-[#4CAF50]"></div>
@@ -635,19 +646,19 @@ const FlightSearchResults = () => {
                     </div>
                     <div className="flex-1 ml-1">
                       <div className="mb-4">
-                        <p className="text-[#2E7D32] font-bold text-[14px]">{cf.flight.departureTime} {airportName(cf.origin).split(' ')[0]}</p>
-                        <p className="text-gray-500 text-[12px]">{airportName(cf.origin)} ({cf.origin})</p>
+                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.departureTime} {airportName(leg.origin).split(' ')[0]}</p>
+                        <p className="text-gray-500 text-[12px]">{airportName(leg.origin)} ({leg.origin})</p>
                       </div>
                       <div>
-                        <p className="text-[#2E7D32] font-bold text-[14px]">{cf.flight.arrivalTime} {airportName(cf.destination).split(' ')[0]}</p>
-                        <p className="text-gray-500 text-[12px]">{airportName(cf.destination)} ({cf.destination})</p>
+                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.arrivalTime} {airportName(leg.destination).split(' ')[0]}</p>
+                        <p className="text-gray-500 text-[12px]">{airportName(leg.destination)} ({leg.destination})</p>
                       </div>
                     </div>
                   </div>
                   <div className="text-[12px] text-[#2E7D32] space-y-0.5 mt-4 ml-12">
-                    <p>Flight number <span className="font-bold">{cf.flight.flightNumber}</span></p>
+                    <p>Flight number <span className="font-bold">{leg.flight.flightNumber}</span></p>
                     <p>Operated by Iraqi Airways</p>
-                    <p className="uppercase">{cf.flight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
+                    <p className="uppercase">{leg.flight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
                   </div>
                 </div>
                 {/* Vertical divider */}
@@ -655,22 +666,24 @@ const FlightSearchResults = () => {
                 {/* Your fare */}
                 <div className="flex-1">
                   <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">Your fare</h3>
-                  <p className="text-center font-bold text-gray-800 mb-4">{cf.fare}</p>
+                  <p className="text-center font-bold text-gray-800 mb-4">{leg.fare}</p>
                   <div className="space-y-3 text-[13px]">
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">Baggage in cabin</span> 1 piece up to {fareDetails.cabin}</p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">Checked baggage</span> 1 piece up to {fareDetails.checked}</p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><p><span className="font-bold text-[#2E7D32]">Change bookings</span> <span className="whitespace-pre-line">{fareDetails.change}</span></p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><p><span className="font-bold text-[#2E7D32]">Refund bookings</span> <span className="whitespace-pre-line">{fareDetails.refund}</span></p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><p><span className="font-bold text-[#2E7D32]">VIP Lounge</span> {fareDetails.lounge}</p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">Baggage in cabin</span> 1 piece up to {legFareDetails.cabin}</p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">Checked baggage</span> 1 piece up to {legFareDetails.checked}</p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><p><span className="font-bold text-[#2E7D32]">Change bookings</span> <span className="whitespace-pre-line">{legFareDetails.change}</span></p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><p><span className="font-bold text-[#2E7D32]">Refund bookings</span> <span className="whitespace-pre-line">{legFareDetails.refund}</span></p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><p><span className="font-bold text-[#2E7D32]">VIP Lounge</span> {legFareDetails.lounge}</p></div>
                   </div>
                 </div>
               </div>
             </div>}
             {/* Change flight button */}
             <div className="px-6 py-4">
-              <button onClick={() => { setShowCart(false); setCartFlight(null); }} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Change flight</button>
+              <button onClick={() => { setShowCart(false); setCartFlight(null); setSelectedLegs(selectedLegs.slice(0, legIdx)); setStepIndex(legIdx); }} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Change flight</button>
             </div>
           </div>
+            );
+          })}
           {/* Total price */}
           <div className="text-right mt-6">
             <p className="text-[#2E7D32] text-base">Total price for flight: <span className="font-bold text-lg">{cartTotal}</span></p>
