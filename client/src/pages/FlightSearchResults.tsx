@@ -80,8 +80,7 @@ const FARE_ROWS: FareRow[] = [
 const FlightSearchResults = () => {
   const [, setLocation] = useLocation();
   const { lang, setLang, isAr, dir, t } = useLang();
-  // Force English for this page to match original
-  useEffect(() => { if (lang !== 'en') setLang('en'); }, []);
+
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [datesVisible, setDatesVisible] = useState(true);
   const [currOpen, setCurrOpen] = useState(false);
@@ -766,7 +765,7 @@ const FlightSearchResults = () => {
               onClick={() => setLangMenuOpen(o => !o)}
               className="flex items-center gap-1.5 text-white text-[15px] font-medium"
             >
-              <span>English</span>
+              <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             {langMenuOpen && (
