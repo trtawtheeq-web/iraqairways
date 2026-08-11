@@ -754,8 +754,8 @@ const FlightSearchResults = () => {
 
   return (
     <div className="min-h-screen bg-white font-[Lato]" dir={dir}>
-      {/* Mobile Top Bar - matches original: back arrow + route pill + KWD */}
-      <div className="md:hidden w-full py-3 px-4 flex items-center justify-between sticky top-0 z-[9999] bg-white">
+      {/* Mobile Top Bar - HIDDEN (replaced by Iraqi Airways header below) */}
+      <div className="hidden w-full py-3 px-4 flex items-center justify-between sticky top-0 z-[9999] bg-white">
         <button onClick={() => { if (detailsFlight) { setDetailsFlight(null); } else if (expandedId) { setExpandedId(null); } else { window.location.href = '/'; } }} className="w-9 h-9 rounded-full border border-[#12470D]/30 flex items-center justify-center bg-white">
           <svg className="w-4 h-4 text-[#12470D]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
@@ -781,8 +781,8 @@ const FlightSearchResults = () => {
         </div>
       </div>
 
-      {/* Header - Iraqi Airways Original Style */}
-      <header className="hidden md:block w-full" dir={isAr ? 'rtl' : 'ltr'}>
+      {/* Header - Iraqi Airways Original Style - visible on all sizes */}
+      <header className="w-full" dir={isAr ? 'rtl' : 'ltr'}>
         {/* Green top bar - matching original exactly */}
         <div className="w-full bg-[#4ca42c] px-5 py-3 flex items-center">
           <img
@@ -900,7 +900,7 @@ const FlightSearchResults = () => {
       <main className="max-w-5xl mx-auto px-4 md:px-4 pb-4" dir={isAr ? 'rtl' : 'ltr'}>
 
         {/* "Please, select your departure" box - matches original */}
-        <div className="hidden md:flex justify-center mt-6 mb-6">
+        <div className="flex justify-center mt-6 mb-6">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-10 py-5 text-center">
             <p className="text-2xl text-[#4ca42c] font-light">{t('fsr.pleaseSelect')}</p>
             <p className="text-base text-gray-500 mt-1">{cityOfEn(origin)} to {cityOfEn(destination)}</p>
@@ -908,7 +908,7 @@ const FlightSearchResults = () => {
         </div>
 
         {/* Full date - matches original */}
-        <div className="hidden md:block text-center mb-4">
+        <div className="block text-center mb-4">
           <p className="text-lg font-bold text-[#4ca42c]">{detailDateLabel}</p>
         </div>
 
@@ -950,7 +950,7 @@ const FlightSearchResults = () => {
         )}
 
         {/* Date strip — mobile: scrollable for 1 year */}
-        <div className="md:hidden border-b border-gray-200 mb-4 relative">
+        <div className="hidden border-b border-gray-200 mb-4 relative">
           <div
             className="flex overflow-x-auto no-scrollbar"
             ref={(el) => {
@@ -985,7 +985,7 @@ const FlightSearchResults = () => {
           </div>
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
-        <div className="hidden md:block mb-4" dir="ltr">
+        <div className="block mb-4" dir="ltr">
           <div className="relative rounded-xl pb-6 px-16" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
           {/* Hide dates on top border - half above half below */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
@@ -1064,7 +1064,7 @@ const FlightSearchResults = () => {
 
         {/* Step heading */}
         {!isLoading && flights.length > 0 && (
-          <p className="hidden md:block text-sm text-[#12470D] font-semibold mb-3">{stepHeading()}</p>
+          <p className="block text-sm text-[#12470D] font-semibold mb-3">{stepHeading()}</p>
         )}
 
         {isLoading ? (
@@ -1087,7 +1087,7 @@ const FlightSearchResults = () => {
               return (
                 <div key={flight.id} className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                   {/* ---- Mobile card (matches original exactly) ---- */}
-                  <div className="md:hidden px-5 py-4" onClick={() => setExpandedId(open ? null : flight.id)}>
+                  <div className="hidden px-5 py-4" onClick={() => setExpandedId(open ? null : flight.id)}>
                     {/* Row 1: Date + Flight number */}
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm text-gray-600">{detailDateLabel}</span>
@@ -1130,7 +1130,7 @@ const FlightSearchResults = () => {
                   </div>
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
-                  <div className={`hidden md:block ${isFirstFlight ? 'pt-5' : ''}`} dir="ltr">
+                  <div className={`block ${isFirstFlight ? 'pt-5' : ''}`} dir="ltr">
                     {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#4ca42c] border border-[#4ca42c] px-2.5 py-0.5 rounded z-10 font-medium">{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1} seat{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1 > 1 ? 's' : ''} left</span></div>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
@@ -1208,7 +1208,7 @@ const FlightSearchResults = () => {
 
                   {/* ---- Expanded: Mobile vertical cards ---- */}
                   {open && (
-                    <div className="md:hidden border-t border-gray-100 bg-white px-4 pb-4 pt-4">
+                    <div className="hidden border-t border-gray-100 bg-white px-4 pb-4 pt-4">
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-bold text-[#001326]">{isAr ? 'خيارات الأسعار' : 'Fare options'}</h3>
                         <button onClick={() => setExpandedId(null)} className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white">
@@ -1251,7 +1251,7 @@ const FlightSearchResults = () => {
                   )}
                   {/* ---- Expanded: Select a fare (matches original Iraqi Airways) ---- */}
                   {open && (
-                    <div className="hidden md:block bg-[#f8f8f8] px-8 py-6">
+                    <div className="block bg-[#f8f8f8] px-8 py-6">
                       <h3 className="text-center text-[#2E7D32] text-xl mb-6">Select a fare</h3>
                       <div className="flex justify-center gap-6 flex-wrap">
                         {(expandedType === 'economy' ? [
