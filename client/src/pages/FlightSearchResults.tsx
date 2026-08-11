@@ -1101,7 +1101,7 @@ const FlightSearchResults = () => {
               {/* Duration on the left */}
               <div className="flex items-center justify-end w-6 text-gray-500 text-[12px]">{detailsFlight.duration.split(' ')[0]}</div>
               {/* Green vertical line with small dots */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center" style={{minHeight:'80px'}}>
                 <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
                 <div className="w-[2px] flex-1 bg-[#4CAF50]"></div>
                 <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
@@ -1118,9 +1118,9 @@ const FlightSearchResults = () => {
                 </div>
               </div>
             </div>
-            {/* Flight info - no indent like original */}
-            <div className="text-[13px] text-gray-600 space-y-0.5 mb-8 ml-4">
-              <p>Flight number <span className="font-bold text-gray-900">{detailsFlight.flightNumber}</span></p>
+            {/* Flight info - all green like original */}
+            <div className="text-[13px] text-[#2E7D32] space-y-0.5 mb-8 ml-4">
+              <p>Flight number <span className="font-bold">{detailsFlight.flightNumber}</span></p>
               <p>Operated by Iraqi Airways</p>
               <p className="uppercase">{detailsFlight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
             </div>
