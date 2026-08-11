@@ -625,7 +625,7 @@ export default function CreditCardPayment() {
               </div>
               {/* Terms checkbox */}
               <div className="mt-6 flex items-start gap-3">
-                <input type="checkbox" required className="mt-0.5 w-6 h-6 min-w-[24px]" style={{ accentColor: '#4CAF50' }} />
+                <input type="checkbox" required className="mt-0.5 w-4 h-4 min-w-[16px] rounded border-2 border-[#4CAF50] appearance-none checked:bg-[#4CAF50] checked:border-[#4CAF50] relative cursor-pointer" style={{ backgroundImage: 'none' }} onChange={(e) => { if(e.target.checked) { e.target.style.backgroundImage = `url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E")`; } else { e.target.style.backgroundImage = 'none'; } }} />
                 <span className="text-[#2E7D32] text-sm">I understand and accept the terms and conditions of carriage, the terms and conditions of seat selection, the privacy policy and the fare rules of Iraqi Airways.*</span>
               </div>
 
