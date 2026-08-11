@@ -347,3 +347,28 @@ a { text-decoration: none; outline: none; }
   .ia-video-section { width: 95%; display: block; }
   .ia-ticker { width: 100%; }
 }
+
+/* ===== MOBILE RESPONSIVE - matches original iraqiairways.com.iq on mobile ===== */
+@media (max-width: 640px) {
+  /* Header green bar - show hamburger, hide nav text */
+  .ia-header-greenbar .ia-nav-links {
+    display: none !important;
+  }
+  .ia-header-greenbar .ia-hamburger {
+    display: flex !important;
+  }
+
+  /* Flight info bar - reorganize for mobile */
+  .ia-flight-info-bar {
+    flex-wrap: wrap !important;
+    padding: 10px 12px !important;
+    position: relative;
+    min-height: auto !important;
+  }
+  .ia-flight-info-bar .ia-route-dots {
+    display: none !important;
+  }
+  .ia-flight-info-bar .ia-mobile-route-text {
+    display: block !important;
+  }
+}

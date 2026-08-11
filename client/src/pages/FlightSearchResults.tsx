@@ -784,17 +784,21 @@ const FlightSearchResults = () => {
       {/* Header - Iraqi Airways Original Style - visible on all sizes */}
       <header className="w-full" dir={isAr ? 'rtl' : 'ltr'}>
         {/* Green top bar - matching original exactly */}
-        <div className="w-full bg-[#4ca42c] px-5 py-3 flex items-center">
+        <div className="w-full bg-[#4ca42c] px-3 sm:px-5 py-2 sm:py-3 flex items-center">
+          {/* Hamburger - mobile only */}
+          <button className="sm:hidden text-white mr-2" onClick={() => window.location.href = '/'}>
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
           <img
             src="/iraqi_airways/upload/logo-white-transparent.png"
             alt="Iraqi Airways"
             onClick={() => { window.location.href = '/'; }}
-            className="w-[100px] h-[58px] object-contain cursor-pointer"
+            className="w-[70px] h-[45px] sm:w-[100px] sm:h-[58px] object-contain cursor-pointer"
           />
-          <span className="mx-4 h-6 w-px bg-white/40"></span>
-          <a href="/" className="text-white text-[15px] font-medium hover:underline">{t('fsr.home')}</a>
-          <span className="mx-4 h-6 w-px bg-white/40"></span>
-          <div className="relative">
+          <span className="hidden sm:block mx-4 h-6 w-px bg-white/40"></span>
+          <a href="/" className="hidden sm:block text-white text-[15px] font-medium hover:underline">{t('fsr.home')}</a>
+          <span className="hidden sm:block mx-4 h-6 w-px bg-white/40"></span>
+          <div className="relative hidden sm:block">
             <button
               onClick={() => setLangMenuOpen(o => !o)}
               className="flex items-center gap-1.5 text-white text-[15px] font-medium"
@@ -811,8 +815,14 @@ const FlightSearchResults = () => {
           </div>
         </div>
         {/* Flight info bar - matching original exactly */}
-        <div className="w-full bg-white border-b border-gray-200 px-6 py-4 flex items-center">
-          <div className="flex items-baseline gap-1">
+        <div className="w-full bg-white border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap sm:flex-nowrap items-center relative">
+          {/* Mobile: text route */}
+          <div className="sm:hidden w-[calc(100%-80px)]">
+            <p className="text-sm font-bold text-[#1a3c0a] m-0">{cityOfEn(origin)} - {cityOfEn(destination)}</p>
+            <p className="text-xs text-gray-600 m-0">{new Date(initialDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', day:'numeric', month:'short'})} &nbsp; {passengers} <svg className="inline w-3 h-3" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></p>
+          </div>
+          {/* Desktop: full route with dots */}
+          <div className="hidden sm:flex items-baseline gap-1">
             <div className="flex flex-col">
               <span className="text-[22px] font-bold text-[#1a3c0a]">{origin}</span>
               <span className="text-xs text-gray-500">{cityOfEn(origin)}</span>
@@ -841,26 +851,26 @@ const FlightSearchResults = () => {
               <span className="text-xs text-gray-500">{cityOfEn(destination)}</span>
             </div>
           </div>
-          <span className="mx-5 h-10 w-px bg-gray-300"></span>
-          <div className="flex flex-col">
+          <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
+          <div className="hidden sm:flex flex-col">
             <span className="text-sm text-gray-600">{t('fsr.depart')}</span>
             <span className="text-base font-bold text-[#4ca42c]">{new Date(initialDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
           </div>
           {tripType === 'round' && returnDate && (
             <>
-              <span className="mx-5 h-10 w-px bg-gray-300"></span>
-              <div className="flex flex-col">
+              <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
+              <div className="hidden sm:flex flex-col">
                 <span className="text-sm text-gray-600">Return</span>
                 <span className="text-base font-bold text-[#4ca42c]">{new Date(returnDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
               </div>
             </>
           )}
-          <span className="mx-5 h-10 w-px bg-gray-300"></span>
-          <div className="flex flex-col">
+          <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
+          <div className="hidden sm:flex flex-col">
             <span className="text-sm text-gray-600">{t('fsr.passenger')}</span>
             <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
-          <div className="ml-auto flex flex-col items-center justify-center bg-[#2E7D32] text-white px-6 py-3 cursor-pointer min-h-[80px]">
+          <div className="ml-auto flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 sm:px-6 py-2 sm:py-3 cursor-pointer min-h-[60px] sm:min-h-[80px]">
             <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
             <span className="text-sm font-medium">{t('fsr.yourBooking')}</span>
           </div>
@@ -1162,9 +1172,9 @@ const FlightSearchResults = () => {
                         </div>
                       </div>
                       {/* Right: Economy + Business columns */}
-                      <div className="flex">
+                      <div className="flex flex-col sm:flex-row w-full sm:w-auto">
                         {/* Economy column */}
-                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#4ca42c] text-white px-3 py-5 hover:bg-[#3d8c22] transition-colors">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-full sm:w-[150px] flex flex-col items-center justify-center bg-[#4ca42c] text-white px-3 py-4 sm:py-5 hover:bg-[#3d8c22] transition-colors">
                           <span className="text-base font-bold">{t('fsr.economy')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
@@ -1172,7 +1182,7 @@ const FlightSearchResults = () => {
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'economy' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         {/* Business column */}
-                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors border-l border-[#4CAF50]/30">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-full sm:w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-4 sm:py-5 hover:bg-[#1B5E20] transition-colors border-t sm:border-t-0 sm:border-l border-[#4CAF50]/30">
                           <span className="text-base font-bold">{t('fsr.business')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
@@ -1320,7 +1330,7 @@ const FlightSearchResults = () => {
         )}
         {/* Back button - left aligned */}
         <div className="mt-6 mb-8" dir="ltr">
-          <button onClick={() => window.location.href = '/'} className="bg-[#4ca42c] hover:bg-[#3d8c22] text-white px-6 py-2.5 rounded-full font-medium transition-colors">
+          <button onClick={() => window.location.href = '/'} className="w-full sm:w-auto bg-[#4ca42c] hover:bg-[#3d8c22] text-white px-6 py-4 sm:py-2.5 rounded-full font-medium text-lg sm:text-base transition-colors">
             Back
           </button>
         </div>
@@ -1737,8 +1747,8 @@ const FlightSearchResults = () => {
 
             {/* Footer - matching original */}
       <footer className="bg-[#4ca42c] text-white mt-8" dir="ltr">
-        <div className="max-w-6xl mx-auto px-6 py-10">
-          <div className="flex justify-between mb-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+          <div className="flex flex-col sm:flex-row sm:justify-between mb-8 gap-4 sm:gap-0">
             <div>
               <h4 className="font-bold text-lg mb-2">Plan and booking</h4>
               <a href="/" className="text-white underline text-sm">{t('fsr.bookTrip')} ↗</a>
