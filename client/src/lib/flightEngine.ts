@@ -194,14 +194,30 @@ export const KWI_BLOCK_MINUTES: Record<string, number> = {
 };
 
 // Real Iraqi Airways block times from BGW (minutes) - based on actual schedules
+// Real Iraqi Airways block times from BGW (minutes) - from actual 10 June 2026 schedule
 export const BGW_BLOCK_MINUTES: Record<string, number> = {
-    EBL: 60, KIK: 45, ISU: 55, NJF: 45, BSR: 70, OSM: 50,
-    BEY: 90, AMM: 80, DXB: 120, KWI: 60, BAH: 90, SHJ: 120,
-    IST: 180, SAW: 180, CAI: 150, GYD: 120, ESB: 150, AYT: 150,
-    TZX: 135, SZF: 150, IKA: 75, MHD: 135, IFN: 75,
-    DEL: 270, BOM: 240, ISB: 210, KHI: 180, AMD: 240,
-    KUL: 510, CAN: 480, CPH: 300, FRA: 285, MUC: 270, DUS: 285,
-    MCT: 150, VKO: 240, TUN: 240,
+    // Domestic (same timezone UTC+3)
+    KIK: 30, ISU: 45, EBL: 60, BSR: 60, NJF: 50, OSM: 45,
+    // Regional Middle East
+    BEY: 90, AMM: 90, KWI: 60, BAH: 90,
+    // Gulf (UTC+4, add 1h apparent)
+    DXB: 215, SHJ: 210, MCT: 180,
+    // Turkey (same timezone UTC+3)
+    IST: 180, SAW: 165, AYT: 150, TZX: 120, SZF: 130, ESB: 150,
+    // Egypt (same timezone UTC+3 in summer)
+    CAI: 150,
+    // Iran (UTC+3.5)
+    IKA: 90, MHD: 135, IFN: 90,
+    // Caucasus
+    GYD: 150,
+    // South Asia
+    DEL: 270, BOM: 255, ISB: 210, KHI: 195, AMD: 255,
+    // Far East
+    KUL: 480, CAN: 450,
+    // Europe
+    CPH: 330, FRA: 300, MUC: 285, DUS: 300,
+    // Other
+    VKO: 240, TUN: 240,
 };
 
 /**
