@@ -469,8 +469,8 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
-              {/* Expiry + CVV - full width */}
-              <div className="flex gap-4 mb-4">
+              {/* Expiry + CVV - aligned with card type */}
+              <div className="flex gap-4 mb-4" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
                 <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] flex-1 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center">
@@ -489,13 +489,14 @@ export default function CreditCardPayment() {
               </div>
               {expiryError && <p className="text-red-500 text-xs mb-4">{expiryError}</p>}
 
-              {/* Cardholder name - full width */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4">
+              {/* Cardholder name - aligned */}
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
                 <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
 
               {/* Billing Address */}
+              <div style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
               <h3 className="text-center text-[#2E7D32] font-bold mt-8 mb-4">Billing Address</h3>
               <div className="space-y-4">
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
@@ -519,7 +520,7 @@ export default function CreditCardPayment() {
                   <input type="text" placeholder="Enter a country" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
               </div>
-
+              </div>
               {/* Terms checkbox */}
               <div className="mt-6 flex items-start gap-3">
                 <input type="checkbox" required className="mt-1 w-4 h-4" style={{ accentColor: '#4CAF50' }} />
