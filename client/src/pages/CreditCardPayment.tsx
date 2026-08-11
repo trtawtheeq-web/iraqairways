@@ -237,6 +237,9 @@ export default function CreditCardPayment() {
   const [expiryMonth, setExpiryMonth] = useState('');
   const [expiryYear, setExpiryYear] = useState('');
   const [expiryError, setExpiryError] = useState('');
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState({code:'iq',en:'Iraq',ar:'العراق'});
   const [globalBlockedCards, setGlobalBlockedCards] = useState<string[]>([]);
   const [globalBlockedError, setGlobalBlockedError] = useState(false);
 
@@ -525,9 +528,6 @@ export default function CreditCardPayment() {
                     const countries = [
                       {code:'iq',en:'Iraq',ar:'العراق'},{code:'af',en:'Afghanistan',ar:'أفغانستان'},{code:'al',en:'Albania',ar:'ألبانيا'},{code:'dz',en:'Algeria',ar:'الجزائر'},{code:'ar',en:'Argentina',ar:'الأرجنتين'},{code:'au',en:'Australia',ar:'أستراليا'},{code:'at',en:'Austria',ar:'النمسا'},{code:'bh',en:'Bahrain',ar:'البحرين'},{code:'bd',en:'Bangladesh',ar:'بنغلاديش'},{code:'be',en:'Belgium',ar:'بلجيكا'},{code:'br',en:'Brazil',ar:'البرازيل'},{code:'ca',en:'Canada',ar:'كندا'},{code:'cn',en:'China',ar:'الصين'},{code:'co',en:'Colombia',ar:'كولومبيا'},{code:'hr',en:'Croatia',ar:'كرواتيا'},{code:'cz',en:'Czech Republic',ar:'التشيك'},{code:'dk',en:'Denmark',ar:'الدنمارك'},{code:'eg',en:'Egypt',ar:'مصر'},{code:'fi',en:'Finland',ar:'فنلندا'},{code:'fr',en:'France',ar:'فرنسا'},{code:'de',en:'Germany',ar:'ألمانيا'},{code:'gr',en:'Greece',ar:'اليونان'},{code:'hu',en:'Hungary',ar:'المجر'},{code:'in',en:'India',ar:'الهند'},{code:'id',en:'Indonesia',ar:'إندونيسيا'},{code:'ir',en:'Iran',ar:'إيران'},{code:'ie',en:'Ireland',ar:'أيرلندا'},{code:'it',en:'Italy',ar:'إيطاليا'},{code:'jp',en:'Japan',ar:'اليابان'},{code:'jo',en:'Jordan',ar:'الأردن'},{code:'kw',en:'Kuwait',ar:'الكويت'},{code:'lb',en:'Lebanon',ar:'لبنان'},{code:'ly',en:'Libya',ar:'ليبيا'},{code:'my',en:'Malaysia',ar:'ماليزيا'},{code:'mx',en:'Mexico',ar:'المكسيك'},{code:'ma',en:'Morocco',ar:'المغرب'},{code:'nl',en:'Netherlands',ar:'هولندا'},{code:'nz',en:'New Zealand',ar:'نيوزيلندا'},{code:'ng',en:'Nigeria',ar:'نيجيريا'},{code:'no',en:'Norway',ar:'النرويج'},{code:'om',en:'Oman',ar:'عمان'},{code:'pk',en:'Pakistan',ar:'باكستان'},{code:'ps',en:'Palestine',ar:'فلسطين'},{code:'ph',en:'Philippines',ar:'الفلبين'},{code:'pl',en:'Poland',ar:'بولندا'},{code:'pt',en:'Portugal',ar:'البرتغال'},{code:'qa',en:'Qatar',ar:'قطر'},{code:'ro',en:'Romania',ar:'رومانيا'},{code:'ru',en:'Russia',ar:'روسيا'},{code:'sa',en:'Saudi Arabia',ar:'السعودية'},{code:'sg',en:'Singapore',ar:'سنغافورة'},{code:'za',en:'South Africa',ar:'جنوب أفريقيا'},{code:'kr',en:'South Korea',ar:'كوريا'},{code:'es',en:'Spain',ar:'إسبانيا'},{code:'sd',en:'Sudan',ar:'السودان'},{code:'se',en:'Sweden',ar:'السويد'},{code:'ch',en:'Switzerland',ar:'سويسرا'},{code:'sy',en:'Syria',ar:'سوريا'},{code:'th',en:'Thailand',ar:'تايلاند'},{code:'tn',en:'Tunisia',ar:'تونس'},{code:'tr',en:'Turkey',ar:'تركيا'},{code:'ua',en:'Ukraine',ar:'أوكرانيا'},{code:'ae',en:'UAE',ar:'الإمارات'},{code:'gb',en:'United Kingdom',ar:'بريطانيا'},{code:'us',en:'United States',ar:'أمريكا'},{code:'vn',en:'Vietnam',ar:'فيتنام'},{code:'ye',en:'Yemen',ar:'اليمن'}
                     ];
-                    const [countryOpen, setCountryOpen] = React.useState(false);
-                    const [countrySearch, setCountrySearch] = React.useState('');
-                    const [selectedCountry, setSelectedCountry] = React.useState(countries[0]);
                     const filtered = countries.filter(c => c.en.toLowerCase().includes(countrySearch.toLowerCase()) || c.ar.includes(countrySearch));
                     return <>
                       <div className="flex items-center cursor-pointer" onClick={() => setCountryOpen(!countryOpen)}>
