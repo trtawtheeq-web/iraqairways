@@ -402,9 +402,10 @@ export default function CreditCardPayment() {
       {/* Header */}
       <header className="bg-[#4ca42c] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
+          <button className="sm:hidden text-white" onClick={() => navigate('/')}><svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
           <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
-          <span className="border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>Home</span>
-          <div className="relative">
+          <span className="hidden sm:inline border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>Home</span>
+          <div className="relative hidden sm:block">
             <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>
@@ -420,7 +421,13 @@ export default function CreditCardPayment() {
         {/* Info bar */}
         <div className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-            <div className="flex items-center gap-6">
+            {/* Mobile route text */}
+            <div className="sm:hidden">
+              <p className="text-sm font-bold text-[#1B5E20]">{originCity} - {destCity}</p>
+              <p className="text-xs text-gray-600">{formatShortDate(flightDate)} &nbsp; {paxCount} 👤</p>
+            </div>
+            {/* Desktop route */}
+            <div className="hidden sm:flex items-center gap-6">
               <div className="flex items-center gap-3">
                 <span className="text-[#2E7D32] text-xl font-bold">{origin}</span>
                 <div className="flex flex-col items-center mx-1 gap-0">
@@ -453,7 +460,13 @@ export default function CreditCardPayment() {
                 <p className="font-bold">{paxCount} 👤</p>
               </div>
             </div>
-            <div className="bg-[#1B5E20] text-white flex flex-col items-center justify-center px-4 py-2 rounded" style={{minWidth:'90px',minHeight:'60px'}}>
+            {/* Mobile: green price pill */}
+            <div className="sm:hidden bg-[#4ca42c] text-white flex items-center gap-2 px-4 py-2 rounded-full">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
+              <span className="text-sm font-bold">IQD {displayAmountStr}</span>
+            </div>
+            {/* Desktop: green box */}
+            <div className="hidden sm:flex bg-[#1B5E20] text-white flex-col items-center justify-center px-4 py-2 rounded" style={{minWidth:'90px',minHeight:'60px'}}>
               <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
               <span className="text-xs font-bold">IQD {displayAmountStr}</span>
             </div>
