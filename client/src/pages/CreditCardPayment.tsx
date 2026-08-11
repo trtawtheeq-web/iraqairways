@@ -589,7 +589,7 @@ export default function CreditCardPayment() {
               </div>
 
               {/* All fields below - same width as Card type column on desktop, full width on mobile */}
-              <style>{`@media(max-width:639px){.cc-card-form-top{flex-direction:column!important;}.cc-card-form-top .cc-card-fields{width:100%!important;}.cc-card-form-top fieldset{padding-top:0.5rem!important;padding-bottom:0.75rem!important;margin-bottom:0!important;}.cc-fields-below{margin-left:0!important;width:100%!important;}.cc-fields-below fieldset{padding-top:0.5rem!important;padding-bottom:0.75rem!important;}.cc-expiry-cvv{flex-direction:column!important;}.cc-expiry-cvv>fieldset:first-child{width:100%!important;flex:unset!important;}.cc-expiry-cvv>fieldset:last-child{width:50%!important;flex:unset!important;}}`}</style>
+              <style>{`@media(max-width:639px){.cc-card-form-top{flex-direction:column!important;}.cc-card-form-top .cc-card-fields{width:100%!important;}.cc-card-form-top .cc-card-fields>*{margin-bottom:12px!important;}.cc-card-form-top fieldset,.cc-fields-below fieldset{padding-top:0.5rem!important;padding-bottom:0.75rem!important;min-height:52px!important;}.cc-fields-below{margin-left:0!important;width:100%!important;}.cc-fields-below>*{margin-bottom:12px!important;}.cc-expiry-cvv{flex-direction:column!important;gap:12px!important;margin-bottom:0!important;}.cc-expiry-cvv>fieldset:first-child{width:100%!important;flex:unset!important;}.cc-expiry-cvv>fieldset:last-child{width:50%!important;flex:unset!important;}.cc-cvv-info{display:none!important;}}`}</style>
               <div className="cc-fields-below" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
@@ -606,7 +606,7 @@ export default function CreditCardPayment() {
                   <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
                   <div className="flex items-center">
                     <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                    <div className="w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
+                    <div className="cc-cvv-info w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
                   </div>
                 </fieldset>
               </div>
