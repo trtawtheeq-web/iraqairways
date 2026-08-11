@@ -889,7 +889,7 @@ const FlightSearchResults = () => {
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
                   <div className={`hidden md:block ${isFirstFlight ? 'pt-5' : ''}`} dir="ltr">
-                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span></div>}
+                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1} seat{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1 > 1 ? 's' : ''} left</span></div>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
                       <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
@@ -1033,9 +1033,9 @@ const FlightSearchResults = () => {
                               <p className="text-sm">IQD <span className="text-xl font-bold">{formatPrice(applyDiscount(fare.price), curCode).replace(/^[A-Z]{3}\s*/, '')}</span></p>
                               <p className="text-sm font-bold mt-1">{fare.key}</p>
                             </div>
-                            {/* 1 seat left badge */}
+                            {/* seats left badge */}
                             <div className="bg-[#2E7D32] text-white text-xs text-center py-1.5 flex items-center justify-center gap-1">
-                              <span>🔔</span> 1 seat left at this price
+                              <span>🔔</span> {((flight.id.charCodeAt(0) + fare.key.charCodeAt(0)) % 5) + 1} seat{((flight.id.charCodeAt(0) + fare.key.charCodeAt(0)) % 5) + 1 > 1 ? 's' : ''} left at this price
                             </div>
                             {/* Details */}
                             <div className="p-4 space-y-4 text-[13px]">
