@@ -521,10 +521,60 @@ export default function CreditCardPayment() {
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Country*</legend>
-                  <input type="text" list="countries-list" placeholder="Enter a country" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                  <datalist id="countries-list">
-                    <option value="Afghanistan"/><option value="Albania"/><option value="Algeria"/><option value="Argentina"/><option value="Australia"/><option value="Austria"/><option value="Bahrain"/><option value="Bangladesh"/><option value="Belgium"/><option value="Brazil"/><option value="Canada"/><option value="China"/><option value="Colombia"/><option value="Croatia"/><option value="Czech Republic"/><option value="Denmark"/><option value="Egypt"/><option value="Finland"/><option value="France"/><option value="Germany"/><option value="Greece"/><option value="Hungary"/><option value="India"/><option value="Indonesia"/><option value="Iran"/><option value="Iraq"/><option value="Ireland"/><option value="Italy"/><option value="Japan"/><option value="Jordan"/><option value="Kuwait"/><option value="Lebanon"/><option value="Libya"/><option value="Malaysia"/><option value="Mexico"/><option value="Morocco"/><option value="Netherlands"/><option value="New Zealand"/><option value="Nigeria"/><option value="Norway"/><option value="Oman"/><option value="Pakistan"/><option value="Philippines"/><option value="Poland"/><option value="Portugal"/><option value="Qatar"/><option value="Romania"/><option value="Russia"/><option value="Saudi Arabia"/><option value="Singapore"/><option value="South Africa"/><option value="South Korea"/><option value="Spain"/><option value="Sudan"/><option value="Sweden"/><option value="Switzerland"/><option value="Syria"/><option value="Thailand"/><option value="Tunisia"/><option value="Turkey"/><option value="Ukraine"/><option value="United Arab Emirates"/><option value="United Kingdom"/><option value="United States"/><option value="Vietnam"/><option value="Yemen"/>
-                  </datalist>
+                  <select defaultValue="Iraq" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+                    <option value="Iraq">🇮🇶 Iraq - العراق</option>
+                    <option value="Afghanistan">🇦🇫 Afghanistan - أفغانستان</option>
+                    <option value="Albania">🇦🇱 Albania - ألبانيا</option>
+                    <option value="Algeria">🇩🇿 Algeria - الجزائر</option>
+                    <option value="Argentina">🇦🇷 Argentina - الأرجنتين</option>
+                    <option value="Australia">🇦🇺 Australia - أستراليا</option>
+                    <option value="Austria">🇦🇹 Austria - النمسا</option>
+                    <option value="Bahrain">🇧🇭 Bahrain - البحرين</option>
+                    <option value="Bangladesh">🇧🇩 Bangladesh - بنغلاديش</option>
+                    <option value="Belgium">🇧🇪 Belgium - بلجيكا</option>
+                    <option value="Brazil">🇧🇷 Brazil - البرازيل</option>
+                    <option value="Canada">🇨🇦 Canada - كندا</option>
+                    <option value="China">🇨🇳 China - الصين</option>
+                    <option value="Denmark">🇩🇰 Denmark - الدنمارك</option>
+                    <option value="Egypt">🇪🇬 Egypt - مصر</option>
+                    <option value="Finland">🇫🇮 Finland - فنلندا</option>
+                    <option value="France">🇫🇷 France - فرنسا</option>
+                    <option value="Germany">🇩🇪 Germany - ألمانيا</option>
+                    <option value="Greece">🇬🇷 Greece - اليونان</option>
+                    <option value="India">🇮🇳 India - الهند</option>
+                    <option value="Indonesia">🇮🇩 Indonesia - إندونيسيا</option>
+                    <option value="Iran">🇮🇷 Iran - إيران</option>
+                    <option value="Ireland">🇮🇪 Ireland - أيرلندا</option>
+                    <option value="Italy">🇮🇹 Italy - إيطاليا</option>
+                    <option value="Japan">🇯🇵 Japan - اليابان</option>
+                    <option value="Jordan">🇯🇴 Jordan - الأردن</option>
+                    <option value="Kuwait">🇰🇼 Kuwait - الكويت</option>
+                    <option value="Lebanon">🇱🇧 Lebanon - لبنان</option>
+                    <option value="Libya">🇱🇾 Libya - ليبيا</option>
+                    <option value="Malaysia">🇲🇾 Malaysia - ماليزيا</option>
+                    <option value="Morocco">🇲🇦 Morocco - المغرب</option>
+                    <option value="Netherlands">🇳🇱 Netherlands - هولندا</option>
+                    <option value="Norway">🇳🇴 Norway - النرويج</option>
+                    <option value="Oman">🇴🇲 Oman - عمان</option>
+                    <option value="Pakistan">🇵🇰 Pakistan - باكستان</option>
+                    <option value="Palestine">🇵🇸 Palestine - فلسطين</option>
+                    <option value="Qatar">🇶🇦 Qatar - قطر</option>
+                    <option value="Russia">🇷🇺 Russia - روسيا</option>
+                    <option value="Saudi Arabia">🇸🇦 Saudi Arabia - السعودية</option>
+                    <option value="Spain">🇪🇸 Spain - إسبانيا</option>
+                    <option value="Sudan">🇸🇩 Sudan - السودان</option>
+                    <option value="Sweden">🇸🇪 Sweden - السويد</option>
+                    <option value="Switzerland">🇨🇭 Switzerland - سويسرا</option>
+                    <option value="Syria">🇸🇾 Syria - سوريا</option>
+                    <option value="Thailand">🇹🇭 Thailand - تايلاند</option>
+                    <option value="Tunisia">🇹🇳 Tunisia - تونس</option>
+                    <option value="Turkey">🇹🇷 Turkey - تركيا</option>
+                    <option value="Ukraine">🇺🇦 Ukraine - أوكرانيا</option>
+                    <option value="United Arab Emirates">🇦🇪 UAE - الإمارات</option>
+                    <option value="United Kingdom">🇬🇧 United Kingdom - بريطانيا</option>
+                    <option value="United States">🇺🇸 United States - أمريكا</option>
+                    <option value="Yemen">🇾🇪 Yemen - اليمن</option>
+                  </select>
                 </fieldset>
               </div>
               </div>
