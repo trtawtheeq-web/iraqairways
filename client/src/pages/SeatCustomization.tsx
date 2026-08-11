@@ -7,7 +7,7 @@ export default function SeatCustomization() {
   const [, setLocation] = useLocation();
   const { lang, setLang } = useLang();
   const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState<number | null>(null);
   const [paxOpen, setPaxOpen] = useState(false);
   const [paxOpenIdx, setPaxOpenIdx] = useState(-1);
 
@@ -131,15 +131,15 @@ export default function SeatCustomization() {
               <p>⏱ <strong>Duration {leg.duration}</strong></p>
               <p>✈ Operated by Iraqi Airways</p>
             </div>
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => setDetailOpen(!detailOpen)}>
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => setDetailOpen(detailOpen === legIdx ? null : legIdx)}>
               <span className="text-[#2E7D32] font-medium">{leg.fare || fareClass}</span>
               <div className="w-8 h-8 border-2 border-[#2E7D32] rounded flex items-center justify-center">
-                <span className="text-[#2E7D32] text-sm">{detailOpen ? '∧' : '∨'}</span>
+                <span className="text-[#2E7D32] text-sm">{detailOpen === legIdx ? '∧' : '∨'}</span>
               </div>
             </div>
           </div>
           {/* Expanded details - green background, 2 columns */}
-          {detailOpen && (
+          {detailOpen === legIdx && (
             <div className="mt-4 bg-[#f0f7f0] rounded-lg p-6">
               <div className="grid grid-cols-2 gap-8">
                 {/* Left: Itinerary details */}
@@ -183,7 +183,7 @@ export default function SeatCustomization() {
                 <p className="text-[#2E7D32] text-sm">🔒 Your flights and prices have been secured. In order to change your selection, please start a new search.</p>
               </div>
               {/* Close arrow */}
-              <div className="text-center mt-4 cursor-pointer" onClick={() => setDetailOpen(false)}>
+              <div className="text-center mt-4 cursor-pointer" onClick={() => setDetailOpen(null)}>
                 <div className="inline-block bg-[#e8f5e9] rounded px-8 py-1 border-t-2 border-[#4CAF50]">
                   <span className="text-[#2E7D32]">∧</span>
                 </div>
