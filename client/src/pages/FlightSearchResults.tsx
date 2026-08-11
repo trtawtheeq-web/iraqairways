@@ -955,7 +955,7 @@ const FlightSearchResults = () => {
                 <button
                   onClick={() => handleDateChange(item.dateStr)}
                   className={`w-full flex flex-col items-center justify-end rounded-t-lg transition-all text-white`}
-                  style={{ ...{ height: `${heightPx}px`, backgroundColor: item.isActive ? '#1a5c0a' : '#4CAF50', fontFamily: 'Lato, sans-serif' } }}
+                  style={{ ...{ height: `${heightPx}px`, backgroundColor: item.isActive ? '#1a5c0a' : '#4ca42c', fontFamily: 'Lato, sans-serif' } }}
 
                 >
                   <div className="flex flex-col items-center pb-2">
@@ -988,7 +988,7 @@ const FlightSearchResults = () => {
         {/* Row: "N flights available" + filter */}
         {!isLoading && (
           <div className="flex items-center justify-between mb-4">
-            <button className="flex items-center gap-2 bg-[#4CAF50] hover:bg-[#388E3C] text-white px-5 py-2.5 rounded-full font-medium transition-colors">
+            <button className="flex items-center gap-2 bg-[#4ca42c] hover:bg-[#3d8c22] text-white px-5 py-2.5 rounded-full font-medium transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h18M6 8h12M9 12h6M11 16h2"/></svg>
               <span>Filters</span>
             </button>
@@ -1260,7 +1260,7 @@ const FlightSearchResults = () => {
         )}
         {/* Back button - left aligned */}
         <div className="mt-6 mb-8" dir="ltr">
-          <button onClick={() => window.location.href = '/'} className="bg-[#2E7D32] hover:bg-[#1B5E20] text-white px-6 py-2.5 rounded-full font-medium transition-colors">
+          <button onClick={() => window.location.href = '/'} className="bg-[#4ca42c] hover:bg-[#3d8c22] text-white px-6 py-2.5 rounded-full font-medium transition-colors">
             Back
           </button>
         </div>
