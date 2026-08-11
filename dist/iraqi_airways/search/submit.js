@@ -8,8 +8,14 @@ function submitSearch(){
   // Convert from d/m/Y to Y-m-d format
   function convertDate(d) {
     if (!d) return "";
+    // Handle "d/m/Y to d/m/Y" format (range picker)
+    if (d.indexOf(" to ") > -1) {
+      d = d.split(" to ")[1].trim();
+    }
     var parts = d.split("/");
     if (parts.length === 3) return parts[2] + "-" + parts[1].padStart(2,"0") + "-" + parts[0].padStart(2,"0");
+    // Already Y-m-d
+    if (d.match(/^\d{4}-\d{2}-\d{2}$/)) return d;
     return d;
   }
   var date = convertDate(dateRaw);

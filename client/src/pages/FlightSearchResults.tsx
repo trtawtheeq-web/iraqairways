@@ -111,8 +111,29 @@ const FlightSearchResults = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const origin = searchParams.get('origin') || 'KWI';
   const destination = searchParams.get('destination') || 'DXB';
-  const initialDate = searchParams.get('date') || new Date().toISOString().split('T')[0];
-  const returnDate = searchParams.get('returnDate') || '';
+  const initialDateRaw = searchParams.get('date') || new Date().toISOString().split('T')[0];
+  const initialDate = (() => {
+    let d = initialDateRaw.trim();
+    if (d.includes(' to ')) d = d.split(' to ')[0].trim();
+    const parts = d.split('/');
+    if (parts.length === 3) return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    return new Date().toISOString().split('T')[0];
+  })();
+  const returnDateRaw = searchParams.get('returnDate') || '';
+  // Clean returnDate: handle "d/m/Y to d/m/Y" or "d/m/Y" formats
+  const returnDate = (() => {
+    let d = returnDateRaw.trim();
+    if (!d) return '';
+    // Handle "d/m/Y to d/m/Y" format
+    if (d.includes(' to ')) d = d.split(' to ')[1].trim();
+    // Convert d/m/Y to Y-m-d
+    const parts = d.split('/');
+    if (parts.length === 3) return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+    // Already Y-m-d?
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    return '';
+  })();
   const tripType = searchParams.get('tripType') || 'oneway';
   const segmentsParam = searchParams.get('segments') || '';
 
