@@ -81,7 +81,7 @@ const PassengerDetails = () => {
       gender: 'Male',
       firstName: '',
       lastName: '',
-      dialCode: '+965',
+      dialCode: '+964',
       phone: '',
       email: '',
       dob: '',
