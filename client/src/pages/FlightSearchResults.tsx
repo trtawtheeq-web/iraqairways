@@ -590,8 +590,8 @@ const FlightSearchResults = () => {
                   <span className="text-2xl font-bold text-gray-800">{cf.flight.arrivalTime}</span>
                 </div>
                 <div className="text-sm text-gray-600">
-                  <p>⏱ Duration {cf.flight.duration.replace('h ', 'h ').replace('m', 'min')}</p>
-                  <p>✈ Operated by Iraqi Airways</p>
+                  <p>⏱ {t('fsr.duration')} {cf.flight.duration.replace('h ', 'h ').replace('m', 'min')}</p>
+                  <p>✈ {t('fsr.operatedBy')}</p>
                 </div>
                 <div className="text-right flex items-center gap-2">
                   <span className="text-[#2E7D32] font-bold">{cf.fare}</span>
@@ -677,16 +677,16 @@ const FlightSearchResults = () => {
             <div className="flex justify-between mb-8">
               <div>
                 <h4 className="font-bold text-lg mb-2">Plan and booking</h4>
-                <a href="/" className="text-white underline text-sm">Book trip ↗</a>
+                <a href="/" className="text-white underline text-sm">{t('fsr.bookTrip')} ↗</a>
               </div>
               <div>
                 <h4 className="font-bold text-lg mb-2">Contact us</h4>
-                <a href="/" className="text-white underline text-sm block">Contact us ↗</a>
-                <a href="/" className="text-white underline text-sm block mt-1">Iraqi airways offers ↗</a>
+                <a href="/" className="text-white underline text-sm block">{t('fsr.contactUs')} ↗</a>
+                <a href="/" className="text-white underline text-sm block mt-1">{t('fsr.offers')} ↗</a>
               </div>
               <div>
                 <h4 className="font-bold text-lg mb-2">About us</h4>
-                <a href="/" className="text-white underline text-sm">Our fleet ↗</a>
+                <a href="/" className="text-white underline text-sm">{t('fsr.ourFleet')} ↗</a>
               </div>
             </div>
             <div className="text-center">
@@ -698,7 +698,7 @@ const FlightSearchResults = () => {
                 <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-10" /></div>
                 <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/dinersclub.png" alt="Diners Club" className="h-10" /></div>
               </div>
-              <p className="text-sm text-white/80">Credit card fees may occur.</p>
+              <p className="text-sm text-white/80">{t('fsr.creditCardFees')}</p>
             </div>
             <div className="text-center mt-6">
               <h4 className="font-bold text-lg mb-3">Follow us</h4>
@@ -748,7 +748,7 @@ const FlightSearchResults = () => {
       </div>
 
       {/* Header - Iraqi Airways Original Style */}
-      <header className="hidden md:block w-full" dir="ltr">
+      <header className="hidden md:block w-full" dir={isAr ? 'rtl' : 'ltr'}>
         {/* Green top bar - matching original exactly */}
         <div className="w-full bg-[#4ca42c] px-5 py-3 flex items-center">
           <img
@@ -758,7 +758,7 @@ const FlightSearchResults = () => {
             className="w-[100px] h-[58px] object-contain cursor-pointer"
           />
           <span className="mx-4 h-6 w-px bg-white/40"></span>
-          <a href="/" className="text-white text-[15px] font-medium hover:underline">Home</a>
+          <a href="/" className="text-white text-[15px] font-medium hover:underline">{t('fsr.home')}</a>
           <span className="mx-4 h-6 w-px bg-white/40"></span>
           <div className="relative">
             <button
@@ -791,17 +791,17 @@ const FlightSearchResults = () => {
           </div>
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
-            <span className="text-sm text-gray-600">Depart</span>
+            <span className="text-sm text-gray-600">{t('fsr.depart')}</span>
             <span className="text-base font-bold text-[#4ca42c]">{new Date(date + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
           </div>
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
-            <span className="text-sm text-gray-600">Passenger</span>
+            <span className="text-sm text-gray-600">{t('fsr.passenger')}</span>
             <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
           <div className="ml-auto flex flex-col items-center justify-center bg-[#2E7D32] text-white px-6 py-3 cursor-pointer min-h-[80px]">
             <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
-            <span className="text-sm font-medium">Your booking</span>
+            <span className="text-sm font-medium">{t('fsr.yourBooking')}</span>
           </div>
         </div>
       </header>
@@ -836,12 +836,12 @@ const FlightSearchResults = () => {
         </div>
       )}
 
-      <main className="max-w-5xl mx-auto px-4 md:px-4 pb-4">
+      <main className="max-w-5xl mx-auto px-4 md:px-4 pb-4" dir={isAr ? 'rtl' : 'ltr'}>
 
         {/* "Please, select your departure" box - matches original */}
         <div className="hidden md:flex justify-center mt-6 mb-6">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-10 py-5 text-center">
-            <p className="text-2xl text-[#4ca42c] font-light">Please, select your departure</p>
+            <p className="text-2xl text-[#4ca42c] font-light">{t('fsr.pleaseSelect')}</p>
             <p className="text-base text-gray-500 mt-1">{cityOfEn(origin)} to {cityOfEn(destination)}</p>
           </div>
         </div>
@@ -929,7 +929,7 @@ const FlightSearchResults = () => {
           {/* Hide dates on top border - half above half below */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
             <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1.5 bg-white px-5 py-2 rounded border border-gray-200 shadow-sm whitespace-nowrap">
-              <span>{datesVisible ? 'Hide dates' : 'Show dates'}</span>
+              <span>{datesVisible ? t('fsr.hideDates') : t('fsr.showDates')}</span>
               <svg className={`w-4 h-4 transition-transform ${datesVisible ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
             </button>
           </div>
@@ -989,12 +989,12 @@ const FlightSearchResults = () => {
           <div className="flex items-center justify-between mb-4">
             <button className="flex items-center gap-2 bg-[#4ca42c] hover:bg-[#3d8c22] text-white px-5 py-2.5 rounded-full font-medium transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h18M6 8h12M9 12h6M11 16h2"/></svg>
-              <span>Filters</span>
+              <span>{t('fsr.filters')}</span>
             </button>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">Sort by</span>
+              <span className="text-sm text-gray-600">{t('fsr.sortBy')}</span>
               <button className="flex items-center gap-1 text-base font-bold text-gray-800">
-                <span>Cheapest</span>
+                <span>{t('fsr.cheapest')}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </button>
             </div>
@@ -1097,14 +1097,14 @@ const FlightSearchResults = () => {
                         <div className="text-sm text-gray-600">
                           <p className="flex items-center gap-1"><span>⏱</span> Duration {flight.duration}</p>
                           <p className="flex items-center gap-1 mt-1"><span>✈</span> Operated by Iraqi Airways</p>
-                          <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#4CAF50] underline mt-1">See itinerary details ↗</button>
+                          <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#4CAF50] underline mt-1">{t('fsr.seeItinerary')} ↗</button>
                         </div>
                       </div>
                       {/* Right: Economy + Business columns */}
                       <div className="flex">
                         {/* Economy column */}
                         <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#4ca42c] text-white px-3 py-5 hover:bg-[#3d8c22] transition-colors">
-                          <span className="text-base font-bold">Economy</span>
+                          <span className="text-base font-bold">{t('fsr.economy')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -1112,7 +1112,7 @@ const FlightSearchResults = () => {
                         </button>
                         {/* Business column */}
                         <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors border-l border-[#4CAF50]/30">
-                          <span className="text-base font-bold">Business</span>
+                          <span className="text-base font-bold">{t('fsr.business')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -1680,16 +1680,16 @@ const FlightSearchResults = () => {
           <div className="flex justify-between mb-8">
             <div>
               <h4 className="font-bold text-lg mb-2">Plan and booking</h4>
-              <a href="/" className="text-white underline text-sm">Book trip ↗</a>
+              <a href="/" className="text-white underline text-sm">{t('fsr.bookTrip')} ↗</a>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-2">Contact us</h4>
-              <a href="/" className="text-white underline text-sm block">Contact us ↗</a>
-              <a href="/" className="text-white underline text-sm block mt-1">Iraqi airways offers ↗</a>
+              <a href="/" className="text-white underline text-sm block">{t('fsr.contactUs')} ↗</a>
+              <a href="/" className="text-white underline text-sm block mt-1">{t('fsr.offers')} ↗</a>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-2">About us</h4>
-              <a href="/" className="text-white underline text-sm">Our fleet ↗</a>
+              <a href="/" className="text-white underline text-sm">{t('fsr.ourFleet')} ↗</a>
             </div>
           </div>
           <div className="text-center">
@@ -1701,7 +1701,7 @@ const FlightSearchResults = () => {
               <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-10" /></div>
               <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/dinersclub.png" alt="Diners Club" className="h-10" /></div>
             </div>
-            <p className="text-sm text-white/80">Credit card fees may occur.</p>
+            <p className="text-sm text-white/80">{t('fsr.creditCardFees')}</p>
           </div>
           <div className="text-center mt-6">
             <h4 className="font-bold text-lg mb-3">Follow us</h4>
