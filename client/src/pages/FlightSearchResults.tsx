@@ -667,8 +667,8 @@ const FlightSearchResults = () => {
             <span className="mx-2 text-gray-400">|</span>
             <a href="#" className="underline">Dangerous goods policy ↗</a>
           </div>
-          {/* Fill passenger details button */}
-          <div className="text-center mt-8 mb-12">
+          {/* Fill passenger details button - right aligned like original */}
+          <div className="text-right mt-8 mb-12">
             <button onClick={handleFillPassengerDetails} className="bg-[#2E7D32] text-white px-10 py-4 rounded-full text-lg font-medium hover:bg-[#1B5E20] transition-colors shadow-md">Fill passenger details</button>
           </div>
         </div>
