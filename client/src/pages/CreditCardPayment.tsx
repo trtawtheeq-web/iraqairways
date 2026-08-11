@@ -547,7 +547,7 @@ export default function CreditCardPayment() {
             {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* Top row: Card preview left + Card type & Card number right */}
-              <div className="flex flex-col sm:flex-row gap-6 items-start">
+              <div className="cc-card-form-top flex flex-col sm:flex-row gap-6 items-start">
                 {/* Card preview */}
                 <div className="w-full sm:w-64 sm:min-w-[256px] h-40 rounded-xl text-white flex flex-col justify-between relative flex-shrink-0 overflow-hidden mx-auto sm:mx-0 max-w-[320px]" style={{background:'linear-gradient(135deg, #5a6a8a 0%, #4a5a7a 40%, #3d4a6b 100%)'}}>
                   {/* Diagonal stripe overlay */}
@@ -565,7 +565,7 @@ export default function CreditCardPayment() {
                 </div>
 
                 {/* Card type + Card number */}
-                <div className="flex-1 min-w-0 space-y-4">
+                <div className="cc-card-fields flex-1 min-w-0 space-y-4">
                   <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                     <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
                     <select value={selectedCardType} onChange={(e) => setSelectedCardType(e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
@@ -589,7 +589,7 @@ export default function CreditCardPayment() {
               </div>
 
               {/* All fields below - same width as Card type column on desktop, full width on mobile */}
-              <style>{`@media(max-width:639px){.cc-fields-below{margin-left:0!important;width:100%!important;}.cc-expiry-cvv{flex-direction:column!important;}.cc-expiry-cvv>fieldset:first-child{width:100%!important;flex:unset!important;}.cc-expiry-cvv>fieldset:last-child{width:50%!important;flex:unset!important;}}`}</style>
+              <style>{`@media(max-width:639px){.cc-card-form-top{flex-direction:column!important;}.cc-card-form-top .cc-card-fields{width:100%!important;}.cc-card-form-top fieldset{padding-top:0.5rem!important;padding-bottom:0.75rem!important;margin-bottom:0!important;}.cc-fields-below{margin-left:0!important;width:100%!important;}.cc-fields-below fieldset{padding-top:0.5rem!important;padding-bottom:0.75rem!important;}.cc-expiry-cvv{flex-direction:column!important;}.cc-expiry-cvv>fieldset:first-child{width:100%!important;flex:unset!important;}.cc-expiry-cvv>fieldset:last-child{width:50%!important;flex:unset!important;}}`}</style>
               <div className="cc-fields-below" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
