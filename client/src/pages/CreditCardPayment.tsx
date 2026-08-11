@@ -378,7 +378,7 @@ export default function CreditCardPayment() {
   const [adultDetailOpen, setAdultDetailOpen] = useState(false);
   const [childDetailOpen, setChildDetailOpen] = useState(false);
   // Parse pax from flightData
-  const flightData = JSON.parse(localStorage.getItem('flightData') || '{}');
+  const flightData = JSON.parse(localStorage.getItem('selectedFlight') || localStorage.getItem('flightData') || '{}');
   const px = flightData.pax || { adult: paxCount, child: 0, infant: 0 };
   const numAdults = px.adult || paxCount;
   const numChildren = px.child || 0;
@@ -423,16 +423,31 @@ export default function CreditCardPayment() {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3">
                 <span className="text-[#2E7D32] text-xl font-bold">{origin}</span>
-                <span className="text-gray-400">·····✈·····</span>
+                <div className="flex flex-col items-center mx-1 gap-0">
+                  {flightData?.tripType === 'round' ? (
+                    <>
+                      <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">··········</span><svg className="w-3 h-3 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+                      <div className="flex items-center"><svg className="w-3 h-3 text-[#4ca42c] rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span className="text-[#4ca42c] text-[9px] tracking-[2px]">··········</span></div>
+                    </>
+                  ) : (
+                    <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">··········</span><svg className="w-3 h-3 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+                  )}
+                </div>
                 <span className="text-[#2E7D32] text-xl font-bold">{destination}</span>
               </div>
               <div className="text-[#2E7D32] text-sm border-l pl-4">
-                <span className="text-gray-500">Baghdad</span> / <span className="text-gray-500">{destCity}</span>
+                <span className="text-gray-500">{originCity}</span> / <span className="text-gray-500">{destCity}</span>
               </div>
               <div className="text-[#2E7D32] text-sm border-l pl-4">
                 <p className="text-gray-500 text-xs">Depart</p>
                 <p className="font-bold">{formatShortDate(flightDate)}</p>
               </div>
+              {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
+                <div className="text-[#2E7D32] text-sm border-l pl-4">
+                  <p className="text-gray-500 text-xs">Return</p>
+                  <p className="font-bold">{formatShortDate(flightData.legs[1].date)}</p>
+                </div>
+              )}
               <div className="text-[#2E7D32] text-sm border-l pl-4">
                 <p className="text-gray-500 text-xs">Passenger</p>
                 <p className="font-bold">{paxCount} 👤</p>

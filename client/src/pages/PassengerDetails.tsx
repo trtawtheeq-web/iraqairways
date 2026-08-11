@@ -566,7 +566,16 @@ const PassengerDetails = () => {
               <span className="text-2xl font-bold text-[#1B5E20]">{flightData?.origin || 'BGW'}</span>
               <p className="text-xs text-[#1B5E20]">{cityName(flightData?.origin || 'BGW')}</p>
             </div>
-            <span className="text-[#1B5E20]/40 text-sm">··············· ✈ ···············</span>
+            <div className="flex flex-col items-center mx-2 gap-0">
+              {flightData?.tripType === 'round' ? (
+                <>
+                  <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className="w-3.5 h-3.5 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+                  <div className="flex items-center"><svg className="w-3.5 h-3.5 text-[#4ca42c] rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span></div>
+                </>
+              ) : (
+                <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className="w-3.5 h-3.5 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+              )}
+            </div>
             <div>
               <span className="text-2xl font-bold text-[#1B5E20]">{flightData?.destination || 'EBL'}</span>
               <p className="text-xs text-[#1B5E20]">{cityName(flightData?.destination || 'EBL')}</p>
@@ -579,6 +588,16 @@ const PassengerDetails = () => {
             <p className="text-sm text-[#1B5E20]">Depart</p>
             <p className="font-bold text-[#1B5E20]">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
           </div>
+          {/* Return - only for round trips */}
+          {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
+            <>
+              <span className="mx-6 text-gray-300 text-2xl">|</span>
+              <div>
+                <p className="text-sm text-[#1B5E20]">Return</p>
+                <p className="font-bold text-[#1B5E20]">{flightData.legs[1].date ? new Date(flightData.legs[1].date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+              </div>
+            </>
+          )}
           {/* Separator */}
           <span className="mx-6 text-gray-300 text-2xl">|</span>
           {/* Passenger */}
