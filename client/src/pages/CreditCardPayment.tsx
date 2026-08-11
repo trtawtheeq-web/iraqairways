@@ -479,7 +479,7 @@ export default function CreditCardPayment() {
                     <input type="text" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
                   </div>
                 </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-52">
+                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-64 ${!watch('cvv') ? 'border-red-500' : 'border-[#4CAF50]'}`}>
                   <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
                   <div className="flex items-center">
                     <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
@@ -522,13 +522,13 @@ export default function CreditCardPayment() {
               </div>
               </div>
               {/* Terms checkbox */}
-              <div className="mt-6 flex items-start gap-3">
+              <div className="mt-6 flex items-start gap-3" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
                 <input type="checkbox" required className="mt-1 w-4 h-4" style={{ accentColor: '#4CAF50' }} />
                 <span className="text-gray-700 text-sm">I understand and accept the terms and conditions of carriage, the terms and conditions of seat selection, the privacy policy and the fare rules of Iraqi Airways.*</span>
               </div>
 
               {/* Pay button */}
-              <div className="mt-6 text-center">
+              <div className="mt-6 text-center" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
                 <button type="submit" disabled={!isFormValid} className={`px-10 py-3 rounded-full text-lg font-medium text-white ${isFormValid ? 'bg-[#1B5E20] hover:bg-[#0D3B0F]' : 'bg-gray-400 cursor-not-allowed'}`}>
                   Pay IQD {displayAmountStr}
                 </button>
