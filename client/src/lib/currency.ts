@@ -10,25 +10,25 @@ export interface CurrencyInfo {
 }
 
 export const CURRENCIES: CurrencyInfo[] = [
-  { code: 'KWD', label: 'Kuwaiti Dinar', rate: 1, decimals: 3 },
-  { code: 'IQD', label: 'Iraqi Dinar', rate: 4250, decimals: 2 },
-  { code: 'USD', label: 'US Dollar', rate: 3.24341, decimals: 2 },
-  { code: 'AED', label: 'UAE Dirham', rate: 11.911405, decimals: 2 },
-  { code: 'SAR', label: 'Saudi Riyal', rate: 12.162769, decimals: 2 },
-  { code: 'QAR', label: 'Qatari Riyal', rate: 11.805995, decimals: 2 },
-  { code: 'BHD', label: 'Bahraini Dinar', rate: 1.21952, decimals: 3 },
-  { code: 'OMR', label: 'Omani Rial', rate: 1.24708, decimals: 3 },
-  { code: 'JOD', label: 'Jordanian Dinar', rate: 2.299574, decimals: 3 },
-  { code: 'EGP', label: 'Egyptian Pound', rate: 163.418782, decimals: 2 },
-  { code: 'INR', label: 'Indian Rupee', rate: 307.833864, decimals: 2 },
-  { code: 'EUR', label: 'Euro', rate: 2.798705, decimals: 2 },
-  { code: 'GBP', label: 'British Pound', rate: 2.420466, decimals: 2 },
-  { code: 'RUB', label: 'Russian Ruble', rate: 241.15, decimals: 2 },
-  { code: 'LKR', label: 'Sri Lankan Rupee', rate: 1076.70, decimals: 2 },
+  { code: 'IQD', label: 'Iraqi Dinar', rate: 1, decimals: 2 },
+  { code: 'USD', label: 'US Dollar', rate: 0.000763, decimals: 2 },
+  { code: 'KWD', label: 'Kuwaiti Dinar', rate: 0.000235, decimals: 3 },
+  { code: 'AED', label: 'UAE Dirham', rate: 0.002801, decimals: 2 },
+  { code: 'SAR', label: 'Saudi Riyal', rate: 0.002861, decimals: 2 },
+  { code: 'QAR', label: 'Qatari Riyal', rate: 0.002777, decimals: 2 },
+  { code: 'BHD', label: 'Bahraini Dinar', rate: 0.000287, decimals: 3 },
+  { code: 'OMR', label: 'Omani Rial', rate: 0.000293, decimals: 3 },
+  { code: 'JOD', label: 'Jordanian Dinar', rate: 0.000541, decimals: 3 },
+  { code: 'EGP', label: 'Egyptian Pound', rate: 0.03845, decimals: 2 },
+  { code: 'INR', label: 'Indian Rupee', rate: 0.07237, decimals: 2 },
+  { code: 'EUR', label: 'Euro', rate: 0.000658, decimals: 2 },
+  { code: 'GBP', label: 'British Pound', rate: 0.000569, decimals: 2 },
+  { code: 'RUB', label: 'Russian Ruble', rate: 0.05674, decimals: 2 },
+  { code: 'LKR', label: 'Sri Lankan Rupee', rate: 0.25334, decimals: 2 },
 ];
 
 // Site-wide promotional discount applied to displayed fares.
-export const DISCOUNT_RATE = 0.35;
+export const DISCOUNT_RATE = 0;
 
 // Apply the promotional discount to a KWD amount.
 export function applyDiscount(amountKWD: number): number {

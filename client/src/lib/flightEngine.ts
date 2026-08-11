@@ -193,6 +193,17 @@ export const KWI_BLOCK_MINUTES: Record<string, number> = {
     TZX: 155, VOG: 220,
 };
 
+// Real Iraqi Airways block times from BGW (minutes) - based on actual schedules
+export const BGW_BLOCK_MINUTES: Record<string, number> = {
+    EBL: 60, KIK: 45, ISU: 55, NJF: 45, BSR: 70, OSM: 50,
+    BEY: 90, AMM: 80, DXB: 120, KWI: 60, BAH: 90, SHJ: 120,
+    IST: 180, SAW: 180, CAI: 150, GYD: 120, ESB: 150, AYT: 150,
+    TZX: 135, SZF: 150, IKA: 75, MHD: 135, IFN: 75,
+    DEL: 270, BOM: 240, ISB: 210, KHI: 180, AMD: 240,
+    KUL: 510, CAN: 480, CPH: 300, FRA: 285, MUC: 270, DUS: 285,
+    MCT: 150, VKO: 240, TUN: 240,
+};
+
 /**
  * Real non-stop block time (minutes) for a given distance, used ONLY as a
  * fallback for city pairs that do not touch the Kuwait hub. Calibrated by
@@ -210,6 +221,13 @@ export const blockMinutes = (km: number): number => {
  * exactly). Otherwise fall back to the calibrated distance model.
  */
 export const routeBlockMinutes = (origin: string, destination: string, km: number): number => {
+  // Iraqi Airways hub: BGW
+  if (origin === 'BGW' && BGW_BLOCK_MINUTES[destination] !== undefined) {
+    return BGW_BLOCK_MINUTES[destination];
+  }
+  if (destination === 'BGW' && BGW_BLOCK_MINUTES[origin] !== undefined) {
+    return BGW_BLOCK_MINUTES[origin];
+  }
   if (origin === 'KWI' && KWI_BLOCK_MINUTES[destination] !== undefined) {
     return KWI_BLOCK_MINUTES[destination];
   }
@@ -219,36 +237,36 @@ export const routeBlockMinutes = (origin: string, destination: string, km: numbe
   return blockMinutes(km);
 };
 
-/** Realistic one-way base fare (KWD) from distance, clamped to a sane band. */
+/** Realistic one-way base fare (IQD) from distance, calibrated against real Iraqi Airways prices.
+ *  Returns price in IQD directly (no KWD conversion needed).
+ *  Real data points:
+ *    BGW-BEY  1000km -> 257,096 IQD
+ *    BGW-DXB  1400km -> 284,270 IQD
+ *    BGW-AMM   800km -> 301,300 IQD
+ *    BGW-IST  2000km -> 374,660 IQD
+ *    BGW-MCT  1700km -> 586,880 IQD
+ *    BGW-KUL  7500km -> 665,480 IQD
+ */
 const baseFareFromKm = (km: number): number => {
-  // Calibrated against REAL jazeeraairways.com typical lowest one-way base fares
-  // (great-circle distance with the same coordinates above):
-  //   KWI-BAH   420 km ->  16 KWD
-  //   KWI-DXB   854 km ->  23 KWD
-  //   KWI-CAI  1602 km ->  30 KWD
-  //   KWI-HBE  1766 km ->  52 KWD
-  //   KWI-IST  2191 km ->  60 KWD
-  //   KWI-BOM  2758 km ->  57 KWD
-  //   KWI-DEL  2830 km ->  57 KWD
-  // Piecewise-linear interpolation through these anchors keeps every sector
-  // within ~5% of the real lowest fare and grows sensibly for far routes
-  // (e.g. DAC/LTN land in the ~70-95 KWD band).
+  // Iraqi Airways real pricing anchors (km -> IQD base economy fare)
   const anchors: [number, number][] = [
-    [420, 16],
-    [854, 23],
-    [1602, 30],
-    [1766, 52],
-    [2191, 60],
-    [2758, 58],
+    [160, 120000],    // NJF domestic short
+    [350, 150000],    // EBL/OSM domestic
+    [500, 170000],    // BSR domestic
+    [800, 230000],    // AMM regional
+    [1000, 257000],   // BEY
+    [1400, 285000],   // DXB
+    [2000, 375000],   // IST
+    [3500, 500000],   // DEL/MUC
+    [5000, 590000],   // MCT far
+    [7500, 665000],   // KUL/CAN
   ];
   let raw: number;
   if (km <= anchors[0][0]) {
-    const [[x0, y0], [x1, y1]] = [anchors[0], anchors[1]];
-    raw = y0 + ((y1 - y0) / (x1 - x0)) * (km - x0);
+    raw = anchors[0][1];
   } else if (km >= anchors[anchors.length - 1][0]) {
-    // Beyond the farthest anchor, grow gently with distance (~0.012 KWD/km).
     const [xL, yL] = anchors[anchors.length - 1];
-    raw = yL + (km - xL) * 0.012;
+    raw = yL + (km - xL) * 30; // gentle growth beyond
   } else {
     raw = anchors[0][1];
     for (let i = 0; i < anchors.length - 1; i++) {
@@ -260,7 +278,7 @@ const baseFareFromKm = (km: number): number => {
       }
     }
   }
-  return Math.max(12, Math.min(190, Math.round(raw)));
+  return Math.max(80000, Math.min(900000, Math.round(raw / 100) * 100));
 };
 
 export const getAirport = (iata: string): Airport | undefined =>
@@ -370,12 +388,12 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
     if (!activeDays.has(dowCheck)) return []; // no flights on this day
   }
 
-  // Frequency: short/popular Gulf sectors fly more often than long-haul.
+  // Frequency: Iraqi Airways realistic schedule.
   const seed = seedFrom(`${origin}-${destination}-${dateStr}`);
   let numFlights: number;
-  if (km < 1200) numFlights = 3 + (seed % 4);       // 3-6 short haul
-  else if (km < 3000) numFlights = 2 + (seed % 3);  // 2-4 medium
-  else numFlights = 1 + (seed % 2);                 // 1-2 long haul
+  if (km < 600) numFlights = 2 + (seed % 2);         // 2-3 domestic
+  else if (km < 1500) numFlights = 1 + (seed % 2);   // 1-2 regional
+  else numFlights = 1;                               // 1 long haul
 
   // Weekend (Thu/Fri/Sat) demand uplift for fares.
   const dow = new Date(dateStr + 'T00:00:00').getDay(); // 0 Sun .. 6 Sat
@@ -433,7 +451,7 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
     //       * small distance-stable daily variation.
     const dayFactor = 1 + (((seed % 17) - 6) / 100); // ~ -0.06 .. +0.10
     const price = Math.max(
-      9,
+      80000,
       Math.round(baseFare * advanceUplift * weekendUplift * timeOfDayFactor * dayFactor)
     );
 
