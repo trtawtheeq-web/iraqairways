@@ -742,10 +742,10 @@ const FlightSearchResults = () => {
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
         <div className="hidden md:block mb-4" dir="ltr">
-          <div className="relative rounded-xl pt-4 pb-6 px-16 overflow-visible" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
-          {/* Hide dates on top border */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-            <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1 bg-white px-4 py-1.5 rounded border border-gray-200 shadow-sm">
+          <div className="relative rounded-xl pb-6 px-16 overflow-hidden" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
+          {/* Hide dates inside box at top */}
+          <div className="flex justify-center py-3">
+            <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1">
               <span>{datesVisible ? 'Hide dates' : 'Show dates'}</span>
               <svg className={`w-4 h-4 transition-transform ${datesVisible ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
             </button>
