@@ -817,7 +817,13 @@ const FlightSearchResults = () => {
               <span className="text-[22px] font-bold text-[#1a3c0a]">{origin}</span>
               <span className="text-xs text-gray-500">{cityOfEn(origin)}</span>
             </div>
-            <span className="text-gray-400 text-sm mx-2">············ ✈ ············</span>
+            <div className="flex items-center mx-3">
+              <span className="text-[#4ca42c] text-xs tracking-[3px]">··········</span>
+              <span className="mx-1 w-8 h-8 rounded-full border-2 border-[#4ca42c] flex items-center justify-center">
+                <svg className="w-4 h-4 text-[#4ca42c] -rotate-45" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+              </span>
+              <span className="text-[#4ca42c] text-xs tracking-[3px]">··········</span>
+            </div>
             <div className="flex flex-col">
               <span className="text-[22px] font-bold text-[#1a3c0a]">{destination}</span>
               <span className="text-xs text-gray-500">{cityOfEn(destination)}</span>
