@@ -586,10 +586,13 @@ const FlightSearchResults = () => {
       <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
         {/* Header - same green bar */}
         <header className="bg-[#4ca42c] text-white">
-          <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-6">
-            <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-12" />
-            <a href="/" className="text-white font-medium border-b border-white/50 pb-0.5">Home</a>
-            <span className="text-white/80">English</span>
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 sm:py-3 flex items-center gap-4 sm:gap-6">
+            <button className="sm:hidden text-white" onClick={() => window.location.href = '/'}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 sm:h-12" />
+            <a href="/" className="hidden sm:block text-white font-medium border-b border-white/50 pb-0.5">Home</a>
+            <span className="hidden sm:block text-white/80">English</span>
           </div>
         </header>
         {/* Your selection box */}
@@ -615,19 +618,21 @@ const FlightSearchResults = () => {
             <div className="px-6 py-4">
               <p className="text-[#2E7D32] font-bold">{airportName(leg.origin).split(' ')[0]} to {airportName(leg.destination).split(' ')[0]} - <span className="font-normal text-[#2E7D32]">{legDateLabel}</span></p>
               <hr className="border-[#2E7D32] mt-3" />
-              <div className="flex items-center mt-4 gap-4">
-                <div className="flex items-center gap-3 flex-1">
-                  <span className="text-2xl font-bold text-gray-800">{leg.flight.departureTime}</span>
+              <div className="flex flex-wrap sm:flex-nowrap items-center mt-4 gap-2 sm:gap-4">
+                <div className="flex items-center gap-3 flex-1 min-w-[200px]">
+                  <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.departureTime}</span>
                   <span className="text-gray-400 text-sm flex-1 text-center">··········· nonstop ···········</span>
-                  <span className="text-2xl font-bold text-gray-800">{leg.flight.arrivalTime}</span>
+                  <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.arrivalTime}</span>
                 </div>
-                <div className="text-sm text-gray-600">
-                  <p>⏱ {t('fsr.duration')} {leg.flight.duration.replace('h ', 'h ').replace('m', 'min')}</p>
-                  <p>✈ {t('fsr.operatedBy')}</p>
-                </div>
-                <div className="text-right flex items-center gap-2">
-                  <span className="text-[#2E7D32] font-bold">{leg.fare}</span>
-                  <button onClick={() => setCartExpanded(!cartExpanded)} className="text-gray-400 hover:text-gray-600"><svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-500">{leg.origin}</span>
+                    <span className="text-[#2E7D32] font-bold text-sm">{leg.fare}</span>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-xs text-gray-500">{leg.destination}</span>
+                    <button onClick={() => setCartExpanded(!cartExpanded)} className="text-gray-400 hover:text-gray-600"><svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -700,9 +705,9 @@ const FlightSearchResults = () => {
             <span className="mx-2 text-gray-400">|</span>
             <a href="#" className="underline">Dangerous goods policy ↗</a>
           </div>
-          {/* Fill passenger details button - right aligned like original */}
-          <div className="text-right mt-8 mb-12">
-            <button onClick={handleFillPassengerDetails} className="bg-[#2E7D32] text-white px-10 py-4 rounded-full text-lg font-medium hover:bg-[#1B5E20] transition-colors shadow-md">Fill passenger details</button>
+          {/* Fill passenger details button - full width on mobile, right on desktop */}
+          <div className="text-center sm:text-right mt-8 mb-12">
+            <button onClick={handleFillPassengerDetails} className="w-full sm:w-auto bg-[#2E7D32] text-white px-10 py-4 rounded-full text-lg font-medium hover:bg-[#1B5E20] transition-colors shadow-md">Fill passenger details</button>
           </div>
         </div>
         {/* Footer - same as flight search page */}
