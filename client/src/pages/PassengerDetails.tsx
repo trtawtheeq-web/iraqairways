@@ -791,7 +791,7 @@ const PassengerDetails = () => {
 
         {/* Back + Confirm buttons - right aligned */}
         <div className="flex justify-end gap-3 mb-12">
-          <button onClick={() => setLocation('/flight-search')} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">Back</button>
+          <button onClick={() => setLocation('/flight-search')} className="bg-[#4CAF50] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#388E3C]">Back</button>
           <button onClick={handleContinue} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">Confirm</button>
         </div>
       </main>
