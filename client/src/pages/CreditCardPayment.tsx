@@ -233,6 +233,7 @@ export default function CreditCardPayment() {
     return groups ? groups.join(" ") : cleaned;
   };
 
+  const [selectedCardType, setSelectedCardType] = useState('');
   const [globalBlockedCards, setGlobalBlockedCards] = useState<string[]>([]);
   const [globalBlockedError, setGlobalBlockedError] = useState(false);
 
@@ -431,8 +432,9 @@ export default function CreditCardPayment() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex gap-6">
                 {/* Card preview */}
-                <div className="w-64 h-40 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between flex-shrink-0">
-                  <p className="text-lg tracking-widest font-mono">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
+                <div className="w-64 h-40 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between flex-shrink-0 relative">
+                  {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
+                  <p className="text-lg tracking-widest font-mono mt-6">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
                   <div className="flex justify-between text-xs">
                     <div><p className="opacity-70">Cardholder name</p><p>{nameOnCard || 'XXX'}</p></div>
                     <div><p className="opacity-70">Expiration date</p><p>{expiryDate || 'XXX'}</p></div>
@@ -444,11 +446,10 @@ export default function CreditCardPayment() {
                   {/* Card type */}
                   <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                     <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
-                    <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                      <option>Select card type</option>
-                      <option>Visa</option>
-                      <option>Mastercard</option>
-                      <option>American Express</option>
+                    <select value={selectedCardType} onChange={(e) => setSelectedCardType(e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+                      <option value="">Select card type</option>
+                      <option value="Visa">Visa</option>
+                      <option value="MasterCard">MasterCard</option>
                     </select>
                   </fieldset>
 
