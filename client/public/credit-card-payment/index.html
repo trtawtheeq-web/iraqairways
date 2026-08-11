@@ -29,6 +29,18 @@
         font-weight: normal;
         font-style: normal;
       }
+      @media (max-width: 639px) {
+        .cc-card-form-top { flex-direction: column !important; }
+        .cc-card-form-top .cc-card-fields { width: 100% !important; }
+        .cc-card-form-top .cc-card-fields > fieldset { margin-bottom: 12px !important; }
+        .cc-fields-below { margin-left: 0 !important; width: 100% !important; }
+        .cc-fields-below > fieldset { margin-bottom: 12px !important; }
+        .cc-expiry-cvv { flex-direction: column !important; gap: 12px !important; margin-bottom: 0 !important; align-items: stretch !important; }
+        .cc-expiry-cvv > fieldset { width: 100% !important; flex: unset !important; }
+        .cc-expiry-cvv > fieldset:last-child { width: 50% !important; }
+        fieldset { padding: 4px 12px 8px !important; min-height: 52px !important; box-sizing: border-box !important; }
+        .cc-cvv-info { display: none !important; }
+      }
     </style>
     <!-- Fix: BFCache handler - forces reload when Safari restores page from memory -->
     <script>
