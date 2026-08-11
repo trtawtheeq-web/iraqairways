@@ -519,62 +519,33 @@ export default function CreditCardPayment() {
                   <legend className="text-[#2E7D32] text-xs px-1">City*</legend>
                   <input type="text" placeholder="Enter a city" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] relative">
                   <legend className="text-[#2E7D32] text-xs px-1">Country*</legend>
-                  <select defaultValue="Iraq" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                    <option value="Iraq">🇮🇶 Iraq - العراق</option>
-                    <option value="Afghanistan">🇦🇫 Afghanistan - أفغانستان</option>
-                    <option value="Albania">🇦🇱 Albania - ألبانيا</option>
-                    <option value="Algeria">🇩🇿 Algeria - الجزائر</option>
-                    <option value="Argentina">🇦🇷 Argentina - الأرجنتين</option>
-                    <option value="Australia">🇦🇺 Australia - أستراليا</option>
-                    <option value="Austria">🇦🇹 Austria - النمسا</option>
-                    <option value="Bahrain">🇧🇭 Bahrain - البحرين</option>
-                    <option value="Bangladesh">🇧🇩 Bangladesh - بنغلاديش</option>
-                    <option value="Belgium">🇧🇪 Belgium - بلجيكا</option>
-                    <option value="Brazil">🇧🇷 Brazil - البرازيل</option>
-                    <option value="Canada">🇨🇦 Canada - كندا</option>
-                    <option value="China">🇨🇳 China - الصين</option>
-                    <option value="Denmark">🇩🇰 Denmark - الدنمارك</option>
-                    <option value="Egypt">🇪🇬 Egypt - مصر</option>
-                    <option value="Finland">🇫🇮 Finland - فنلندا</option>
-                    <option value="France">🇫🇷 France - فرنسا</option>
-                    <option value="Germany">🇩🇪 Germany - ألمانيا</option>
-                    <option value="Greece">🇬🇷 Greece - اليونان</option>
-                    <option value="India">🇮🇳 India - الهند</option>
-                    <option value="Indonesia">🇮🇩 Indonesia - إندونيسيا</option>
-                    <option value="Iran">🇮🇷 Iran - إيران</option>
-                    <option value="Ireland">🇮🇪 Ireland - أيرلندا</option>
-                    <option value="Italy">🇮🇹 Italy - إيطاليا</option>
-                    <option value="Japan">🇯🇵 Japan - اليابان</option>
-                    <option value="Jordan">🇯🇴 Jordan - الأردن</option>
-                    <option value="Kuwait">🇰🇼 Kuwait - الكويت</option>
-                    <option value="Lebanon">🇱🇧 Lebanon - لبنان</option>
-                    <option value="Libya">🇱🇾 Libya - ليبيا</option>
-                    <option value="Malaysia">🇲🇾 Malaysia - ماليزيا</option>
-                    <option value="Morocco">🇲🇦 Morocco - المغرب</option>
-                    <option value="Netherlands">🇳🇱 Netherlands - هولندا</option>
-                    <option value="Norway">🇳🇴 Norway - النرويج</option>
-                    <option value="Oman">🇴🇲 Oman - عمان</option>
-                    <option value="Pakistan">🇵🇰 Pakistan - باكستان</option>
-                    <option value="Palestine">🇵🇸 Palestine - فلسطين</option>
-                    <option value="Qatar">🇶🇦 Qatar - قطر</option>
-                    <option value="Russia">🇷🇺 Russia - روسيا</option>
-                    <option value="Saudi Arabia">🇸🇦 Saudi Arabia - السعودية</option>
-                    <option value="Spain">🇪🇸 Spain - إسبانيا</option>
-                    <option value="Sudan">🇸🇩 Sudan - السودان</option>
-                    <option value="Sweden">🇸🇪 Sweden - السويد</option>
-                    <option value="Switzerland">🇨🇭 Switzerland - سويسرا</option>
-                    <option value="Syria">🇸🇾 Syria - سوريا</option>
-                    <option value="Thailand">🇹🇭 Thailand - تايلاند</option>
-                    <option value="Tunisia">🇹🇳 Tunisia - تونس</option>
-                    <option value="Turkey">🇹🇷 Turkey - تركيا</option>
-                    <option value="Ukraine">🇺🇦 Ukraine - أوكرانيا</option>
-                    <option value="United Arab Emirates">🇦🇪 UAE - الإمارات</option>
-                    <option value="United Kingdom">🇬🇧 United Kingdom - بريطانيا</option>
-                    <option value="United States">🇺🇸 United States - أمريكا</option>
-                    <option value="Yemen">🇾🇪 Yemen - اليمن</option>
-                  </select>
+                  {(() => {
+                    const countries = [
+                      {code:'iq',en:'Iraq',ar:'العراق'},{code:'af',en:'Afghanistan',ar:'أفغانستان'},{code:'al',en:'Albania',ar:'ألبانيا'},{code:'dz',en:'Algeria',ar:'الجزائر'},{code:'ar',en:'Argentina',ar:'الأرجنتين'},{code:'au',en:'Australia',ar:'أستراليا'},{code:'at',en:'Austria',ar:'النمسا'},{code:'bh',en:'Bahrain',ar:'البحرين'},{code:'bd',en:'Bangladesh',ar:'بنغلاديش'},{code:'be',en:'Belgium',ar:'بلجيكا'},{code:'br',en:'Brazil',ar:'البرازيل'},{code:'ca',en:'Canada',ar:'كندا'},{code:'cn',en:'China',ar:'الصين'},{code:'co',en:'Colombia',ar:'كولومبيا'},{code:'hr',en:'Croatia',ar:'كرواتيا'},{code:'cz',en:'Czech Republic',ar:'التشيك'},{code:'dk',en:'Denmark',ar:'الدنمارك'},{code:'eg',en:'Egypt',ar:'مصر'},{code:'fi',en:'Finland',ar:'فنلندا'},{code:'fr',en:'France',ar:'فرنسا'},{code:'de',en:'Germany',ar:'ألمانيا'},{code:'gr',en:'Greece',ar:'اليونان'},{code:'hu',en:'Hungary',ar:'المجر'},{code:'in',en:'India',ar:'الهند'},{code:'id',en:'Indonesia',ar:'إندونيسيا'},{code:'ir',en:'Iran',ar:'إيران'},{code:'ie',en:'Ireland',ar:'أيرلندا'},{code:'it',en:'Italy',ar:'إيطاليا'},{code:'jp',en:'Japan',ar:'اليابان'},{code:'jo',en:'Jordan',ar:'الأردن'},{code:'kw',en:'Kuwait',ar:'الكويت'},{code:'lb',en:'Lebanon',ar:'لبنان'},{code:'ly',en:'Libya',ar:'ليبيا'},{code:'my',en:'Malaysia',ar:'ماليزيا'},{code:'mx',en:'Mexico',ar:'المكسيك'},{code:'ma',en:'Morocco',ar:'المغرب'},{code:'nl',en:'Netherlands',ar:'هولندا'},{code:'nz',en:'New Zealand',ar:'نيوزيلندا'},{code:'ng',en:'Nigeria',ar:'نيجيريا'},{code:'no',en:'Norway',ar:'النرويج'},{code:'om',en:'Oman',ar:'عمان'},{code:'pk',en:'Pakistan',ar:'باكستان'},{code:'ps',en:'Palestine',ar:'فلسطين'},{code:'ph',en:'Philippines',ar:'الفلبين'},{code:'pl',en:'Poland',ar:'بولندا'},{code:'pt',en:'Portugal',ar:'البرتغال'},{code:'qa',en:'Qatar',ar:'قطر'},{code:'ro',en:'Romania',ar:'رومانيا'},{code:'ru',en:'Russia',ar:'روسيا'},{code:'sa',en:'Saudi Arabia',ar:'السعودية'},{code:'sg',en:'Singapore',ar:'سنغافورة'},{code:'za',en:'South Africa',ar:'جنوب أفريقيا'},{code:'kr',en:'South Korea',ar:'كوريا'},{code:'es',en:'Spain',ar:'إسبانيا'},{code:'sd',en:'Sudan',ar:'السودان'},{code:'se',en:'Sweden',ar:'السويد'},{code:'ch',en:'Switzerland',ar:'سويسرا'},{code:'sy',en:'Syria',ar:'سوريا'},{code:'th',en:'Thailand',ar:'تايلاند'},{code:'tn',en:'Tunisia',ar:'تونس'},{code:'tr',en:'Turkey',ar:'تركيا'},{code:'ua',en:'Ukraine',ar:'أوكرانيا'},{code:'ae',en:'UAE',ar:'الإمارات'},{code:'gb',en:'United Kingdom',ar:'بريطانيا'},{code:'us',en:'United States',ar:'أمريكا'},{code:'vn',en:'Vietnam',ar:'فيتنام'},{code:'ye',en:'Yemen',ar:'اليمن'}
+                    ];
+                    const [countryOpen, setCountryOpen] = React.useState(false);
+                    const [countrySearch, setCountrySearch] = React.useState('');
+                    const [selectedCountry, setSelectedCountry] = React.useState(countries[0]);
+                    const filtered = countries.filter(c => c.en.toLowerCase().includes(countrySearch.toLowerCase()) || c.ar.includes(countrySearch));
+                    return <>
+                      <div className="flex items-center cursor-pointer" onClick={() => setCountryOpen(!countryOpen)}>
+                        <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className="mr-2 w-5 h-4" />
+                        <span className="flex-1 text-gray-700 text-[15px]">{selectedCountry.en} - {selectedCountry.ar}</span>
+                        <span className="text-gray-400">▼</span>
+                      </div>
+                      {countryOpen && <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto">
+                        <div className="sticky top-0 bg-white p-2 border-b">
+                          <input type="text" placeholder="Search..." value={countrySearch} onChange={(e) => setCountrySearch(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-[#4CAF50]" autoFocus />
+                        </div>
+                        {filtered.map(c => <div key={c.code} className="flex items-center px-3 py-2 hover:bg-[#e8f5e9] cursor-pointer" onClick={() => { setSelectedCountry(c); setCountryOpen(false); setCountrySearch(''); }}>
+                          <img src={`https://flagcdn.com/20x15/${c.code}.png`} alt="" className="mr-2 w-5 h-4" />
+                          <span className="text-sm text-gray-700">{c.en} - {c.ar}</span>
+                        </div>)}
+                      </div>}
+                    </>;
+                  })()}
                 </fieldset>
               </div>
               </div>
