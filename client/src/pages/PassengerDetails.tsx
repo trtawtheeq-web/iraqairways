@@ -561,9 +561,15 @@ const PassengerDetails = () => {
                 <input type="text" placeholder="Enter a last name" value={p.lastName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'lastName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
               {/* Date of birth - auto-format DD/MM/YYYY */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] relative">
                 <legend className="text-[#2E7D32] text-xs px-1">Date of birth</legend>
-                <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <div className="flex items-center">
+                  <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <div className="relative">
+                    <input type="date" className="absolute inset-0 w-8 h-8 opacity-0 cursor-pointer" onChange={(e) => { const d = e.target.value; if (d) { const [y,m,dd] = d.split('-'); update(index, 'dob', `${dd}/${m}/${y}`); } }} />
+                    <svg className="w-6 h-6 text-[#2E7D32] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  </div>
+                </div>
               </fieldset>
               <p className="text-gray-400 text-xs">Example: 31/01/2025</p>
             </div>
