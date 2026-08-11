@@ -474,8 +474,8 @@ const PassengerDetails = () => {
           <span className="text-white/40">|</span>
           <span className="text-white">English <span className="text-xs">▼</span></span>
         </div>
-        {/* Flight info bar - larger text like original */}
-        <div className="bg-[#2d6b12] py-3 border-t border-white/10">
+        {/* Flight info bar - same green as header, no separate bg */}
+        <div className="py-3 border-t border-white/20">
           <div className="max-w-7xl mx-auto px-6 flex items-center">
             {/* Route */}
             <div className="flex items-center gap-4">
@@ -503,8 +503,8 @@ const PassengerDetails = () => {
               <p className="text-sm text-white/70">Passenger</p>
               <p className="font-bold">{totalCount} 👤</p>
             </div>
-            {/* Your booking - right */}
-            <div className="ml-auto bg-[#2E7D32] px-4 py-2 rounded flex items-center gap-2">
+            {/* Your booking - right, darker green box */}
+            <div className="ml-auto bg-[#1B5E20] px-5 py-3 rounded flex items-center gap-2">
               <span className="text-xl">🛒</span>
               <span className="font-bold text-sm">Your booking</span>
             </div>
