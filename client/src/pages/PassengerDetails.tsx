@@ -49,6 +49,7 @@ const PassengerDetails = () => {
   const [extraPhones, setExtraPhones] = useState<{code: string; number: string}[]>([]);
   const [showEmergency, setShowEmergency] = useState(false);
   const [rememberPassenger, setRememberPassenger] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [specialAssistance, setSpecialAssistance] = useState<Record<string, any>>({});
 
   useEffect(() => {
@@ -201,6 +202,10 @@ const PassengerDetails = () => {
 
   const handleContinue = () => {
     const primary = passengers[primaryIndex];
+    if (!privacyAccepted) {
+      alert('Please accept the privacy policy to continue.');
+      return;
+    }
     const isValid = passengers.every((p) => p.firstName.trim() && p.lastName.trim())
       && primary.email.trim() && primary.phone.trim();
     if (!isValid) {
@@ -784,7 +789,7 @@ const PassengerDetails = () => {
         {/* Privacy policy checkbox */}
         <div className="border border-gray-200 rounded-lg p-6 mb-8">
           <label className="flex items-start gap-3 cursor-pointer">
-            <input type="checkbox" className="w-5 h-5 mt-0.5 border-gray-300 rounded" />
+            <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="w-5 h-5 mt-0.5 rounded accent-[#4CAF50]" style={{accentColor: '#4CAF50'}} />
             <span className="text-gray-700 text-sm">I understand and accept that my personal data will be processed in accordance with the applicable carrier's privacy policy <a href="#" className="text-[#2E7D32] underline">more</a></span>
           </label>
         </div>
