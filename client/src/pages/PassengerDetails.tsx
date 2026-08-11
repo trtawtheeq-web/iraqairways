@@ -596,16 +596,16 @@ const PassengerDetails = () => {
               </fieldset>
             </div>
           ))}
+          {/* Add another email */}
+          <div className="text-center mb-4">
+            <button type="button" onClick={() => setExtraEmails([...extraEmails, ''])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another email address</button>
+          </div>
           {/* Remove additional email */}
           {extraEmails.length > 0 && (
-            <div className="text-center mb-4">
+            <div className="text-center mb-6">
               <button type="button" onClick={() => setExtraEmails(extraEmails.slice(0, -1))} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Remove additional email address</button>
             </div>
           )}
-          {/* Add another email */}
-          <div className="text-center mb-6">
-            <button type="button" onClick={() => setExtraEmails([...extraEmails, ''])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another email address</button>
-          </div>
           {/* Phone type */}
           <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
             <legend className="text-[#2E7D32] text-xs px-1">Phone type*</legend>
@@ -620,7 +620,85 @@ const PassengerDetails = () => {
           <div className="grid grid-cols-2 gap-4 mb-5">
             <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
               <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
-              <input type="text" placeholder="Enter a country calling code" value={passengers[0]?.dialCode || '+964'} onChange={(e) => { const v = e.target.value.replace(/[^0-9+]/g, ''); update(0, 'dialCode', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <select value={passengers[0]?.dialCode || '+964'} onChange={(e) => update(0, 'dialCode', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+                <option value="+964">Iraq (+964)</option>
+                <option value="+93">Afghanistan (+93)</option>
+                <option value="+355">Albania (+355)</option>
+                <option value="+213">Algeria (+213)</option>
+                <option value="+376">Andorra (+376)</option>
+                <option value="+244">Angola (+244)</option>
+                <option value="+54">Argentina (+54)</option>
+                <option value="+374">Armenia (+374)</option>
+                <option value="+61">Australia (+61)</option>
+                <option value="+43">Austria (+43)</option>
+                <option value="+994">Azerbaijan (+994)</option>
+                <option value="+973">Bahrain (+973)</option>
+                <option value="+880">Bangladesh (+880)</option>
+                <option value="+375">Belarus (+375)</option>
+                <option value="+32">Belgium (+32)</option>
+                <option value="+55">Brazil (+55)</option>
+                <option value="+359">Bulgaria (+359)</option>
+                <option value="+1">Canada (+1)</option>
+                <option value="+86">China (+86)</option>
+                <option value="+57">Colombia (+57)</option>
+                <option value="+385">Croatia (+385)</option>
+                <option value="+357">Cyprus (+357)</option>
+                <option value="+420">Czech Republic (+420)</option>
+                <option value="+45">Denmark (+45)</option>
+                <option value="+20">Egypt (+20)</option>
+                <option value="+358">Finland (+358)</option>
+                <option value="+33">France (+33)</option>
+                <option value="+995">Georgia (+995)</option>
+                <option value="+49">Germany (+49)</option>
+                <option value="+30">Greece (+30)</option>
+                <option value="+852">Hong Kong (+852)</option>
+                <option value="+36">Hungary (+36)</option>
+                <option value="+91">India (+91)</option>
+                <option value="+62">Indonesia (+62)</option>
+                <option value="+98">Iran (+98)</option>
+                <option value="+353">Ireland (+353)</option>
+                <option value="+39">Italy (+39)</option>
+                <option value="+81">Japan (+81)</option>
+                <option value="+962">Jordan (+962)</option>
+                <option value="+7">Kazakhstan (+7)</option>
+                <option value="+254">Kenya (+254)</option>
+                <option value="+82">South Korea (+82)</option>
+                <option value="+965">Kuwait (+965)</option>
+                <option value="+961">Lebanon (+961)</option>
+                <option value="+218">Libya (+218)</option>
+                <option value="+60">Malaysia (+60)</option>
+                <option value="+52">Mexico (+52)</option>
+                <option value="+212">Morocco (+212)</option>
+                <option value="+31">Netherlands (+31)</option>
+                <option value="+64">New Zealand (+64)</option>
+                <option value="+234">Nigeria (+234)</option>
+                <option value="+47">Norway (+47)</option>
+                <option value="+968">Oman (+968)</option>
+                <option value="+92">Pakistan (+92)</option>
+                <option value="+970">Palestine (+970)</option>
+                <option value="+63">Philippines (+63)</option>
+                <option value="+48">Poland (+48)</option>
+                <option value="+351">Portugal (+351)</option>
+                <option value="+974">Qatar (+974)</option>
+                <option value="+40">Romania (+40)</option>
+                <option value="+7">Russia (+7)</option>
+                <option value="+966">Saudi Arabia (+966)</option>
+                <option value="+381">Serbia (+381)</option>
+                <option value="+65">Singapore (+65)</option>
+                <option value="+27">South Africa (+27)</option>
+                <option value="+34">Spain (+34)</option>
+                <option value="+249">Sudan (+249)</option>
+                <option value="+46">Sweden (+46)</option>
+                <option value="+41">Switzerland (+41)</option>
+                <option value="+963">Syria (+963)</option>
+                <option value="+66">Thailand (+66)</option>
+                <option value="+216">Tunisia (+216)</option>
+                <option value="+90">Turkey (+90)</option>
+                <option value="+971">UAE (+971)</option>
+                <option value="+44">United Kingdom (+44)</option>
+                <option value="+1">United States (+1)</option>
+                <option value="+967">Yemen (+967)</option>
+              </select>
             </fieldset>
             <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
               <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
@@ -642,7 +720,9 @@ const PassengerDetails = () => {
               <div className="grid grid-cols-2 gap-4">
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
-                  <input type="text" placeholder="Enter a country calling code" value={ph.code} onChange={(e) => { const arr = [...extraPhones]; arr[i] = {...arr[i], code: e.target.value.replace(/[^0-9+]/g, '')}; setExtraPhones(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <select value={ph.code} onChange={(e) => { const arr = [...extraPhones]; arr[i] = {...arr[i], code: e.target.value}; setExtraPhones(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+                    <option value="+964">Iraq (+964)</option><option value="+93">Afghanistan (+93)</option><option value="+355">Albania (+355)</option><option value="+213">Algeria (+213)</option><option value="+54">Argentina (+54)</option><option value="+374">Armenia (+374)</option><option value="+61">Australia (+61)</option><option value="+43">Austria (+43)</option><option value="+994">Azerbaijan (+994)</option><option value="+973">Bahrain (+973)</option><option value="+880">Bangladesh (+880)</option><option value="+32">Belgium (+32)</option><option value="+55">Brazil (+55)</option><option value="+1">Canada (+1)</option><option value="+86">China (+86)</option><option value="+45">Denmark (+45)</option><option value="+20">Egypt (+20)</option><option value="+33">France (+33)</option><option value="+49">Germany (+49)</option><option value="+91">India (+91)</option><option value="+98">Iran (+98)</option><option value="+39">Italy (+39)</option><option value="+81">Japan (+81)</option><option value="+962">Jordan (+962)</option><option value="+965">Kuwait (+965)</option><option value="+961">Lebanon (+961)</option><option value="+60">Malaysia (+60)</option><option value="+31">Netherlands (+31)</option><option value="+968">Oman (+968)</option><option value="+92">Pakistan (+92)</option><option value="+970">Palestine (+970)</option><option value="+974">Qatar (+974)</option><option value="+7">Russia (+7)</option><option value="+966">Saudi Arabia (+966)</option><option value="+34">Spain (+34)</option><option value="+963">Syria (+963)</option><option value="+90">Turkey (+90)</option><option value="+971">UAE (+971)</option><option value="+44">United Kingdom (+44)</option><option value="+1">United States (+1)</option><option value="+967">Yemen (+967)</option>
+                  </select>
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
@@ -676,7 +756,9 @@ const PassengerDetails = () => {
               <div className="grid grid-cols-2 gap-4">
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
-                  <input type="text" placeholder="+964" value={emergency.dialCode} onChange={(e) => { const v = e.target.value.replace(/[^0-9+]/g, ''); setEmergency({...emergency, dialCode: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <select value={emergency.dialCode} onChange={(e) => setEmergency({...emergency, dialCode: e.target.value})} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+                    <option value="+964">Iraq (+964)</option><option value="+93">Afghanistan (+93)</option><option value="+355">Albania (+355)</option><option value="+213">Algeria (+213)</option><option value="+54">Argentina (+54)</option><option value="+374">Armenia (+374)</option><option value="+61">Australia (+61)</option><option value="+43">Austria (+43)</option><option value="+994">Azerbaijan (+994)</option><option value="+973">Bahrain (+973)</option><option value="+880">Bangladesh (+880)</option><option value="+32">Belgium (+32)</option><option value="+55">Brazil (+55)</option><option value="+1">Canada (+1)</option><option value="+86">China (+86)</option><option value="+45">Denmark (+45)</option><option value="+20">Egypt (+20)</option><option value="+33">France (+33)</option><option value="+49">Germany (+49)</option><option value="+91">India (+91)</option><option value="+98">Iran (+98)</option><option value="+39">Italy (+39)</option><option value="+81">Japan (+81)</option><option value="+962">Jordan (+962)</option><option value="+965">Kuwait (+965)</option><option value="+961">Lebanon (+961)</option><option value="+60">Malaysia (+60)</option><option value="+31">Netherlands (+31)</option><option value="+968">Oman (+968)</option><option value="+92">Pakistan (+92)</option><option value="+970">Palestine (+970)</option><option value="+974">Qatar (+974)</option><option value="+7">Russia (+7)</option><option value="+966">Saudi Arabia (+966)</option><option value="+34">Spain (+34)</option><option value="+963">Syria (+963)</option><option value="+90">Turkey (+90)</option><option value="+971">UAE (+971)</option><option value="+44">United Kingdom (+44)</option><option value="+1">United States (+1)</option><option value="+967">Yemen (+967)</option>
+                  </select>
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
