@@ -253,29 +253,47 @@ export const routeBlockMinutes = (origin: string, destination: string, km: numbe
   return blockMinutes(km);
 };
 
-/** Realistic one-way base fare (IQD) from distance, calibrated against real Iraqi Airways prices.
- *  Returns price in IQD directly (no KWD conversion needed).
- *  Real data points:
- *    BGW-BEY  1000km -> 257,096 IQD
- *    BGW-DXB  1400km -> 284,270 IQD
- *    BGW-AMM   800km -> 301,300 IQD
- *    BGW-IST  2000km -> 374,660 IQD
- *    BGW-MCT  1700km -> 586,880 IQD
- *    BGW-KUL  7500km -> 665,480 IQD
- */
+// Fixed route-specific base fares (IQD) from real Iraqi Airways data.
+// These override the distance-based calculation for known routes.
+const BGW_ROUTE_FARES: Record<string, number> = {
+  // Domestic - from original site & ads
+  NJF: 97000, KIK: 97000, ISU: 105000, EBL: 112200, BSR: 97000, OSM: 105000,
+  // Regional Middle East - from original site screenshots
+  BEY: 257096, AMM: 230000, KWI: 105000, BAH: 180000,
+  // Gulf - from trip.com USD prices * 1310
+  DXB: 284000, SHJ: 280000, MCT: 400000,
+  // Turkey - from Instagram/trip.com
+  IST: 375000, SAW: 365000, AYT: 365000, ESB: 340000, TZX: 300000, SZF: 310000,
+  // Iran
+  IKA: 200000, MHD: 250000, IFN: 200000,
+  // Egypt
+  CAI: 270000,
+  // Caucasus
+  GYD: 280000,
+  // South Asia
+  DEL: 500000, BOM: 480000, ISB: 450000, KHI: 420000, AMD: 470000,
+  // Far East
+  KUL: 665000, CAN: 650000,
+  // Europe
+  CPH: 550000, FRA: 540000, MUC: 530000, DUS: 540000,
+  // Other
+  VKO: 400000, TUN: 420000,
+};
+
+/** Realistic one-way base fare (IQD) from distance, calibrated against REAL Iraqi Airways prices. */
 const baseFareFromKm = (km: number): number => {
-  // Iraqi Airways real pricing anchors (km -> IQD base economy fare)
+  // Distance-based fallback for routes not in the fixed table
   const anchors: [number, number][] = [
-    [160, 120000],    // NJF domestic short
-    [350, 150000],    // EBL/OSM domestic
-    [500, 170000],    // BSR domestic
-    [800, 230000],    // AMM regional
-    [1000, 257000],   // BEY
-    [1400, 285000],   // DXB
-    [2000, 375000],   // IST
-    [3500, 500000],   // DEL/MUC
-    [5000, 590000],   // MCT far
-    [7500, 665000],   // KUL/CAN
+    [150, 97000],     // domestic short
+    [450, 112200],    // domestic medium
+    [700, 200000],    // regional short
+    [1000, 257000],   // regional medium (BEY)
+    [1400, 284000],   // Gulf (DXB)
+    [1700, 375000],   // IST
+    [2500, 430000],   // medium-haul
+    [3500, 520000],   // long-haul
+    [5000, 600000],   // very long
+    [7000, 665000],   // ultra long (KUL/CAN)
   ];
   let raw: number;
   if (km <= anchors[0][0]) {
@@ -375,7 +393,10 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
 
   const km = distanceKm(from, to);
   const block = routeBlockMinutes(origin, destination, km);
-  const baseFare = baseFareFromKm(km);
+  // Use fixed route fare if available, otherwise fall back to distance-based
+  const routeFare = (origin === 'BGW' && BGW_ROUTE_FARES[destination]) ||
+                    (destination === 'BGW' && BGW_ROUTE_FARES[origin]) || 0;
+  const baseFare = routeFare || baseFareFromKm(km);
 
   // ----- Operating days: not every route flies every day -----
   // A route operates only on a fixed subset of weekdays, derived from a
@@ -413,18 +434,16 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
 
   // Weekend (Thu/Fri/Sat) demand uplift for fares.
   const dow = new Date(dateStr + 'T00:00:00').getDay(); // 0 Sun .. 6 Sat
-  const weekendUplift = dow === 4 || dow === 5 || dow === 6 ? 1.12 : 1.0;
+  // Iraqi Airways prices are relatively stable (not much weekend/advance variation)
+  // The original site shows nearly the same price across all days
+  const weekendUplift = dow === 4 || dow === 5 || dow === 6 ? 1.0 : 1.0; // no weekend uplift
 
-  // ----- Advance-purchase curve: nearer dates are pricier -----
-  // Calibrated against real Jazeera day-by-day fares (e.g. KWI-BOM 1Jul=131
-  // decaying to ~57 after ~3 weeks; KWI-HBE 79 -> 52). Model:
-  //   multiplier = 1 + peak * exp(-daysAhead / tau)
-  // The peak (how much pricier the closest days are) grows with distance:
-  // short Gulf sectors ~1.5x on day 0, long-haul ~2.2x on day 0. It settles
-  // back to the base fare after roughly 3-4 weeks.
+  // ----- Advance-purchase curve: very mild for Iraqi Airways -----
+  // The original site shows nearly flat pricing across dates (112,200 for all days)
+  // Only a very small uplift for last-minute bookings
   const apDays = Math.max(0, daysFromToday);
-  const apPeak = km < 1200 ? 0.55 : km < 3000 ? 0.85 : 1.2; // day-0 uplift by haul
-  const apTau = 8; // decay constant in days (settles ~3-4 weeks out)
+  const apPeak = 0.15; // only 15% uplift at day 0 (Iraqi Airways has stable pricing)
+  const apTau = 5; // settles quickly
   const advanceUplift = 1 + apPeak * Math.exp(-apDays / apTau);
 
   // Spread departures across the operating day (about 05:00 - 23:00).
@@ -454,18 +473,12 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
     const flightNo = band + i * 2 + (isFromHub ? 0 : 1);
     const flightNumber = `IA ${flightNo}`;
 
-    // Time-of-day peak: early-morning (06-09) and evening (18-22) departures are
-    // pricier than mid-day off-peak, matching the original's demand shaping.
-    const depHour = depLocalMin / 60;
-    let timeOfDayFactor: number;
-    if (depHour >= 6 && depHour < 9) timeOfDayFactor = 1.12;       // morning peak
-    else if (depHour >= 18 && depHour < 22) timeOfDayFactor = 1.10; // evening peak
-    else if (depHour >= 11 && depHour < 15) timeOfDayFactor = 0.95; // mid-day off-peak
-    else timeOfDayFactor = 1.0;
+    // Iraqi Airways has uniform pricing regardless of departure time
+    const timeOfDayFactor = 1.0;
 
     // Fare: base * advance-purchase curve * weekend uplift * time-of-day peak
     //       * small distance-stable daily variation.
-    const dayFactor = 1 + (((seed % 17) - 6) / 100); // ~ -0.06 .. +0.10
+    const dayFactor = 1.0; // Iraqi Airways has stable pricing
     const price = Math.max(
       80000,
       Math.round(baseFare * advanceUplift * weekendUplift * timeOfDayFactor * dayFactor)
