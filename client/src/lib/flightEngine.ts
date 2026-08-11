@@ -109,6 +109,27 @@ export const airports: Airport[] = [
   { iata: 'HSA', city: 'Turkistan',             lat: 43.3133, lon: 68.1467, utc: 5 },
   { iata: 'VOG', city: 'Volgograd',             lat: 48.7825, lon: 44.3455, utc: 3 },
   { iata: 'AQI', city: 'Qaisumah',              lat: 28.3352, lon: 46.1250, utc: 3 },
+  // --- Iraqi domestic airports ---
+  { iata: 'KIK', city: 'Kirkuk',                lat: 35.4681, lon: 44.3489, utc: 3 },
+  { iata: 'ISU', city: 'Sulaymaniyah',           lat: 35.5617, lon: 45.3167, utc: 3 },
+  { iata: 'BSR', city: 'Basra',                  lat: 30.5491, lon: 47.6621, utc: 3 },
+  { iata: 'OSM', city: 'Mosul',                  lat: 36.3058, lon: 43.1474, utc: 3 },
+  // --- International airports missing ---
+  { iata: 'AMM', city: 'Amman',                  lat: 31.7226, lon: 35.9932, utc: 3 },
+  { iata: 'CAN', city: 'Guangzhou',              lat: 23.3924, lon: 113.2988, utc: 8 },
+  { iata: 'CPH', city: 'Copenhagen',             lat: 55.6180, lon: 12.6508, utc: 2 },
+  { iata: 'DUS', city: 'Dusseldorf',             lat: 51.2895, lon: 6.7668, utc: 2 },
+  { iata: 'ESB', city: 'Ankara',                 lat: 40.1281, lon: 32.9951, utc: 3 },
+  { iata: 'FRA', city: 'Frankfurt',              lat: 50.0379, lon: 8.5622, utc: 2 },
+  { iata: 'IFN', city: 'Isfahan',                lat: 32.7508, lon: 51.8613, utc: 3.5 },
+  { iata: 'KUL', city: 'Kuala Lumpur',           lat: 2.7456, lon: 101.7099, utc: 8 },
+  { iata: 'MCT', city: 'Muscat',                 lat: 23.5933, lon: 58.2844, utc: 4 },
+  { iata: 'MUC', city: 'Munich',                 lat: 48.3538, lon: 11.7861, utc: 2 },
+  { iata: 'SHJ', city: 'Sharjah',                lat: 25.3286, lon: 55.5172, utc: 4 },
+  { iata: 'SZF', city: 'Samsun',                 lat: 41.2545, lon: 36.5671, utc: 3 },
+  { iata: 'TUN', city: 'Tunis',                  lat: 36.8510, lon: 10.2272, utc: 1 },
+  { iata: 'VKO', city: 'Moscow',                 lat: 55.5915, lon: 37.2615, utc: 3 },
+  { iata: 'BAH', city: 'Bahrain',                lat: 26.2708, lon: 50.6336, utc: 3 },
 ];
 
 // -----------------------------------------------------------------------------
@@ -379,8 +400,8 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
 
   const flights: Flight[] = [];
   const band = flightNumberBand(destination);
-  // Outbound from the hub uses even? We use base for KWI-origin, base+1 otherwise.
-  const isFromHub = origin === 'KWI';
+  // Outbound from the hub uses even? We use base for BGW-origin, base+1 otherwise.
+  const isFromHub = origin === 'BGW';
 
   for (let i = 0; i < numFlights; i++) {
     // Distribute and add deterministic per-day jitter so times differ by date.
@@ -397,7 +418,7 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
 
     // Flight number: base + 2*i for the outbound; +1 for the return direction.
     const flightNo = band + i * 2 + (isFromHub ? 0 : 1);
-    const flightNumber = `J9 ${flightNo}`;
+    const flightNumber = `IA ${flightNo}`;
 
     // Time-of-day peak: early-morning (06-09) and evening (18-22) departures are
     // pricier than mid-day off-peak, matching the original's demand shaping.
@@ -424,7 +445,7 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
       duration: formatDuration(block),
       arrivesNextDay: arrivesNextDay || undefined,
       priceKWD: price,
-      aircraft: km > 3500 ? 'Airbus A320neo' : 'Airbus A320',
+      aircraft: km > 4000 ? 'Boeing 787-8' : km > 2000 ? 'Airbus A321neo' : 'Boeing 737-800',
       fareClass: 'Light',
       gate: `${128 + ((seed + i * 3) % 8)}`,
     });
