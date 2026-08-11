@@ -1099,7 +1099,7 @@ const FlightSearchResults = () => {
             {/* Timeline: duration left | green line+dots center | info right */}
             <div className="flex gap-3 mb-6">
               {/* Duration on the left */}
-              <div className="flex items-center justify-end w-8 text-gray-400 text-xs">{detailsFlight.duration.split(' ')[0]}</div>
+              <div className="flex items-center justify-end w-8 text-[#2E7D32] text-xs">{detailsFlight.duration.split(' ')[0]}</div>
               {/* Green vertical line with dots */}
               <div className="flex flex-col items-center py-1">
                 <div className="w-[10px] h-[10px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
