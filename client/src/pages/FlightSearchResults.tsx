@@ -742,7 +742,7 @@ const FlightSearchResults = () => {
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
         <div className="hidden md:block mb-4" dir="ltr">
-          <div className="relative rounded-xl pt-8 pb-6 px-16" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
+          <div className="relative rounded-xl pt-6 pb-6 px-16 overflow-hidden" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
           {/* Hide dates on the top border of the box */}
           <div className="flex justify-center absolute top-0 left-0 right-0 -translate-y-1/2 z-20">
             <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1 bg-white px-4 py-1.5 rounded border border-gray-200 relative z-20">
@@ -887,7 +887,7 @@ const FlightSearchResults = () => {
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
                   <div className="hidden md:block relative" dir="ltr">
-
+                    {isFirstFlight && <span className="absolute -top-5 right-4 text-[11px] bg-[#e8f5e0] text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
                       <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
@@ -918,8 +918,7 @@ const FlightSearchResults = () => {
                         </div>
                       </div>
                       {/* Right: Economy + Business columns */}
-                      <div className="flex relative">
-                        {isFirstFlight && <span className="absolute -top-3 right-2 text-[11px] bg-[#e8f5e0] text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span>}
+                      <div className="flex">
                         {/* Economy column */}
                         <button onClick={() => handleSelectFare(flight, 0, 'Basic')} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors">
                           <span className="text-base font-bold">Economy</span>
