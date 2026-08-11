@@ -48,6 +48,7 @@ const PassengerDetails = () => {
   const [extraEmails, setExtraEmails] = useState<string[]>([]);
   const [extraPhones, setExtraPhones] = useState<{code: string; number: string}[]>([]);
   const [showEmergency, setShowEmergency] = useState(false);
+  const [rememberPassenger, setRememberPassenger] = useState(false);
   const [specialAssistance, setSpecialAssistance] = useState<Record<string, any>>({});
 
   useEffect(() => {
@@ -771,8 +772,8 @@ const PassengerDetails = () => {
 
         {/* Remember passenger information */}
         <div className="border border-gray-200 rounded-lg p-6 mb-6 bg-[#f9f9f9]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-5 bg-gray-400 rounded-full relative cursor-pointer"><div className="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5"></div></div>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setRememberPassenger(!rememberPassenger)}>
+            <div className={`w-10 h-5 rounded-full relative transition-colors ${rememberPassenger ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${rememberPassenger ? 'left-[22px]' : 'left-0.5'}`}></div></div>
             <div>
               <p className="font-bold text-gray-800">Remember passenger information</p>
               <p className="text-gray-500 text-sm">Save your personal information now, save time in future bookings.</p>
