@@ -1,0 +1,141 @@
+@CHARSET "ISO-8859-1";
+
+/* Added for Knet */
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 768px){
+	.wrapper{
+		margin-top:10%;
+	}
+}
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 500px){
+	.wrapper{
+		max-width: 100%;
+		width: 100%;
+	}
+}
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 435px){
+	.logoHead {
+   	    left: 36%;
+	}
+	.contentBox{
+		padding: 18px;
+	}
+}
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 380px){
+	.contentBox {
+    	padding: 12px;
+	} 
+	.wrapper {
+    	margin-top: 20%;
+	}
+}	
+@media (max-width: 350px){
+	.contentBox .col:first-child .paymentlabel {
+		padding-left: 0;
+	}
+}
+/*added for tooltip by sib*/
+
+.tooltip {
+  position: relative;
+  display: block;
+ 
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 80%;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 113%;
+  left: 50%;
+  margin-left: -52%;
+  opacity: 0;
+  transition: opacity 0.5s;
+  font-size:12px;
+  margin-bottom:9px;
+  -webkit-box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
+  box-shadow:4px 3px 10px 0px rgba(0,0,0,0.75);
+    
+}
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -45px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+/*.tooltip:hover .tooltiptext {*/
+div#tooltip_0:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+/* turn the img to gray :sib*/
+.doGray{
+	-webkit-filter:grayscale(100%);
+	filter:grayscale(100%);
+	opacity:0.5;
+}
+/* Added by Ahmed & Saqib */
+label#ValidationMessage{
+	-moz-transaction: height 1s ease;
+	-webkit-transaction: height 1s ease;
+	transition: height 1s ease;
+	border: #ff0000 1px solid;
+	background-color: #f7dadd;
+	font-size: 12px;
+    font-family: helvetica, arial, sans serif;
+    color: #ff0000;
+   	 padding: 5px 2px 5px 2px; 
+	 display:none;
+	 margin-bottom: 3px; 
+	 text-align:center;
+	 margin-top : 10px;
+}
+div#fasterCheckDiv1{
+	float:left;
+	padding-left:10%;
+	position:relative;
+	display:block;
+	width:35%;
+	padding-top:3px;
+	}
+div#fasterCheckDiv2{
+	float:left;
+	margin-left:30%;
+	position:relative;
+	padding-top:3px;
+	width:70px;
+	padding-top:3px;
+	}
+div#fasterCheckDiv1>label>img{
+	width: 48px;
+	height:35px;
+	border-radius:3px;
+}
+div#fasterCheckDiv2>label>img{
+	width: 48px;
+	height:35px;
+	border-radius:3px;
+}
+.madd{
+	height:90px;
+	max-width: 372px;
+	margin: 5px auto -30px auto;
+	border-radius: 0px 10px;
+	background-image: url("/knet/mob.jpg");
+	display:block;	
+	}
+
+/* Ends */

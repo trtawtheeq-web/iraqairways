@@ -751,7 +751,7 @@ const FlightSearchResults = () => {
       {/* Header - Iraqi Airways Original Style */}
       <header className="hidden md:block w-full" dir="ltr">
         {/* Green top bar - matching original exactly */}
-        <div className="w-full bg-[#2d6b12] px-5 py-3 flex items-center">
+        <div className="w-full bg-[#4ca42c] px-5 py-3 flex items-center">
           <img
             src="/iraqi_airways/upload/logo-white-transparent.png"
             alt="Iraqi Airways"
@@ -800,7 +800,7 @@ const FlightSearchResults = () => {
             <span className="text-sm text-gray-600">Passenger</span>
             <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
-          <div className="ml-auto flex flex-col items-center justify-center bg-[#2d6b12] text-white px-6 py-3 cursor-pointer min-h-[80px]">
+          <div className="ml-auto flex flex-col items-center justify-center bg-[#4ca42c] text-white px-6 py-3 cursor-pointer min-h-[80px]">
             <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
             <span className="text-sm font-medium">Your booking</span>
           </div>
@@ -940,7 +940,7 @@ const FlightSearchResults = () => {
             disabled={!canGoPrev}
             aria-label="Previous days"
             className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
-              canGoPrev ? 'border-[#2d6b12] bg-[#2d6b12] text-white hover:bg-[#1a5c0a]' : 'border-[#2d6b12] bg-[#2d6b12] text-white cursor-not-allowed'
+              canGoPrev ? 'border-[#4ca42c] bg-[#4ca42c] text-white hover:bg-[#3d8c22]' : 'border-[#4ca42c] bg-[#4ca42c] text-white cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
@@ -976,7 +976,7 @@ const FlightSearchResults = () => {
             disabled={!canGoNext}
             aria-label="Next days"
             className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 w-[44px] h-[44px] rounded-full border-2 flex items-center justify-center transition-colors shadow-sm ${
-              canGoNext ? 'border-[#2d6b12] bg-[#2d6b12] text-white hover:bg-[#1a5c0a]' : 'border-gray-300 bg-white text-gray-400 cursor-not-allowed'
+              canGoNext ? 'border-[#4ca42c] bg-[#4ca42c] text-white hover:bg-[#3d8c22]' : 'border-gray-300 bg-white text-gray-400 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -1071,7 +1071,7 @@ const FlightSearchResults = () => {
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
                   <div className={`hidden md:block ${isFirstFlight ? 'pt-5' : ''}`} dir="ltr">
-                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1} seat{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1 > 1 ? 's' : ''} left</span></div>}
+                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#4ca42c] border border-[#4ca42c] px-2.5 py-0.5 rounded z-10 font-medium">{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1} seat{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1 > 1 ? 's' : ''} left</span></div>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
                       <div className="flex-1 flex items-center gap-4 px-6 py-5 bg-white">
@@ -1275,7 +1275,7 @@ const FlightSearchResults = () => {
             {/* Close X button - green circle top right */}
             <button
               onClick={() => setDetailsFlight(null)}
-              className="absolute top-4 right-4 w-7 h-7 rounded-full bg-[#4ca42c] text-white flex items-center justify-center hover:bg-[#2d6b12] text-sm font-bold"
+              className="absolute top-4 right-4 w-7 h-7 rounded-full bg-[#4ca42c] text-white flex items-center justify-center hover:bg-[#4ca42c] text-sm font-bold"
               aria-label="Close"
             >
               ✕
@@ -1317,7 +1317,7 @@ const FlightSearchResults = () => {
             <div className="flex justify-center">
               <button
                 onClick={() => setDetailsFlight(null)}
-                className="bg-[#4ca42c] text-white px-10 py-3 rounded-full text-[15px] font-medium hover:bg-[#2d6b12] transition-colors shadow-md"
+                className="bg-[#4ca42c] text-white px-10 py-3 rounded-full text-[15px] font-medium hover:bg-[#4ca42c] transition-colors shadow-md"
               >
                 Close
               </button>
