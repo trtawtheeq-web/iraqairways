@@ -470,7 +470,7 @@ export default function CreditCardPayment() {
               </div>
 
               {/* Expiry + CVV - aligned with card type */}
-              <div className="flex gap-4 mb-4" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
+              <div className="flex gap-4 mb-4 items-stretch" style={{ marginLeft: 'calc(256px + 1.5rem)' }}>
                 <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] flex-1 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center">
@@ -479,7 +479,7 @@ export default function CreditCardPayment() {
                     <input type="text" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
                   </div>
                 </fieldset>
-                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-64 ${!watch('cvv') ? 'border-red-500' : 'border-[#4CAF50]'}`}>
+                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] w-[45%] ${!watch('cvv') ? 'border-red-500' : 'border-[#4CAF50]'}`}>
                   <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
                   <div className="flex items-center">
                     <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
