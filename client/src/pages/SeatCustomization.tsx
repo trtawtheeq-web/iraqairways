@@ -70,7 +70,7 @@ export default function SeatCustomization() {
   return (
     <div className="min-h-screen flex flex-col bg-white" style={{ fontFamily: 'Lato, sans-serif' }}>
       {/* Header */}
-      <header className="bg-[#398017] text-white">
+      <header className="bg-[#4ca42c] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
           <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
           <span className="border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => setLocation('/')}>Home</span>
@@ -264,7 +264,7 @@ export default function SeatCustomization() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#398017] text-white py-8">
+      <footer className="bg-[#4ca42c] text-white py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-3 gap-8 mb-8">
             <div>

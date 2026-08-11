@@ -562,7 +562,7 @@ const FlightSearchResults = () => {
     return (
       <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
         {/* Header - same green bar */}
-        <header className="bg-[#398017] text-white">
+        <header className="bg-[#4ca42c] text-white">
           <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-6">
             <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-12" />
             <a href="/" className="text-white font-medium border-b border-white/50 pb-0.5">Home</a>
@@ -673,7 +673,7 @@ const FlightSearchResults = () => {
           </div>
         </div>
         {/* Footer - same as flight search page */}
-        <footer className="bg-[#398017] text-white mt-8" dir="ltr">
+        <footer className="bg-[#4ca42c] text-white mt-8" dir="ltr">
           <div className="max-w-6xl mx-auto px-6 py-10">
             <div className="flex justify-between mb-8">
               <div>
@@ -793,12 +793,12 @@ const FlightSearchResults = () => {
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
             <span className="text-sm text-gray-600">Depart</span>
-            <span className="text-base font-bold text-[#398017]">{new Date(date + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
+            <span className="text-base font-bold text-[#4ca42c]">{new Date(date + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
           </div>
           <span className="mx-5 h-10 w-px bg-gray-300"></span>
           <div className="flex flex-col">
             <span className="text-sm text-gray-600">Passenger</span>
-            <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#398017" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
+            <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
           <div className="ml-auto flex flex-col items-center justify-center bg-[#2d6b12] text-white px-6 py-3 cursor-pointer min-h-[80px]">
             <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
@@ -842,14 +842,14 @@ const FlightSearchResults = () => {
         {/* "Please, select your departure" box - matches original */}
         <div className="hidden md:flex justify-center mt-6 mb-6">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-10 py-5 text-center">
-            <p className="text-2xl text-[#398017] font-light">Please, select your departure</p>
+            <p className="text-2xl text-[#4ca42c] font-light">Please, select your departure</p>
             <p className="text-base text-gray-500 mt-1">{cityOfEn(origin)} to {cityOfEn(destination)}</p>
           </div>
         </div>
 
         {/* Full date - matches original */}
         <div className="hidden md:block text-center mb-4">
-          <p className="text-lg font-bold text-[#398017]">{detailDateLabel}</p>
+          <p className="text-lg font-bold text-[#4ca42c]">{detailDateLabel}</p>
         </div>
 
         {/* Hide dates toggle - moved inside box below */}
@@ -963,8 +963,8 @@ const FlightSearchResults = () => {
                     <span className="text-base font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 </button>
-                <div className={`text-[11px] mt-1.5 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-[#398017]'}`}>
-                  {item.isActive && <span className="text-[#398017] mr-0.5">✔</span>}
+                <div className={`text-[11px] mt-1.5 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-[#4ca42c]'}`}>
+                  {item.isActive && <span className="text-[#4ca42c] mr-0.5">✔</span>}
                   {enDate}
                 </div>
               </div>
@@ -1275,7 +1275,7 @@ const FlightSearchResults = () => {
             {/* Close X button - green circle top right */}
             <button
               onClick={() => setDetailsFlight(null)}
-              className="absolute top-4 right-4 w-7 h-7 rounded-full bg-[#398017] text-white flex items-center justify-center hover:bg-[#2d6b12] text-sm font-bold"
+              className="absolute top-4 right-4 w-7 h-7 rounded-full bg-[#4ca42c] text-white flex items-center justify-center hover:bg-[#2d6b12] text-sm font-bold"
               aria-label="Close"
             >
               ✕
@@ -1283,8 +1283,8 @@ const FlightSearchResults = () => {
             {/* Title: City - City (light font weight like original) */}
             <h2 className="text-[26px] font-light text-gray-800 mb-5">{airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin} - {airportName(currentLeg.destination).split(' ')[0] || currentLeg.destination}</h2>
             {/* Date and duration - green */}
-            <p className="text-[#398017] text-[14px] leading-tight">Departs on {detailDateLabel}</p>
-            <p className="text-[#398017] text-[14px] font-bold leading-tight mb-6">Total duration: {detailsFlight.duration.replace(' 0', ' ').replace('h ', 'h ').replace('m', 'min')}</p>
+            <p className="text-[#4ca42c] text-[14px] leading-tight">Departs on {detailDateLabel}</p>
+            <p className="text-[#4ca42c] text-[14px] font-bold leading-tight mb-6">Total duration: {detailsFlight.duration.replace(' 0', ' ').replace('h ', 'h ').replace('m', 'min')}</p>
             {/* Timeline: duration left | green line+dots | info right */}
             <div className="flex gap-2 mb-6 ml-4">
               {/* Duration on the left */}
@@ -1317,7 +1317,7 @@ const FlightSearchResults = () => {
             <div className="flex justify-center">
               <button
                 onClick={() => setDetailsFlight(null)}
-                className="bg-[#398017] text-white px-10 py-3 rounded-full text-[15px] font-medium hover:bg-[#2d6b12] transition-colors shadow-md"
+                className="bg-[#4ca42c] text-white px-10 py-3 rounded-full text-[15px] font-medium hover:bg-[#2d6b12] transition-colors shadow-md"
               >
                 Close
               </button>
@@ -1676,7 +1676,7 @@ const FlightSearchResults = () => {
       )}
 
             {/* Footer - matching original */}
-      <footer className="bg-[#398017] text-white mt-8" dir="ltr">
+      <footer className="bg-[#4ca42c] text-white mt-8" dir="ltr">
         <div className="max-w-6xl mx-auto px-6 py-10">
           <div className="flex justify-between mb-8">
             <div>

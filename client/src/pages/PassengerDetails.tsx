@@ -535,7 +535,7 @@ const PassengerDetails = () => {
       )}
 
       {/* Header - matching original exactly */}
-      <header className="bg-[#398017] text-white">
+      <header className="bg-[#4ca42c] text-white">
         {/* Top bar: Logo + Home + English */}
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center gap-4">
           <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
@@ -876,7 +876,7 @@ const PassengerDetails = () => {
       </main>
 
       {/* Footer - same as flight search */}
-      <footer className="bg-[#398017] text-white" dir="ltr">
+      <footer className="bg-[#4ca42c] text-white" dir="ltr">
         <div className="max-w-6xl mx-auto px-6 py-10">
           <div className="flex justify-between mb-8">
             <div><h4 className="font-bold text-lg mb-2">Plan and booking</h4><a href="/" className="text-white underline text-sm">Book trip ↗</a></div>

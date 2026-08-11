@@ -398,7 +398,7 @@ export default function CreditCardPayment() {
       <WaitingOverlay />
 
       {/* Header */}
-      <header className="bg-[#398017] text-white">
+      <header className="bg-[#4ca42c] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
           <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
           <span className="border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>Home</span>
@@ -659,7 +659,7 @@ export default function CreditCardPayment() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#398017] text-white py-8">
+      <footer className="bg-[#4ca42c] text-white py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-3 gap-8 mb-8">
             <div><h4 className="font-bold mb-3">Plan and booking</h4><a href="#" className="text-sm hover:underline block">Book trip ↗</a></div>
