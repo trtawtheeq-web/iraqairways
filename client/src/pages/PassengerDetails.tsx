@@ -458,448 +458,187 @@ const PassengerDetails = () => {
     </>
   );
 
+  // fieldset input style matching original
+  const fieldsetCls = "w-full bg-[#f5faf0] border border-[#4CAF50] rounded px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#2E7D32] text-[15px]";
+  const labelCls = "block text-[13px] text-[#2E7D32] font-medium mb-1";
+
   return (
-    <div className="min-h-screen bg-[#EAF1FB] font-avenir pb-52 lg:pb-10" dir={dir}>
-      {/* Logo - hidden on mobile, shown on desktop */}
-      <div className="hidden md:block px-6 pt-5">
-        <img src="/iraqi_airways/upload/logo-white.jpg" alt="Jazeera" className="h-[90px] cursor-pointer" onClick={() => { window.location.href = '/'; }} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-      </div>
-
-      {/* Mobile: Simple back arrow + title (NO navbar/logo/currency/menu) */}
-      <div className="md:hidden pt-10 px-5 pb-4">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setLocation('/flight-search')}
-            className="w-10 h-10 rounded-full bg-white border border-[#e0e8f0] flex items-center justify-center text-[#001d3d] shadow-sm"
-            aria-label="Back"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d={isAr ? "M9 5l7 7-7 7" : "M15 19l-7-7 7-7"} /></svg>
-          </button>
-          <h1 className="text-[22px] font-extrabold text-[#11315F]">{isAr ? 'من المسافر اليوم؟' : 'Who\u2019s flying today?'}</h1>
+    <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
+      {/* Header - same green bar as original */}
+      <header className="bg-[#398017] text-white">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-6">
+          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-12" />
+          <a href="/" className="text-white font-medium border-b border-white/50 pb-0.5">Home</a>
+          <span className="text-white/80">English</span>
         </div>
-      </div>
-
-      <main className="max-w-6xl mx-auto px-4 md:px-4 mt-0 md:mt-4">
-        {/* Desktop Title row */}
-        <div className="hidden md:flex items-center gap-3 mb-6">
-          <button
-            onClick={() => setLocation('/flight-search')}
-            className="w-10 h-10 rounded-full bg-white border border-[#b8d4b0] flex items-center justify-center text-[#12470D] shadow-sm hover:bg-[#f3f8ff]"
-            aria-label="Back"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
-          </button>
-          <h1 className="text-4xl font-extrabold text-[#0a72c0]">{isAr ? 'من المسافر اليوم؟' : 'Who\u2019s flying today?'}</h1>
-        </div>
-
-        <div className="flex flex-col-reverse lg:flex-row gap-6 items-start">
-          {/* Left column */}
-          <div className="flex-1 w-full space-y-4">
-            {/* Cancel for Any Reason */}
-            <div className="bg-white rounded-2xl shadow-sm border border-[#e6eef7] p-5 md:p-6">
-              {/* Header with icon */}
-              <div className="flex items-center gap-3 pb-4 border-b border-[#e8f0f8]">
-                <span className="w-11 h-11 rounded-xl bg-[#dceaf9] text-[#0a4c95] flex items-center justify-center shrink-0">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                </span>
-                <h2 className="text-xl font-extrabold text-[#0a4c95]">{isAr ? 'الإلغاء لأي سبب' : 'Cancel for Any Reason'}</h2>
-              </div>
-              {/* Bullet points */}
-              <ul className="space-y-4 mt-5 mb-5">
-                {(isAr ? [
-                  'ألغِ حتى 24 ساعة قبل المغادرة – فعلاً لأي سبب',
-                  `استرداد 80٪ (${formatPrice(refundAmount, curCode)}) من أجرة رحلتك والضرائب إلى حسابك البنكي`,
-                  'ألغِ الرحلة بنفسك عبر خيار الخدمة الذاتية',
-                ] : [
-                  'Cancel up to 24 hours before departure \u2013 truly for any reason',
-                  `Get a refund of 80% (${formatPrice(refundAmount, curCode)}) of your flight fare and taxes to your bank account`,
-                  'Cancel the trip yourself via our self-serve option',
-                ]).map((line, i) => (
-                  <li key={i} className="flex items-start gap-3 text-[#3a4a5b] text-[15px] leading-relaxed">
-                    <svg className="w-5 h-5 text-[#3aa0e3] mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ul>
-              <button type="button" className="text-[15px] font-semibold text-[#0a72c0] underline mb-5">{isAr ? 'عرض الشروط' : 'View Terms'}</button>
-              {/* Radio options */}
-              <div className="space-y-3">
-                <button
-                  type="button"
-                  onClick={() => setCancelChoice('refundable')}
-                  className={`${isAr ? 'text-right' : 'text-left'} w-full rounded-2xl p-4 bg-white border-2 transition-colors ${cancelChoice === 'refundable' ? 'border-[#0a4c95]' : 'border-[#d7e2ee]'} flex items-center justify-between`}
-                >
-                  <div>
-                    <p className="font-bold text-[#11315F] text-[16px]">{isAr ? 'قابل للاسترداد 80٪' : '80% refundable'}</p>
-                    <p className="text-sm text-gray-500 mt-0.5">+{formatPrice(4, curCode)}/{isAr ? 'للراكب' : 'passenger'}</p>
-                  </div>
-                  <span className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${cancelChoice === 'refundable' ? 'border-[#0a4c95]' : 'border-[#9bb0c7]'}`}>
-                    {cancelChoice === 'refundable' && <span className="w-3 h-3 rounded-full bg-[#0a4c95]"></span>}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCancelChoice('no')}
-                  className={`${isAr ? 'text-right' : 'text-left'} w-full rounded-2xl p-4 bg-white border-2 transition-colors ${cancelChoice === 'no' ? 'border-[#0a4c95]' : 'border-[#d7e2ee]'} flex items-center justify-between`}
-                >
-                  <div>
-                    <p className="font-bold text-[#11315F] text-[16px]">{isAr ? 'لا شكراً' : 'No thanks'}</p>
-                    <p className="text-sm text-gray-500 mt-0.5">{isAr ? 'ابقِ رحلتي غير قابلة للاسترداد' : 'Keep my trip non-refundable'}</p>
-                  </div>
-                  <span className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${cancelChoice === 'no' ? 'border-[#0a4c95]' : 'border-[#9bb0c7]'}`}>
-                    {cancelChoice === 'no' && <span className="w-3 h-3 rounded-full bg-[#0a4c95]"></span>}
-                  </span>
-                </button>
-              </div>
+        {/* Flight info bar */}
+        <div className="bg-[#2d6b12] py-2">
+          <div className="max-w-7xl mx-auto px-6 flex items-center gap-8 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="font-bold">{flightData?.origin || 'BGW'}</span>
+              <span className="text-white/60">······ ✈ ······</span>
+              <span className="font-bold">{flightData?.destination || 'EBL'}</span>
             </div>
-
-            {/* Passenger cards */}
-            {passengers.map((p, index) => {
-              const isOpen = openIndex === index;
-              return (
-                <div key={index} className="bg-white rounded-2xl shadow-sm border border-[#e6eef7] overflow-hidden">
-                  {/* Card header */}
-                  <button
-                    type="button"
-                    onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                    className="w-full flex items-center justify-between px-6 py-5 text-left"
-                  >
-                    <div>
-                      <div className="text-lg font-extrabold text-[#0a4c95]">{paxTypeLabel(p.type)} {index + 1}</div>
-                      {!isOpen && <div className="text-sm text-[#5b6b7b] mt-0.5">{paxTypeLabel(p.type)}</div>}
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {primaryIndex === index && (
-                        <span className="text-xs font-semibold text-white bg-[#0a4c95] rounded-full px-3 py-1">{isAr ? 'الرئيسي' : 'Primary'}</span>
-                      )}
-                      <svg className={`w-5 h-5 text-[#0a4c95] transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-                    </div>
-                  </button>
-
-                  {isOpen && (
-                    <div className="px-6 pb-6 space-y-4">
-                      {/* Gender toggle */}
-                      <div className="flex gap-3">
-                        {(['Male', 'Female'] as const).map((g) => (
-                          <button
-                            key={g}
-                            type="button"
-                            onClick={() => update(index, 'gender', g)}
-                            className={`px-6 py-2 rounded-full text-sm font-medium border transition-colors ${p.gender === g ? 'bg-[#dceaf9] border-[#9fc4ea] text-[#0a4c95]' : 'bg-white border-[#d7e2ee] text-[#5b6b7b]'}`}
-                          >
-                            {g === 'Male' ? (isAr ? 'ذكر' : 'Male') : (isAr ? 'أنثى' : 'Female')}
-                          </button>
-                        ))}
-                      </div>
-
-                      {/* First name */}
-                      <input
-                        type="text"
-                        placeholder={isAr ? 'الاسم الأول *' : 'First or Given name *'}
-                        value={p.firstName}
-                        onChange={(e) => update(index, 'firstName', sanitizeName(e.target.value))}
-                        lang="en"
-                        inputMode="latin"
-                        autoComplete="given-name"
-                        className="w-full bg-[#f4f7fb] border border-[#e3eaf2] rounded-xl px-4 py-4 text-[#0a2540] placeholder-[#8a99a8] focus:outline-none focus:border-[#0a72c0]"
-                      />
-                      {/* Last name */}
-                      <input
-                        type="text"
-                        placeholder={isAr ? 'اسم العائلة *' : 'Last or Surname *'}
-                        value={p.lastName}
-                        onChange={(e) => update(index, 'lastName', sanitizeName(e.target.value))}
-                        lang="en"
-                        inputMode="latin"
-                        autoComplete="family-name"
-                        className="w-full bg-[#f4f7fb] border border-[#e3eaf2] rounded-xl px-4 py-4 text-[#0a2540] placeholder-[#8a99a8] focus:outline-none focus:border-[#0a72c0]"
-                      />
-
-                      {/* Phone + Email */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex bg-[#f4f7fb] border border-[#e3eaf2] rounded-xl overflow-hidden">
-                          <div className="flex items-center border-r border-[#e3eaf2]">
-                            <CountryCodePicker
-                              value={p.dialCode}
-                              onChange={(d) => update(index, 'dialCode', d)}
-                            />
-                          </div>
-                          <input
-                            type="tel"
-                            placeholder={isAr ? 'رقم الهاتف *' : 'Phone number *'}
-                            value={p.phone}
-                            onChange={(e) => update(index, 'phone', sanitizePhone(e.target.value))}
-                            inputMode="numeric"
-                            lang="en"
-                            className="flex-1 bg-transparent px-4 py-4 text-[#0a2540] placeholder-[#8a99a8] focus:outline-none"
-                          />
-                        </div>
-                        <input
-                          type="email"
-                          placeholder={isAr ? 'البريد الإلكتروني *' : 'Email Id *'}
-                          value={p.email}
-                          onChange={(e) => update(index, 'email', sanitizeEmail(e.target.value))}
-                          inputMode="email"
-                          lang="en"
-                          className="w-full bg-[#f4f7fb] border border-[#e3eaf2] rounded-xl px-4 py-4 text-[#0a2540] placeholder-[#8a99a8] focus:outline-none focus:border-[#0a72c0]"
-                        />
-                      </div>
-
-                      {/* DOB */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <DateOfBirthPicker
-                          value={p.dob}
-                          onChange={(v) => update(index, 'dob', v)}
-                        />
-                      </div>
-
-                      {/* Additional Details */}
-                      <div className="flex items-center justify-between pt-2">
-                        <span className="text-lg font-bold text-[#0a72c0]">{isAr ? 'تفاصيل إضافية' : 'Additional Details'}</span>
-                        <button
-                          type="button"
-                          onClick={() => setPassportOpen((prev) => ({ ...prev, [index]: !prev[index] }))}
-                          className="w-9 h-9 rounded-full border border-[#b8d4b0] text-[#0a72c0] flex items-center justify-center hover:bg-[#f3f8ff]"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={passportOpen[index] ? 'M20 12H4' : 'M12 4v16m8-8H4'} />
-                          </svg>
-                        </button>
-                      </div>
-
-                      {passportOpen[index] && (
-                        <div className="space-y-4">
-                          {/* Passport details header + upload */}
-                          <div className="flex items-center justify-between flex-wrap gap-3">
-                            <span className="text-lg font-bold text-[#0a72c0]">{isAr ? 'بيانات جواز السفر' : 'Passport details'}</span>
-                            <label className="flex items-center gap-2 px-5 py-2 rounded-full border border-[#0a72c0] text-[#0a72c0] text-sm font-medium hover:bg-[#f3f8ff] cursor-pointer">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
-                              {isAr ? 'رفع جواز السفر/الهوية الخليجية' : 'Upload passport/GCC ID'}
-                              <input type="file" accept="image/*,.pdf" className="hidden" />
-                            </label>
-                          </div>
-
-                          {/* Choose travel document */}
-                          <div className="relative">
-                            <select
-                              value={p.docType}
-                              onChange={(e) => update(index, 'docType', e.target.value)}
-                              className={`w-full appearance-none bg-[#f4f7fb] border border-[#e3eaf2] rounded-xl px-5 py-4 pr-10 focus:outline-none focus:border-[#0a72c0] ${p.docType ? 'text-[#0a2540]' : 'text-[#8a99a8]'}`}
-                            >
-                              <option value="" disabled>{isAr ? 'اختر وثيقة السفر' : 'Choose travel document'}</option>
-                              <option value="Passport">Passport</option>
-                              <option value="GCC ID">GCC ID</option>
-                              <option value="National ID">National ID</option>
-                            </select>
-                            <svg className="w-4 h-4 text-[#6b7b8b] absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-                          </div>
-
-                          {/* Passport number */}
-                          <input
-                            type="text"
-                            value={p.passportNo}
-                            onChange={(e) => update(index, 'passportNo', e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase())}
-                            placeholder={isAr ? 'رقم جواز السفر/الهوية الخليجية' : 'Passport number/ GCC ID'}
-                            className="w-full bg-[#f4f7fb] border border-[#e3eaf2] rounded-xl px-5 py-4 text-[#0a2540] placeholder-[#8a99a8] focus:outline-none focus:border-[#0a72c0]"
-                          />
-
-                          {/* Countries */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <CountrySelect
-                              value={p.issueCountry}
-                              onChange={(v) => update(index, 'issueCountry', v)}
-                              placeholder={isAr ? 'دولة الإصدار' : 'Issue Country'}
-                            />
-                            <CountrySelect
-                              value={p.residenceCountry}
-                              onChange={(v) => update(index, 'residenceCountry', v)}
-                              placeholder={isAr ? 'دولة الإقامة' : 'Country of residence'}
-                            />
-                          </div>
-
-                          {/* Dates */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <SimpleDatePicker
-                              value={p.expiryDate}
-                              onChange={(v) => update(index, 'expiryDate', v)}
-                              placeholder={isAr ? 'تاريخ الانتهاء' : 'Expiry date'}
-                              mode="future"
-                            />
-                            <SimpleDatePicker
-                              value={p.issueDate}
-                              onChange={(v) => update(index, 'issueDate', v)}
-                              placeholder={isAr ? 'تاريخ الإصدار' : 'Date of issue'}
-                              mode="past"
-                            />
-                          </div>
-
-                          {/* Clear details */}
-                          <div className="flex justify-end">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                update(index, 'docType', '');
-                                update(index, 'passportNo', '');
-                                update(index, 'issueCountry', '');
-                                update(index, 'residenceCountry', '');
-                                update(index, 'expiryDate', '');
-                                update(index, 'issueDate', '');
-                              }}
-                              className="text-[#6b7b8b] underline hover:text-[#0a2540]"
-                            >
-                              {isAr ? 'مسح التفاصيل' : 'Clear details'}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="flex items-center justify-between bg-[#f4f7fb] border border-[#e3eaf2] rounded-xl px-5 py-4">
-                        <span className="text-[#0a2540] flex-1">
-                          {isAr ? 'أحتاج مساعدة خاصة' : 'I\'ll need special assistance'}
-                          {specialAssistance[index] && specialAssistance[index].label && (
-                            <span className="block text-sm text-[#0a72c0] font-medium mt-1">{specialAssistance[index].label}</span>
-                          )}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            try { localStorage.setItem('passengerData', JSON.stringify(passengers)); } catch { /* ignore */ }
-                            setLocation(`/wheelchair?passenger=${index}`);
-                          }}
-                          className="px-6 py-1.5 rounded-full border border-[#0a4c95] text-[#0a4c95] text-sm font-medium hover:bg-[#f3f8ff]"
-                        >{specialAssistance[index] ? (isAr ? 'تعديل' : 'Edit') : (isAr ? 'إضافة' : 'Add')}</button>
-                      </div>
-
-                      {/* Primary guest toggle */}
-                      <div className="flex items-center gap-3 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => setPrimaryIndex(index)}
-                          className={`relative w-12 h-6 rounded-full transition-colors ${primaryIndex === index ? 'bg-[#0a72c0]' : 'bg-gray-300'}`}
-                        >
-                          <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-all ${primaryIndex === index ? 'left-6' : 'left-0.5'}`} />
-                        </button>
-                        <span className="text-[#0a2540] font-medium">{isAr ? 'الضيف الرئيسي' : 'Primary Guest'}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-
-            {/* Emergency contact */}
-            <div className="pt-2">
-              <h2 className="text-lg font-bold text-[#0a72c0] mb-3">{isAr ? 'جهة اتصال للطوارئ' : 'Emergency contact'}</h2>
-              {!(emergency.firstName || emergency.lastName || emergency.phone || emergency.email) ? (
-                <button
-                  type="button"
-                  onClick={() => setLocation('/emergency-contact')}
-                  className="w-full flex items-center gap-3 bg-[#0a4c95] hover:bg-[#083d7a] text-white rounded-2xl px-6 py-5 font-semibold shadow-sm"
-                >
-                  <span className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
-                  </span>
-                  {isAr ? 'إضافة جهة اتصال للطوارئ' : 'Add an emergency contact'}
-                </button>
-              ) : (
-                <div className="bg-white rounded-2xl shadow-sm border border-[#e6eef7] p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-base font-bold text-[#0a72c0]">{isAr ? 'جهة اتصال للطوارئ' : 'Emergency contact'}</h3>
-                    <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setLocation('/emergency-contact')}
-                        className="text-sm font-semibold text-[#0a72c0] hover:underline"
-                      >
-                        {isAr ? 'تعديل' : 'Edit'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => { setEmergency({ firstName: '', lastName: '', dialCode: '+965', phone: '', email: '' }); localStorage.removeItem('emergencyContact'); }}
-                        className="text-[#8a99a8] hover:text-[#0a2540]"
-                        aria-label="Remove emergency contact"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-[#0a2540] font-semibold">{emergency.firstName} {emergency.lastName}</p>
-                  <p className="text-[#8a99a8] text-sm">{emergency.dialCode} {emergency.phone}</p>
-                  <p className="text-[#8a99a8] text-sm">{emergency.email}</p>
-                </div>
-              )}
+            <span>|</span>
+            <div><span className="text-white/70">Depart</span> <span className="font-bold">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</span></div>
+            <span>|</span>
+            <div><span className="text-white/70">Passenger</span> <span className="font-bold">{totalCount} 👤</span></div>
+            <div className="ml-auto flex items-center gap-2">
+              <span>🛒</span> <span className="font-bold">Your booking</span>
             </div>
           </div>
+        </div>
+      </header>
 
-          {/* Right column - Trip summary (DESKTOP ONLY) */}
-          <div className="hidden lg:block w-96">
-            <div className="bg-white rounded-2xl shadow-sm border border-[#e6eef7] p-6 sticky top-6">
-              <h2 className="text-2xl font-extrabold text-[#0a72c0] mb-4">{t('seat.tripSummary')}</h2>
-              <TripSummaryContent />
-              <button
-                type="button"
-                onClick={handleContinue}
-                className="w-full bg-[#0a4c95] hover:bg-[#083d7a] text-white font-bold py-4 rounded-full text-lg shadow-sm transition-colors"
-              >
-                {t('common.continue')}
-              </button>
+      {/* Main content */}
+      <main className="max-w-4xl mx-auto px-6 py-8">
+        {/* Personal information */}
+        <div className="border border-gray-200 rounded-lg p-8 mb-6">
+          <h2 className="text-center text-[#2E7D32] text-2xl mb-6">Personal information</h2>
+          <p className="text-[#2E7D32] text-sm mb-1">* = mandatory fields</p>
+          <p className="text-gray-600 text-sm mb-6">Please fill personal information as shown in the passport</p>
+          
+          {passengers.map((p, index) => (
+            <div key={index} className="space-y-5 mb-8">
+              {passengers.length > 1 && <h3 className="text-[#2E7D32] font-bold text-lg">Passenger {index + 1} ({p.type})</h3>}
+              {/* Title */}
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <legend className="text-[#2E7D32] text-xs px-1">Title*</legend>
+                <select value={p.gender === 'Male' ? 'Mr' : 'Mrs'} onChange={(e) => update(index, 'gender', e.target.value === 'Mr' ? 'Male' : 'Female')} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+                  <option value="" disabled>Choose a title</option>
+                  <option value="Mr">Mr</option>
+                  <option value="Mrs">Mrs</option>
+                  <option value="Ms">Ms</option>
+                </select>
+              </fieldset>
+              {/* First name */}
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <legend className="text-[#2E7D32] text-xs px-1">First name*</legend>
+                <input type="text" placeholder="Enter a first name" value={p.firstName} onChange={(e) => update(index, 'firstName', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              </fieldset>
+              {/* Last name */}
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <legend className="text-[#2E7D32] text-xs px-1">Last name*</legend>
+                <input type="text" placeholder="Enter a last name" value={p.lastName} onChange={(e) => update(index, 'lastName', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              </fieldset>
+              {/* Date of birth */}
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+                <legend className="text-[#2E7D32] text-xs px-1">Date of birth</legend>
+                <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => update(index, 'dob', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              </fieldset>
+              <p className="text-gray-400 text-xs">Example: 31/01/2025</p>
+            </div>
+          ))}
+
+          {/* Frequent flyer cards */}
+          <h2 className="text-center text-[#2E7D32] text-2xl mt-8 mb-6">Frequent flyer cards</h2>
+          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
+            <legend className="text-[#2E7D32] text-xs px-1">Frequent flyer program</legend>
+            <select className="w-full bg-transparent text-gray-400 focus:outline-none text-[15px]">
+              <option value="">Select a program</option>
+              <option value="iraqi">Iraqi Airways</option>
+            </select>
+          </fieldset>
+          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+            <legend className="text-[#2E7D32] text-xs px-1">Frequent flyer number</legend>
+            <input type="text" placeholder="Enter a frequent flyer number" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+          </fieldset>
+        </div>
+
+        {/* Contact Information */}
+        <div className="border border-gray-200 rounded-lg p-8 mb-6">
+          <h2 className="text-center text-[#2E7D32] text-2xl mb-6">Contact Information</h2>
+          {/* Email */}
+          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
+            <legend className="text-[#2E7D32] text-xs px-1">Email*</legend>
+            <input type="email" placeholder="Enter an email address" value={passengers[0]?.email || ''} onChange={(e) => update(0, 'email', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+          </fieldset>
+          {/* Confirm email */}
+          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
+            <legend className="text-[#2E7D32] text-xs px-1">Confirm email*</legend>
+            <input type="email" placeholder="Confirm an email address" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+          </fieldset>
+          {/* Add another email */}
+          <div className="text-center mb-6">
+            <button className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another email address</button>
+          </div>
+          {/* Phone type */}
+          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
+            <legend className="text-[#2E7D32] text-xs px-1">Phone type*</legend>
+            <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
+              <option value="Personal">Personal</option>
+              <option value="Business">Business</option>
+            </select>
+          </fieldset>
+          {/* Country code + Phone number */}
+          <div className="grid grid-cols-2 gap-4 mb-5">
+            <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+              <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
+              <input type="text" placeholder="Enter a country calling code" value={passengers[0]?.dialCode || '+964'} onChange={(e) => update(0, 'dialCode', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+            </fieldset>
+            <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
+              <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
+              <input type="tel" placeholder="Enter a mobile phone" value={passengers[0]?.phone || ''} onChange={(e) => update(0, 'phone', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+            </fieldset>
+          </div>
+          {/* Add another phone */}
+          <div className="text-center mb-6">
+            <button className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another phone number</button>
+          </div>
+          {/* Fill emergency contact toggle */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-5 bg-gray-400 rounded-full relative cursor-pointer"><div className="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5"></div></div>
+            <span className="text-gray-600 text-sm">Fill emergency contact</span>
+          </div>
+        </div>
+
+        {/* Remember passenger information */}
+        <div className="border border-gray-200 rounded-lg p-6 mb-6 bg-[#f9f9f9]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-5 bg-gray-400 rounded-full relative cursor-pointer"><div className="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5"></div></div>
+            <div>
+              <p className="font-bold text-gray-800">Remember passenger information</p>
+              <p className="text-gray-500 text-sm">Save your personal information now, save time in future bookings.</p>
             </div>
           </div>
+        </div>
+
+        {/* Privacy policy checkbox */}
+        <div className="border border-gray-200 rounded-lg p-6 mb-8">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" className="w-5 h-5 mt-0.5 border-gray-300 rounded" />
+            <span className="text-gray-700 text-sm">I understand and accept that my personal data will be processed in accordance with the applicable carrier's privacy policy <a href="#" className="text-[#2E7D32] underline">more</a></span>
+          </label>
+        </div>
+
+        {/* Back + Confirm buttons - right aligned */}
+        <div className="flex justify-end gap-3 mb-12">
+          <button onClick={() => setLocation('/flight-search')} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">Back</button>
+          <button onClick={handleContinue} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">Confirm</button>
         </div>
       </main>
 
-      {/* ===== MOBILE BOTTOM SHEET - Trip Summary ===== */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[9999]">
-        {/* Expanded overlay */}
-        {summaryOpen && (
-          <div
-            className="fixed inset-0 bg-black/20 z-[9998]"
-            onClick={() => setSummaryOpen(false)}
-          />
-        )}
-        <div
-          className={`relative z-[9999] bg-white rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.12)] transition-all duration-300 ease-in-out ${summaryOpen ? 'max-h-[75vh] overflow-y-auto' : 'max-h-auto'}`}
-        >
-          <div className="px-5 pt-5 pb-4">
-            {/* Header row */}
-            <button
-              type="button"
-              onClick={() => setSummaryOpen((o) => !o)}
-              className="w-full flex items-center justify-between mb-3"
-            >
-              <h2 className="text-xl font-extrabold text-[#11315F]">{t('seat.tripSummary')}</h2>
-              <svg className={`w-5 h-5 text-[#11315F] transition-transform ${summaryOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-            </button>
-
-            {/* Expanded content */}
-            {summaryOpen && (
-              <div className="mb-3">
-                <TripSummaryContent />
-              </div>
-            )}
-
-            {/* Collapsed: Total row (always visible) */}
-            {!summaryOpen && (
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-lg font-bold text-[#0a2540]">{t('common.total')}</span>
-                <span className="flex flex-col items-end leading-tight">
-                  <span className="text-xs line-through text-red-500">{fmtConv(Math.round((finalTotalConv + discountAmountConv) * f) / f)}</span>
-                  <span className="text-lg font-extrabold text-[#0a72c0]">{fmtConv(finalTotalConv)}</span>
-                </span>
-              </div>
-            )}
-
-            {/* Continue button */}
-            <button
-              type="button"
-              onClick={handleContinue}
-              className="w-full bg-[#0a4c95] hover:bg-[#083d7a] text-white font-bold py-4 rounded-full text-lg shadow-sm transition-colors"
-            >
-              {t('common.continue')}
-            </button>
+      {/* Footer - same as flight search */}
+      <footer className="bg-[#398017] text-white" dir="ltr">
+        <div className="max-w-6xl mx-auto px-6 py-10">
+          <div className="flex justify-between mb-8">
+            <div><h4 className="font-bold text-lg mb-2">Plan and booking</h4><a href="/" className="text-white underline text-sm">Book trip ↗</a></div>
+            <div><h4 className="font-bold text-lg mb-2">Contact us</h4><a href="/" className="text-white underline text-sm block">Contact us ↗</a><a href="/" className="text-white underline text-sm block mt-1">Iraqi airways offers ↗</a></div>
+            <div><h4 className="font-bold text-lg mb-2">About us</h4><a href="/" className="text-white underline text-sm">Our fleet ↗</a></div>
+          </div>
+          <div className="text-center">
+            <h4 className="font-bold text-lg mb-3">Secured payment</h4>
+            <div className="flex justify-center gap-3 mb-2">
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/americanexpress.png" alt="Amex" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/visa.png" alt="Visa" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/mastercard.png" alt="MC" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-10" /></div>
+              <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/dinersclub.png" alt="DC" className="h-10" /></div>
+            </div>
+            <p className="text-sm text-white/80">Credit card fees may occur.</p>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };
