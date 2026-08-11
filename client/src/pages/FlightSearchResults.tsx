@@ -659,8 +659,8 @@ const FlightSearchResults = () => {
             <p className="text-[#2E7D32] text-lg">Total price: <span className="font-bold text-2xl">{cartTotal}</span></p>
             <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="text-[#2E7D32] underline">See price details.</a></p>
           </div>
-          {/* Policy links */}
-          <div className="text-center mt-6 text-sm text-[#2E7D32]">
+          {/* Policy links - right aligned like original */}
+          <div className="text-right mt-6 text-sm text-[#2E7D32]">
             <a href="#" className="underline">Detailed baggage policy ↗</a>
             <span className="mx-2 text-gray-400">|</span>
             <a href="#" className="underline">Review conditions ↗</a>
