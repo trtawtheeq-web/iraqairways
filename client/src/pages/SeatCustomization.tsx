@@ -71,7 +71,7 @@ export default function SeatCustomization() {
       {/* Header */}
       <header className="bg-[#398017] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
-          <img src="/iraqi_airways/img/logo.png" alt="Iraqi Airways" className="h-10 brightness-0 invert" />
+          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
           <span className="border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => setLocation('/')}>Home</span>
           <span className="text-sm">English ▼</span>
         </div>
@@ -191,11 +191,11 @@ export default function SeatCustomization() {
           <div className="text-center mb-6">
             <h4 className="font-bold text-lg mb-3">Secured payment</h4>
             <div className="flex justify-center gap-2 mb-2">
-              <img src="/iraqi_airways/img/amex.png" alt="Amex" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/img/visa.png" alt="Visa" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/img/mastercard.png" alt="Mastercard" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/img/paypal.png" alt="PayPal" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/img/diners.png" alt="Diners" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/americanexpress.png" alt="Amex" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/visa.png" alt="Visa" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/mastercard.png" alt="Mastercard" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-8 bg-white rounded p-1" />
+              <img src="/iraqi_airways/dinersclub.png" alt="Diners" className="h-8 bg-white rounded p-1" />
             </div>
             <p className="text-xs opacity-80">Credit card fees may occur.</p>
           </div>
