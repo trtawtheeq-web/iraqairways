@@ -600,6 +600,8 @@ const PassengerDetails = () => {
             <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
               <option value="Personal">Personal</option>
               <option value="Business">Business</option>
+              <option value="Agency">Agency</option>
+              <option value="Other">Other</option>
             </select>
           </fieldset>
           {/* Country code + Phone number */}
