@@ -395,15 +395,17 @@ a { text-decoration: none; outline: none; }
     flex-direction: column !important;
     gap: 16px !important;
     margin-bottom: 0 !important;
-    align-items: stretch !important;
+    align-items: flex-start !important;
+  }
+  .cc-expiry-cvv > fieldset {
+    flex: none !important;
+    height: auto !important;
   }
   .cc-expiry-cvv > fieldset:first-child {
     width: 100% !important;
-    flex: unset !important;
   }
   .cc-expiry-cvv > fieldset:last-child {
     width: 50% !important;
-    flex: unset !important;
   }
   .cc-cvv-info {
     display: none !important;
