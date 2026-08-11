@@ -395,17 +395,42 @@ a { text-decoration: none; outline: none; }
     flex-direction: column !important;
     gap: 12px !important;
     margin-bottom: 0 !important;
-    align-items: flex-start !important;
+    align-items: stretch !important;
   }
   .cc-expiry-cvv > fieldset {
     flex: none !important;
-    height: auto !important;
   }
   .cc-expiry-cvv > fieldset:first-child {
     width: 100% !important;
   }
   .cc-expiry-cvv > fieldset:last-child {
     width: 50% !important;
+  }
+  /* Force uniform height and spacing for all input containers */
+  .cc-card-fields fieldset,
+  .cc-fields-below fieldset,
+  .cc-expiry-cvv fieldset {
+    height: 52px !important;
+    padding: 0 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    margin-bottom: 12px !important;
+  }
+  .cc-card-fields fieldset legend,
+  .cc-fields-below fieldset legend,
+  .cc-expiry-cvv fieldset legend {
+    margin-bottom: -4px !important;
+  }
+  .cc-card-fields fieldset input,
+  .cc-fields-below fieldset input,
+  .cc-expiry-cvv fieldset input,
+  .cc-card-fields fieldset select {
+    height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   .cc-cvv-info {
     display: none !important;
