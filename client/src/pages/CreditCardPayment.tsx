@@ -593,7 +593,7 @@ export default function CreditCardPayment() {
               <div className="cc-fields-below" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
-              <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-4 items-stretch mb-4">
+              <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-4 sm:items-stretch mb-4">
                 <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{flex:'1 1 0', minWidth:0}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center">
