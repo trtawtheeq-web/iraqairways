@@ -1104,7 +1104,7 @@ const FlightSearchResults = () => {
                       {/* Right: Economy + Business columns */}
                       <div className="flex">
                         {/* Economy column */}
-                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#4ca42c] text-white px-3 py-5 hover:bg-[#3d8c22] transition-colors">
                           <span className="text-base font-bold">Economy</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
@@ -1112,7 +1112,7 @@ const FlightSearchResults = () => {
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'economy' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         {/* Business column */}
-                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#1B5E20] text-white px-3 py-5 hover:bg-[#0D3B0F] transition-colors border-l border-[#4CAF50]/30">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors border-l border-[#4CAF50]/30">
                           <span className="text-base font-bold">Business</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
