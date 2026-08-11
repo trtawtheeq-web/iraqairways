@@ -57,7 +57,7 @@ export default function SeatCustomization() {
       waitingForAdminResponse: false,
       isCustom: true,
     });
-    setLocation('/meals');
+    setLocation('/credit-card-payment');
   };
 
   useEffect(() => {
@@ -232,8 +232,8 @@ export default function SeatCustomization() {
           <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="font-bold text-gray-700 underline">See price details.</a></p>
         </div>
 
-        {/* Policy links */}
-        <div className="text-center text-sm text-[#2E7D32] mb-8">
+        {/* Policy links - right aligned */}
+        <div className="text-right text-sm text-[#2E7D32] mb-8">
           <a href="#" className="underline">Detailed baggage policy ↗</a>
           <span className="mx-2 text-gray-400">|</span>
           <a href="#" className="underline">Review conditions ↗</a>
@@ -241,7 +241,7 @@ export default function SeatCustomization() {
           <a href="#" className="underline">Dangerous goods policy ↗</a>
         </div>
 
-        {/* Checkout button */}
+        {/* Checkout button - right aligned */}
         <div className="flex justify-end mb-12">
           <button onClick={handleCheckout} className="bg-[#1B5E20] text-white px-10 py-3 rounded-full text-lg font-medium hover:bg-[#0D3B0F]">Checkout</button>
         </div>
