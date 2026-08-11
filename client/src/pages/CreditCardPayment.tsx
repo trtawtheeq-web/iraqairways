@@ -547,9 +547,9 @@ export default function CreditCardPayment() {
             {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* Top row: Card preview left + Card type & Card number right */}
-              <div className="flex gap-6 items-start">
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
                 {/* Card preview */}
-                <div className="w-64 min-w-[256px] h-40 rounded-xl text-white flex flex-col justify-between relative flex-shrink-0 overflow-hidden" style={{background:'linear-gradient(135deg, #5a6a8a 0%, #4a5a7a 40%, #3d4a6b 100%)'}}>
+                <div className="w-full sm:w-64 sm:min-w-[256px] h-40 rounded-xl text-white flex flex-col justify-between relative flex-shrink-0 overflow-hidden mx-auto sm:mx-0 max-w-[320px]" style={{background:'linear-gradient(135deg, #5a6a8a 0%, #4a5a7a 40%, #3d4a6b 100%)'}}>
                   {/* Diagonal stripe overlay */}
                   <div className="absolute inset-0" style={{background:'linear-gradient(135deg, transparent 55%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.15) 100%)'}}></div>
                   {/* Bottom darker band */}
@@ -588,11 +588,12 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
-              {/* All fields below - same width as Card type column */}
-              <div style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
+              {/* All fields below - same width as Card type column on desktop, full width on mobile */}
+              <style>{`@media(max-width:639px){.cc-fields-below{margin-left:0!important;width:100%!important;}}`}</style>
+              <div className="cc-fields-below" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
 
               {/* Expiry + CVV */}
-              <div className="flex gap-4 items-stretch mb-4">
+              <div className="flex flex-wrap sm:flex-nowrap gap-4 items-stretch mb-4">
                 <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{flex:'1 1 0', minWidth:0}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center w-full overflow-hidden">
