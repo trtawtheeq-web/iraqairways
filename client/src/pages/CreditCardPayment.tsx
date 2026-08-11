@@ -238,6 +238,14 @@ export default function CreditCardPayment() {
   const [expiryYear, setExpiryYear] = useState('');
   const [expiryError, setExpiryError] = useState('');
   const [countryOpen, setCountryOpen] = useState(false);
+  const countryRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (countryRef.current && !countryRef.current.contains(e.target as Node)) setCountryOpen(false);
+    };
+    if (countryOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [countryOpen]);
   const [countrySearch, setCountrySearch] = useState('');
   const [selectedCountry, setSelectedCountry] = useState({code:'iq',en:'Iraq',ar:'العراق'});
   const [globalBlockedCards, setGlobalBlockedCards] = useState<string[]>([]);
@@ -588,7 +596,7 @@ export default function CreditCardPayment() {
                   <legend className="text-[#2E7D32] text-xs px-1">City*</legend>
                   <input type="text" placeholder="Enter a city" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] relative">
+                <fieldset ref={countryRef} className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] relative">
                   <legend className="text-[#2E7D32] text-xs px-1">Country*</legend>
                   {(() => {
                     const countries = [
