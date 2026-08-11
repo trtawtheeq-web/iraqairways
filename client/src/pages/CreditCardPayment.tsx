@@ -469,6 +469,9 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
+              {/* All fields below - same width as Card type column */}
+              <div style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
+
               {/* Expiry + CVV */}
               <div className="flex gap-4 mb-4 items-stretch">
                 <fieldset className={`border rounded px-3 py-3 bg-[#f5faf0] w-1/2 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`}>
@@ -490,7 +493,7 @@ export default function CreditCardPayment() {
               {expiryError && <p className="text-red-500 text-xs mb-4">{expiryError}</p>}
 
               {/* Cardholder name */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4">
+              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-4 w-full">
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
                 <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
@@ -545,6 +548,7 @@ export default function CreditCardPayment() {
                   {selectedCardType === 'MasterCard' && <div><span className="text-[#eb001b] text-sm">Mastercard</span><br/><span className="text-[#f79e1b] text-sm font-bold">SecureCode</span></div>}
                 </div>
               </div>}
+              </div>
             </form>
           </div>
         </div>
