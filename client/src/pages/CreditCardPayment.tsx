@@ -433,9 +433,9 @@ export default function CreditCardPayment() {
 
             {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="grid grid-cols-[280px_1fr] gap-6 items-start">
+              <div className="flex gap-6 items-start overflow-hidden">
                 {/* Card preview */}
-                <div className="w-full h-44 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between relative">
+                <div className="w-64 min-w-[256px] h-44 bg-gradient-to-br from-gray-400 to-gray-600 rounded-xl p-5 text-white flex flex-col justify-between relative flex-shrink-0">
                   {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
                   <p className="text-lg tracking-widest font-mono mt-6">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
                   <div className="flex justify-between text-xs">
@@ -445,7 +445,7 @@ export default function CreditCardPayment() {
                 </div>
 
                 {/* Fields */}
-                <div className="space-y-4">
+                <div className="flex-1 min-w-0 space-y-4">
                   {/* Card type */}
                   <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                     <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
