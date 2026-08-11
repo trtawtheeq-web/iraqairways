@@ -507,7 +507,7 @@ export default function CreditCardPayment() {
                   <div className="absolute bottom-0 left-0 right-0 h-12" style={{background:'linear-gradient(to top, rgba(0,0,0,0.3), transparent)'}}></div>
                   <div className="relative z-10 p-5 flex flex-col justify-between h-full">
                     {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
-                    <p className="text-lg tracking-widest font-mono mt-4">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
+                    <p className="text-lg tracking-widest font-mono mt-8">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
                     <div className="flex justify-between text-xs">
                       <div><p className="opacity-70">Cardholder name</p><p>{nameOnCard || 'XXX'}</p></div>
                       <div><p className="opacity-70">Expiration date</p><p>{expiryDate || 'XXX'}</p></div>
