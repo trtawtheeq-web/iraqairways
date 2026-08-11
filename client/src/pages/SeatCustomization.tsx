@@ -120,6 +120,31 @@ export default function SeatCustomization() {
               <span className="text-[#2E7D32]">{detailOpen ? '∧' : '∨'}</span>
             </div>
           </div>
+          {/* Expanded details */}
+          {detailOpen && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <h4 className="text-[#2E7D32] font-bold mb-3">Itinerary details</h4>
+              <div className="flex items-start gap-4 mb-4">
+                <div className="text-gray-500 text-sm text-right w-8">{duration.replace('m','min')}</div>
+                <div className="flex flex-col items-center">
+                  <div className="w-2 h-2 rounded-full bg-[#4CAF50]"></div>
+                  <div className="w-[2px] h-12 bg-[#4CAF50]"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#4CAF50]"></div>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm"><strong>{depTime}</strong> {originCity} - {originCity} Airport ({origin})</p>
+                  <p className="text-sm mt-8"><strong>{arrTime}</strong> {destCity} - {destCity} Airport ({destination})</p>
+                </div>
+              </div>
+              <p className="text-sm text-[#2E7D32]">Flight number <strong>IA {Math.floor(Math.random()*900+100)}</strong></p>
+              <p className="text-sm text-[#2E7D32]">Operated by Iraqi Airways</p>
+              <h4 className="text-[#2E7D32] font-bold mt-4 mb-2">Your fare</h4>
+              <p className="text-sm text-gray-600">✓ Baggage in cabin: 7 kg</p>
+              <p className="text-sm text-gray-600">✓ Checked baggage: 30 kg</p>
+              <p className="text-sm text-gray-600">✓ Change bookings: With penalty</p>
+              <p className="text-sm text-gray-600">✓ Refund bookings: With penalty</p>
+            </div>
+          )}
         </div>
 
         {/* Total price for flight */}
