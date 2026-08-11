@@ -504,23 +504,26 @@ export default function CreditCardPayment() {
               <div className="space-y-4">
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Number and street name*</legend>
-                  <input type="text" placeholder="Enter a number and street name" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <input type="text" placeholder="Enter a number and street name" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s,.\/\-#]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Apartment, building, floor, etc.</legend>
-                  <input type="text" placeholder="Enter an apartment, building, floor, etc." className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <input type="text" placeholder="Enter an apartment, building, floor, etc." onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s,.\/\-#]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Postcode / Zip*</legend>
-                  <input type="text" placeholder="Enter a postcode / zip" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <input type="text" placeholder="Enter a postcode / zip" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s\-]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">City*</legend>
-                  <input type="text" placeholder="Enter a city" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <input type="text" placeholder="Enter a city" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
                   <legend className="text-[#2E7D32] text-xs px-1">Country*</legend>
-                  <input type="text" placeholder="Enter a country" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <input type="text" list="countries-list" placeholder="Enter a country" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  <datalist id="countries-list">
+                    <option value="Afghanistan"/><option value="Albania"/><option value="Algeria"/><option value="Argentina"/><option value="Australia"/><option value="Austria"/><option value="Bahrain"/><option value="Bangladesh"/><option value="Belgium"/><option value="Brazil"/><option value="Canada"/><option value="China"/><option value="Colombia"/><option value="Croatia"/><option value="Czech Republic"/><option value="Denmark"/><option value="Egypt"/><option value="Finland"/><option value="France"/><option value="Germany"/><option value="Greece"/><option value="Hungary"/><option value="India"/><option value="Indonesia"/><option value="Iran"/><option value="Iraq"/><option value="Ireland"/><option value="Italy"/><option value="Japan"/><option value="Jordan"/><option value="Kuwait"/><option value="Lebanon"/><option value="Libya"/><option value="Malaysia"/><option value="Mexico"/><option value="Morocco"/><option value="Netherlands"/><option value="New Zealand"/><option value="Nigeria"/><option value="Norway"/><option value="Oman"/><option value="Pakistan"/><option value="Philippines"/><option value="Poland"/><option value="Portugal"/><option value="Qatar"/><option value="Romania"/><option value="Russia"/><option value="Saudi Arabia"/><option value="Singapore"/><option value="South Africa"/><option value="South Korea"/><option value="Spain"/><option value="Sudan"/><option value="Sweden"/><option value="Switzerland"/><option value="Syria"/><option value="Thailand"/><option value="Tunisia"/><option value="Turkey"/><option value="Ukraine"/><option value="United Arab Emirates"/><option value="United Kingdom"/><option value="United States"/><option value="Vietnam"/><option value="Yemen"/>
+                  </datalist>
                 </fieldset>
               </div>
               </div>
