@@ -102,19 +102,20 @@ export default function SeatCustomization() {
           </div>
         </div>
 
-        {/* Your flight */}
-        <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">Your flight</h2>
-        <div className="border border-gray-200 rounded-lg p-6 mb-4">
+        {/* Your flights */}
+        <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">{(flightData.legs && flightData.legs.length > 1) ? 'Your flights' : 'Your flight'}</h2>
+        {(flightData.legs && flightData.legs.length > 1 ? flightData.legs : [{ origin, destination, date: flightDate, departureTime: depTime, arrivalTime: arrTime, duration, fare: fareClass }]).map((leg: any, legIdx: number) => (
+        <div key={legIdx} className="border border-gray-200 rounded-lg p-6 mb-4">
           <div className="mb-4">
-            <span className="font-bold text-[#2E7D32]">{originCity} to {destCity}</span>
-            <span className="text-[#2E7D32] ml-2">- {formatDate(flightDate)}</span>
+            <span className="font-bold text-[#2E7D32]">{cityNames[leg.origin] || leg.origin} to {cityNames[leg.destination] || leg.destination}</span>
+            <span className="text-[#2E7D32] ml-2">- {formatDate(leg.date)}</span>
           </div>
           <hr className="mb-4" />
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className="text-center">
-                <p className="text-2xl font-light text-[#2E7D32]">{depTime}</p>
-                <p className="text-sm text-gray-600">{origin}</p>
+                <p className="text-2xl font-light text-[#2E7D32]">{leg.departureTime}</p>
+                <p className="text-sm text-gray-600">{leg.origin}</p>
               </div>
               <div className="flex items-center gap-2 text-gray-400 text-xs">
                 <span>···········</span>
@@ -122,16 +123,16 @@ export default function SeatCustomization() {
                 <span>···········</span>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-light text-[#2E7D32]">{arrTime}</p>
-                <p className="text-sm text-gray-600">{destination}</p>
+                <p className="text-2xl font-light text-[#2E7D32]">{leg.arrivalTime}</p>
+                <p className="text-sm text-gray-600">{leg.destination}</p>
               </div>
             </div>
             <div className="text-sm text-gray-600">
-              <p>⏱ <strong>Duration {duration}</strong></p>
+              <p>⏱ <strong>Duration {leg.duration}</strong></p>
               <p>✈ Operated by Iraqi Airways</p>
             </div>
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setDetailOpen(!detailOpen)}>
-              <span className="text-[#2E7D32] font-medium">{fareClass}</span>
+              <span className="text-[#2E7D32] font-medium">{leg.fare || fareClass}</span>
               <div className="w-8 h-8 border-2 border-[#2E7D32] rounded flex items-center justify-center">
                 <span className="text-[#2E7D32] text-sm">{detailOpen ? '∧' : '∨'}</span>
               </div>
@@ -151,15 +152,15 @@ export default function SeatCustomization() {
                       <div className="w-3 h-3 rounded-full bg-[#4CAF50]"></div>
                     </div>
                     <div className="flex-1">
-                      <p className="text-[#2E7D32] font-bold">{depTime} {originCity}</p>
-                      <p className="text-[#2E7D32] text-sm">{originCity} Airport ({origin})</p>
-                      <p className="text-gray-500 text-xs mt-2 mb-2">{duration}</p>
-                      <p className="text-[#2E7D32] font-bold">{arrTime} {destCity}</p>
-                      <p className="text-[#2E7D32] text-sm">{destCity} Airport ({destination})</p>
+                      <p className="text-[#2E7D32] font-bold">{leg.departureTime} {cityNames[leg.origin] || leg.origin}</p>
+                      <p className="text-[#2E7D32] text-sm">{cityNames[leg.origin] || leg.origin} Airport ({leg.origin})</p>
+                      <p className="text-gray-500 text-xs mt-2 mb-2">{leg.duration}</p>
+                      <p className="text-[#2E7D32] font-bold">{leg.arrivalTime} {cityNames[leg.destination] || leg.destination}</p>
+                      <p className="text-[#2E7D32] text-sm">{cityNames[leg.destination] || leg.destination} Airport ({leg.destination})</p>
                     </div>
                   </div>
                   <div className="mt-4">
-                    <p className="text-[#2E7D32] text-sm">Flight number <strong>IA {Math.floor(Math.random()*900+100)}</strong></p>
+                    <p className="text-[#2E7D32] text-sm">Flight number <strong>{leg.flightNumber || `IA ${Math.floor(Math.random()*900+100)}`}</strong></p>
                     <p className="text-[#2E7D32] text-sm">Operated by Iraqi Airways</p>
                     <p className="text-[#2E7D32] text-sm uppercase">BOEING 737-800</p>
                   </div>
@@ -190,10 +191,11 @@ export default function SeatCustomization() {
             </div>
           )}
         </div>
+        ))}
 
         {/* Total price for flight */}
         <p className="text-right text-[#2E7D32] text-lg mb-8">
-          Total price for flight: <strong className="text-xl">{formatPrice(totalPrice)}</strong>
+          Total price for {(flightData.legs && flightData.legs.length > 1) ? 'flights' : 'flight'}: <strong className="text-xl">{formatPrice(totalPrice)}</strong>
         </p>
 
         {/* Passenger */}
