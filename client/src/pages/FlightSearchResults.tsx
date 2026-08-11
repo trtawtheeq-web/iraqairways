@@ -742,14 +742,14 @@ const FlightSearchResults = () => {
         </div>
         {/* Date strip — desktop: full ribbon with arrows */}
         <div className="hidden md:block mb-4" dir="ltr">
-          {/* Hide dates button above the green box */}
-          <div className="flex justify-center mb-2">
-            <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1 bg-white px-4 py-1.5 rounded border border-gray-200">
+          <div className="relative rounded-xl pt-4 pb-6 px-16 overflow-visible" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
+          {/* Hide dates on top border */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+            <button onClick={() => setDatesVisible(!datesVisible)} className="text-sm text-gray-600 flex items-center gap-1 bg-white px-4 py-1.5 rounded border border-gray-200 shadow-sm">
               <span>{datesVisible ? 'Hide dates' : 'Show dates'}</span>
               <svg className={`w-4 h-4 transition-transform ${datesVisible ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/></svg>
             </button>
           </div>
-          <div className="relative rounded-xl pt-4 pb-6 px-16" style={{backgroundColor:'#e8f4e0', border:'1px solid #c5d9b8'}}>
           {datesVisible && <div style={{minHeight:'160px'}} className="flex items-end">
           <button
             onClick={() => canGoPrev && shiftRibbon(-7)}
@@ -886,7 +886,7 @@ const FlightSearchResults = () => {
                   </div>
 
                   {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
-                  <div className="hidden md:block relative" dir="ltr">
+                  <div className="hidden md:block relative overflow-visible" dir="ltr">
                     {isFirstFlight && <span className="absolute top-0 right-4 -translate-y-1/2 text-[11px] bg-[#e8f5e0] text-[#2d6b12] border border-[#2d6b12] px-2.5 py-0.5 rounded z-10 font-medium">5 seats left</span>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
