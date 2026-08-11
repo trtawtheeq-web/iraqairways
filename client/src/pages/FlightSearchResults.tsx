@@ -1096,19 +1096,19 @@ const FlightSearchResults = () => {
             {/* Date and duration - green */}
             <p className="text-[#398017] text-[14px] leading-tight">Departs on {detailDateLabel}</p>
             <p className="text-[#398017] text-[14px] font-bold leading-tight mb-6">Total duration: {detailsFlight.duration.replace(' 0', ' ').replace('h ', 'h ').replace('m', 'min')}</p>
-            {/* Timeline: duration left | green line+dots center | info right */}
-            <div className="flex gap-3 mb-6">
+            {/* Timeline: duration left | green line+dots | info right */}
+            <div className="flex gap-2 mb-6 ml-4">
               {/* Duration on the left */}
-              <div className="flex items-center justify-end w-8 text-[#2E7D32] text-xs">{detailsFlight.duration.split(' ')[0]}</div>
-              {/* Green vertical line with dots */}
-              <div className="flex flex-col items-center py-1">
-                <div className="w-[10px] h-[10px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
-                <div className="w-[3px] flex-1 bg-[#4CAF50] my-0.5"></div>
-                <div className="w-[10px] h-[10px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
+              <div className="flex items-center justify-end w-6 text-gray-500 text-[12px]">{detailsFlight.duration.split(' ')[0]}</div>
+              {/* Green vertical line with small dots */}
+              <div className="flex flex-col items-center">
+                <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
+                <div className="w-[2px] flex-1 bg-[#4CAF50]"></div>
+                <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
               </div>
               {/* Flight info on the right */}
-              <div className="flex-1">
-                <div className="mb-6">
+              <div className="flex-1 ml-1">
+                <div className="mb-4">
                   <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.departureTime} {airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin}</p>
                   <p className="text-gray-500 text-[13px]">{airportName(currentLeg.origin)} ({currentLeg.origin})</p>
                 </div>
@@ -1118,8 +1118,8 @@ const FlightSearchResults = () => {
                 </div>
               </div>
             </div>
-            {/* Flight info */}
-            <div className="text-[13px] text-gray-600 space-y-0.5 mb-8 pl-8">
+            {/* Flight info - no indent like original */}
+            <div className="text-[13px] text-gray-600 space-y-0.5 mb-8 ml-4">
               <p>Flight number <span className="font-bold text-gray-900">{detailsFlight.flightNumber}</span></p>
               <p>Operated by Iraqi Airways</p>
               <p className="uppercase">{detailsFlight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
