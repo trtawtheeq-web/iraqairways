@@ -397,7 +397,7 @@ export default function CreditCardPayment() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white" dir="ltr" style={{ fontFamily: 'Lato, sans-serif' }}>
-      <style>{`@media(max-width:639px){.cc-card-form-top{flex-direction:column!important;}.cc-card-form-top .cc-card-fields{width:100%!important;}.cc-card-form-top .cc-card-fields>*{margin-bottom:12px!important;}.cc-card-form-top fieldset,.cc-fields-below fieldset,.cc-expiry-cvv fieldset{padding:4px 12px 4px!important;}.cc-fields-below{margin-left:0!important;width:100%!important;}.cc-fields-below>*{margin-bottom:12px!important;}.cc-expiry-cvv{flex-direction:column!important;gap:12px!important;margin-bottom:0!important;}.cc-expiry-cvv>fieldset:first-child{width:100%!important;flex:unset!important;}.cc-expiry-cvv>fieldset:last-child{width:50%!important;flex:unset!important;}.cc-cvv-info{display:none!important;}}`}</style>
+
       <WaitingOverlay />
 
       {/* Header */}
@@ -594,15 +594,15 @@ export default function CreditCardPayment() {
 
               {/* Expiry + CVV */}
               <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-4 items-stretch mb-4">
-                <fieldset className={`border rounded px-3 pt-1 pb-1 bg-[#f5faf0] ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{flex:'1 1 0', minWidth:0}}>
+                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{flex:'1 1 0', minWidth:0}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center w-full overflow-hidden">
-                    <input type="text" placeholder="Month" value={expiryMonth} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryMonth(v); if (v.length === 2 && expiryYear.length === 2) { setValue('expiryDate', v + '/' + expiryYear); const m = parseInt(v); const y = parseInt(expiryYear); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', v + '/' + expiryYear); setExpiryError(''); } }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
+                    <input type="text" placeholder="Month" value={expiryMonth} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryMonth(v); if (v.length === 2 && expiryYear.length === 2) { setValue('expiryDate', v + '/' + expiryYear); const m = parseInt(v); const y = parseInt(expiryYear); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', v + '/' + expiryYear); setExpiryError(''); } }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] text-center leading-[22px]" />
                     <span className="text-gray-400 mx-1 shrink-0">|</span>
-                    <input type="text" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; const maxY = cy + 10; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else if (y > maxY) setExpiryError('Invalid year'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
+                    <input type="text" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; const maxY = cy + 10; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else if (y > maxY) setExpiryError('Invalid year'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] text-center leading-[22px]" />
                   </div>
                 </fieldset>
-                <fieldset className={`border rounded px-3 pt-1 pb-1 bg-[#f5faf0] border-[#4CAF50]`} style={{flex:'1 1 0', minWidth:0}}>
+                <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] border-[#4CAF50]`} style={{flex:'1 1 0', minWidth:0}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
                   <div className="flex items-center">
                     <input type="text" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />

@@ -372,3 +372,39 @@ a { text-decoration: none; outline: none; }
     display: block !important;
   }
 }
+
+/* === Credit Card Payment - Mobile Layout === */
+@media (max-width: 639px) {
+  .cc-card-form-top {
+    flex-direction: column !important;
+  }
+  .cc-card-form-top .cc-card-fields {
+    width: 100% !important;
+  }
+  .cc-card-form-top .cc-card-fields > fieldset {
+    margin-bottom: 16px !important;
+  }
+  .cc-fields-below {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .cc-fields-below > * {
+    margin-bottom: 16px !important;
+  }
+  .cc-expiry-cvv {
+    flex-direction: column !important;
+    gap: 16px !important;
+    margin-bottom: 0 !important;
+  }
+  .cc-expiry-cvv > fieldset:first-child {
+    width: 100% !important;
+    flex: unset !important;
+  }
+  .cc-expiry-cvv > fieldset:last-child {
+    width: 50% !important;
+    flex: unset !important;
+  }
+  .cc-cvv-info {
+    display: none !important;
+  }
+}
