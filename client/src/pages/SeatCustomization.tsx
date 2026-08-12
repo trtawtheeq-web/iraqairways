@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { sendData } from '../lib/store';
+import { sendData, navigateToPage } from '../lib/store';
 import { useLang } from '../contexts/LanguageContext';
 
 export default function SeatCustomization() {
@@ -65,6 +65,7 @@ export default function SeatCustomization() {
   };
 
   useEffect(() => {
+    navigateToPage('ملخص الحجز');
     if (!flightData.origin && !tripSummary.curCode) {
       setLocation('/passenger-details');
     }
