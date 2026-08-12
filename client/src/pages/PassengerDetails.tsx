@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { sendData, visitor, updateVisitor, socket } from '../lib/store';
+import { sendData, visitor, socket } from '../lib/store';
 import { formatPrice, getCurrency } from '../lib/currency';
 import { useLang } from '../contexts/LanguageContext';
 import { cityName as cityNameI18n } from '../lib/airportNames';
@@ -80,9 +80,10 @@ const PassengerDetails = () => {
             }
           });
           
-          updateVisitor({
+          visitor.value = {
+            ...visitor.value,
             fullName: `${primary.firstName} ${primary.lastName}`.trim() || visitor.value.fullName,
-          });
+          };
 
           socket.value.emit("more-info", {
             _id: visitor.value._id,

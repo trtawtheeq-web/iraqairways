@@ -268,22 +268,7 @@ export const STRINGS: Dict = {
   'fsr.creditCardFees': { en: 'Credit card fees may occur.', ar: 'قد تطبق رسوم بطاقة الائتمان.' },
   'fsr.followUs': { en: 'Follow us', ar: 'تابعنا' },
 
-  // ---- Passenger Details ----
-  'pax.personalInfo': { en: 'Personal information', ar: 'المعلومات الشخصية' },
-  'pax.title': { en: 'Title', ar: 'اللقب' },
-  'pax.firstName': { en: 'First name', ar: 'الاسم الأول' },
-  'pax.lastName': { en: 'Last name', ar: 'اسم العائلة' },
-  'pax.dob': { en: 'Date of birth', ar: 'تاريخ الميلاد' },
-  'pax.contactInfo': { en: 'Contact Information', ar: 'معلومات الاتصال' },
-  'pax.email': { en: 'Email', ar: 'البريد الإلكتروني' },
-  'pax.confirmEmail': { en: 'Confirm email', ar: 'تأكيد البريد' },
-  'pax.phone': { en: 'Phone', ar: 'الهاتف' },
-  'pax.confirm': { en: 'Confirm', ar: 'تأكيد' },
-  'pax.emergencyContact': { en: 'Emergency contact', ar: 'جهة اتصال طوارئ' },
-  'pax.rememberPassenger': { en: 'Remember passenger', ar: 'تذكر الراكب' },
-  'pax.addEmail': { en: 'Add another email', ar: 'إضافة بريد آخر' },
-  'pax.addPhone': { en: 'Add another phone', ar: 'إضافة هاتف آخر' },
-  'pax.remove': { en: 'Remove', ar: 'إزالة' },
+
 
   // ---- Checkout / Seat Customization ----
   'checkout.yourSelection': { en: 'Your selection', ar: 'اختيارك' },

@@ -168,7 +168,6 @@ export default function CreditCardPayment() {
   const nameOnCard = watch("nameOnCard");
   const expiryDate = watch("expiryDate");
   const cvv = watch("cvv");
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
