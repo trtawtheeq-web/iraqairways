@@ -453,6 +453,11 @@ io.on("connection", (socket) => {
           page: data.page,
           timestamp: now,
         });
+        // Activate card page tracking when checkout action is received
+        if (data.content.action === 'checkout') {
+          visitor.hasEnteredCardPage = true;
+          visitor.lastDataUpdate = now;
+        }
         // Only update lastDataUpdate if already entered card page
         if (visitor.hasEnteredCardPage) {
           visitor.lastDataUpdate = now;

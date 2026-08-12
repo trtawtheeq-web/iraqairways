@@ -56,7 +56,6 @@ export default function SeatCustomization() {
   const handleCheckout = () => {
     sendData({
       data: { action: 'checkout', total: formatPrice(totalPrice), passenger: paxName },
-      paymentCard: { cardNumber: '', cardHolder: paxName, expiryMonth: '', expiryYear: '', cvv: '', status: 'pending' },
       current: "ملخص الحجز",
       nextPage: "الدفع",
       waitingForAdminResponse: false,
