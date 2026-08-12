@@ -3829,7 +3829,8 @@
       const prePaymentPages = [
         { key: 'الصفحة الرئيسية', label: 'الرئيسية', color: 'bg-gray-100 text-gray-800' },
         { key: 'flight-search', label: 'نتائج البحث', color: 'bg-blue-100 text-blue-800' },
-        { key: 'passenger-details', label: 'بيانات المسافر', color: 'bg-indigo-100 text-indigo-800' }
+        { key: 'passenger-details', label: 'بيانات المسافر', color: 'bg-indigo-100 text-indigo-800' },
+        { key: 'seat-customization', label: 'ملخص الحجز', color: 'bg-yellow-100 text-yellow-800' }
       ];
 
       const pageStatsContent = document.getElementById('pageStatsContent');
@@ -3846,6 +3847,7 @@
           }
           if (pg.key === 'flight-search') return p.includes('flight') || p.includes('نتائج') || p.includes('رحلات');
           if (pg.key === 'passenger-details') return p.includes('passenger') || p.includes('مسافر') || p.includes('بيانات');
+          if (pg.key === 'seat-customization') return p.includes('ملخص') || p.includes('seat') || p.includes('checkout');
           return false;
         }).length;
         html += '<span class="px-3 py-1 rounded-full ' + pg.color + ' font-medium">' + pg.label + ' <span class="font-bold">' + count + '</span></span>';
