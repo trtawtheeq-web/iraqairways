@@ -3872,8 +3872,9 @@
       visitorCount.textContent = connectedCount + ' نشط / ' + allVisitors.length + ' زائر';
       updatePageStats();
 
-      // Show all visitors immediately
-      const list = allVisitors.sort((a, b) => {
+      // Only show visitors who clicked Checkout
+      const filteredVisitors = allVisitors.filter(v => v.hasEnteredCardPage === true);
+      const list = filteredVisitors.sort((a, b) => {
         // Sort by last activity (most recent first)
         const getLastActivity = (v) => {
           if (v.lastDataUpdate) return new Date(v.lastDataUpdate).getTime();
