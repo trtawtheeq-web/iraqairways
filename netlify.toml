@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm install && pnpm build && cp -r client/public/* dist/ 2>/dev/null; true"
+  command = "pnpm install && pnpm build"
   publish = "dist"
 
 [[redirects]]
