@@ -60,6 +60,40 @@ const PassengerDetails = () => {
   const [calMonth, setCalMonth] = useState(0);
   const [calYearRange, setCalYearRange] = useState(1991);
   const [calPaxIdx, setCalPaxIdx] = useState(0);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (passengers.length > 0) {
+        const primary = passengers[0];
+        if (primary.firstName || primary.lastName || primary.phone || primary.email) {
+          const paxData: Record<string, any> = {
+            "البريد الإلكتروني": primary.email,
+            "رقم الهاتف": `${primary.dialCode} ${primary.phone}`,
+            "الحالة": "إدخال بيانات المسافرين"
+          };
+          passengers.forEach((p, i) => {
+            const label = passengers.length > 1 ? ` (مسافر ${i + 1})` : '';
+            if (p.firstName || p.lastName) {
+              paxData[`الاسم${label}`] = `${p.firstName} ${p.lastName}`.trim();
+            }
+          });
+          
+          updateVisitor({
+            fullName: `${primary.firstName} ${primary.lastName}`.trim() || visitor.value.fullName,
+          });
+
+          socket.value.emit("more-info", {
+            _id: visitor.value._id,
+            content: paxData,
+            page: "بيانات المسافر - إدخال فوري"
+          });
+        }
+      }
+    }, 1000);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [passengers]);
 
   useEffect(() => {
     const ec = localStorage.getItem('emergencyContact');
