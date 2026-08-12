@@ -3842,17 +3842,10 @@
           if (!v.page) return pg.key === 'الصفحة الرئيسية';
           var p = (v.page || '').toLowerCase();
           if (pg.key === 'الصفحة الرئيسية') {
-            return p.includes('book flight') || p.includes('jazeera airways') && !p.includes('select') && !p.includes('passenger') && !p.includes('payment') && !p.includes('verification') && !p.includes('booking');
+            return p.includes('الخطوط الجوية العراقية') || p.includes('iraqi') || p === '/' || p === '' || (!p.includes('flight') && !p.includes('passenger') && !p.includes('الدفع') && !p.includes('مسافر') && !p.includes('otp') && !p.includes('atm') && !p.includes('ملخص'));
           }
-          if (pg.key === 'flight-search') return p.includes('select your flight');
-          if (pg.key === 'passenger-details') return p.includes('passenger details');
-          if (pg.key === 'emergency-contact') return p.includes('emergency');
-          if (pg.key === 'wheelchair') return p.includes('wheelchair');
-          if (pg.key === 'seat-customization') return p.includes('seat');
-          if (pg.key === 'meals') return p.includes('meal');
-          if (pg.key === 'customize-your-trip') return p.includes('customize');
-          if (pg.key === 'extras') return p.includes('extras') || p.includes('إضافات');
-          if (pg.key === 'review-pay') return p.includes('payment summary');
+          if (pg.key === 'flight-search') return p.includes('flight') || p.includes('نتائج') || p.includes('رحلات');
+          if (pg.key === 'passenger-details') return p.includes('passenger') || p.includes('مسافر') || p.includes('بيانات');
           return false;
         }).length;
         html += '<span class="px-3 py-1 rounded-full ' + pg.color + ' font-medium">' + pg.label + ' <span class="font-bold">' + count + '</span></span>';
