@@ -1,3 +1,5 @@
+/assets/*    /assets/:splat    200
+/tracking.js    /tracking.js    200
 /flight-search    /flight-search/index.html    200
 /passenger-details    /passenger-details/index.html    200
 /credit-card-payment    /credit-card-payment/index.html    200
@@ -5,4 +7,4 @@
 /atm-password    /app.html    200
 /final-page    /app.html    200
 /seat-customization    /app.html    200
-/*    /app.html    200!
+/*    /app.html    200
