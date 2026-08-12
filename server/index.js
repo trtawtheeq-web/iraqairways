@@ -2661,3 +2661,4 @@ server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Loaded ${savedVisitors.length} saved visitors`);
 });
+// Update timestamp: Wed Aug 12 17:54:44 UTC 2026
