@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { sendData } from '../lib/store';
+import { sendData, visitor, updateVisitor, socket } from '../lib/store';
 import { formatPrice, getCurrency } from '../lib/currency';
 import { useLang } from '../contexts/LanguageContext';
 import { cityName as cityNameI18n } from '../lib/airportNames';

