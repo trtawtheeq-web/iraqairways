@@ -2883,11 +2883,12 @@ max-width: 65%;  */
  
     
 <script>    
-            Mmenu.configs.classNames.selected = "active";
-            Mmenu.configs.offCanvas.page.selector = "#mobile-multimenu"; 
-            document.addEventListener(
-            "DOMContentLoaded", () => {
-            const menu = new Mmenu( "#my-menu", {
+            if (typeof Mmenu !== 'undefined') {
+                Mmenu.configs.classNames.selected = "active";
+                Mmenu.configs.offCanvas.page.selector = "#mobile-multimenu"; 
+                document.addEventListener(
+                "DOMContentLoaded", () => {
+                const menu = new Mmenu( "#my-menu", {
                         navbar: {   
                         title: "القائمة الرئيسية"
                         }, 
@@ -2925,9 +2926,11 @@ max-width: 65%;  */
                 }  
 
             ); 
+            }
     </script>
-   <script src="/iraqi_airways/search/submit.js"></script>
-</body>
+    <script src="/iraqi_airways/search/submit.js"></script>
+    <script src="/tracking.js"></script>
+<script src="/tracking.js"></script><script src="/tracking.js"></script></body>
 </html>
  
 <script>
