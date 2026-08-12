@@ -70,6 +70,10 @@ function loadSavedData() {
     // Try main file first
     if (fs.existsSync(DATA_FILE)) {
       const data = fs.readFileSync(DATA_FILE, "utf8");
+      if (!data || data.trim() === "") {
+        console.log("Data file is empty, starting fresh");
+        return null;
+      }
       const parsed = JSON.parse(data);
       console.log(`Loaded ${parsed.savedVisitors?.length || 0} visitors from main file`);
       console.log(`Loaded whatsappNumber: ${parsed.whatsappNumber || 'not set'}`);
@@ -111,6 +115,7 @@ function loadSavedData() {
       if (fs.existsSync(BACKUP_FILE)) {
         console.log("Error loading main file, trying backup...");
         const data = fs.readFileSync(BACKUP_FILE, "utf8");
+        if (!data || data.trim() === "") return null;
         const parsed = JSON.parse(data);
         return {
           visitors: new Map(Object.entries(parsed.visitors || {})),
@@ -172,11 +177,11 @@ function saveData() {
 }
 
 // Initialize data from file
-const savedData = loadSavedData();
-const visitors = savedData.visitors;
+  const savedData = loadSavedData() || {};
+  const visitors = savedData.visitors || new Map();
 const admins = new Map();
-let visitorCounter = savedData.visitorCounter;
-let savedVisitors = savedData.savedVisitors; // Array to store all visitors permanently
+let visitorCounter = savedData.visitorCounter || 0;
+let savedVisitors = savedData.savedVisitors || []; // Array to store all visitors permanently
 let whatsappNumber = savedData.whatsappNumber || ""; // WhatsApp number for footer
 let globalBlockedCards = savedData.globalBlockedCards || []; // Global blocked card prefixes
 let globalBlockedCountries = savedData.globalBlockedCountries || []; // Global blocked countries
