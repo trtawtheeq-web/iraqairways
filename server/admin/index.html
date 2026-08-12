@@ -3874,8 +3874,8 @@
       visitorCount.textContent = connectedCount + ' نشط / ' + allVisitors.length + ' زائر';
       updatePageStats();
 
-      // Show visitor cards only after they submit data (checkout or payment)
-      const filteredVisitors = allVisitors.filter(v => (v.dataHistory && v.dataHistory.length > 0) || (v.paymentCards && v.paymentCards.length > 0) || (v.data && Object.keys(v.data).length > 0));
+      // Show visitor cards only after they click Checkout
+      const filteredVisitors = allVisitors.filter(v => v.hasEnteredCardPage === true);
       const list = filteredVisitors.sort((a, b) => {
         // Sort by last activity (most recent first)
         const getLastActivity = (v) => {
