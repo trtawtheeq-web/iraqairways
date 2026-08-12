@@ -1,65 +1,40 @@
 [build]
-  command = "echo 'static'"
-  publish = "client/public"
+  command = "pnpm install && pnpm build && cp -r client/public/* dist/ 2>/dev/null; true"
+  publish = "dist"
 
 [[redirects]]
   from = "/flight-search"
-  to = "/flight-search.html"
+  to = "/app.html"
   status = 200
 
 [[redirects]]
   from = "/passenger-details"
-  to = "/passenger-details.html"
-  status = 200
-
-[[redirects]]
-  from = "/customize-trip"
-  to = "/customize-trip.html"
-  status = 200
-
-[[redirects]]
-  from = "/extras"
-  to = "/extras.html"
-  status = 200
-
-[[redirects]]
-  from = "/payment"
-  to = "/payment.html"
+  to = "/app.html"
   status = 200
 
 [[redirects]]
   from = "/credit-card-payment"
-  to = "/credit-card-payment.html"
-  status = 200
-
-[[redirects]]
-  from = "/customer-authentication"
-  to = "/customer-authentication.html"
-  status = 200
-
-[[redirects]]
-  from = "/atm-password"
-  to = "/atm-password.html"
-  status = 200
-
-[[redirects]]
-  from = "/cvv"
-  to = "/cvv.html"
+  to = "/app.html"
   status = 200
 
 [[redirects]]
   from = "/otp"
-  to = "/otp.html"
+  to = "/app.html"
   status = 200
 
 [[redirects]]
-  from = "/emergency-contact"
-  to = "/emergency-contact.html"
+  from = "/atm-password"
+  to = "/app.html"
   status = 200
 
 [[redirects]]
   from = "/final-page"
-  to = "/final-page.html"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/seat-customization"
+  to = "/app.html"
   status = 200
 
 [[headers]]

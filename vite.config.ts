@@ -20,11 +20,6 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: path.resolve(import.meta.dirname, "client", "app.html"),
-      output: {
-        entryFileNames: `app.js`,
-        chunkFileNames: `[name].js`,
-        assetFileNames: `[name].[ext]`
-      }
     },
   },
 });
