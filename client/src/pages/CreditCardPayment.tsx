@@ -676,10 +676,10 @@ export default function CreditCardPayment() {
                     ];
                     const filtered = countries.filter(c => c.en.toLowerCase().includes(countrySearch.toLowerCase()) || c.ar.includes(countrySearch));
                     return <>
-                      <div className="flex items-center cursor-pointer" onClick={() => setCountryOpen(!countryOpen)}>
+                      <div className="flex items-center cursor-pointer w-full" onClick={() => setCountryOpen(!countryOpen)}>
                         <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className="mr-2 w-5 h-4" />
-                        <span className="flex-1 text-gray-700 text-[15px]">{selectedCountry.en} - {selectedCountry.ar}</span>
-                        <span className="text-gray-400">▼</span>
+                        <span className="text-gray-700 text-[15px]">{selectedCountry.en} - {selectedCountry.ar}</span>
+                        <span className="text-gray-400 ml-auto">▼</span>
                       </div>
                       {countryOpen && <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto">
                         <div className="sticky top-0 bg-white p-2 border-b">
