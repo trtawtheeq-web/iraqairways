@@ -412,6 +412,7 @@ const FlightSearchResults = () => {
   };
 
   const finalize = (allLegs: SelectedLeg[], addDisruption = false) => {
+    // Note: l.flight.priceKWD now contains the ORIGINAL price (undiscounted)
     const basePerPax = allLegs.reduce((sum, l) => sum + l.flight.priceKWD, 0);
     const grandTotal = allLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0);
     const disruptionFee = addDisruption ? Math.round(2.0 * totalPax * 1000) / 1000 : 0;
@@ -473,8 +474,8 @@ const FlightSearchResults = () => {
 
     // Select a specific fare bundle for a flight.
   const handleSelectFare = (flight: Flight, extra: number, fareKey: string) => {
-    // Store the discounted fare so every downstream page uses the discounted price automatically.
-    const adjusted: Flight = { ...flight, priceKWD: Math.round(applyDiscount(flight.priceKWD + extra) * 1000) / 1000 };
+    // Store the original fare (undiscounted) so pages can apply/remove discount in real-time.
+    const adjusted: Flight = { ...flight, priceKWD: Math.round((flight.priceKWD + extra) * 1000) / 1000 };
     const chosen: SelectedLeg = { ...currentLeg, date, flight: adjusted, fare: fareKey };
     const updated = [...selectedLegs.slice(0, stepIndex), chosen];
     if (isLastStep) {
@@ -574,7 +575,7 @@ const FlightSearchResults = () => {
     const cf = cartFlight;
     // For round trips, show all legs
     const allCartLegs = selectedLegs.length > 0 ? selectedLegs : [{ origin: cf.origin, destination: cf.destination, date: cf.date, flight: cf.flight, fare: cf.fare }];
-    const grandCartTotal = formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode);
+    const grandCartTotal = formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(applyDiscount(l.flight.priceKWD)), 0), curCode);
     const cartDateLabel = (() => { try { return new Date(cf.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return cf.date; } })();
     const cartPrice = formatPrice(cf.flight.priceKWD, curCode);
     const cartTotal = grandCartTotal;
@@ -693,13 +694,13 @@ const FlightSearchResults = () => {
           {/* Total price */}
           <div className="text-right mt-6">
             <p className="text-[#2E7D32] text-base">Total price for flight: 
-              {globalDiscount.value && <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>}
+              {globalDiscount.value && <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
               <span className="font-bold text-lg ml-1">{cartTotal}</span>
             </p>
           </div>
           <div className="text-right mt-6">
             <p className="text-[#2E7D32] text-lg">Total price: 
-              {globalDiscount.value && <span className="text-lg line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>}
+              {globalDiscount.value && <span className="text-lg line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
               <span className="font-bold text-2xl ml-1">{cartTotal}</span>
             </p>
             <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="text-[#2E7D32] underline">See price details.</a></p>

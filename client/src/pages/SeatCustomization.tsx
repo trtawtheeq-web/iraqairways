@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { sendData, navigateToPage } from '../lib/store';
+import { sendData, navigateToPage, globalDiscount } from '../lib/store';
 import { useLang } from '../contexts/LanguageContext';
 
 export default function SeatCustomization() {
+  // Subscribe to global discount signal for real-time UI updates
+  const isDiscountActive = globalDiscount.value;
   const [, setLocation] = useLocation();
   const { lang, setLang } = useLang();
   const [langMenuOpen, setLangMenuOpen] = useState(false);
@@ -30,7 +32,10 @@ export default function SeatCustomization() {
   const destCity = cityNames[destination] || destination;
 
   const curCode = tripSummary.curCode || 'IQD';
-  const totalPrice = tripSummary.baseTotalConv || flightData.price || 0;
+  const originalPrice = tripSummary.originalTotalConv || tripSummary.baseTotalConv || flightData.price || 0;
+  const discountedPrice = tripSummary.baseTotalConv || flightData.price || 0;
+  const totalPrice = isDiscountActive ? discountedPrice : originalPrice;
+  
   const formatPrice = (n: number) => `${curCode} ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   const depTime = flightData.departureTime || '17:00';
@@ -197,7 +202,7 @@ export default function SeatCustomization() {
         {/* Total price for flight */}
         <p className="text-right text-[#2E7D32] text-lg mb-8">
           Total price for {(flightData.legs && flightData.legs.length > 1) ? 'flights' : 'flight'}: 
-          <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(totalPrice / 0.75)}</span>
+          {globalDiscount.value && <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(originalPrice)}</span>}
           <strong className="text-xl ml-1">{formatPrice(totalPrice)}</strong>
         </p>
 
@@ -265,7 +270,7 @@ export default function SeatCustomization() {
         <div className="text-right mb-4">
           <p className="text-[#2E7D32] text-lg flex items-center justify-end gap-2">
             Total price: 
-            {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">{formatPrice(totalPrice / 0.75)}</span>}
+            {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">{formatPrice(originalPrice)}</span>}
             <strong className="text-3xl">{formatPrice(totalPrice)}</strong>
           </p>
           <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="font-bold text-gray-700 underline">See price details.</a></p>

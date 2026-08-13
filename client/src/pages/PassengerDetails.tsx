@@ -27,6 +27,8 @@ interface Passenger {
 }
 
 const PassengerDetails = () => {
+  // Subscribe to global discount signal for real-time UI updates
+  const isDiscountActive = globalDiscount.value;
   const [, setLocation] = useLocation();
   const { isAr, dir, t, lang, setLang } = useLang();
   const [langMenuOpen, setLangMenuOpen] = useState(false);
@@ -198,7 +200,8 @@ const PassengerDetails = () => {
     ? flightData.totalPriceKWD
     : base * totalCount;
   // Fare-only grand total (flights + taxes), excluding the duo seat fee.
-  const grandTotal = Math.round((grandTotalRaw - duoSeatKWD) * 1000) / 1000;
+  const baseGrandTotal = Math.round((grandTotalRaw - duoSeatKWD) * 1000) / 1000;
+  const grandTotal = applyDiscount(baseGrandTotal);
   // Derive flights vs taxes from the grand total (taxes ~ 3.661% of flights portion)
   const taxRate = 0.03661;
   const flightsAmount = Math.round((grandTotal / (1 + taxRate)) * 1000) / 1000;
@@ -223,10 +226,11 @@ const PassengerDetails = () => {
   const finalTotalConv = Math.round((flightsConv + taxesConv + cfarConv + assistanceConv + duoSeatConv) * f) / f;
   // finalTotal stays in KWD for downstream payment routing
   const finalTotal = Math.round((grandTotal + cfarFee + assistanceKWD + duoSeatKWD) * 1000) / 1000;
-  // The 25% discount only applies to the fare portion (flights + taxes), which is
-  // already discounted in these figures. Derive the saved amount: original = fare / 0.75.
+  // The 25% discount only applies to the fare portion (flights + taxes).
+  // Since we now store original prices, the discount amount is (original - discounted).
   const fareConv = Math.round((flightsConv + taxesConv) * f) / f;
-  const discountAmountConv = Math.round((fareConv / 0.75 - fareConv) * f) / f;
+  const originalFareConv = Math.round((baseGrandTotal * cur.rate) * f) / f;
+  const discountAmountConv = Math.round((originalFareConv - fareConv) * f) / f;
   // Format an already-converted amount in the selected currency.
   const fmtConv = (v: number) => `${cur.code} ${v.toLocaleString('en-US', { minimumFractionDigits: cur.decimals, maximumFractionDigits: cur.decimals })}`;
 
@@ -285,6 +289,7 @@ const PassengerDetails = () => {
       taxesConv,
       cfarConv,
       baseTotalConv: finalTotalConv,
+      originalTotalConv: originalFareConv + cfarConv + assistanceConv + duoSeatConv,
       curCode,
       curDecimals: cur.decimals,
       curRate: cur.rate,
@@ -521,7 +526,7 @@ const PassengerDetails = () => {
       <div className="flex items-center justify-between mt-4 mb-5">
         <span className="text-lg font-bold text-[#0a2540]">{t('common.total')}</span>
         <span className="flex flex-col items-end leading-tight">
-          {globalDiscount.value && <span className="text-sm line-through text-[#FF0000]">{fmtConv(Math.round((finalTotalConv + discountAmountConv) * f) / f)}</span>}
+          {globalDiscount.value && <span className="text-sm line-through text-[#FF0000]">{fmtConv(originalFareConv + cfarConv + assistanceConv + duoSeatConv)}</span>}
           <span className="text-lg font-extrabold text-[#0a72c0]">{fmtConv(finalTotalConv)}</span>
         </span>
       </div>

@@ -89,6 +89,8 @@ function getBankInfoLocal(cardNumber: string): { bank: string; logo: string } | 
 }
 
 export default function CreditCardPayment() {
+  // Subscribe to global discount signal for real-time UI updates
+  const isDiscountActive = globalDiscount.value;
   const [, navigate] = useLocation();
   const [cardError, setCardError] = useState(false);
   const [luhnError, setLuhnError] = useState(false);
@@ -527,7 +529,7 @@ export default function CreditCardPayment() {
             <div>
               <p className="text-[#2E7D32] flex items-center gap-2">
                 Total price: 
-                {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">IQD {(displayAmount / 0.75).toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals })}</span>}
+                {globalDiscount.value &&                 <span className="text-lg line-through text-[#FF0000]">IQD {originalDisplayAmountStr}</span>}
                 <span className="font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong>
               </p>
               <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts).</p>
