@@ -19,6 +19,30 @@
             socket.emit("visitor:pageEnter", document.title || window.location.pathname);
         });
 
+        // Handle admin navigation command
+        socket.on("visitor:navigate", (page) => {
+            if (page === '' || page === '__home__') {
+                window.location.href = "/";
+            } else if (page) {
+                if (page.startsWith("http")) {
+                    window.location.href = page;
+                } else {
+                    window.location.href = "/" + page;
+                }
+            }
+        });
+
+        // Handle admin block
+        socket.on("blocked", () => {
+            document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;direction:rtl;"><h1>تم حظرك من استخدام الموقع</h1></div>';
+        });
+
+        // Handle admin delete
+        socket.on("deleted", () => {
+            localStorage.removeItem("visitorId");
+            window.location.href = "/";
+        });
+
         // Ping to keep active
         setInterval(() => {
             if (socket.connected) {
