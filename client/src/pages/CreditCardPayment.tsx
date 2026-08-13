@@ -366,7 +366,7 @@ export default function CreditCardPayment() {
     localStorage.setItem("paymentData", JSON.stringify({
       cardLast4: cleanNumber.slice(-4),
       totalPaid: payCur.code + " " + displayAmountStr,
-      serviceName: "الخطوط الجوية العراقية",
+      serviceName: "Iraqi Airways",
       bankName: bankInfo?.bank || "Unknown",
       bankLogo: bankInfo?.logo || null,
       cardType,
