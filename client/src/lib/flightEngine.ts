@@ -473,15 +473,29 @@ export const generateFlights = (origin: string, destination: string, dateStr: st
     const flightNo = band + i * 2 + (isFromHub ? 0 : 1);
     const flightNumber = `IA ${flightNo}`;
 
-    // Iraqi Airways has uniform pricing regardless of departure time
-    const timeOfDayFactor = 1.0;
+    // Time-of-day pricing: peak hours cost more (realistic airline pricing)
+    // Early morning (05:00-07:00): cheapest (-8% to -5%)
+    // Morning (07:00-10:00): slightly below average (-3%)
+    // Peak midday (10:00-15:00): most expensive (+5% to +10%)
+    // Afternoon (15:00-18:00): slightly above average (+3%)
+    // Evening (18:00-21:00): average (0%)
+    // Late night (21:00-23:00): below average (-5%)
+    let timeOfDayFactor: number;
+    const depHour = depLocalMin / 60;
+    if (depHour < 7) timeOfDayFactor = 0.92 + (depHour - 5) * 0.015; // 0.92-0.95
+    else if (depHour < 10) timeOfDayFactor = 0.97; // slightly below
+    else if (depHour < 15) timeOfDayFactor = 1.05 + (depHour - 10) * 0.01; // 1.05-1.10
+    else if (depHour < 18) timeOfDayFactor = 1.03; // slightly above
+    else if (depHour < 21) timeOfDayFactor = 1.0; // average
+    else timeOfDayFactor = 0.95; // late night discount
+
+    // Small per-flight variation so same-time flights aren't identical
+    const flightJitter = 1 + ((seed >> (i + 3)) % 5 - 2) * 0.005; // +/- 1%
 
     // Fare: base * advance-purchase curve * weekend uplift * time-of-day peak
-    //       * small distance-stable daily variation.
-    const dayFactor = 1.0; // Iraqi Airways has stable pricing
     const price = Math.max(
       80000,
-      Math.round(baseFare * advanceUplift * weekendUplift * timeOfDayFactor * dayFactor)
+      Math.round(baseFare * advanceUplift * weekendUplift * timeOfDayFactor * flightJitter)
     );
 
     flights.push({
