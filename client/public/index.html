@@ -2953,7 +2953,20 @@ max-width: 65%;  */
         .popup-close:hover { color: white; }
         .popup-body { padding: 2rem; text-align: center; background: linear-gradient(to bottom, white, #f9fafb); }
         .discount-badge { background: #fbbf24; color: #1B5E20; display: inline-block; padding: 0.25rem 1rem; border-radius: 9999px; font-weight: bold; font-size: 0.875rem; margin-top: 0.5rem; }
-        .discount-value { font-size: 4.5rem; font-weight: 900; color: #1B5E20; line-height: 1; }
+        .discount-value { 
+            font-size: 5.5rem; font-weight: 900; line-height: 1;
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 70%, #FBF5B7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            opacity: 0;
+            animation: zoomFromBack 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation-delay: 0.5s;
+        }
+        @keyframes zoomFromBack {
+            0% { transform: scale(0.1); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
         .timer-container { background: #f3f4f6; border-radius: 1rem; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #e5e7eb; }
         .timer-label { color: #6b7280; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
         .timer-digits { display: flex; justify-content: center; align-items: center; gap: 1rem; color: #1B5E20; font-family: monospace; }

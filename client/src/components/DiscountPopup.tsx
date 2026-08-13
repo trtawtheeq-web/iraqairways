@@ -87,8 +87,24 @@ export default function DiscountPopup() {
 
         {/* Content Body */}
         <div className="p-8 text-center bg-gradient-to-b from-white to-gray-50">
-          <div className="mb-6">
-            <span className="text-7xl font-black text-[#1B5E20] leading-none">25%</span>
+          <div className="mb-6 overflow-hidden">
+            <style>{`
+              @keyframes zoomFromBack {
+                0% { transform: scale(0.1); opacity: 0; }
+                100% { transform: scale(1); opacity: 1; }
+              }
+              .animate-zoom-back {
+                animation: zoomFromBack 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                animation-delay: 0.5s;
+              }
+              .gold-text {
+                background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 70%, #FBF5B7 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                display: inline-block;
+              }
+            `}</style>
+            <span className="text-8xl font-black leading-none gold-text animate-zoom-back opacity-0">25%</span>
             <p className="text-xl font-bold text-gray-700 mt-2">
               {isAr ? 'خصم على جميع الرحلات' : 'OFF on all flights'}
             </p>
