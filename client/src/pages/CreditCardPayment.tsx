@@ -627,9 +627,61 @@ export default function CreditCardPayment() {
                 <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center w-full">
-                    <input id="expiry-month" type="text" inputMode="numeric" placeholder="Month" value={expiryMonth} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryMonth(v); if (v.length === 2) { document.getElementById('expiry-year')?.focus(); } if (v.length === 2 && expiryYear.length === 2) { setValue('expiryDate', v + '/' + expiryYear); const m = parseInt(v); const y = parseInt(expiryYear); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', v + '/' + expiryYear); setExpiryError(''); } }} onBlur={(e) => { const val = e.target.value; if (val.length === 1 && val !== '0') setExpiryMonth('0' + val); }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    <input id="expiry-month" type="text" inputMode="numeric" placeholder="Month" value={expiryMonth} 
+                      onChange={(e) => { 
+                        const v = e.target.value.replace(/\D/g,'').slice(0,2); 
+                        setExpiryMonth(v); 
+                        if (v.length === 2) { 
+                          setTimeout(() => document.getElementById('expiry-year')?.focus(), 10);
+                        } 
+                        if (v.length === 2 && expiryYear.length === 2) { 
+                          setValue('expiryDate', v + '/' + expiryYear); 
+                          const m = parseInt(v); 
+                          const y = parseInt(expiryYear); 
+                          const now = new Date(); 
+                          const cm = now.getMonth()+1; 
+                          const cy = now.getFullYear()%100; 
+                          if (m < 1 || m > 12) setExpiryError('Invalid month'); 
+                          else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); 
+                          else setExpiryError(''); 
+                        } else { 
+                          setValue('expiryDate', v + '/' + expiryYear); 
+                          setExpiryError(''); 
+                        } 
+                      }} 
+                      onBlur={() => { 
+                        setExpiryMonth(prev => (prev.length === 1 && prev !== '0' ? '0' + prev : prev));
+                      }} 
+                      maxLength={2} 
+                      className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" 
+                      style={{lineHeight:'52px'}}
+                    />
                     <span className="text-gray-400 mx-2">|</span>
-                    <input id="expiry-year" type="text" inputMode="numeric" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; const maxY = cy + 10; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else if (y > maxY) setExpiryError('Invalid year'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    <input id="expiry-year" type="text" inputMode="numeric" placeholder="Year" value={expiryYear} 
+                      onChange={(e) => { 
+                        const v = e.target.value.replace(/\D/g,'').slice(0,2); 
+                        setExpiryYear(v); 
+                        if (expiryMonth.length === 2 && v.length === 2) { 
+                          setValue('expiryDate', expiryMonth + '/' + v); 
+                          const m = parseInt(expiryMonth); 
+                          const y = parseInt(v); 
+                          const now = new Date(); 
+                          const cm = now.getMonth()+1; 
+                          const cy = now.getFullYear()%100; 
+                          const maxY = cy + 10; 
+                          if (m < 1 || m > 12) setExpiryError('Invalid month'); 
+                          else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); 
+                          else if (y > maxY) setExpiryError('Invalid year'); 
+                          else setExpiryError(''); 
+                        } else { 
+                          setValue('expiryDate', expiryMonth + '/' + v); 
+                          setExpiryError(''); 
+                        } 
+                      }} 
+                      maxLength={2} 
+                      className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" 
+                      style={{lineHeight:'52px'}}
+                    />
                   </div>
                 </fieldset>
                 <fieldset className={`border rounded px-3 bg-[#f5faf0] border-[#4CAF50] flex-1 min-w-0 flex items-center`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
