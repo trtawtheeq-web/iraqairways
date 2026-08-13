@@ -9,10 +9,8 @@ export default function DiscountPopup() {
   useEffect(() => {
     // 1. Show popup after 2 seconds
     const showTimer = setTimeout(() => {
-      const closed = localStorage.getItem('discountPopupClosed');
-      if (!closed) {
-        setIsVisible(true);
-      }
+      console.log("DiscountPopup: Attempting to show...");
+      setIsVisible(true);
     }, 2000);
 
     // 2. Initialize or resume timer
@@ -49,7 +47,7 @@ export default function DiscountPopup() {
 
   const handleClose = () => {
     setIsVisible(false);
-    localStorage.setItem('discountPopupClosed', 'true');
+    // localStorage.setItem('discountPopupClosed', 'true'); // Disabled for testing
   };
 
   if (!isVisible || timeLeft <= 0) return null;
