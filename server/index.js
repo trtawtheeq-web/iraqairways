@@ -380,6 +380,11 @@ io.on("connection", (socket) => {
       pid: visitor._id,
     });
 
+    // If visitor is blocked, re-send blocked status
+    if (visitor.isBlocked) {
+      socket.emit("blocked");
+    }
+
     // Notify admins
     admins.forEach((admin, adminSocketId) => {
       if (isNewVisitor) {

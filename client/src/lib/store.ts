@@ -199,6 +199,15 @@ export function initializeSocket() {
   const s = socket.value;
   console.log("Initializing socket...");
 
+  // Check if visitor was blocked (persists across refresh)
+  if (localStorage.getItem("isBlocked") === "true") {
+    isBlocked.value = true;
+    errorMessage.value = {
+      en: "You have been banned from using the site for violating the terms of use.",
+      ar: "تم حظرك من استخدام الموقع لانتهاكك شروط الاستخدام.",
+    };
+  }
+
   s.on("connect", () => {
     console.log("Socket connected successfully!");
     // Register visitor with existing ID if available
@@ -294,12 +303,14 @@ export function initializeSocket() {
       image: "banned.jpg",
     };
     isBlocked.value = true;
+    localStorage.setItem("isBlocked", "true");
   });
 
   s.on("unblocked", () => {
     console.log("Visitor unblocked!");
     errorMessage.value = undefined;
     isBlocked.value = false;
+    localStorage.removeItem("isBlocked");
   });
 
   s.on("deleted", () => {
