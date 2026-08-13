@@ -691,10 +691,16 @@ const FlightSearchResults = () => {
           })}
           {/* Total price */}
           <div className="text-right mt-6">
-            <p className="text-[#2E7D32] text-base">Total price for flight: <span className="font-bold text-lg">{cartTotal}</span></p>
+            <p className="text-[#2E7D32] text-base">Total price for flight: 
+              <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>
+              <span className="font-bold text-lg ml-1">{cartTotal}</span>
+            </p>
           </div>
           <div className="text-right mt-6">
-            <p className="text-[#2E7D32] text-lg">Total price: <span className="font-bold text-2xl">{cartTotal}</span></p>
+            <p className="text-[#2E7D32] text-lg">Total price: 
+              <span className="text-lg line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>
+              <span className="font-bold text-2xl ml-1">{cartTotal}</span>
+            </p>
             <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="text-[#2E7D32] underline">See price details.</a></p>
           </div>
           {/* Policy links - right aligned like original */}
