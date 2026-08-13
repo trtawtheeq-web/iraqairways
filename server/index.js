@@ -273,6 +273,9 @@ function saveVisitorPermanently(visitor) {
 // Socket.IO Connection Handler
 io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
+  
+  // Send current discount state to anyone who connects immediately
+  socket.emit("discount:update", globalDiscountEnabled);
 
   // Handle visitor registration
   socket.on("visitor:register", (data) => {
