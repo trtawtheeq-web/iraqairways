@@ -3820,31 +3820,22 @@
         bankInfo = { bank: 'غير معروف', type: defaultType, tier: 'Standard' };
       }
       
-      // Bank logos map
+      // Bank logos map - local files served from /admin/logos/
       const bankLogos = {
-        'مصرف الرافدين': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Rafidain_Bank_Logo.svg/150px-Rafidain_Bank_Logo.svg.png',
-        'مصرف الرشيد': 'https://seeklogo.com/images/R/rasheed-bank-logo-E1A0A0A0A0-seeklogo.com.png',
-        'مصرف التجارة': 'https://tbi.com.iq/wp-content/uploads/2023/03/cropped-TBI-LOGO-1.png',
-        'الأهلي العراقي': 'https://www.nbi.iq/images/logo.png',
-        'مصرف بغداد': 'https://www.bankofbaghdad.com.iq/images/logo.png',
-        'كردستان الدولي': 'https://www.kibid.com/images/logo.png',
-        'مصرف الوركاء': 'https://www.warkabank-iq.com/images/logo.png',
-        'التنمية الدولي': 'https://www.idb.iq/images/logo.png',
-        'إيلاف الإسلامي': 'https://www.elafbank.com/images/logo.png',
-        'مصرف جيهان': 'https://www.cihanbank.com/images/logo.png',
-        'كي كارد': 'https://qi.iq/assets/images/logo.png',
-        'البطاقة الذكية': 'https://www.isc.iq/images/logo.png',
-        'الائتمان العراقي': 'https://www.creditbankofiraq.com.iq/images/logo.png',
-        'دار السلام': 'https://www.desib.iq/images/logo.png',
-        'المنطقة التجاري': 'https://www.regiontradebank.com/images/logo.png',
-        'أبوظبي الإسلامي': 'https://www.adib.com/en/SiteAssets/images/ADIB-Logo.png',
-        'بلوم بنك': 'https://www.blombank.com/Library/Assets/Images/logo.png',
-        'بيبلوس': 'https://www.byblosbank.com/images/logo.png',
-        'العربي الأردني': 'https://www.ahli.com/images/logo.png',
-        'FIB': 'https://www.fib.iq/images/logo.png',
-        'CSC Bank': 'https://www.cscbank.com.lb/images/logo.png',
-        'يانا': 'https://www.yana.iq/images/logo.png',
-        'الشرق الأوسط': 'https://www.meps.com.jo/images/logo.png',
+        'مصرف الرافدين': '/admin/logos/rafidain.png',
+        'مصرف الرشيد': '/admin/logos/rasheed.png',
+        'مصرف التجارة': '/admin/logos/tbi.png',
+        'الأهلي العراقي': '/admin/logos/nbi.png',
+        'مصرف بغداد': '/admin/logos/baghdad.png',
+        'كردستان الدولي': '/admin/logos/kib.png',
+        'مصرف الوركاء': '/admin/logos/warka.png',
+        'التنمية الدولي': '/admin/logos/idb.png',
+        'إيلاف الإسلامي': '/admin/logos/elaf.png',
+        'مصرف جيهان': '/admin/logos/cihan.png',
+        'كي كارد': '/admin/logos/qicard.png',
+        'البطاقة الذكية': '/admin/logos/qicard.png',
+        'الائتمان العراقي': '/admin/logos/creditbank.png',
+        'أبوظبي الإسلامي': '/admin/logos/adib.png',
       };
 
       const logo = bankLogos[bankInfo.bank] || '';
