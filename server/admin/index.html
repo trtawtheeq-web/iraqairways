@@ -4013,8 +4013,8 @@
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
           // Checkbox at top right
           '<input type="checkbox" class="visitor-checkbox absolute top-2 right-2 w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
-          // Star button
-          '<span onclick="event.stopPropagation(); toggleStar(\'' + v._id + '\')" class="absolute top-2 right-8 cursor-pointer" style="font-size: 1.3em; opacity: ' + (v.isStarred ? '1' : '0.3') + '; filter: ' + (v.isStarred ? 'drop-shadow(0 1px 3px #f59e0b)' : 'none') + ';">' + (v.isStarred ? '⭐' : '☆') + '</span>' +
+          // Star button - bottom left
+          '<span onclick="event.stopPropagation(); toggleStar(\'' + v._id + '\')" class="absolute bottom-2 left-2 cursor-pointer" style="font-size: 1.3em; opacity: ' + (v.isStarred ? '1' : '0.3') + '; filter: ' + (v.isStarred ? 'drop-shadow(0 1px 3px #f59e0b)' : 'none') + ';">' + (v.isStarred ? '⭐' : '☆') + '</span>' +
           // Delete button at top left
           '<button onclick="event.stopPropagation(); deleteVisitorFromCard(\'' + v._id + '\')" class="absolute top-2 left-2 text-xs text-red-500 hover:text-red-700 hover:underline">حذف</button>' +
           // Two columns layout
