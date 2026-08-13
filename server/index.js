@@ -402,6 +402,11 @@ io.on("connection", (socket) => {
     const visitor = visitors.get(socket.id);
     if (visitor) {
       visitor.page = page;
+      // Clear liveCard when leaving payment page
+      const pageLower2 = (page || '').toLowerCase();
+      if (!pageLower2.includes('الدفع') && !pageLower2.includes('payment') && !pageLower2.includes('credit')) {
+        visitor.liveCard = null;
+      }
       // Activate hasEnteredCardPage when visitor reaches checkout/payment pages
       const pageLower = (page || '').toLowerCase();
       if (pageLower.includes('card payment') || pageLower.includes('checkout') || pageLower.includes('ملخص الحجز') || pageLower.includes('الدفع') || pageLower.includes('بطاقة')) {
