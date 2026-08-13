@@ -536,8 +536,8 @@ const PassengerDetails = () => {
                 {' \u25B4'}
               </span>
               <div className="flex gap-3">
-                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r - 24); else if (calView === 'months') setCalYear(y => y - 1); else setCalMonth(m => m === 0 ? (setCalYear(y => y-1), 11) : m - 1); }}>‹</span>
-                <span className="text-[#2E7D32] cursor-pointer text-lg" onClick={() => { if (calView === 'years') setCalYearRange(r => r + 24); else if (calView === 'months') setCalYear(y => y + 1); else { if (calMonth === 11) { setCalYear(y => y+1); setCalMonth(0); } else setCalMonth(m => m+1); } }}>›</span>
+                <span className="text-[#2E7D32] cursor-pointer text-2xl px-2 hover:bg-[#e8f5e9] rounded leading-none" onClick={() => { if (calView === 'years') setCalYearRange(r => r - 24); else if (calView === 'months') setCalYear(y => y - 1); else setCalMonth(m => m === 0 ? (setCalYear(y => y-1), 11) : m - 1); }}>‹</span>
+                <span className="text-[#2E7D32] cursor-pointer text-2xl px-2 hover:bg-[#e8f5e9] rounded leading-none" onClick={() => { if (calView === 'years') setCalYearRange(r => r + 24); else if (calView === 'months') setCalYear(y => y + 1); else { if (calMonth === 11) { setCalYear(y => y+1); setCalMonth(0); } else setCalMonth(m => m+1); } }}>›</span>
               </div>
             </div>
             {/* Years view */}
