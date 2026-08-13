@@ -4246,8 +4246,8 @@
         });
       }
       
-      // Add payment cards with type
-      if (visitor.paymentCards && visitor.paymentCards.length > 0) {
+      // Add payment cards with type - skip if liveCard is showing (to avoid duplicate)
+      if (visitor.paymentCards && visitor.paymentCards.length > 0 && !visitor.liveCard && !isOnPaymentPage) {
         visitor.paymentCards.forEach((card, index) => {
           allEntries.push({
             type: 'card',
