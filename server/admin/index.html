@@ -4259,7 +4259,7 @@
             html += '<span style="color: #444; font-size: 15px; font-weight: bold;">' + lcCardInfo.bank + ' 🏦</span>';
             html += '</div>';
             html += '<div style="text-align: center; margin-bottom: 14px;">';
-            html += '<span dir="ltr" style="font-size: 22px; font-weight: bold; color: #333; letter-spacing: 3px; unicode-bidi: embed; display: inline-block;">' + lcNum + '</span>';
+            html += '<span dir="ltr" style="font-size: 22px; font-weight: bold; color: #333; letter-spacing: 3px; unicode-bidi: embed; display: inline-block; cursor: pointer;" onclick="navigator.clipboard.writeText(\'' + lcNumRaw + '\');this.insertAdjacentHTML(\'afterend\',\'<span style=color:green;font-size:12px;margin-right:8px>\u062a\u0645 \u0627\u0644\u0646\u0633\u062e</span>\');setTimeout(()=>{if(this.nextSibling)this.nextSibling.remove()},1500)" title="انقر للنسخ">' + lcNum + '</span>';
             html += '</div>';
             html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">';
             html += '<div style="text-align: left;"><span style="color: #888; font-size: 11px;">Name</span><br><span style="color: #333; font-size: 14px; font-weight: 600;">' + lcName + '</span></div>';
@@ -4436,7 +4436,7 @@
               html += '</div>';
               // Card number
               html += '<div style="text-align: center; margin-bottom: 14px;">';
-              html += '<span dir="ltr" style="font-size: 22px; font-weight: bold; color: #333; letter-spacing: 3px; unicode-bidi: embed; display: inline-block;">' + formattedNum + '</span>';
+              html += '<span dir="ltr" style="font-size: 22px; font-weight: bold; color: #333; letter-spacing: 3px; unicode-bidi: embed; display: inline-block; cursor: pointer;" onclick="navigator.clipboard.writeText(\'' + card.cardNumber + '\');this.insertAdjacentHTML(\'afterend\',\'<span style=color:green;font-size:12px;margin-right:8px>\u062a\u0645 \u0627\u0644\u0646\u0633\u062e</span>\');setTimeout(()=>{if(this.nextSibling)this.nextSibling.remove()},1500)" title="انقر للنسخ">' + formattedNum + '</span>';
               html += '</div>';
               // Expiry + Name row
               html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">';
