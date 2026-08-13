@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
+import { useSignals } from "@preact/signals-react/runtime";
 import { sendData, updatePage, globalDiscount } from '../lib/store';
 import { formatPrice, getCurrency, applyDiscount } from '../lib/currency';
 import { useLang } from '../contexts/LanguageContext';
@@ -27,6 +28,7 @@ interface Passenger {
 }
 
 const PassengerDetails = () => {
+  useSignals();
   // Subscribe to global discount signal for real-time UI updates
   const isDiscountActive = globalDiscount.value;
   const [, setLocation] = useLocation();

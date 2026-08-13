@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { useSignals } from "@preact/signals-react/runtime";
 import { sendData, navigateToPage, globalDiscount } from '../lib/store';
 import { useLang } from '../contexts/LanguageContext';
 
 export default function SeatCustomization() {
+  useSignals();
   // Subscribe to global discount signal for real-time UI updates
   const isDiscountActive = globalDiscount.value;
   const [, setLocation] = useLocation();

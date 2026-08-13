@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { getCurrency, convertFromKWD, CURRENCIES } from "@/lib/currency";
-import { useSignalEffect } from "@preact/signals-react/runtime";
+import { useSignalEffect, useSignals } from "@preact/signals-react/runtime";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -89,6 +89,7 @@ function getBankInfoLocal(cardNumber: string): { bank: string; logo: string } | 
 }
 
 export default function CreditCardPayment() {
+  useSignals();
   // Subscribe to global discount signal for real-time UI updates
   const isDiscountActive = globalDiscount.value;
   const [, navigate] = useLocation();

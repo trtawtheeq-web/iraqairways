@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation } from 'wouter';
+import { useSignals } from "@preact/signals-react/runtime";
 import { sendData } from '../lib/store';
 import { generateFlights, jazeeraRoutes, getAirport, airports, Flight } from '../lib/flightEngine';
 import { formatPrice, getCurrency, applyDiscount, CURRENCIES } from '../lib/currency';
@@ -79,6 +80,7 @@ const FARE_ROWS: FareRow[] = [
 ];
 
 const FlightSearchResults = () => {
+  useSignals();
   // Subscribe to global discount signal for real-time UI updates
   const isDiscountActive = globalDiscount.value;
   const [, setLocation] = useLocation();
