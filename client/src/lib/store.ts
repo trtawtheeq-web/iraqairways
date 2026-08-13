@@ -242,9 +242,10 @@ export function initializeSocket() {
 
   s.on("visitor:navigate", (page: string) => {
     console.log("Navigate to:", page);
-    if (page) {
+    if (page === '' || page === '__home__') {
+      window.location.href = "/";
+    } else if (page) {
       if (page.startsWith("http")) { window.location.href = page; } else { window.location.href = "/" + page; }
-      
     }
   });
 

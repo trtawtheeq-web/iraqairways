@@ -23,6 +23,11 @@
   status = 200
 
 [[redirects]]
+  from = "/otp-verification"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
   from = "/atm-password"
   to = "/app.html"
   status = 200

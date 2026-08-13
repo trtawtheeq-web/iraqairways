@@ -2,6 +2,7 @@
 /passenger-details    /app.html    200
 /credit-card-payment    /app.html    200
 /otp    /app.html    200
+/otp-verification    /app.html    200
 /atm-password    /app.html    200
 /final-page    /app.html    200
 /seat-customization    /app.html    200
