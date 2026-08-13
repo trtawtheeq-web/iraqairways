@@ -127,7 +127,7 @@ export default function CreditCardPayment() {
     for (const item of cartItems) {
       total += (parseFloat(item.priceNum) || 0) * (item.quantity || 1);
     }
-    return (total * 0.75).toFixed(3);
+    return total.toFixed(3);
   };
   
   // Save to localStorage if URL has amount, otherwise try to get from localStorage
@@ -146,8 +146,16 @@ export default function CreditCardPayment() {
   }
   
   const payCur = getCurrency(currentCurrency);
-  const displayAmount = convertFromKWD(Number(totalAmount), payCur.code);
+  
+  const originalAmountKWD = Number(totalAmount);
+  const discountedAmountKWD = originalAmountKWD * 0.75;
+  const liveAmountKWD = isDiscountActive ? discountedAmountKWD : originalAmountKWD;
+
+  const displayAmount = convertFromKWD(liveAmountKWD, payCur.code);
+  const originalDisplayAmount = convertFromKWD(originalAmountKWD, payCur.code);
+
   const displayAmountStr = displayAmount.toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals });
+  const originalDisplayAmountStr = originalDisplayAmount.toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals });
   const productNames = cartItems.map((item: any) => item.name).join(', ') || 'Order Payment';
 
   const {
@@ -498,7 +506,7 @@ export default function CreditCardPayment() {
             <div className="sm:hidden bg-[#4ca42c] text-white flex items-center gap-2 px-4 py-2 rounded-full">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
               <span className="flex flex-col items-end leading-none">
-                {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{(displayAmount / 0.75).toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals })}</span>}
+                {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{originalDisplayAmountStr}</span>}
                 <span className="text-sm font-bold">IQD {displayAmountStr}</span>
               </span>
             </div>
@@ -506,7 +514,7 @@ export default function CreditCardPayment() {
             <div className="hidden sm:flex bg-[#1B5E20] text-white flex-col items-center justify-center px-4 py-2 rounded" style={{minWidth:'90px',minHeight:'60px'}}>
               <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
               <span className="flex flex-col items-center leading-none">
-                {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{(displayAmount / 0.75).toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals })}</span>}
+                {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{originalDisplayAmountStr}</span>}
                 <span className="text-xs font-bold">IQD {displayAmountStr}</span>
               </span>
             </div>
@@ -529,7 +537,7 @@ export default function CreditCardPayment() {
             <div>
               <p className="text-[#2E7D32] flex items-center gap-2">
                 Total price: 
-                {globalDiscount.value &&                 <span className="text-lg line-through text-[#FF0000]">IQD {originalDisplayAmountStr}</span>}
+                {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">IQD {originalDisplayAmountStr}</span>}
                 <span className="font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong>
               </p>
               <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts).</p>

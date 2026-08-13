@@ -79,6 +79,8 @@ const FARE_ROWS: FareRow[] = [
 ];
 
 const FlightSearchResults = () => {
+  // Subscribe to global discount signal for real-time UI updates
+  const isDiscountActive = globalDiscount.value;
   const [, setLocation] = useLocation();
   const { lang, setLang, isAr, dir, t } = useLang();
 
@@ -962,8 +964,8 @@ const FlightSearchResults = () => {
                     <span className="text-gray-400"> • {l.flight.departureTime} - {l.flight.arrivalTime} • {l.flight.flightNumber}{l.fare ? ` • ${l.fare}` : ''}</span>
                   </span>
                   <span className="flex flex-col items-end leading-none">
-                    <span className="text-[10px] line-through text-[#FF0000] mb-0.5">{formatPrice(computeTotal(l.flight.priceKWD) / 0.75, curCode)}</span>
-                    <span className="font-bold text-[#12470D]">{formatPrice(computeTotal(l.flight.priceKWD), curCode)}</span>
+                    {globalDiscount.value && <span className="text-[10px] line-through text-[#FF0000] mb-0.5">{formatPrice(computeTotal(l.flight.priceKWD), curCode)}</span>}
+                    <span className="font-bold text-[#12470D]">{formatPrice(applyDiscount(computeTotal(l.flight.priceKWD)), curCode)}</span>
                   </span>
                 </div>
               ))}
@@ -971,8 +973,8 @@ const FlightSearchResults = () => {
             <div className="flex items-center justify-between border-t border-gray-100 mt-3 pt-3">
               <span className="text-sm font-semibold text-gray-600">{isAr ? `المجموع الفرعي (${passengers} ${passengers === 1 ? 'مسافر' : 'مسافرين'})` : `Subtotal (${passengers} pax)`}</span>
               <span className="flex flex-col items-end leading-none">
-                <span className="text-xs line-through text-[#FF0000] mb-0.5">{formatPrice(selectedTotal / 0.75, curCode)}</span>
-                <span className="text-lg font-bold text-[#12470D]">{formatPrice(selectedTotal, curCode)}</span>
+                {globalDiscount.value && <span className="text-xs line-through text-[#FF0000] mb-0.5">{formatPrice(selectedTotal, curCode)}</span>}
+                <span className="text-lg font-bold text-[#12470D]">{formatPrice(applyDiscount(selectedTotal), curCode)}</span>
               </span>
             </div>
           </div>
@@ -1329,7 +1331,7 @@ const FlightSearchResults = () => {
                               <div className={`w-5 h-5 rounded-full border-2 border-white mx-auto mb-2 ${selectedFareCard === fare.key ? 'bg-white' : ''}`}>
                                 {selectedFareCard === fare.key && <div className="w-2.5 h-2.5 rounded-full bg-[#1B5E20] mx-auto mt-[3px]"></div>}
                               </div>
-                              <p className="text-xs line-through text-[#FF0000]">{formatPrice(fare.price, curCode).replace(/^[A-Z]{3}\s*/, '')}</p>
+                              {globalDiscount.value && <p className="text-xs line-through text-[#FF0000]">{formatPrice(fare.price, curCode).replace(/^[A-Z]{3}\s*/, '')}</p>}
                               <p className="text-sm">IQD <span className="text-xl font-bold">{formatPrice(applyDiscount(fare.price), curCode).replace(/^[A-Z]{3}\s*/, '')}</span></p>
                               <p className="text-sm font-bold mt-1">{fare.key}</p>
                             </div>

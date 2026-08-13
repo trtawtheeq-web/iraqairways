@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { sendData, updatePage, globalDiscount } from '../lib/store';
-import { formatPrice, getCurrency } from '../lib/currency';
+import { formatPrice, getCurrency, applyDiscount } from '../lib/currency';
 import { useLang } from '../contexts/LanguageContext';
 import { cityName as cityNameI18n } from '../lib/airportNames';
 import CountryCodePicker from '../components/CountryCodePicker';
@@ -201,7 +201,7 @@ const PassengerDetails = () => {
     : base * totalCount;
   // Fare-only grand total (flights + taxes), excluding the duo seat fee.
   const baseGrandTotal = Math.round((grandTotalRaw - duoSeatKWD) * 1000) / 1000;
-  const grandTotal = applyDiscount(baseGrandTotal);
+  const grandTotal = globalDiscount.value ? applyDiscount(baseGrandTotal) : baseGrandTotal;
   // Derive flights vs taxes from the grand total (taxes ~ 3.661% of flights portion)
   const taxRate = 0.03661;
   const flightsAmount = Math.round((grandTotal / (1 + taxRate)) * 1000) / 1000;
@@ -225,11 +225,14 @@ const PassengerDetails = () => {
   const assistanceConv = Math.round(assistanceKWD * cur.rate * f) / f;
   const finalTotalConv = Math.round((flightsConv + taxesConv + cfarConv + assistanceConv + duoSeatConv) * f) / f;
   // finalTotal stays in KWD for downstream payment routing
-  const finalTotal = Math.round((grandTotal + cfarFee + assistanceKWD + duoSeatKWD) * 1000) / 1000;
+    const originalFinalTotal = Math.round((baseGrandTotal + cfarFee + assistanceKWD + duoSeatKWD) * 1000) / 1000;
+    const finalTotal = Math.round((grandTotal + cfarFee + assistanceKWD + duoSeatKWD) * 1000) / 1000;
   // The 25% discount only applies to the fare portion (flights + taxes).
   // Since we now store original prices, the discount amount is (original - discounted).
   const fareConv = Math.round((flightsConv + taxesConv) * f) / f;
   const originalFareConv = Math.round((baseGrandTotal * cur.rate) * f) / f;
+  const originalFlightsConv = Math.round((originalFareConv / (1 + taxRate)) * f) / f;
+  const originalTaxesConv = Math.round((originalFareConv - originalFlightsConv) * f) / f;
   const discountAmountConv = Math.round((originalFareConv - fareConv) * f) / f;
   // Format an already-converted amount in the selected currency.
   const fmtConv = (v: number) => `${cur.code} ${v.toLocaleString('en-US', { minimumFractionDigits: cur.decimals, maximumFractionDigits: cur.decimals })}`;
@@ -293,7 +296,8 @@ const PassengerDetails = () => {
       curCode,
       curDecimals: cur.decimals,
       curRate: cur.rate,
-      baseTotalKWD: finalTotal,
+      baseTotalKWD: originalFinalTotal,
+      discountedTotalKWD: finalTotal,
       discountConv: discountAmountConv,
       legs: summaryLegs,
       bundleName,
@@ -404,7 +408,7 @@ const PassengerDetails = () => {
           <span className="text-[#0a2540] font-bold text-[15px]">{t('seat.flights')}</span>
           <span className="flex items-center gap-2">
             <span className="flex flex-col items-end leading-none">
-              <span className="text-[10px] line-through text-[#FF0000] mb-0.5">{fmtConv(Math.round(flightsConv / 0.75 * f) / f)}</span>
+              {globalDiscount.value && <span className="text-[10px] line-through text-[#FF0000] mb-0.5">{fmtConv(originalFlightsConv)}</span>}
               <span className="text-[#0a72c0] font-semibold text-[15px]">{fmtConv(flightsConv)}</span>
             </span>
             <svg className={`w-4 h-4 text-[#0a72c0] transition-transform ${flightsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
@@ -458,7 +462,7 @@ const PassengerDetails = () => {
                             {isAr ? 'الركاب' : 'Passengers'}
                           </span>
                           <span className="flex flex-col items-end leading-none">
-                            <span className="text-[9px] line-through text-[#FF0000] mb-0.5">{fmtConv(Math.round(flightsConv / 0.75 * f) / f)}</span>
+                            {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] mb-0.5">{fmtConv(originalFlightsConv)}</span>}
                             <span className="text-[#0a72c0] font-semibold text-sm">{fmtConv(flightsConv)}</span>
                           </span>
                         </div>
@@ -467,7 +471,7 @@ const PassengerDetails = () => {
                           <div className="flex items-center justify-between text-sm text-[#5b6b7b]">
                             <span>{px.adult}x {isAr ? 'بالغ' : 'Adult'}</span>
                             <span className="flex flex-col items-end leading-none">
-                                <span className="text-[9px] line-through text-[#FF0000] mb-0.5">{fmtConv(Math.round(flightsConv / 0.75 * f) / f)}</span>
+                                {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] mb-0.5">{fmtConv(originalFlightsConv)}</span>}
                                 <span className="text-[#0a72c0]">{fmtConv(flightsConv)}</span>
                               </span>
                           </div>
@@ -486,7 +490,10 @@ const PassengerDetails = () => {
       <div className="bg-[#f4f7fb] rounded-xl mb-3">
         <div className="flex items-center justify-between px-4 py-4">
           <span className="text-[#0a2540] font-bold text-[15px]">{isAr ? 'الضرائب' : 'Taxes'}</span>
-          <span className="text-[#0a72c0] font-semibold text-[15px]">{fmtConv(taxesConv)}</span>
+          <span className="flex flex-col items-end leading-none">
+            {globalDiscount.value && <span className="text-[10px] line-through text-[#FF0000] mb-0.5">{fmtConv(originalTaxesConv)}</span>}
+            <span className="text-[#0a72c0] font-semibold text-[15px]">{fmtConv(taxesConv)}</span>
+          </span>
         </div>
       </div>
 
