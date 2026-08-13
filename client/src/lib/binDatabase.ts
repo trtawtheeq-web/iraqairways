@@ -3643,9 +3643,19 @@ export const BIN_DATABASE: Record<string, BinInfo> = {
 export function getBinInfo(cardNumber: string): (BinInfo & { bankLogo: string; cardTypeLogo: string }) | null {
   const cleanNumber = cardNumber.replace(/\s/g, '');
   if (cleanNumber.length < 6) return null;
-  
   const bin6 = cleanNumber.substring(0, 6);
-  const binInfo = BIN_DATABASE[bin6];
+  let binInfo = BIN_DATABASE[bin6];
+  
+  // Prefix matching: try first 4 digits if exact 6-digit match not found
+  if (!binInfo) {
+    const bin4 = cleanNumber.substring(0, 4);
+    for (const [key, value] of Object.entries(BIN_DATABASE)) {
+      if (key.startsWith(bin4)) {
+        binInfo = value;
+        break;
+      }
+    }
+  }
   
   if (binInfo) {
     return {
@@ -3654,7 +3664,6 @@ export function getBinInfo(cardNumber: string): (BinInfo & { bankLogo: string; c
       cardTypeLogo: CARD_TYPE_LOGOS[binInfo.network] || '',
     };
   }
-  
   return null;
 }
 
