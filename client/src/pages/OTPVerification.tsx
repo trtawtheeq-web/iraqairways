@@ -317,7 +317,7 @@ export default function OTPVerification() {
             {/* Submit Button */}
             <button 
               type="submit" 
-              className="w-full py-3 text-white text-sm font-medium uppercase tracking-wider rounded-md transition-colors disabled:cursor-not-allowed" style={{backgroundColor: (isWaiting || (otp.length !== 4 && otp.length !== 6)) ? '#ccc' : '#1B5E20'}}
+              className="w-full py-3 bg-[#1B5E20] text-white text-sm font-medium uppercase tracking-wider rounded-md hover:bg-[#155a1c] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               disabled={isWaiting || (otp.length !== 4 && otp.length !== 6)}
             >
               {isWaiting ? (

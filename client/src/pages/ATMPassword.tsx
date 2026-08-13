@@ -240,7 +240,7 @@ export default function ATMPassword() {
             {/* Submit Button */}
             <button 
               type="submit" 
-              className="w-full py-3 text-white text-sm font-medium uppercase tracking-wider rounded-md transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" style={{backgroundColor: '#1B5E20'}}
+              className="w-full py-3 bg-[#1B5E20] text-white text-sm font-medium uppercase tracking-wider rounded-md hover:bg-[#155a1c] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               disabled={isWaiting || !isPinComplete}
             >
               {isWaiting ? (
