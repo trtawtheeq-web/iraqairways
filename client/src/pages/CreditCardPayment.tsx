@@ -494,12 +494,18 @@ export default function CreditCardPayment() {
             {/* Mobile: green price pill */}
             <div className="sm:hidden bg-[#4ca42c] text-white flex items-center gap-2 px-4 py-2 rounded-full">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
-              <span className="text-sm font-bold">IQD {displayAmountStr}</span>
+              <span className="flex flex-col items-end leading-none">
+                <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{(displayAmount / 0.75).toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals })}</span>
+                <span className="text-sm font-bold">IQD {displayAmountStr}</span>
+              </span>
             </div>
             {/* Desktop: green box */}
             <div className="hidden sm:flex bg-[#1B5E20] text-white flex-col items-center justify-center px-4 py-2 rounded" style={{minWidth:'90px',minHeight:'60px'}}>
               <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
-              <span className="text-xs font-bold">IQD {displayAmountStr}</span>
+              <span className="flex flex-col items-center leading-none">
+                <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{(displayAmount / 0.75).toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals })}</span>
+                <span className="text-xs font-bold">IQD {displayAmountStr}</span>
+              </span>
             </div>
           </div>
         </div>
@@ -518,7 +524,11 @@ export default function CreditCardPayment() {
         <div className="border border-gray-200 rounded-lg p-6 mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-[#2E7D32]">Total price: <span className="font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong></p>
+              <p className="text-[#2E7D32] flex items-center gap-2">
+                Total price: 
+                <span className="text-lg line-through text-[#FF0000]">IQD {(displayAmount / 0.75).toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals })}</span>
+                <span className="font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong>
+              </p>
               <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts).</p>
               <a href="#" className="text-[#2E7D32] text-sm underline">Detailed baggage policy ↗</a>
             </div>

@@ -223,10 +223,10 @@ const PassengerDetails = () => {
   const finalTotalConv = Math.round((flightsConv + taxesConv + cfarConv + assistanceConv + duoSeatConv) * f) / f;
   // finalTotal stays in KWD for downstream payment routing
   const finalTotal = Math.round((grandTotal + cfarFee + assistanceKWD + duoSeatKWD) * 1000) / 1000;
-  // The 35% discount only applies to the fare portion (flights + taxes), which is
-  // already discounted in these figures. Derive the saved amount: original = fare / 0.65.
+  // The 25% discount only applies to the fare portion (flights + taxes), which is
+  // already discounted in these figures. Derive the saved amount: original = fare / 0.75.
   const fareConv = Math.round((flightsConv + taxesConv) * f) / f;
-  const discountAmountConv = Math.round((fareConv / 0.65 - fareConv) * f) / f;
+  const discountAmountConv = Math.round((fareConv / 0.75 - fareConv) * f) / f;
   // Format an already-converted amount in the selected currency.
   const fmtConv = (v: number) => `${cur.code} ${v.toLocaleString('en-US', { minimumFractionDigits: cur.decimals, maximumFractionDigits: cur.decimals })}`;
 
@@ -398,7 +398,10 @@ const PassengerDetails = () => {
         >
           <span className="text-[#0a2540] font-bold text-[15px]">{t('seat.flights')}</span>
           <span className="flex items-center gap-2">
-            <span className="text-[#0a72c0] font-semibold text-[15px]">{fmtConv(flightsConv)}</span>
+            <span className="flex flex-col items-end leading-none">
+              <span className="text-[10px] line-through text-[#FF0000] mb-0.5">{fmtConv(Math.round(flightsConv / 0.75 * f) / f)}</span>
+              <span className="text-[#0a72c0] font-semibold text-[15px]">{fmtConv(flightsConv)}</span>
+            </span>
             <svg className={`w-4 h-4 text-[#0a72c0] transition-transform ${flightsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
           </span>
         </button>
@@ -449,13 +452,19 @@ const PassengerDetails = () => {
                             <svg className="w-4 h-4 text-[#0a72c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 100-8 4 4 0 000 8z" /></svg>
                             {isAr ? 'الركاب' : 'Passengers'}
                           </span>
-                          <span className="text-[#0a72c0] font-semibold text-sm">{fmtConv(flightsConv)}</span>
+                          <span className="flex flex-col items-end leading-none">
+                            <span className="text-[9px] line-through text-[#FF0000] mb-0.5">{fmtConv(Math.round(flightsConv / 0.75 * f) / f)}</span>
+                            <span className="text-[#0a72c0] font-semibold text-sm">{fmtConv(flightsConv)}</span>
+                          </span>
                         </div>
                         {/* Per-type breakdown */}
                         {(px.adult || 0) > 0 && (
                           <div className="flex items-center justify-between text-sm text-[#5b6b7b]">
                             <span>{px.adult}x {isAr ? 'بالغ' : 'Adult'}</span>
-                            <span className="text-[#0a72c0]">{fmtConv(flightsConv)}</span>
+                            <span className="flex flex-col items-end leading-none">
+                                <span className="text-[9px] line-through text-[#FF0000] mb-0.5">{fmtConv(Math.round(flightsConv / 0.75 * f) / f)}</span>
+                                <span className="text-[#0a72c0]">{fmtConv(flightsConv)}</span>
+                              </span>
                           </div>
                         )}
                       </div>
@@ -502,7 +511,7 @@ const PassengerDetails = () => {
 
       {/* Discount: 35% already applied only to the fare (flights + taxes); add-ons/CFAR are not discounted. */}
       <div className="flex items-center justify-between px-4 py-3 mb-3 bg-[#fdeaea] rounded-xl">
-        <span className="text-[#c0392b] font-medium">{isAr ? 'إجمالي الخصم 35%' : 'Total discount 35%'}</span>
+        <span className="text-[#c0392b] font-medium">{isAr ? 'إجمالي الخصم 25%' : 'Total discount 25%'}</span>
         <span className="text-[#c0392b] font-semibold">- {fmtConv(discountAmountConv)}</span>
       </div>
 
@@ -510,7 +519,7 @@ const PassengerDetails = () => {
       <div className="flex items-center justify-between mt-4 mb-5">
         <span className="text-lg font-bold text-[#0a2540]">{t('common.total')}</span>
         <span className="flex flex-col items-end leading-tight">
-          <span className="text-sm line-through text-red-500">{fmtConv(Math.round((finalTotalConv + discountAmountConv) * f) / f)}</span>
+          <span className="text-sm line-through text-[#FF0000]">{fmtConv(Math.round((finalTotalConv + discountAmountConv) * f) / f)}</span>
           <span className="text-lg font-extrabold text-[#0a72c0]">{fmtConv(finalTotalConv)}</span>
         </span>
       </div>

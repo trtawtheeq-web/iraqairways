@@ -953,13 +953,19 @@ const FlightSearchResults = () => {
                     <span className="font-semibold">{cityOf(l.origin)} → {cityOf(l.destination)}</span>
                     <span className="text-gray-400"> • {l.flight.departureTime} - {l.flight.arrivalTime} • {l.flight.flightNumber}{l.fare ? ` • ${l.fare}` : ''}</span>
                   </span>
-                  <span className="font-bold text-[#12470D]">{formatPrice(computeTotal(l.flight.priceKWD), curCode)}</span>
+                  <span className="flex flex-col items-end leading-none">
+                    <span className="text-[10px] line-through text-[#FF0000] mb-0.5">{formatPrice(computeTotal(l.flight.priceKWD) / 0.75, curCode)}</span>
+                    <span className="font-bold text-[#12470D]">{formatPrice(computeTotal(l.flight.priceKWD), curCode)}</span>
+                  </span>
                 </div>
               ))}
             </div>
             <div className="flex items-center justify-between border-t border-gray-100 mt-3 pt-3">
               <span className="text-sm font-semibold text-gray-600">{isAr ? `المجموع الفرعي (${passengers} ${passengers === 1 ? 'مسافر' : 'مسافرين'})` : `Subtotal (${passengers} pax)`}</span>
-              <span className="text-lg font-bold text-[#12470D]">{formatPrice(selectedTotal, curCode)}</span>
+              <span className="flex flex-col items-end leading-none">
+                <span className="text-xs line-through text-[#FF0000] mb-0.5">{formatPrice(selectedTotal / 0.75, curCode)}</span>
+                <span className="text-lg font-bold text-[#12470D]">{formatPrice(selectedTotal, curCode)}</span>
+              </span>
             </div>
           </div>
         )}
@@ -989,7 +995,7 @@ const FlightSearchResults = () => {
                 <div className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#12470D]' : 'font-medium text-gray-700'}`}>{item.displayDate}</div>
                 {item.minPrice > 0 ? (
                   <div className="flex flex-col items-center">
-                    <span className="text-xs line-through text-red-500 whitespace-nowrap">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    <span className="text-xs line-through text-[#FF0000] whitespace-nowrap">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                     <span className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#001326]' : 'text-[#001326]'}`}>{formatPrice(applyDiscount(item.minPrice), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 ) : (
@@ -1035,7 +1041,10 @@ const FlightSearchResults = () => {
                 >
                   <div className="flex flex-col items-center pb-2">
                     <span className="text-base font-bold text-white">IQD</span>
-                    <span className="text-base font-bold">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    {item.minPrice > 0 && (
+                      <span className="text-[10px] line-through text-[#FF0000] opacity-90 leading-none mb-0.5">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    )}
+                    <span className="text-base font-bold leading-none">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 </button>
                 <div className={`text-[11px] mt-1.5 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-[#4ca42c]'}`}>
@@ -1154,7 +1163,7 @@ const FlightSearchResults = () => {
                         </span>
                       ) : <span />}
                       <div className="flex flex-col items-end">
-                        <span className="text-xs line-through text-red-500">{formatPrice(flight.priceKWD, curCode)}</span>
+                        <span className="text-xs line-through text-[#FF0000]">{formatPrice(flight.priceKWD, curCode)}</span>
                         <span className="text-xl font-bold text-[#12470D]">{formatPrice(applyDiscount(flight.priceKWD), curCode)}</span>
                       </div>
                     </div>
@@ -1179,7 +1188,7 @@ const FlightSearchResults = () => {
                         <div className="text-right">
                           <p className="text-2xl font-bold text-gray-800 leading-none">
                             {flight.arrivalTime}
-                            {flight.arrivesNextDay && <sup className="text-[10px] text-red-500 ml-0.5">+1</sup>}
+                            {flight.arrivesNextDay && <sup className="text-[10px] text-[#FF0000] ml-0.5">+1</sup>}
                           </p>
                           <p className="text-sm text-gray-600 mt-1">{currentLeg.destination}</p>
                         </div>
@@ -1199,7 +1208,7 @@ const FlightSearchResults = () => {
                           <span className="text-base font-bold">{t('fsr.economy')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
-                          <span className="text-xs line-through text-red-200 mt-0.5">{formatPrice(flight.priceKWD, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                          <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'economy' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -1208,7 +1217,7 @@ const FlightSearchResults = () => {
                           <span className="text-base font-bold">{t('fsr.business')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
-                          <span className="text-xs line-through text-red-200 mt-0.5">{formatPrice(flight.priceKWD * 1.6, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                          <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD * 1.6, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'business' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -1238,7 +1247,7 @@ const FlightSearchResults = () => {
                       </div>
                       <button onClick={() => setExpandedId(open ? null : flight.id)} className="flex items-center gap-2">
                         <span className="flex flex-col items-end leading-tight">
-                          <span className="text-sm line-through text-red-500">{formatPrice(flight.priceKWD, curCode)}</span>
+                          <span className="text-sm line-through text-[#FF0000]">{formatPrice(flight.priceKWD, curCode)}</span>
                           <span className="text-[#0070C0] font-bold text-xl">{formatPrice(applyDiscount(flight.priceKWD), curCode)}</span>
                         </span>
                         <svg className={`w-5 h-5 text-[#0070C0] transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -1264,7 +1273,7 @@ const FlightSearchResults = () => {
                               {/* Bundle header */}
                               <div className="px-5 py-4 text-white" style={{ background: headerBg }}>
                                 <p className="text-xl font-bold">{b.key}</p>
-                                <p className="text-xs line-through text-white/70 mt-0.5">{bi === 0 ? formatPrice(flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>
+                                <p className="text-xs line-through text-[#FF0000] mt-0.5">{bi === 0 ? formatPrice(flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>
                                 <p className="text-base font-semibold">{bi === 0 ? formatPrice(applyDiscount(flight.priceKWD), curCode) : `+ ${formatPrice(applyDiscount(b.extra), curCode)}`}</p>
                               </div>
                               {/* Icons row + Details */}
@@ -1312,7 +1321,7 @@ const FlightSearchResults = () => {
                               <div className={`w-5 h-5 rounded-full border-2 border-white mx-auto mb-2 ${selectedFareCard === fare.key ? 'bg-white' : ''}`}>
                                 {selectedFareCard === fare.key && <div className="w-2.5 h-2.5 rounded-full bg-[#1B5E20] mx-auto mt-[3px]"></div>}
                               </div>
-                              <p className="text-xs line-through text-red-300">{formatPrice(fare.price, curCode).replace(/^[A-Z]{3}\s*/, '')}</p>
+                              <p className="text-xs line-through text-[#FF0000]">{formatPrice(fare.price, curCode).replace(/^[A-Z]{3}\s*/, '')}</p>
                               <p className="text-sm">IQD <span className="text-xl font-bold">{formatPrice(applyDiscount(fare.price), curCode).replace(/^[A-Z]{3}\s*/, '')}</span></p>
                               <p className="text-sm font-bold mt-1">{fare.key}</p>
                             </div>
@@ -1539,7 +1548,7 @@ const FlightSearchResults = () => {
                       {/* Bundle header */}
                       <div className="px-5 py-5 text-white" style={{ background: headerBg }}>
                         <p className="text-2xl font-bold">{b.key}</p>
-                        <p className="text-sm line-through text-white/70 mt-1">{bi === 0 ? formatPrice(fareDetailOpen.flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>
+                        <p className="text-sm line-through text-[#FF0000] mt-1">{bi === 0 ? formatPrice(fareDetailOpen.flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>
                         <p className="text-lg font-semibold">{bi === 0 ? formatPrice(applyDiscount(fareDetailOpen.flight.priceKWD), curCode) : `+ ${formatPrice(applyDiscount(b.extra), curCode)}`}</p>
                       </div>
                       {/* Fare rows */}
