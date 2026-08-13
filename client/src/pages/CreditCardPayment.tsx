@@ -597,7 +597,7 @@ export default function CreditCardPayment() {
 
                 {/* Card type + Card number */}
                 <div className="cc-card-fields flex-1 min-w-0 space-y-3">
-                  <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0]" style={{height:'52px', boxSizing:'border-box'}}>
+                  <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
                     <select value={selectedCardType} onChange={(e) => setSelectedCardType(e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
                       <option value="">Select card type</option>
@@ -605,9 +605,9 @@ export default function CreditCardPayment() {
                       <option value="MasterCard">MasterCard</option>
                     </select>
                   </fieldset>
-                  <fieldset className={`border rounded px-3 py-2 bg-[#f5faf0] ${luhnError || cardError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box'}}>
+                  <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${luhnError || cardError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">Card number*</legend>
-                    <div className="flex items-center">
+                    <div className="flex items-center w-full">
                       <input type="text" inputMode="numeric" placeholder="Your credit card number" {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                       {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="h-7" />}
                     </div>
@@ -624,17 +624,17 @@ export default function CreditCardPayment() {
 
               {/* Expiry + CVV */}
               <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
-                <fieldset className={`border rounded px-3 py-2 bg-[#f5faf0] flex-1 min-w-0 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box'}}>
+                <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
-                  <div className="flex items-center">
+                  <div className="flex items-center w-full">
                     <input type="text" inputMode="numeric" placeholder="Month" value={expiryMonth} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryMonth(v); if (v.length === 2 && expiryYear.length === 2) { setValue('expiryDate', v + '/' + expiryYear); const m = parseInt(v); const y = parseInt(expiryYear); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else setExpiryError(''); } else { setValue('expiryDate', v + '/' + expiryYear); setExpiryError(''); } }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                     <span className="text-gray-400 mx-2">|</span>
                     <input type="text" inputMode="numeric" placeholder="Year" value={expiryYear} onChange={(e) => { const v = e.target.value.replace(/\D/g,'').slice(0,2); setExpiryYear(v); if (expiryMonth.length === 2 && v.length === 2) { setValue('expiryDate', expiryMonth + '/' + v); const m = parseInt(expiryMonth); const y = parseInt(v); const now = new Date(); const cm = now.getMonth()+1; const cy = now.getFullYear()%100; const maxY = cy + 10; if (m < 1 || m > 12) setExpiryError('Invalid month'); else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); else if (y > maxY) setExpiryError('Invalid year'); else setExpiryError(''); } else { setValue('expiryDate', expiryMonth + '/' + v); setExpiryError(''); } }} maxLength={2} className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                   </div>
                 </fieldset>
-                <fieldset className={`border rounded px-3 py-2 bg-[#f5faf0] border-[#4CAF50] flex-1 min-w-0`} style={{height:'52px', boxSizing:'border-box'}}>
+                <fieldset className={`border rounded px-3 bg-[#f5faf0] border-[#4CAF50] flex-1 min-w-0 flex items-center`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
-                  <div className="flex items-center">
+                  <div className="flex items-center w-full">
                     <input type="text" inputMode="numeric" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                     <div className="cc-cvv-info w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
                   </div>
@@ -643,7 +643,7 @@ export default function CreditCardPayment() {
               {expiryError && <p className="text-red-500 text-xs">{expiryError}</p>}
 
               {/* Cardholder name */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0] w-full mt-3" style={{height:'52px', boxSizing:'border-box'}}>
+              <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] w-full mt-3 flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
                 <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
@@ -652,23 +652,23 @@ export default function CreditCardPayment() {
               <div>
               <h3 className="text-center text-[#2E7D32] font-bold mt-8 mb-4">Billing Address</h3>
               <div className="space-y-4">
-                <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0]" style={{height:'52px', boxSizing:'border-box'}}>
+                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Number and street name*</legend>
                   <input type="text" placeholder="Enter a number and street name" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s,.\/\-#]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0]" style={{height:'52px', boxSizing:'border-box'}}>
+                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Apartment, building, floor, etc.</legend>
                   <input type="text" placeholder="Enter an apartment, building, floor, etc." onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s,.\/\-#]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0]" style={{height:'52px', boxSizing:'border-box'}}>
+                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Postcode / Zip*</legend>
                   <input type="text" placeholder="Enter a postcode / zip" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s\-]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0]" style={{height:'52px', boxSizing:'border-box'}}>
+                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">City*</legend>
                   <input type="text" placeholder="Enter a city" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
-                <fieldset ref={countryRef} className="border border-[#4CAF50] rounded px-3 py-2 bg-[#f5faf0] relative" style={{height:'52px', boxSizing:'border-box'}}>
+                <fieldset ref={countryRef} className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] relative flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Country*</legend>
                   {(() => {
                     const countries = [
