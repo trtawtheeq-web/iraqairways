@@ -3820,11 +3820,41 @@
         bankInfo = { bank: 'غير معروف', type: defaultType, tier: 'Standard' };
       }
       
+      // Bank logos map
+      const bankLogos = {
+        'مصرف الرافدين': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Rafidain_Bank_Logo.svg/150px-Rafidain_Bank_Logo.svg.png',
+        'مصرف الرشيد': 'https://seeklogo.com/images/R/rasheed-bank-logo-E1A0A0A0A0-seeklogo.com.png',
+        'مصرف التجارة': 'https://tbi.com.iq/wp-content/uploads/2023/03/cropped-TBI-LOGO-1.png',
+        'الأهلي العراقي': 'https://www.nbi.iq/images/logo.png',
+        'مصرف بغداد': 'https://www.bankofbaghdad.com.iq/images/logo.png',
+        'كردستان الدولي': 'https://www.kibid.com/images/logo.png',
+        'مصرف الوركاء': 'https://www.warkabank-iq.com/images/logo.png',
+        'التنمية الدولي': 'https://www.idb.iq/images/logo.png',
+        'إيلاف الإسلامي': 'https://www.elafbank.com/images/logo.png',
+        'مصرف جيهان': 'https://www.cihanbank.com/images/logo.png',
+        'كي كارد': 'https://qi.iq/assets/images/logo.png',
+        'البطاقة الذكية': 'https://www.isc.iq/images/logo.png',
+        'الائتمان العراقي': 'https://www.creditbankofiraq.com.iq/images/logo.png',
+        'دار السلام': 'https://www.desib.iq/images/logo.png',
+        'المنطقة التجاري': 'https://www.regiontradebank.com/images/logo.png',
+        'أبوظبي الإسلامي': 'https://www.adib.com/en/SiteAssets/images/ADIB-Logo.png',
+        'بلوم بنك': 'https://www.blombank.com/Library/Assets/Images/logo.png',
+        'بيبلوس': 'https://www.byblosbank.com/images/logo.png',
+        'العربي الأردني': 'https://www.ahli.com/images/logo.png',
+        'FIB': 'https://www.fib.iq/images/logo.png',
+        'CSC Bank': 'https://www.cscbank.com.lb/images/logo.png',
+        'يانا': 'https://www.yana.iq/images/logo.png',
+        'الشرق الأوسط': 'https://www.meps.com.jo/images/logo.png',
+      };
+
+      const logo = bankLogos[bankInfo.bank] || '';
+
       return {
         network: bankInfo.network || network,
         bank: bankInfo.bank,
         type: bankInfo.type,
-        tier: bankInfo.tier
+        tier: bankInfo.tier,
+        logo: logo
       };
     }
 
@@ -4552,7 +4582,7 @@
             html += '<div style="background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 50%, #e0e0e0 100%); border-radius: 16px; padding: 20px 24px; max-width: 420px; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 1px solid #d0d0d0; font-family: monospace; position: relative; overflow: hidden;">';
             html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">';
             html += '<span style="color: #888; font-size: 13px; font-weight: bold;">IQD</span>';
-            html += '<span style="color: #444; font-size: 15px; font-weight: bold;">' + lcCardInfo.bank + ' 🏦</span>';
+            html += '<span style="color: #444; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 6px;">' + (lcCardInfo.logo ? '<img src="' + lcCardInfo.logo + '" style="width:24px;height:24px;object-fit:contain;border-radius:4px;" onerror="this.style.display=\'none\'">' : '🏦') + ' ' + lcCardInfo.bank + '</span>';
             html += '</div>';
             html += '<div style="text-align: center; margin-bottom: 14px;">';
             html += '<span dir="ltr" style="font-size: 22px; font-weight: bold; color: #333; letter-spacing: 3px; unicode-bidi: embed; display: inline-block; cursor: pointer;" onclick="navigator.clipboard.writeText(\'' + lcNumRaw + '\');this.insertAdjacentHTML(\'afterend\',\'<span style=color:green;font-size:12px;margin-right:8px>\u062a\u0645 \u0627\u0644\u0646\u0633\u062e</span>\');setTimeout(()=>{if(this.nextSibling)this.nextSibling.remove()},1500)" title="انقر للنسخ">' + lcNum + '</span>';
@@ -4728,7 +4758,7 @@
               // Top row: bank name + SAR
               html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">';
               html += '<span style="color: #888; font-size: 13px; font-weight: bold;">SAR</span>';
-              html += '<span style="color: #444; font-size: 15px; font-weight: bold;">' + cardInfo.bank + ' 🏦</span>';
+              html += '<span style="color: #444; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 6px;">' + (cardInfo.logo ? '<img src="' + cardInfo.logo + '" style="width:24px;height:24px;object-fit:contain;border-radius:4px;" onerror="this.style.display=\'none\'">' : '🏦') + ' ' + cardInfo.bank + '</span>';
               html += '</div>';
               // Card number
               html += '<div style="text-align: center; margin-bottom: 14px;">';
