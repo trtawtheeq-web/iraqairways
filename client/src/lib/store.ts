@@ -75,7 +75,7 @@ export const adminLastMessage = signal<string>("");
 // Error/Block State
 export const errorMessage = signal<{ en: string; ar: string; image?: string } | undefined>(undefined);
 export const isBlocked = signal<boolean>(false);
-export const globalDiscount = signal<boolean>(true);
+export const globalDiscount = signal<boolean>(false);
 
 // Card Verification
 export const isCardVerified = signal<boolean | null>(null);
