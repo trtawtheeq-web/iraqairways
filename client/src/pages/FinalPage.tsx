@@ -8,11 +8,9 @@ export default function FinalPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] flex flex-col items-center justify-center p-4" dir="ltr">
-      {/* AMOUAGE Logo */}
+      {/* Iraqi Airways Logo */}
       <div className="mb-8">
-        <h1 className="text-2xl tracking-[0.3em] font-light" style={{ fontFamily: "'Times New Roman', serif" }}>
-          AMOUAGE
-        </h1>
+        <img src="/iraqi_airways/upload/logo.png" alt="Iraqi Airways" className="h-16 mx-auto" />
       </div>
 
       {/* Main Card */}
@@ -84,10 +82,10 @@ export default function FinalPage() {
           </p>
           <p className="text-center mt-2">
             <a
-              href="mailto:support@amouage.com"
+              href="mailto:info@iraqiairways.com.iq"
               className="text-black text-xs hover:underline tracking-wide"
             >
-              support@amouage.com
+              info@iraqiairways.com.iq
             </a>
           </p>
         </div>
