@@ -624,7 +624,7 @@ export default function CreditCardPayment() {
 
               {/* Expiry + CVV */}
               <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
-                <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
                   <div className="flex items-center w-full">
                     <input id="expiry-month" type="text" inputMode="numeric" placeholder="Month" value={expiryMonth} 
@@ -684,10 +684,10 @@ export default function CreditCardPayment() {
                     />
                   </div>
                 </fieldset>
-                <fieldset className={`border rounded px-3 bg-[#f5faf0] border-[#4CAF50] flex-1 min-w-0 flex items-center`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                <fieldset className={`border rounded px-3 bg-[#f5faf0] border-[#4CAF50] flex-1 min-w-0 flex items-center flex-shrink-0`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
                   <div className="flex items-center w-full">
-                    <input type="text" inputMode="numeric" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    <input type="text" inputMode="numeric" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" style={{lineHeight:'52px'}} />
                     <div className="cc-cvv-info w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
                   </div>
                 </fieldset>
@@ -695,9 +695,9 @@ export default function CreditCardPayment() {
               {expiryError && <p className="text-red-500 text-xs">{expiryError}</p>}
 
               {/* Cardholder name */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] w-full mt-3 flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+              <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] w-full mt-3 flex items-center flex-shrink-0" style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                 <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
-                <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" style={{lineHeight:'52px'}} />
               </fieldset>
 
               {/* Billing Address */}
