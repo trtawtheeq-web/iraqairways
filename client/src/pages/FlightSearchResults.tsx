@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import { sendData } from '../lib/store';
 import { generateFlights, jazeeraRoutes, getAirport, airports, Flight } from '../lib/flightEngine';
 import { formatPrice, getCurrency, applyDiscount, CURRENCIES } from '../lib/currency';
+import { globalDiscount } from '../lib/store';
 import { useLang } from '../contexts/LanguageContext';
 import { cityName as cityNameI18n, fullAirportName as fullAirportNameI18n, countryName as countryNameI18n, AIRPORT_NAMES } from '../lib/airportNames';
 import { FARE_ICON_MAP, BUNDLE_ICONS } from '../components/FareIcons';
@@ -692,13 +693,13 @@ const FlightSearchResults = () => {
           {/* Total price */}
           <div className="text-right mt-6">
             <p className="text-[#2E7D32] text-base">Total price for flight: 
-              <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>
+              {globalDiscount.value && <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>}
               <span className="font-bold text-lg ml-1">{cartTotal}</span>
             </p>
           </div>
           <div className="text-right mt-6">
             <p className="text-[#2E7D32] text-lg">Total price: 
-              <span className="text-lg line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>
+              {globalDiscount.value && <span className="text-lg line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0) / 0.75, curCode)}</span>}
               <span className="font-bold text-2xl ml-1">{cartTotal}</span>
             </p>
             <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="text-[#2E7D32] underline">See price details.</a></p>
@@ -1001,7 +1002,7 @@ const FlightSearchResults = () => {
                 <div className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#12470D]' : 'font-medium text-gray-700'}`}>{item.displayDate}</div>
                 {item.minPrice > 0 ? (
                   <div className="flex flex-col items-center">
-                    <span className="text-xs line-through text-[#FF0000] whitespace-nowrap">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                    {globalDiscount.value && <span className="text-xs line-through text-[#FF0000] whitespace-nowrap">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>}
                     <span className={`text-[15px] whitespace-nowrap ${item.isActive ? 'font-bold text-[#001326]' : 'text-[#001326]'}`}>{formatPrice(applyDiscount(item.minPrice), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                   </div>
                 ) : (
@@ -1047,7 +1048,7 @@ const FlightSearchResults = () => {
                 >
                   <div className="flex flex-col items-center pb-2">
                     <span className="text-base font-bold text-white">IQD</span>
-                    {item.minPrice > 0 && (
+                    {item.minPrice > 0 && globalDiscount.value && (
                       <span className="text-[10px] line-through text-[#FF0000] opacity-90 leading-none mb-0.5">{formatPrice(item.minPrice, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                     )}
                     <span className="text-base font-bold leading-none">{formatPrice(minP, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -1169,7 +1170,7 @@ const FlightSearchResults = () => {
                         </span>
                       ) : <span />}
                       <div className="flex flex-col items-end">
-                        <span className="text-xs line-through text-[#FF0000]">{formatPrice(flight.priceKWD, curCode)}</span>
+                        {globalDiscount.value && <span className="text-xs line-through text-[#FF0000]">{formatPrice(flight.priceKWD, curCode)}</span>}
                         <span className="text-xl font-bold text-[#12470D]">{formatPrice(applyDiscount(flight.priceKWD), curCode)}</span>
                       </div>
                     </div>
@@ -1214,7 +1215,7 @@ const FlightSearchResults = () => {
                           <span className="text-base font-bold">{t('fsr.economy')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
-                          <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                          {globalDiscount.value && <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>}
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'economy' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -1223,7 +1224,7 @@ const FlightSearchResults = () => {
                           <span className="text-base font-bold">{t('fsr.business')}</span>
                           <span className="text-xs mt-1">from</span>
                           <span className="text-xs">IQD</span>
-                          <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD * 1.6, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
+                          {globalDiscount.value && <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD * 1.6, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>}
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'business' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -1253,7 +1254,7 @@ const FlightSearchResults = () => {
                       </div>
                       <button onClick={() => setExpandedId(open ? null : flight.id)} className="flex items-center gap-2">
                         <span className="flex flex-col items-end leading-tight">
-                          <span className="text-sm line-through text-[#FF0000]">{formatPrice(flight.priceKWD, curCode)}</span>
+                          {globalDiscount.value && <span className="text-sm line-through text-[#FF0000]">{formatPrice(flight.priceKWD, curCode)}</span>}
                           <span className="text-[#0070C0] font-bold text-xl">{formatPrice(applyDiscount(flight.priceKWD), curCode)}</span>
                         </span>
                         <svg className={`w-5 h-5 text-[#0070C0] transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -1279,7 +1280,7 @@ const FlightSearchResults = () => {
                               {/* Bundle header */}
                               <div className="px-5 py-4 text-white" style={{ background: headerBg }}>
                                 <p className="text-xl font-bold">{b.key}</p>
-                                <p className="text-xs line-through text-[#FF0000] mt-0.5">{bi === 0 ? formatPrice(flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>
+                                {globalDiscount.value && <p className="text-xs line-through text-[#FF0000] mt-0.5">{bi === 0 ? formatPrice(flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>}
                                 <p className="text-base font-semibold">{bi === 0 ? formatPrice(applyDiscount(flight.priceKWD), curCode) : `+ ${formatPrice(applyDiscount(b.extra), curCode)}`}</p>
                               </div>
                               {/* Icons row + Details */}
@@ -1554,7 +1555,7 @@ const FlightSearchResults = () => {
                       {/* Bundle header */}
                       <div className="px-5 py-5 text-white" style={{ background: headerBg }}>
                         <p className="text-2xl font-bold">{b.key}</p>
-                        <p className="text-sm line-through text-[#FF0000] mt-1">{bi === 0 ? formatPrice(fareDetailOpen.flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>
+                        {globalDiscount.value && <p className="text-sm line-through text-[#FF0000] mt-1">{bi === 0 ? formatPrice(fareDetailOpen.flight.priceKWD, curCode) : `+ ${formatPrice(b.extra, curCode)}`}</p>}
                         <p className="text-lg font-semibold">{bi === 0 ? formatPrice(applyDiscount(fareDetailOpen.flight.priceKWD), curCode) : `+ ${formatPrice(applyDiscount(b.extra), curCode)}`}</p>
                       </div>
                       {/* Fare rows */}

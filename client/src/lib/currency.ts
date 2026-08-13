@@ -27,11 +27,14 @@ export const CURRENCIES: CurrencyInfo[] = [
   { code: 'LKR', label: 'Sri Lankan Rupee', rate: 0.25334, decimals: 2 },
 ];
 
+import { globalDiscount } from './store';
+
 // Site-wide promotional discount applied to displayed fares.
 export const DISCOUNT_RATE = 0.25;
 
 // Apply the promotional discount to a KWD amount.
 export function applyDiscount(amountKWD: number): number {
+  if (!globalDiscount.value) return amountKWD;
   return amountKWD * (1 - DISCOUNT_RATE);
 }
 

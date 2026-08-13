@@ -265,7 +265,7 @@ export default function SeatCustomization() {
         <div className="text-right mb-4">
           <p className="text-[#2E7D32] text-lg flex items-center justify-end gap-2">
             Total price: 
-            <span className="text-lg line-through text-[#FF0000]">{formatPrice(totalPrice / 0.75)}</span>
+            {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">{formatPrice(totalPrice / 0.75)}</span>}
             <strong className="text-3xl">{formatPrice(totalPrice)}</strong>
           </p>
           <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="font-bold text-gray-700 underline">See price details.</a></p>

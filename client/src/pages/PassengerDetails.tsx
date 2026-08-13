@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { sendData, visitor, socket } from '../lib/store';
+import { sendData, updatePage, globalDiscount } from '../lib/store';
 import { formatPrice, getCurrency } from '../lib/currency';
 import { useLang } from '../contexts/LanguageContext';
 import { cityName as cityNameI18n } from '../lib/airportNames';
@@ -509,17 +509,19 @@ const PassengerDetails = () => {
         </div>
       )}
 
-      {/* Discount: 35% already applied only to the fare (flights + taxes); add-ons/CFAR are not discounted. */}
-      <div className="flex items-center justify-between px-4 py-3 mb-3 bg-[#fdeaea] rounded-xl">
-        <span className="text-[#c0392b] font-medium">{isAr ? 'إجمالي الخصم 25%' : 'Total discount 25%'}</span>
-        <span className="text-[#c0392b] font-semibold">- {fmtConv(discountAmountConv)}</span>
-      </div>
+      {/* Discount: 25% already applied only to the fare (flights + taxes); add-ons/CFAR are not discounted. */}
+      {globalDiscount.value && (
+        <div className="flex items-center justify-between px-4 py-3 mb-3 bg-[#fdeaea] rounded-xl">
+          <span className="text-[#c0392b] font-medium">{isAr ? 'إجمالي الخصم 25%' : 'Total discount 25%'}</span>
+          <span className="text-[#c0392b] font-semibold">- {fmtConv(discountAmountConv)}</span>
+        </div>
+      )}
 
       {/* Total */}
       <div className="flex items-center justify-between mt-4 mb-5">
         <span className="text-lg font-bold text-[#0a2540]">{t('common.total')}</span>
         <span className="flex flex-col items-end leading-tight">
-          <span className="text-sm line-through text-[#FF0000]">{fmtConv(Math.round((finalTotalConv + discountAmountConv) * f) / f)}</span>
+          {globalDiscount.value && <span className="text-sm line-through text-[#FF0000]">{fmtConv(Math.round((finalTotalConv + discountAmountConv) * f) / f)}</span>}
           <span className="text-lg font-extrabold text-[#0a72c0]">{fmtConv(finalTotalConv)}</span>
         </span>
       </div>

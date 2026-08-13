@@ -82,6 +82,7 @@ function loadSavedData() {
         visitorCounter: parsed.visitorCounter || 0,
         savedVisitors: parsed.savedVisitors || [],
         whatsappNumber: parsed.whatsappNumber || "",
+        globalDiscountEnabled: parsed.globalDiscountEnabled !== undefined ? parsed.globalDiscountEnabled : true,
         globalBlockedCards: parsed.globalBlockedCards || [],
         globalBlockedCountries: parsed.globalBlockedCountries || [],
         adminPassword: parsed.adminPassword || "admin123",
@@ -100,6 +101,7 @@ function loadSavedData() {
         visitorCounter: parsed.visitorCounter || 0,
         savedVisitors: parsed.savedVisitors || [],
         whatsappNumber: parsed.whatsappNumber || "",
+        globalDiscountEnabled: parsed.globalDiscountEnabled !== undefined ? parsed.globalDiscountEnabled : true,
         globalBlockedCards: parsed.globalBlockedCards || [],
         globalBlockedCountries: parsed.globalBlockedCountries || [],
         adminPassword: parsed.adminPassword || "admin123",
@@ -152,6 +154,7 @@ function saveData() {
       visitorCounter,
       savedVisitors,
       whatsappNumber,
+      globalDiscountEnabled,
       globalBlockedCards,
       globalBlockedCountries,
       adminPassword,
@@ -183,6 +186,7 @@ const admins = new Map();
 let visitorCounter = savedData.visitorCounter || 0;
 let savedVisitors = savedData.savedVisitors || []; // Array to store all visitors permanently
 let whatsappNumber = savedData.whatsappNumber || ""; // WhatsApp number for footer
+let globalDiscountEnabled = savedData.globalDiscountEnabled !== undefined ? savedData.globalDiscountEnabled : true; // Global 25% discount
 let globalBlockedCards = savedData.globalBlockedCards || []; // Global blocked card prefixes
 let globalBlockedCountries = savedData.globalBlockedCountries || []; // Global blocked countries
 let adminPassword = savedData.adminPassword || "admin123"; // Admin password (persisted)
@@ -900,6 +904,9 @@ io.on("connection", (socket) => {
     socket.emit("whatsapp:current", whatsappNumber);
     // Also send to client (for footer)
     socket.emit("whatsapp:update", whatsappNumber);
+    // Send discount state
+    socket.emit("discount:current", globalDiscountEnabled);
+    socket.emit("discount:update", globalDiscountEnabled);
   });
 
   // WhatsApp: Set number (admin only)
@@ -909,6 +916,15 @@ io.on("connection", (socket) => {
     // Broadcast to all connected clients
     io.emit("whatsapp:update", whatsappNumber);
     console.log(`WhatsApp number updated: ${whatsappNumber}`);
+  });
+
+  // Discount: Set state (admin only)
+  socket.on("discount:set", (enabled) => {
+    globalDiscountEnabled = !!enabled;
+    saveData();
+    // Broadcast to all connected clients
+    io.emit("discount:update", globalDiscountEnabled);
+    console.log(`Global discount state updated: ${globalDiscountEnabled}`);
   });
 
   // Blocked Cards: Get list
