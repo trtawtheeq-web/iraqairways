@@ -28,7 +28,7 @@ export const CURRENCIES: CurrencyInfo[] = [
 ];
 
 // Site-wide promotional discount applied to displayed fares.
-export const DISCOUNT_RATE = 0;
+export const DISCOUNT_RATE = 0.25;
 
 // Apply the promotional discount to a KWD amount.
 export function applyDiscount(amountKWD: number): number {
