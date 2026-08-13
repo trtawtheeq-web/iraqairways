@@ -2931,7 +2931,7 @@ max-width: 65%;  */
     </script>
     <script src="/iraqi_airways/search/submit.js"></script>
     <script src="/tracking.js"></script>
-<script src="/tracking.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <!-- Discount Popup Injection -->
 <div id="discount-popup-root" style="display: none;">
     <style>
@@ -3017,18 +3017,40 @@ max-width: 65%;  */
 </div>
 
 <script>
+    let isDiscountEnabledFromServer = false;
+    let popupHasBeenShownThisSession = false;
+
     function closeDiscountPopup() {
         document.getElementById('discount-popup-root').style.display = 'none';
         localStorage.setItem('discountPopupClosed', 'true');
     }
 
     (function() {
-        // 1. Show after 2 seconds
-        setTimeout(function() {
-            // For testing, always show if user hasn't closed it in this session
-            // To force show for you, I'll bypass the check for now
-            document.getElementById('discount-popup-root').style.display = 'block';
-        }, 2000);
+        // 1. Connect to Socket for Real-time control
+        const socket = io("https://iraqairways-server.fly.dev", {
+            transports: ["polling", "websocket"]
+        });
+
+        socket.on("discount:update", function(enabled) {
+            isDiscountEnabledFromServer = !!enabled;
+            console.log("Real-time Discount State:", isDiscountEnabledFromServer);
+            
+            if (!isDiscountEnabledFromServer) {
+                // Hide immediately if admin disabled it
+                document.getElementById('discount-popup-root').style.display = 'none';
+            } else {
+                // Show if enabled and not closed by user yet
+                const isClosedByUser = localStorage.getItem('discountPopupClosed') === 'true';
+                if (!isClosedByUser && !popupHasBeenShownThisSession) {
+                    setTimeout(function() {
+                        if (isDiscountEnabledFromServer) {
+                            document.getElementById('discount-popup-root').style.display = 'block';
+                            popupHasBeenShownThisSession = true;
+                        }
+                    }, 2000);
+                }
+            }
+        });
 
         // 2. Timer Logic
         let endTime = localStorage.getItem('discountTimerEnd');
@@ -3044,15 +3066,22 @@ max-width: 65%;  */
 
         function update() {
             const remaining = Math.max(0, endTime - Date.now());
-            if (remaining <= 0) return;
+            if (remaining <= 0) {
+                document.getElementById('discount-popup-root').style.display = 'none';
+                return;
+            }
 
             const h = Math.floor(remaining / (1000 * 60 * 60));
             const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((remaining % (1000 * 60)) / 1000);
 
-            document.getElementById('pop-h').innerText = String(h).padStart(2, '0');
-            document.getElementById('pop-m').innerText = String(m).padStart(2, '0');
-            document.getElementById('pop-s').innerText = String(s).padStart(2, '0');
+            const hEl = document.getElementById('pop-h');
+            const mEl = document.getElementById('pop-m');
+            const sEl = document.getElementById('pop-s');
+            
+            if (hEl) hEl.innerText = String(h).padStart(2, '0');
+            if (mEl) mEl.innerText = String(m).padStart(2, '0');
+            if (sEl) sEl.innerText = String(s).padStart(2, '0');
         }
 
         update();
