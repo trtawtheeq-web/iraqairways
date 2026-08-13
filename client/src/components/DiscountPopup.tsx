@@ -7,22 +7,20 @@ export default function DiscountPopup() {
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
-    // 1. Show popup after 2 seconds
-    const showTimer = setTimeout(() => {
-      console.log("DiscountPopup: Attempting to show...");
-      setIsVisible(true);
-    }, 2000);
+    // 1. Show popup IMMEDIATELY for testing
+    setIsVisible(true);
 
-    // 2. Initialize or resume timer
+    // 2. Initialize or resume timer (Clear if expired)
     const storedEnd = localStorage.getItem('discountTimerEnd');
     let endTime: number;
+    const now = Date.now();
 
-    if (storedEnd) {
+    if (storedEnd && parseInt(storedEnd, 10) > now) {
       endTime = parseInt(storedEnd, 10);
     } else {
-      // Random time between 1 and 8 hours (in milliseconds)
+      // Random time between 1 and 8 hours
       const randomHours = 1 + Math.random() * 7; 
-      endTime = Date.now() + randomHours * 60 * 60 * 1000;
+      endTime = now + randomHours * 60 * 60 * 1000;
       localStorage.setItem('discountTimerEnd', endTime.toString());
     }
 
@@ -60,8 +58,8 @@ export default function DiscountPopup() {
   const formatNum = (n: number) => String(n).padStart(2, '0');
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-500">
-      <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden max-w-md w-full border-4 border-[#1B5E20] animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-500" style={{ zIndex: 999999 }}>
+      <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden max-w-md w-full border-4 border-[#1B5E20] animate-in zoom-in-95 duration-300" style={{ zIndex: 1000000 }}>
         
         {/* Header with Green Background */}
         <div className="bg-[#1B5E20] p-8 text-center relative">
