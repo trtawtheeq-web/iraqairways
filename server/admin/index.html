@@ -4013,8 +4013,7 @@
           '" onclick="selectVisitor(\'' + v._id + '\')">'+
           // Checkbox at top right
           '<input type="checkbox" class="visitor-checkbox absolute top-2 right-2 w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
-          // Star button - bottom left
-          '<span onclick="event.stopPropagation(); toggleStar(\'' + v._id + '\')" class="absolute bottom-2 left-2 cursor-pointer" style="font-size: 1.3em; opacity: ' + (v.isStarred ? '1' : '0.3') + '; filter: ' + (v.isStarred ? 'drop-shadow(0 1px 3px #f59e0b)' : 'none') + ';">' + (v.isStarred ? '⭐' : '☆') + '</span>' +
+
           // Delete button at top left
           '<button onclick="event.stopPropagation(); deleteVisitorFromCard(\'' + v._id + '\')" class="absolute top-2 left-2 text-xs text-red-500 hover:text-red-700 hover:underline">حذف</button>' +
           // Two columns layout
@@ -4036,7 +4035,8 @@
           '</div>' +
           (v.hasNewData ? '<div class="mt-2 text-xs text-blue-700 font-medium">📝 يوجد بيانات جديدة</div>' : '') +
           (v.hasNewMessage ? '<div class="mt-2 text-xs text-green-700 font-medium">💬 تم ورود رسالة من العميل</div>' : '') +
-          (v.waitingForAdminResponse ? '<div class="absolute bottom-2 left-2 text-sm text-yellow-700 font-medium"><span class="hourglass-icon animate-bounce" style="font-size: 1.5em;">⏳</span> ينتظر الرد</div>' : '') +
+          (v.waitingForAdminResponse ? '<div class="text-sm text-yellow-700 font-medium mt-1"><span class="hourglass-icon animate-bounce" style="font-size: 1.5em;">⏳</span> ينتظر الرد</div>' : '') +
+          '<div class="mt-1" style="text-align:left;"><span onclick="event.stopPropagation(); toggleStar(\'' + v._id + '\')" class="cursor-pointer" style="font-size: 1.3em; opacity: ' + (v.isStarred ? '1' : '0.3') + '; filter: ' + (v.isStarred ? 'drop-shadow(0 1px 3px #f59e0b)' : 'none') + ';">' + (v.isStarred ? '⭐' : '☆') + '</span></div>' +
           '</div>';
       }).join('');
       // Start timers for connected visitors
