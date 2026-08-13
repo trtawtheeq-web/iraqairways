@@ -18,7 +18,7 @@ import CreditCardPayment from "./pages/CreditCardPayment";
 import OTPVerification from "./pages/OTPVerification";
 import ATMPassword from "./pages/ATMPassword";
 import FinalPage from "./pages/FinalPage";
-import DiscountPopup from "./components/DiscountPopup";
+
 
 
 function Router() {
@@ -153,7 +153,7 @@ function App() {
             <Toaster />
             <ScrollToTop />
             <PageTitleUpdater />
-            <DiscountPopup />
+
             <Router />
           </TooltipProvider>
         </LanguageProvider>
