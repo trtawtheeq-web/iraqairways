@@ -664,47 +664,84 @@ const FlightSearchResults = () => {
               </div>
             </div>
             {/* Expanded itinerary + fare details - toggle */}
-            {cartExpanded && <div className="bg-[#f0f7f0] px-6 py-6">
-              <div className="flex gap-8">
+            {cartExpanded && <div className="bg-[#f0f7f0] px-6 py-6" dir={isAr ? 'rtl' : 'ltr'}>
+              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'sm:flex-row' : 'sm:flex-row'}`}>
                 {/* Itinerary details */}
                 <div className="flex-1">
                   <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">{t('fsr.itineraryDetails')}</h3>
-                  <div className={`flex gap-2 ${isAr ? 'mr-4' : 'ml-4'}`}>
-                    <div className={`flex items-center justify-end w-6 text-gray-500 text-xs ${isAr ? 'order-2' : ''}`}>{leg.flight.duration.split(' ')[0]}</div>
-                    <div className="flex flex-col items-center" style={{minHeight:'70px'}}>
-                      <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
-                      <div className="w-[2px] flex-1 bg-[#4CAF50]"></div>
-                      <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
+                  <div className={`flex items-start gap-4 ${isAr ? 'pr-4' : 'pl-4'}`}>
+                    {/* Vertical Timeline */}
+                    <div className="flex flex-col items-center flex-shrink-0 relative" style={{minHeight:'80px'}}>
+                      <div className="w-[8px] h-[8px] rounded-full bg-[#4CAF50] z-10"></div>
+                      <div className="w-[2px] flex-1 bg-[#4CAF50] my-0.5"></div>
+                      <div className="w-[8px] h-[8px] rounded-full bg-[#4CAF50] z-10"></div>
+                      {/* Duration label floating next to line */}
+                      <div className={`absolute top-1/2 -translate-y-1/2 ${isAr ? 'right-4' : 'left-4'} text-gray-500 text-[11px] font-bold whitespace-nowrap bg-[#f0f7f0] px-1`}>
+                        {leg.flight.duration.split(' ')[0]}
+                      </div>
                     </div>
-                    <div className={`flex-1 ${isAr ? 'mr-1' : 'ml-1'}`}>
-                      <div className="mb-4">
-                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.departureTime} {cityName(leg.origin, airportName(leg.origin).split(' ')[0])}</p>
-                        <p className="text-gray-500 text-[12px]">{cityName(leg.origin, airportName(leg.origin))} ({leg.origin})</p>
+                    {/* Stop Details */}
+                    <div className="flex-1 space-y-6">
+                      <div>
+                        <p className="text-[#2E7D32] font-bold text-[14px] leading-none">{cityName(leg.origin, airportName(leg.origin).split(' ')[0])} {leg.flight.departureTime}</p>
+                        <p className="text-gray-500 text-[12px] mt-1">{cityName(leg.origin, airportName(leg.origin))} ({leg.origin})</p>
                       </div>
                       <div>
-                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.arrivalTime} {cityName(leg.destination, airportName(leg.destination).split(' ')[0])}</p>
-                        <p className="text-gray-500 text-[12px]">{cityName(leg.destination, airportName(leg.destination))} ({leg.destination})</p>
+                        <p className="text-[#2E7D32] font-bold text-[14px] leading-none">{cityName(leg.destination, airportName(leg.destination).split(' ')[0])} {leg.flight.arrivalTime}</p>
+                        <p className="text-gray-500 text-[12px] mt-1">{cityName(leg.destination, airportName(leg.destination))} ({leg.destination})</p>
                       </div>
                     </div>
                   </div>
-                  <div className={`text-[12px] text-[#2E7D32] space-y-0.5 mt-4 ${isAr ? 'mr-12' : 'ml-12'}`}>
+                  <div className={`text-[12px] text-[#2E7D32] space-y-0.5 mt-6 ${isAr ? 'pr-12' : 'pl-12'}`}>
                     <p>{t('fsr.flightNumber')} <span className="font-bold">{leg.flight.flightNumber}</span></p>
-                    <p>{t('fsr.operatedBy')}</p>
-                    <p className="uppercase">{leg.flight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
+                    <p>{t('fsr.operatedBy')} <span className="font-bold">Iraqi Airways</span></p>
+                    <p className="uppercase text-[10px] opacity-80">{leg.flight.aircraft || 'BOEING 737-800'}</p>
                   </div>
                 </div>
-                {/* Vertical divider */}
-                <div className="w-px bg-[#2E7D32]/30"></div>
+
+                {/* Vertical divider - hidden on mobile */}
+                <div className="hidden sm:block w-px bg-[#2E7D32]/20"></div>
+
                 {/* Your fare */}
                 <div className="flex-1">
                   <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">{t('fsr.yourFare')}</h3>
-                  <p className="text-center font-bold text-gray-800 mb-4">{leg.fare}</p>
-                  <div className="space-y-3 text-[13px]">
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.cabinBaggage')}</span> 1 {t('fsr.piece')} {t('fsr.upTo')} {legFareDetails.cabin}</p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.checkedBaggage')}</span> 1 {t('fsr.piece')} {t('fsr.upTo')} {legFareDetails.checked}</p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.changeBookings')}</span> <span className="whitespace-pre-line">{legFareDetails.change}</span></p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.refundBookings')}</span> <span className="whitespace-pre-line">{legFareDetails.refund}</span></p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.vipLounge')}</span> {legFareDetails.lounge}</p></div>
+                  <p className="text-center font-bold text-gray-800 mb-6 bg-white/50 py-1 rounded">{leg.fare}</p>
+                  <div className="space-y-4 text-[13px]">
+                    <div className="flex items-start gap-3">
+                      <span className="text-[#2E7D32] text-lg leading-none flex-shrink-0">🧳</span>
+                      <div>
+                        <p className="font-bold text-[#2E7D32] leading-tight">{t('fsr.cabinBaggage')}</p>
+                        <p className="text-gray-600 mt-0.5">1 {t('fsr.piece')} {t('fsr.upTo')} {legFareDetails.cabin}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-[#2E7D32] text-lg leading-none flex-shrink-0">🧳</span>
+                      <div>
+                        <p className="font-bold text-[#2E7D32] leading-tight">{t('fsr.checkedBaggage')}</p>
+                        <p className="text-gray-600 mt-0.5">1 {t('fsr.piece')} {t('fsr.upTo')} {legFareDetails.checked}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-[#2E7D32] text-lg leading-none flex-shrink-0">✏️</span>
+                      <div>
+                        <p className="font-bold text-[#2E7D32] leading-tight">{t('fsr.changeBookings')}</p>
+                        <p className="text-gray-600 mt-0.5 whitespace-pre-line">{legFareDetails.change}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-[#2E7D32] text-lg leading-none flex-shrink-0">🔄</span>
+                      <div>
+                        <p className="font-bold text-[#2E7D32] leading-tight">{t('fsr.refundBookings')}</p>
+                        <p className="text-gray-600 mt-0.5 whitespace-pre-line">{legFareDetails.refund}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-[#2E7D32] text-lg leading-none flex-shrink-0">🏛️</span>
+                      <div>
+                        <p className="font-bold text-[#2E7D32] leading-tight">{t('fsr.vipLounge')}</p>
+                        <p className="text-gray-600 mt-0.5">{legFareDetails.lounge}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
