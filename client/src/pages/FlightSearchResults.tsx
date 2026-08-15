@@ -283,7 +283,7 @@ const FlightSearchResults = () => {
       const minPrice = dayFlights.length ? Math.min(...dayFlights.map(f => f.priceKWD)) : 0;
       ribbon.push({
         dateStr,
-        displayDate: current.toLocaleDateString(isAr ? 'ar-EG' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' }),
+        displayDate: current.toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' }),
         minPrice,
         isActive: dateStr === date,
       });
@@ -312,7 +312,7 @@ const FlightSearchResults = () => {
       const minPrice = dayFlights.length ? Math.min(...dayFlights.map(f => f.priceKWD)) : 0;
       ribbon.push({
         dateStr,
-        displayDate: d.toLocaleDateString(isAr ? 'ar-EG' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' }),
+        displayDate: d.toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' }),
         minPrice,
         isActive: dateStr === date,
       });
@@ -410,7 +410,7 @@ const FlightSearchResults = () => {
       return stepIndex === 0 ? t('fsr.selectDeparture') : t('fsr.selectReturn');
     }
     if (tripType === 'multicity') {
-      return isAr ? `اختر الرحلة ${stepIndex + 1} من ${legs.length}` : `Select flight ${stepIndex + 1} of ${legs.length}`;
+      return isAr ? `اختر الرحلة ${stepIndex + 1} من أصل ${legs.length}` : `Select flight ${stepIndex + 1} of ${legs.length}`;
     }
     return t('fsr.selectDeparture');
   };
@@ -604,30 +604,30 @@ const FlightSearchResults = () => {
         {/* Your selection box */}
         <div className="max-w-4xl mx-auto mt-10 mb-6 text-center">
           <div className="inline-block border border-gray-200 rounded-xl px-12 py-6 shadow-sm">
-            <h1 className="text-2xl text-[#2E7D32] font-light">Your selection</h1>
-            <p className="text-[#2E7D32] text-base mt-1">{airportName(allCartLegs[0].origin).split(' ')[0]} to {airportName(allCartLegs[0].destination).split(' ')[0]}{allCartLegs.length > 1 ? ` (Round trip)` : ''}</p>
+            <h1 className="text-2xl text-[#2E7D32] font-light">{t('fsr.yourSelection')}</h1>
+            <p className="text-[#2E7D32] text-base mt-1">{cityName(allCartLegs[0].origin, airportName(allCartLegs[0].origin).split(' ')[0])} {t('common.to')} {cityName(allCartLegs[0].destination, airportName(allCartLegs[0].destination).split(' ')[0])}{allCartLegs.length > 1 ? ` (${t('common.roundTrip')})` : ''}</p>
           </div>
         </div>
         {/* Your flight */}
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">Your flight</h2>
+          <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">{t('fsr.yourFlight')}</h2>
           {allCartLegs.map((leg, legIdx) => {
-            const legDateLabel = (() => { try { return new Date(leg.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return leg.date; } })();
+            const legDateLabel = (() => { try { return new Date(leg.date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return leg.date; } })();
             const legFareDetails = (leg.fare || '').includes('Business') 
-              ? { cabin: '10kg', checked: '40kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: `Yes, out of ${leg.origin}` }
+              ? { cabin: '10kg', checked: '40kg', change: t('fsr.before72') + '\n' + t('fsr.anyOtherTime'), refund: t('fsr.allowedAnyTime'), lounge: `${t('fsr.yesOutOf')} ${leg.origin}` }
               : (leg.fare || '').includes('Platinum')
-                ? { cabin: '7kg', checked: '30kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: 'No access' }
-                : { cabin: '7kg', checked: '30kg', change: 'Any time - Yes with penalty', refund: 'Any time - Yes with penalty', lounge: 'No access' };
+                ? { cabin: '7kg', checked: '30kg', change: t('fsr.before72') + '\n' + t('fsr.anyOtherTime'), refund: t('fsr.allowedAnyTime'), lounge: t('fsr.noAccess') }
+                : { cabin: '7kg', checked: '30kg', change: t('fsr.anyTimeYes'), refund: t('fsr.anyTimeYes'), lounge: t('fsr.noAccess') };
             return (
           <div key={legIdx} className="border border-gray-200 rounded-lg overflow-hidden mb-4">
             {/* Flight summary row */}
             <div className="px-6 py-4">
-              <p className="text-[#2E7D32] font-bold">{airportName(leg.origin).split(' ')[0]} to {airportName(leg.destination).split(' ')[0]} - <span className="font-normal text-[#2E7D32]">{legDateLabel}</span></p>
+              <p className="text-[#2E7D32] font-bold">{cityName(leg.origin, airportName(leg.origin).split(' ')[0])} {t('common.to')} {cityName(leg.destination, airportName(leg.destination).split(' ')[0])} - <span className="font-normal text-[#2E7D32]">{legDateLabel}</span></p>
               <hr className="border-[#2E7D32] mt-3" />
               <div className="flex flex-wrap sm:flex-nowrap items-center mt-4 gap-2 sm:gap-4">
                 <div className="flex items-center gap-3 flex-1 min-w-[200px]">
                   <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.departureTime}</span>
-                  <span className="text-gray-400 text-sm flex-1 text-center">··········· nonstop ···········</span>
+                  <span className="text-gray-400 text-sm flex-1 text-center">··········· {t('fsr.nonstop')} ···········</span>
                   <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.arrivalTime}</span>
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
@@ -647,28 +647,28 @@ const FlightSearchResults = () => {
               <div className="flex gap-8">
                 {/* Itinerary details */}
                 <div className="flex-1">
-                  <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">Itinerary details</h3>
-                  <div className="flex gap-2 ml-4">
-                    <div className="flex items-center justify-end w-6 text-gray-500 text-xs">{leg.flight.duration.split(' ')[0]}</div>
+                  <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">{t('fsr.itineraryDetails')}</h3>
+                  <div className={`flex gap-2 ${isAr ? 'mr-4' : 'ml-4'}`}>
+                    <div className={`flex items-center justify-end w-6 text-gray-500 text-xs ${isAr ? 'order-2' : ''}`}>{leg.flight.duration.split(' ')[0]}</div>
                     <div className="flex flex-col items-center" style={{minHeight:'70px'}}>
                       <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
                       <div className="w-[2px] flex-1 bg-[#4CAF50]"></div>
                       <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
                     </div>
-                    <div className="flex-1 ml-1">
+                    <div className={`flex-1 ${isAr ? 'mr-1' : 'ml-1'}`}>
                       <div className="mb-4">
-                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.departureTime} {airportName(leg.origin).split(' ')[0]}</p>
-                        <p className="text-gray-500 text-[12px]">{airportName(leg.origin)} ({leg.origin})</p>
+                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.departureTime} {cityName(leg.origin, airportName(leg.origin).split(' ')[0])}</p>
+                        <p className="text-gray-500 text-[12px]">{cityName(leg.origin, airportName(leg.origin))} ({leg.origin})</p>
                       </div>
                       <div>
-                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.arrivalTime} {airportName(leg.destination).split(' ')[0]}</p>
-                        <p className="text-gray-500 text-[12px]">{airportName(leg.destination)} ({leg.destination})</p>
+                        <p className="text-[#2E7D32] font-bold text-[14px]">{leg.flight.arrivalTime} {cityName(leg.destination, airportName(leg.destination).split(' ')[0])}</p>
+                        <p className="text-gray-500 text-[12px]">{cityName(leg.destination, airportName(leg.destination))} ({leg.destination})</p>
                       </div>
                     </div>
                   </div>
-                  <div className="text-[12px] text-[#2E7D32] space-y-0.5 mt-4 ml-12">
-                    <p>Flight number <span className="font-bold">{leg.flight.flightNumber}</span></p>
-                    <p>Operated by Iraqi Airways</p>
+                  <div className={`text-[12px] text-[#2E7D32] space-y-0.5 mt-4 ${isAr ? 'mr-12' : 'ml-12'}`}>
+                    <p>{t('fsr.flightNumber')} <span className="font-bold">{leg.flight.flightNumber}</span></p>
+                    <p>{t('fsr.operatedBy')}</p>
                     <p className="uppercase">{leg.flight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
                   </div>
                 </div>
@@ -676,50 +676,50 @@ const FlightSearchResults = () => {
                 <div className="w-px bg-[#2E7D32]/30"></div>
                 {/* Your fare */}
                 <div className="flex-1">
-                  <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">Your fare</h3>
+                  <h3 className="text-center text-[#2E7D32] font-bold text-base mb-4">{t('fsr.yourFare')}</h3>
                   <p className="text-center font-bold text-gray-800 mb-4">{leg.fare}</p>
                   <div className="space-y-3 text-[13px]">
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">Baggage in cabin</span> 1 piece up to {legFareDetails.cabin}</p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">Checked baggage</span> 1 piece up to {legFareDetails.checked}</p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><p><span className="font-bold text-[#2E7D32]">Change bookings</span> <span className="whitespace-pre-line">{legFareDetails.change}</span></p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><p><span className="font-bold text-[#2E7D32]">Refund bookings</span> <span className="whitespace-pre-line">{legFareDetails.refund}</span></p></div>
-                    <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><p><span className="font-bold text-[#2E7D32]">VIP Lounge</span> {legFareDetails.lounge}</p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.cabinBaggage')}</span> 1 {t('fsr.piece')} {t('fsr.upTo')} {legFareDetails.cabin}</p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.checkedBaggage')}</span> 1 {t('fsr.piece')} {t('fsr.upTo')} {legFareDetails.checked}</p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.changeBookings')}</span> <span className="whitespace-pre-line">{legFareDetails.change}</span></p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.refundBookings')}</span> <span className="whitespace-pre-line">{legFareDetails.refund}</span></p></div>
+                    <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><p><span className="font-bold text-[#2E7D32]">{t('fsr.vipLounge')}</span> {legFareDetails.lounge}</p></div>
                   </div>
                 </div>
               </div>
             </div>}
             {/* Change flight button */}
-            <div className="px-6 py-4">
-              <button onClick={() => { setShowCart(false); setCartFlight(null); setSelectedLegs(selectedLegs.slice(0, legIdx)); setStepIndex(legIdx); }} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Change flight</button>
+            <div className={`px-6 py-4 ${isAr ? 'text-right' : 'text-left'}`}>
+              <button onClick={() => { setShowCart(false); setCartFlight(null); setSelectedLegs(selectedLegs.slice(0, legIdx)); setStepIndex(legIdx); }} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">{t('fsr.changeFlight')}</button>
             </div>
           </div>
             );
           })}
           {/* Total price */}
-          <div className="text-right mt-6">
-            <p className="text-[#2E7D32] text-base">Total price for flight: 
-              {globalDiscount.value && <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
-              <span className="font-bold text-lg ml-1">{cartTotal}</span>
+          <div className={`${isAr ? 'text-left' : 'text-right'} mt-6`}>
+            <p className="text-[#2E7D32] text-base">{t('fsr.totalPriceForFlight')}: 
+              {globalDiscount.value && <span className={`text-sm line-through text-[#FF0000] ${isAr ? 'mr-2' : 'ml-2'}`}>{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
+              <span className={`font-bold text-lg ${isAr ? 'mr-1' : 'ml-1'}`}>{cartTotal}</span>
             </p>
           </div>
-          <div className="text-right mt-6">
-            <p className="text-[#2E7D32] text-lg">Total price: 
-              {globalDiscount.value && <span className="text-lg line-through text-[#FF0000] ml-2">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
-              <span className="font-bold text-2xl ml-1">{cartTotal}</span>
+          <div className={`${isAr ? 'text-left' : 'text-right'} mt-6`}>
+            <p className="text-[#2E7D32] text-lg">{t('fsr.totalPrice')}: 
+              {globalDiscount.value && <span className={`text-lg line-through text-[#FF0000] ${isAr ? 'mr-2' : 'ml-2'}`}>{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
+              <span className={`font-bold text-2xl ${isAr ? 'mr-1' : 'ml-1'}`}>{cartTotal}</span>
             </p>
-            <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="text-[#2E7D32] underline">See price details.</a></p>
+            <p className="text-gray-500 text-sm mt-1">{t('fsr.priceNotice')} <a href="#" className="text-[#2E7D32] underline">{t('fsr.seePriceDetails')}</a></p>
           </div>
           {/* Policy links - right aligned like original */}
-          <div className="text-right mt-6 text-sm text-[#2E7D32]">
-            <a href="#" className="underline">Detailed baggage policy ↗</a>
+          <div className={`${isAr ? 'text-left' : 'text-right'} mt-6 text-sm text-[#2E7D32]`}>
+            <a href="#" className="underline">{t('fsr.baggagePolicy')} ↗</a>
             <span className="mx-2 text-gray-400">|</span>
-            <a href="#" className="underline">Review conditions ↗</a>
+            <a href="#" className="underline">{t('fsr.reviewConditions')} ↗</a>
             <span className="mx-2 text-gray-400">|</span>
-            <a href="#" className="underline">Dangerous goods policy ↗</a>
+            <a href="#" className="underline">{t('fsr.dangerousGoods')} ↗</a>
           </div>
           {/* Fill passenger details button - full width on mobile, right on desktop */}
-          <div className="text-center sm:text-right mt-8 mb-12">
-            <button onClick={handleFillPassengerDetails} className="w-full sm:w-auto bg-[#2E7D32] text-white px-10 py-4 rounded-full text-lg font-medium hover:bg-[#1B5E20] transition-colors shadow-md">Fill passenger details</button>
+          <div className={`text-center ${isAr ? 'sm:text-left' : 'sm:text-right'} mt-8 mb-12`}>
+            <button onClick={handleFillPassengerDetails} className="w-full sm:w-auto bg-[#2E7D32] text-white px-10 py-4 rounded-full text-lg font-medium hover:bg-[#1B5E20] transition-colors shadow-md">{t('fsr.fillPassenger')}</button>
           </div>
         </div>
         {/* Footer - same as flight search page */}
@@ -727,16 +727,16 @@ const FlightSearchResults = () => {
           <div className="max-w-6xl mx-auto px-6 py-10">
             <div className="flex justify-between mb-8">
               <div>
-                <h4 className="font-bold text-lg mb-2">Plan and booking</h4>
+                <h4 className="font-bold text-lg mb-2">{t('fsr.planBooking')}</h4>
                 <a href="/" className="text-white underline text-sm">{t('fsr.bookTrip')} ↗</a>
               </div>
               <div>
-                <h4 className="font-bold text-lg mb-2">Contact us</h4>
+                <h4 className="font-bold text-lg mb-2">{t('fsr.contactUs')}</h4>
                 <a href="/" className="text-white underline text-sm block">{t('fsr.contactUs')} ↗</a>
                 <a href="/" className="text-white underline text-sm block mt-1">{t('fsr.offers')} ↗</a>
               </div>
               <div>
-                <h4 className="font-bold text-lg mb-2">About us</h4>
+                <h4 className="font-bold text-lg mb-2">{t('fsr.aboutUs')}</h4>
                 <a href="/" className="text-white underline text-sm">{t('fsr.ourFleet')} ↗</a>
               </div>
             </div>
@@ -761,7 +761,7 @@ const FlightSearchResults = () => {
               </div>
             </div>
             <div className="text-center mt-6">
-              <a href="#" className="text-white underline text-sm">Technical details</a>
+              <a href="#" className="text-white underline text-sm">{t('fsr.technicalDetails')}</a>
             </div>
           </div>
         </footer>
@@ -835,50 +835,50 @@ const FlightSearchResults = () => {
         <div className="w-full bg-white border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap sm:flex-nowrap items-center relative">
           {/* Mobile: text route */}
           <div className="sm:hidden w-[calc(100%-80px)]">
-            <p className="text-sm font-bold text-[#1a3c0a] m-0">{cityOfEn(origin)} - {cityOfEn(destination)}</p>
-            <p className="text-xs text-gray-600 m-0">{new Date(initialDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', day:'numeric', month:'short'})} &nbsp; {passengers} <svg className="inline w-3 h-3" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></p>
+            <p className="text-sm font-bold text-[#1a3c0a] m-0">{cityName(origin, cityOfEn(origin))} - {cityName(destination, cityOfEn(destination))}</p>
+            <p className="text-xs text-gray-600 m-0">{new Date(initialDate + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'})} &nbsp; {passengers} <svg className="inline w-3 h-3" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></p>
           </div>
           {/* Desktop: full route with dots */}
-          <div className="hidden sm:flex items-baseline gap-1">
-            <div className="flex flex-col">
+          <div className={`hidden sm:flex items-baseline gap-1 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
               <span className="text-[22px] font-bold text-[#1a3c0a]">{origin}</span>
-              <span className="text-xs text-gray-500">{cityOfEn(origin)}</span>
+              <span className="text-xs text-gray-500">{cityName(origin, cityOfEn(origin))}</span>
             </div>
             <div className="flex flex-col items-center mx-3 gap-0.5">
               {tripType === 'round' ? (
                 <>
                   <div className="flex items-center">
                     <span className="text-[#4ca42c] text-[10px] tracking-[2px]">················</span>
-                    <svg className="w-4 h-4 text-[#4ca42c] ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                    <svg className={`w-4 h-4 text-[#4ca42c] ${isAr ? 'mr-0.5 rotate-180' : 'ml-0.5'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
                   </div>
                   <div className="flex items-center">
-                    <svg className="w-4 h-4 text-[#4ca42c] mr-0.5 rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                    <svg className={`w-4 h-4 text-[#4ca42c] ${isAr ? 'ml-0.5' : 'mr-0.5 rotate-180'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
                     <span className="text-[#4ca42c] text-[10px] tracking-[2px]">················</span>
                   </div>
                 </>
               ) : (
                 <div className="flex items-center">
                   <span className="text-[#4ca42c] text-[10px] tracking-[2px]">················</span>
-                  <svg className="w-4 h-4 text-[#4ca42c] ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                  <svg className={`w-4 h-4 text-[#4ca42c] ${isAr ? 'mr-0.5 rotate-180' : 'ml-0.5'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
                 </div>
               )}
             </div>
-            <div className="flex flex-col">
+            <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
               <span className="text-[22px] font-bold text-[#1a3c0a]">{destination}</span>
-              <span className="text-xs text-gray-500">{cityOfEn(destination)}</span>
+              <span className="text-xs text-gray-500">{cityName(destination, cityOfEn(destination))}</span>
             </div>
           </div>
           <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
-          <div className="hidden sm:flex flex-col">
+          <div className={`hidden sm:flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
             <span className="text-sm text-gray-600">{t('fsr.depart')}</span>
-            <span className="text-base font-bold text-[#4ca42c]">{new Date(initialDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
+            <span className="text-base font-bold text-[#4ca42c]">{new Date(initialDate + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', month:'short', day:'numeric'})}</span>
           </div>
           {tripType === 'round' && returnDate && (
             <>
               <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
-              <div className="hidden sm:flex flex-col">
-                <span className="text-sm text-gray-600">Return</span>
-                <span className="text-base font-bold text-[#4ca42c]">{new Date(returnDate + 'T00:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</span>
+              <div className={`hidden sm:flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+                <span className="text-sm text-gray-600">{t('common.return')}</span>
+                <span className="text-base font-bold text-[#4ca42c]">{new Date(returnDate + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', month:'short', day:'numeric'})}</span>
               </div>
             </>
           )}
@@ -930,7 +930,7 @@ const FlightSearchResults = () => {
         <div className="flex justify-center mt-6 mb-6">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm px-10 py-5 text-center">
             <p className="text-2xl text-[#4ca42c] font-light">{t('fsr.pleaseSelect')}</p>
-            <p className="text-base text-gray-500 mt-1">{cityOfEn(origin)} to {cityOfEn(destination)}</p>
+            <p className="text-base text-gray-500 mt-1">{cityName(origin, cityOfEn(origin))} {t('common.to')} {cityName(destination, cityOfEn(destination))}</p>
           </div>
         </div>
 
@@ -1042,7 +1042,7 @@ const FlightSearchResults = () => {
             {dateRibbon.map((item) => {
               const minP = item.minPrice > 0 ? applyDiscount(item.minPrice) : 0;
               const prices = dateRibbon.filter(d => d.minPrice > 0).map(d => applyDiscount(d.minPrice)); const avgPrice = prices.reduce((a,b) => a+b, 0) / (prices.length || 1); const heightPx = minP > 0 ? (minP >= avgPrice ? 130 : 70) : 30;
-              const enDate = (() => { try { const d = new Date(item.dateStr); return d.toLocaleDateString('en-US', {weekday:'short'}).slice(0,3) + ' ' + d.getDate(); } catch { return item.displayDate; } })();
+              const arDate = (() => { try { const d = new Date(item.dateStr + 'T00:00:00'); return d.toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', { weekday: 'short', day: 'numeric' }); } catch { return item.displayDate; } })();
               return (
               <div key={item.dateStr} className="flex-shrink-0 flex flex-col items-center" style={{width:'85px'}}>
                 <button
@@ -1060,8 +1060,8 @@ const FlightSearchResults = () => {
                   </div>
                 </button>
                 <div className={`text-[11px] mt-1.5 ${item.isActive ? 'font-bold text-[#1a5c0a]' : 'text-[#4ca42c]'}`}>
-                  {item.isActive && <span className="text-[#4ca42c] mr-0.5">✔</span>}
-                  {enDate}
+                  {item.isActive && <span className={`${isAr ? 'ml-0.5' : 'mr-0.5'} text-[#4ca42c]`}>✔</span>}
+                  {arDate}
                 </div>
               </div>
               );
@@ -1083,15 +1083,15 @@ const FlightSearchResults = () => {
 
         {/* Mobile Economy/Business tabs - visible on mobile only, matches original */}
         {!isLoading && flights.length > 0 && (
-          <div className="sm:hidden flex mb-4 rounded-lg overflow-hidden border border-gray-200">
+          <div className={`sm:hidden flex mb-4 rounded-lg overflow-hidden border border-gray-200 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
             <button onClick={() => { setExpandedType('economy'); setExpandedId(null); setSelectedFareCard(null); }} className={`flex-1 flex flex-col items-center py-3 ${expandedType !== 'business' ? 'bg-[#4ca42c] text-white' : 'bg-[#4ca42c]/80 text-white/80'}`}>
-              <span className="font-bold">Economy</span>
-              <span className="text-xs">from</span>
+              <span className="font-bold">{t('fsr.economy')}</span>
+              <span className="text-xs">{t('fsr.from')}</span>
               <span className="text-xs">IQD {flights[0] ? formatPrice(applyDiscount(flights[0].priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '') : ''}</span>
             </button>
             <button onClick={() => { setExpandedType('business'); setExpandedId(null); setSelectedFareCard(null); }} className={`flex-1 flex flex-col items-center py-3 ${expandedType === 'business' ? 'bg-[#2E7D32] text-white' : 'bg-[#2E7D32]/80 text-white/80'}`}>
-              <span className="font-bold">Business</span>
-              <span className="text-xs">from</span>
+              <span className="font-bold">{t('fsr.business')}</span>
+              <span className="text-xs">{t('fsr.from')}</span>
               <span className="text-xs">IQD {flights[0] ? formatPrice(applyDiscount(flights[0].priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '') : ''}</span>
             </button>
           </div>
@@ -1122,14 +1122,14 @@ const FlightSearchResults = () => {
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#12470D]"></div>
-            <p className="mt-4 text-[#12470D] font-medium">{isAr ? 'جارٍ البحث عن أفضل الرحلات...' : 'Searching for the best flights...'}</p>
+            <p className="mt-4 text-[#12470D] font-medium">{t('fsr.searching')}</p>
           </div>
         ) : flights.length === 0 ? (
           <div className="py-16 text-center">
             <div className="text-5xl mb-5">⚠️</div>
-            <h2 className="text-2xl font-bold text-[#001326]">{isAr ? 'لا توجد رحلات متاحة لهذا المسار' : 'No Flights available for this route'}</h2>
-            <p className="text-gray-500 mt-2 text-sm">{isAr ? 'فشل البحث (500). يرجى المحاولة مرة أخرى.' : 'Search failed (500). Please try again.'}</p>
-            <button onClick={() => window.location.reload()} className="mt-6 bg-[#12470D] hover:bg-[#003875] text-white px-8 py-3 rounded-full font-medium transition-colors">{isAr ? 'حاول مرة أخرى' : 'Try Again'}</button>
+            <h2 className="text-2xl font-bold text-[#001326]">{t('fsr.noFlights')}</h2>
+            <p className="text-gray-500 mt-2 text-sm">{t('fsr.searchFailed')}</p>
+            <button onClick={() => window.location.reload()} className="mt-6 bg-[#12470D] hover:bg-[#003875] text-white px-8 py-3 rounded-full font-medium transition-colors">{t('fsr.tryAgain')}</button>
           </div>
         ) : (
           <div className="space-y-4">
@@ -1158,12 +1158,12 @@ const FlightSearchResults = () => {
                     {/* Row 3: Origin + Direct link + Destination */}
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-sm text-gray-600">{currentLeg.origin}</span>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setDetailsFlight(flight); }}
-                        className="text-sm text-gray-700 underline font-medium"
-                      >
-                        {isAr ? 'مباشر' : 'Direct'} • {flight.duration}
-                      </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setDetailsFlight(flight); }}
+                          className="text-sm text-gray-700 underline font-medium"
+                        >
+                          {t('fsr.nonstop')} • {flight.duration}
+                        </button>
                       <span className="text-sm text-gray-600">{currentLeg.destination}</span>
                     </div>
                     {/* Row 4: Alternating badge (first flight only, CSS animation) + Price */}
@@ -1171,7 +1171,7 @@ const FlightSearchResults = () => {
                       {isFirstFlight ? (
                         <span className="badge-flip-container relative h-7 w-[140px] overflow-hidden">
                           <span className="badge-text-1 text-xs border border-[#12470D] text-[#12470D] px-2.5 py-1 rounded-full font-medium inline-block">{t('fsr.lowestFare')}</span>
-                          <span className="badge-text-2 text-xs bg-[#d6eef8] text-[#12470D] px-2.5 py-1 rounded-full font-medium inline-block absolute left-0 top-0">{isAr ? '2 مقاعد متبقية' : '2 Seats left'}</span>
+                          <span className={`badge-text-2 text-xs bg-[#d6eef8] text-[#12470D] px-2.5 py-1 rounded-full font-medium inline-block absolute ${isAr ? 'right-0' : 'left-0'} top-0`}>2 {t('fsr.seatsLeft')}</span>
                         </span>
                       ) : <span />}
                       <div className="flex flex-col items-end">
@@ -1181,13 +1181,13 @@ const FlightSearchResults = () => {
                     </div>
                   </div>
 
-                  {/* ---- Desktop card row - Iraqi Airways style (LTR) ---- */}
-                  <div className={`block ${isFirstFlight ? 'pt-5' : ''}`} dir="ltr">
-                    {isFirstFlight && <div className="relative"><span className="absolute -top-3 right-4 text-[11px] bg-white text-[#4ca42c] border border-[#4ca42c] px-2.5 py-0.5 rounded z-10 font-medium">{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1} seat{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1 > 1 ? 's' : ''} left</span></div>}
+                  {/* ---- Desktop card row - Iraqi Airways style ---- */}
+                  <div className={`block ${isFirstFlight ? 'pt-5' : ''}`} dir={dir}>
+                    {isFirstFlight && <div className="relative"><span className={`absolute -top-3 ${isAr ? 'left-4' : 'right-4'} text-[11px] bg-white text-[#4ca42c] border border-[#4ca42c] px-2.5 py-0.5 rounded z-10 font-medium`}>{((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1} {((flight.id.charCodeAt(0) + flight.id.charCodeAt(1)) % 7) + 1 > 1 ? t('fsr.seatsLeft') : t('fsr.seatLeft')}</span></div>}
                     <div className="flex items-stretch border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                       {/* Left: Flight times */}
-                      <div className="flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 px-3 sm:px-6 py-4 sm:py-5 bg-white">
-                        <div className="text-left">
+                      <div className={`flex-1 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 px-3 sm:px-6 py-4 sm:py-5 bg-white ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                        <div className={isAr ? 'text-right' : 'text-left'}>
                           <p className="text-2xl font-bold text-gray-800 leading-none">{flight.departureTime}</p>
                           <p className="text-sm text-gray-600 mt-1">{currentLeg.origin}</p>
                         </div>
@@ -1195,9 +1195,9 @@ const FlightSearchResults = () => {
                           <div className="w-full flex items-center">
                             <div className="flex-1 border-t-2 border-dashed border-gray-300"></div>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">nonstop</p>
+                          <p className="text-xs text-gray-500 mt-1">{t('fsr.nonstop')}</p>
                         </div>
-                        <div className="text-right">
+                        <div className={isAr ? 'text-left' : 'text-right'}>
                           <p className="text-2xl font-bold text-gray-800 leading-none">
                             {flight.arrivalTime}
                             {flight.arrivesNextDay && <sup className="text-[10px] text-[#FF0000] ml-0.5">+1</sup>}
@@ -1207,27 +1207,27 @@ const FlightSearchResults = () => {
                         {/* Vertical separator */}
                         <div className="w-px bg-gray-300 self-stretch mx-4"></div>
                         {/* Duration info */}
-                        <div className="text-sm text-gray-600">
-                          <p className="flex items-center gap-1"><span>⏱</span> Duration {flight.duration}</p>
-                          <p className="flex items-center gap-1 mt-1"><span>✈</span> Operated by Iraqi Airways</p>
+                        <div className={`text-sm text-gray-600 ${isAr ? 'text-right' : 'text-left'}`}>
+                          <p className="flex items-center gap-1"><span>⏱</span> {t('fsr.duration')} {flight.duration}</p>
+                          <p className="flex items-center gap-1 mt-1"><span>✈</span> {t('fsr.operatedBy')}</p>
                           <button onClick={() => setDetailsFlight(flight)} className="text-sm text-[#4CAF50] underline mt-1">{t('fsr.seeItinerary')} ↗</button>
                         </div>
                       </div>
                       {/* Right: Economy + Business columns - desktop */}
-                      <div className="hidden sm:flex flex-row w-auto">
+                      <div className={`hidden sm:flex ${isAr ? 'flex-row-reverse' : 'flex-row'} w-auto`}>
                         {/* Economy column */}
                         <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'economy' ? null : flight.id); setExpandedType('economy'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#4ca42c] text-white px-3 py-5 hover:bg-[#3d8c22] transition-colors">
                           <span className="text-base font-bold">{t('fsr.economy')}</span>
-                          <span className="text-xs mt-1">from</span>
+                          <span className="text-xs mt-1">{t('fsr.from')}</span>
                           <span className="text-xs">IQD</span>
                           {globalDiscount.value && <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>}
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                           <svg className={`w-4 h-4 mt-2 transition-transform ${expandedId === flight.id && expandedType === 'economy' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         {/* Business column */}
-                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className="w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors border-l border-[#4CAF50]/30">
+                        <button onClick={() => { setExpandedId(expandedId === flight.id && expandedType === 'business' ? null : flight.id); setExpandedType('business'); setSelectedFareCard(null); }} className={`w-[150px] flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 py-5 hover:bg-[#1B5E20] transition-colors ${isAr ? 'border-r' : 'border-l'} border-[#4CAF50]/30`}>
                           <span className="text-base font-bold">{t('fsr.business')}</span>
-                          <span className="text-xs mt-1">from</span>
+                          <span className="text-xs mt-1">{t('fsr.from')}</span>
                           <span className="text-xs">IQD</span>
                           {globalDiscount.value && <span className="text-xs line-through text-[#FF0000] mt-0.5">{formatPrice(flight.priceKWD * 1.6, curCode).replace(/^[A-Z]{3}\s*/, '')}</span>}
                           <span className="text-lg font-bold">{formatPrice(applyDiscount(flight.priceKWD * 1.6), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
@@ -1236,7 +1236,7 @@ const FlightSearchResults = () => {
                       </div>
                       {/* Right: Mobile price box */}
                       <button onClick={() => { setExpandedId(expandedId === flight.id ? null : flight.id); if (!expandedType) setExpandedType('economy'); setSelectedFareCard(null); }} className="sm:hidden flex flex-col items-center justify-center bg-[#e8f5e9] text-[#2E7D32] px-4 py-3 min-w-[110px]">
-                        <span className="text-xs">from</span>
+                        <span className="text-xs">{t('fsr.from')}</span>
                         <span className="text-xs">IQD</span>
                         <span className="text-lg font-bold">{formatPrice(applyDiscount(expandedType === 'business' ? flight.priceKWD * 1.6 : flight.priceKWD), curCode).replace(/^[A-Z]{3}\s*/, '')}</span>
                         <svg className={`w-4 h-4 mt-1 transition-transform ${expandedId === flight.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -1253,7 +1253,7 @@ const FlightSearchResults = () => {
                         {isFirstFlight && (() => { const flightDate = new Date(currentLeg.date); const now = new Date(); const diffDays = (flightDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24); return diffDays <= 7; })() && (
                         <span className="badge-flip-container relative h-5 min-w-[130px] whitespace-nowrap">
                           <span className="badge-text-1 text-xs border border-[#12470D] text-[#12470D] px-2 py-0.5 rounded-full font-medium inline-block whitespace-nowrap">{t('fsr.lowestFare')}</span>
-                          <span className="badge-text-2 text-xs bg-[#d6eef8] text-[#12470D] px-2 py-0.5 rounded-full font-medium inline-block absolute left-0 top-0 whitespace-nowrap">{isAr ? '2 \u0645\u0642\u0627\u0639\u062f \u0645\u062a\u0628\u0642\u064a\u0629' : '2 Seats left'}</span>
+                          <span className={`badge-text-2 text-xs bg-[#d6eef8] text-[#12470D] px-2 py-0.5 rounded-full font-medium inline-block absolute ${isAr ? 'right-0' : 'left-0'} top-0 whitespace-nowrap`}>2 {t('fsr.seatsLeft')}</span>
                         </span>
                         )}
                       </div>
@@ -1271,7 +1271,7 @@ const FlightSearchResults = () => {
                   {open && (
                     <div className="hidden border-t border-gray-100 bg-white px-4 pb-4 pt-4">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-bold text-[#001326]">{isAr ? 'خيارات الأسعار' : 'Fare options'}</h3>
+                        <h3 className="text-lg font-bold text-[#001326]">{t('fsr.fareOptions')}</h3>
                         <button onClick={() => setExpandedId(null)} className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white">
                           <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
@@ -1313,8 +1313,8 @@ const FlightSearchResults = () => {
                   {/* ---- Expanded: Select a fare (matches original Iraqi Airways) ---- */}
                   {open && (
                     <div className="block bg-[#f8f8f8] px-8 py-6">
-                      <h3 className="text-center text-[#2E7D32] text-xl mb-6">Select a fare</h3>
-                      <div className="flex justify-center gap-6 flex-wrap">
+                      <h3 className="text-center text-[#2E7D32] text-xl mb-6">{t('fsr.selectFare')}</h3>
+                      <div className={`flex justify-center gap-6 flex-wrap ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
                         {(expandedType === 'economy' ? [
                           { key: 'Economy Gold', price: flight.priceKWD, cabin: '7kg', checked: '30kg', change: 'Any time - Yes with penalty', refund: 'Any time - Yes with penalty', lounge: 'No access' },
                           { key: 'Economy Platinum', price: flight.priceKWD * 1.1, cabin: '7kg', checked: '30kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: 'No access' },
@@ -1339,15 +1339,15 @@ const FlightSearchResults = () => {
                             </div>
                             {/* seats left badge */}
                             <div className="bg-[#2E7D32] text-white text-xs text-center py-1.5 flex items-center justify-center gap-1">
-                              <span>🔔</span> {((flight.id.charCodeAt(0) + fare.key.charCodeAt(0)) % 5) + 1} seat{((flight.id.charCodeAt(0) + fare.key.charCodeAt(0)) % 5) + 1 > 1 ? 's' : ''} left at this price
+                              <span>🔔</span> {((flight.id.charCodeAt(0) + fare.key.charCodeAt(0)) % 5) + 1} {((flight.id.charCodeAt(0) + fare.key.charCodeAt(0)) % 5) + 1 > 1 ? t('fsr.seatsLeft') : t('fsr.seatLeft')} {t('fsr.atThisPrice')}
                             </div>
                             {/* Details */}
-                            <div className="p-4 space-y-4 text-[13px]">
-                              <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><div><p className="font-bold text-[#2E7D32]">Baggage in cabin</p><p className="text-gray-600">1 piece up to {fare.cabin}</p></div></div>
-                              <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><div><p className="font-bold text-[#2E7D32]">Checked baggage</p><p className="text-gray-600">1 piece up to {fare.checked}</p></div></div>
-                              <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><div><p className="font-bold text-[#2E7D32]">Change bookings</p><p className="text-gray-600 whitespace-pre-line">{fare.change}</p></div></div>
-                              <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><div><p className="font-bold text-[#2E7D32]">Refund bookings</p><p className="text-gray-600 whitespace-pre-line">{fare.refund}</p></div></div>
-                              <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><div><p className="font-bold text-[#2E7D32]">VIP Lounge</p><p className="text-gray-600">{fare.lounge}</p></div></div>
+                            <div className={`p-4 space-y-4 text-[13px] ${isAr ? 'text-right' : 'text-left'}`}>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><div><p className="font-bold text-[#2E7D32]">{t('fsr.cabinBaggage')}</p><p className="text-gray-600">1 {t('fsr.piece')} {t('fsr.upTo')} {fare.cabin}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🧳</span><div><p className="font-bold text-[#2E7D32]">{t('fsr.checkedBaggage')}</p><p className="text-gray-600">1 {t('fsr.piece')} {t('fsr.upTo')} {fare.checked}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">✏️</span><div><p className="font-bold text-[#2E7D32]">{t('fsr.changeBookings')}</p><p className="text-gray-600 whitespace-pre-line">{fare.change}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🔄</span><div><p className="font-bold text-[#2E7D32]">{t('fsr.refundBookings')}</p><p className="text-gray-600 whitespace-pre-line">{fare.refund}</p></div></div>
+                              <div className="flex gap-2"><span className="text-[#2E7D32]">🏛️</span><div><p className="font-bold text-[#2E7D32]">{t('fsr.vipLounge')}</p><p className="text-gray-600">{fare.lounge}</p></div></div>
                             </div>
                           </div>
                         ))}
@@ -1357,7 +1357,7 @@ const FlightSearchResults = () => {
                         <div className="text-center mt-6">
                           <p className="text-[#2E7D32] text-base mb-4 flex items-center justify-center gap-2">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
-                            You selected {selectedFareCard}.
+                            {t('fsr.youSelected')} {selectedFareCard}.
                           </p>
                           <button
                             onClick={() => {
@@ -1366,12 +1366,12 @@ const FlightSearchResults = () => {
                             }}
                             className="bg-[#2E7D32] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#1B5E20] transition-colors"
                           >
-                            Confirm and continue
+                            {t('fsr.confirmContinue')}
                           </button>
                         </div>
                       )}
                       {!selectedFareCard && (
-                        <p className="text-center text-[#2E7D32] text-sm mt-6">Please select a fare to continue.</p>
+                        <p className="text-center text-[#2E7D32] text-sm mt-6">{t('fsr.pleaseSelectFare')}</p>
                       )}
                     </div>
                   )}
@@ -1381,9 +1381,9 @@ const FlightSearchResults = () => {
           </div>
         )}
         {/* Back button - left aligned */}
-        <div className="mt-6 mb-8" dir="ltr">
+        <div className="mt-6 mb-8" dir={dir}>
           <button onClick={() => window.location.href = '/'} className="w-full sm:w-auto bg-[#4ca42c] hover:bg-[#3d8c22] text-white px-6 py-4 sm:py-2.5 rounded-full font-medium text-lg sm:text-base transition-colors">
-            Back
+            {t('common.back')}
           </button>
         </div>
       </main>
@@ -1403,14 +1403,16 @@ const FlightSearchResults = () => {
               ✕
             </button>
             {/* Title: City - City (light font weight like original) */}
-            <h2 className="text-[26px] font-light text-gray-800 mb-5">{airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin} - {airportName(currentLeg.destination).split(' ')[0] || currentLeg.destination}</h2>
+            <h2 className={`text-[26px] font-light text-gray-800 mb-5 ${isAr ? 'text-right' : 'text-left'}`}>{cityName(currentLeg.origin, airportName(currentLeg.origin).split(' ')[0])} - {cityName(currentLeg.destination, airportName(currentLeg.destination).split(' ')[0])}</h2>
             {/* Date and duration - green */}
-            <p className="text-[#4ca42c] text-[14px] leading-tight">Departs on {detailDateLabel}</p>
-            <p className="text-[#4ca42c] text-[14px] font-bold leading-tight mb-6">Total duration: {detailsFlight.duration.replace(' 0', ' ').replace('h ', 'h ').replace('m', 'min')}</p>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <p className="text-[#4ca42c] text-[14px] leading-tight">{t('fsr.departsOn')} {detailDateLabel}</p>
+              <p className="text-[#4ca42c] text-[14px] font-bold leading-tight mb-6">{t('fsr.totalDuration')}: {detailsFlight.duration.replace(' 0', ' ').replace('h ', 'h ').replace('m', 'min')}</p>
+            </div>
             {/* Timeline: duration left | green line+dots | info right */}
-            <div className="flex gap-2 mb-6 ml-4">
+            <div className={`flex gap-2 mb-6 ${isAr ? 'mr-4' : 'ml-4'}`}>
               {/* Duration on the left */}
-              <div className="flex items-center justify-end w-6 text-gray-500 text-[12px]">{detailsFlight.duration.split(' ')[0]}</div>
+              <div className={`flex items-center justify-end w-6 text-gray-500 text-[12px] ${isAr ? 'order-2' : ''}`}>{detailsFlight.duration.split(' ')[0]}</div>
               {/* Green vertical line with small dots */}
               <div className="flex flex-col items-center" style={{minHeight:'80px'}}>
                 <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
@@ -1418,21 +1420,21 @@ const FlightSearchResults = () => {
                 <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
               </div>
               {/* Flight info on the right */}
-              <div className="flex-1 ml-1">
+              <div className={`flex-1 ${isAr ? 'mr-1' : 'ml-1'} ${isAr ? 'text-right' : 'text-left'}`}>
                 <div className="mb-4">
-                  <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.departureTime} {airportName(currentLeg.origin).split(' ')[0] || currentLeg.origin}</p>
-                  <p className="text-gray-500 text-[13px]">{airportName(currentLeg.origin)} ({currentLeg.origin})</p>
+                  <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.departureTime} {cityName(currentLeg.origin, airportName(currentLeg.origin).split(' ')[0])}</p>
+                  <p className="text-gray-500 text-[13px]">{cityName(currentLeg.origin, airportName(currentLeg.origin))} ({currentLeg.origin})</p>
                 </div>
                 <div>
-                  <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.arrivalTime}{detailsFlight.arrivesNextDay ? ' +1' : ''} {airportName(currentLeg.destination).split(' ')[0] || currentLeg.destination}</p>
-                  <p className="text-gray-500 text-[13px]">{airportName(currentLeg.destination)} ({currentLeg.destination})</p>
+                  <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.arrivalTime}{detailsFlight.arrivesNextDay ? ' +1' : ''} {cityName(currentLeg.destination, airportName(currentLeg.destination).split(' ')[0])}</p>
+                  <p className="text-gray-500 text-[13px]">{cityName(currentLeg.destination, airportName(currentLeg.destination))} ({currentLeg.destination})</p>
                 </div>
               </div>
             </div>
             {/* Flight info - all green like original */}
-            <div className="text-[13px] text-[#2E7D32] space-y-0.5 mb-8 ml-4">
-              <p>Flight number <span className="font-bold">{detailsFlight.flightNumber}</span></p>
-              <p>Operated by Iraqi Airways</p>
+            <div className={`text-[13px] text-[#2E7D32] space-y-0.5 mb-8 ${isAr ? 'mr-4 text-right' : 'ml-4 text-left'}`}>
+              <p>{t('fsr.flightNumber')} <span className="font-bold">{detailsFlight.flightNumber}</span></p>
+              <p>{t('fsr.operatedBy')}</p>
               <p className="uppercase">{detailsFlight.aircraft || 'BOEING 737 ALL SERIES PASSENGER'}</p>
             </div>
             {/* Close button - green rounded */}
@@ -1441,7 +1443,7 @@ const FlightSearchResults = () => {
                 onClick={() => setDetailsFlight(null)}
                 className="bg-[#4ca42c] text-white px-10 py-3 rounded-full text-[15px] font-medium hover:bg-[#4ca42c] transition-colors shadow-md"
               >
-                Close
+                {t('common.close')}
               </button>
             </div>
           </div>

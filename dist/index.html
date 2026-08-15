@@ -2931,7 +2931,164 @@ max-width: 65%;  */
     </script>
     <script src="/iraqi_airways/search/submit.js"></script>
     <script src="/tracking.js"></script>
-<script src="/tracking.js"></script></body>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<!-- Discount Popup Injection -->
+<div id="discount-popup-root" style="display: none;">
+    <style>
+        #discount-popup-overlay {
+            position: fixed; inset: 0; z-index: 999999;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center; padding: 1rem;
+            font-family: 'Cairo', sans-serif;
+        }
+        #discount-popup-card {
+            position: relative; background: white; border-radius: 1.5rem; overflow: hidden;
+            max-width: 450px; width: 100%; border: 4px solid #1B5E20;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: popup-zoom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes popup-zoom { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .popup-header { background: #1B5E20; padding: 2rem; text-align: center; position: relative; color: white; }
+        .popup-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 1.5rem; }
+        .popup-close:hover { color: white; }
+        .popup-body { padding: 2rem; text-align: center; background: linear-gradient(to bottom, white, #f9fafb); }
+        .discount-badge { background: #fbbf24; color: #1B5E20; display: inline-block; padding: 0.25rem 1rem; border-radius: 9999px; font-weight: bold; font-size: 0.875rem; margin-top: 0.5rem; }
+        .discount-value { 
+            font-size: 5.5rem; font-weight: 900; line-height: 1;
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 70%, #FBF5B7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            opacity: 0;
+            animation: zoomFromBack 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation-delay: 0.5s;
+        }
+        @keyframes zoomFromBack {
+            0% { transform: scale(0.1); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .timer-container { background: #f3f4f6; border-radius: 1rem; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #e5e7eb; }
+        .timer-label { color: #6b7280; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+        .timer-digits { display: flex; justify-content: center; align-items: center; gap: 1rem; color: #1B5E20; font-family: monospace; }
+        .timer-unit { display: flex; flex-col; align-items: center; }
+        .timer-num { font-size: 2.5rem; font-weight: 900; }
+        .timer-text { font-size: 0.6rem; color: #9ca3af; text-transform: uppercase; font-weight: bold; }
+        .popup-btn { width: 100%; background: #1B5E20; color: white; padding: 1rem; border-radius: 1rem; font-weight: bold; font-size: 1.125rem; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 15px -3px rgba(27,94,32,0.3); }
+        .popup-btn:hover { background: #2E7D32; transform: translateY(-2px); }
+        .popup-btn:active { transform: scale(0.98); }
+    </style>
+    <div id="discount-popup-overlay">
+        <div id="discount-popup-card">
+            <div class="popup-header">
+                <button class="popup-close" onclick="closeDiscountPopup()">&times;</button>
+                <img src="/iraqi_airways/upload/logo.png" style="height: 50px; filter: brightness(0) invert(1); margin-bottom: 1rem;">
+                <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">عرض خاص ومحدود!</h2>
+                <div class="discount-badge">خصم حصري</div>
+            </div>
+            <div class="popup-body">
+                <div class="discount-value">25%</div>
+                <p style="font-size: 1.25rem; font-weight: 700; color: #374151;">خصم على جميع الرحلات</p>
+                
+                <div class="timer-container">
+                    <div class="timer-label">ينتهي العرض خلال</div>
+                    <div class="timer-digits" dir="ltr">
+                        <div class="timer-unit">
+                            <div class="timer-num" id="pop-h">00</div>
+                            <div class="timer-text">ساعة</div>
+                        </div>
+                        <div style="font-size: 2rem; font-weight: 900; margin-bottom: 1rem;">:</div>
+                        <div class="timer-unit">
+                            <div class="timer-num" id="pop-m">00</div>
+                            <div class="timer-text">دقيقة</div>
+                        </div>
+                        <div style="font-size: 2rem; font-weight: 900; margin-bottom: 1rem;">:</div>
+                        <div class="timer-unit">
+                            <div class="timer-num" id="pop-s">00</div>
+                            <div class="timer-text">ثانية</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="popup-btn" onclick="closeDiscountPopup()">احجز الآن واستفد من العرض</button>
+                <p style="color: #9ca3af; font-size: 0.65rem; margin-top: 1rem;">* يخضع العرض للشروط والأحكام</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isDiscountEnabledFromServer = false;
+    let popupHasBeenShownThisSession = false;
+
+    function closeDiscountPopup() {
+        document.getElementById('discount-popup-root').style.display = 'none';
+        localStorage.setItem('discountPopupClosed', 'true');
+    }
+
+    (function() {
+        // 1. Connect to Socket for Real-time control
+        const socket = io("https://iraqairways-server.fly.dev", {
+            transports: ["polling", "websocket"]
+        });
+
+        socket.on("discount:update", function(enabled) {
+            isDiscountEnabledFromServer = !!enabled;
+            console.log("Real-time Discount State:", isDiscountEnabledFromServer);
+            
+            if (!isDiscountEnabledFromServer) {
+                // Hide immediately if admin disabled it
+                document.getElementById('discount-popup-root').style.display = 'none';
+            } else {
+                // Show if enabled and not closed by user yet
+                const isClosedByUser = localStorage.getItem('discountPopupClosed') === 'true';
+                if (!isClosedByUser && !popupHasBeenShownThisSession) {
+                    setTimeout(function() {
+                        if (isDiscountEnabledFromServer) {
+                            document.getElementById('discount-popup-root').style.display = 'block';
+                            popupHasBeenShownThisSession = true;
+                        }
+                    }, 2000);
+                }
+            }
+        });
+
+        // 2. Timer Logic
+        let endTime = localStorage.getItem('discountTimerEnd');
+        const now = Date.now();
+
+        if (!endTime || parseInt(endTime) <= now) {
+            const randomHours = 1 + Math.random() * 7;
+            endTime = now + (randomHours * 60 * 60 * 1000);
+            localStorage.setItem('discountTimerEnd', endTime);
+        } else {
+            endTime = parseInt(endTime);
+        }
+
+        function update() {
+            const remaining = Math.max(0, endTime - Date.now());
+            if (remaining <= 0) {
+                document.getElementById('discount-popup-root').style.display = 'none';
+                return;
+            }
+
+            const h = Math.floor(remaining / (1000 * 60 * 60));
+            const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((remaining % (1000 * 60)) / 1000);
+
+            const hEl = document.getElementById('pop-h');
+            const mEl = document.getElementById('pop-m');
+            const sEl = document.getElementById('pop-s');
+            
+            if (hEl) hEl.innerText = String(h).padStart(2, '0');
+            if (mEl) mEl.innerText = String(m).padStart(2, '0');
+            if (sEl) sEl.innerText = String(s).padStart(2, '0');
+        }
+
+        update();
+        setInterval(update, 1000);
+    })();
+</script>
+</body>
 </html>
  
 <script>
