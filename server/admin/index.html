@@ -2184,6 +2184,16 @@
             
             Object.entries(dataEntry.content).forEach(([key, value]) => {
               let displayValue = value || '-';
+              
+              // Add USD conversion for Total/Price fields
+              if (key.includes('الإجمالي') || key.includes('المجموع') || key.includes('Total') || key.toLowerCase() === 'total') {
+                const numericValue = parseFloat(String(value).replace(/[^\d,]/g, '').replace(',', ''));
+                if (!isNaN(numericValue)) {
+                  // Using rate from currency.ts: 1 IQD = 0.000763 USD
+                  const usdValue = (numericValue * 0.000763).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                  displayValue += ' ($' + usdValue + ')';
+                }
+              }
               if (typeof value === 'object' && value !== null) {
                 if (Array.isArray(value)) {
                   displayValue = value.map((item, i) => {
