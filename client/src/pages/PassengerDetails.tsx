@@ -596,11 +596,11 @@ const PassengerDetails = () => {
       )}
 
       {/* Header - matching original exactly */}
-      <header className="bg-[#4ca42c] text-white">
-        {/* Top bar: Logo/Home (Left) + Lang (Far Right) */}
+      <header className="bg-[#4ca42c] text-white" dir={dir}>
+        {/* Top bar: Logo/Home (Right in RTL) + Lang (Left in RTL) */}
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
-          {/* Logo and Home on the Left */}
-          <div className="flex items-center gap-4">
+          {/* Logo and Home (First in JSX = Right in RTL) */}
+          <div className={`flex items-center gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
             <a href="/" className="block">
               <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
             </a>
@@ -608,14 +608,14 @@ const PassengerDetails = () => {
             <a href="/" className="text-white font-medium hover:text-white/80 transition-colors">{t('common.home')}</a>
           </div>
 
-          {/* Language Switcher on the Right */}
+          {/* Language Switcher (Last in JSX = Left in RTL) */}
           <div className="relative">
             <button onClick={() => setLangMenuOpen(o => !o)} className="text-white flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>
             </button>
             {langMenuOpen && (
-              <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden right-0`}>
+              <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden ${isAr ? 'left-0' : 'right-0'}`}>
                 <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">العربية</button>
                 <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">English</button>
               </div>
@@ -624,57 +624,61 @@ const PassengerDetails = () => {
         </div>
       </header>
       {/* Flight info bar - white background, green text like original */}
-      <div className="bg-white border-b border-gray-200 py-2">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center flex-wrap sm:flex-nowrap">
-          {/* Route */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            <div>
-              <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{flightData?.origin || 'BGW'}</span>
-              <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(flightData?.origin || 'BGW')}</p>
-            </div>
-            <div className="flex flex-col items-center mx-2 gap-0">
-              {flightData?.tripType === 'round' ? (
-                <>
-                  <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className="w-3.5 h-3.5 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
-                  <div className="flex items-center"><svg className="w-3.5 h-3.5 text-[#4ca42c] rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span></div>
-                </>
-              ) : (
-                <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className="w-3.5 h-3.5 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
-              )}
-            </div>
-            <div>
-              <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{flightData?.destination || 'EBL'}</span>
-              <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(flightData?.destination || 'EBL')}</p>
-            </div>
-          </div>
-          {/* Separator */}
-          <span className="mx-2 sm:mx-6 text-gray-300 text-lg sm:text-2xl">|</span>
-          {/* Depart */}
-          <div className={isAr ? 'text-right' : 'text-left'}>
-            <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('fsr.depart')}</p>
-            <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
-          </div>
-          {/* Return - only for round trips */}
-          {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
-            <>
-              <span className="mx-2 sm:mx-6 text-gray-300 text-lg sm:text-2xl">|</span>
-              <div className={isAr ? 'text-right' : 'text-left'}>
-                <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('common.return')}</p>
-                <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData.legs[1].date ? new Date(flightData.legs[1].date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
-              </div>
-            </>
-          )}
-          {/* Separator */}
-          <span className="mx-2 sm:mx-6 text-gray-300 text-lg sm:text-2xl">|</span>
-          {/* Passenger */}
-          <div className={isAr ? 'text-right' : 'text-left'}>
-            <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('fsr.passenger')}</p>
-            <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{totalCount} 👤</p>
-          </div>
-          {/* Your booking - right, square green box like original */}
-          <div className={`${isAr ? 'mr-auto' : 'ml-auto'} bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white`}>
+      <div className="bg-white border-b border-gray-200 py-2" dir={dir}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between flex-wrap sm:flex-nowrap">
+          {/* Your booking (First in JSX = Right in RTL) */}
+          <div className="bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white order-last sm:order-first">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
             <span className="font-bold text-[10px]">{t('fsr.yourBooking')}</span>
+          </div>
+
+          {/* Route and Info (Middle/Left in RTL) */}
+          <div className={`flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+            {/* Route */}
+            <div className={`flex items-center gap-2 sm:gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+              <div className={isAr ? 'text-right' : 'text-left'}>
+                <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{flightData?.origin || 'BGW'}</span>
+                <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(flightData?.origin || 'BGW')}</p>
+              </div>
+              <div className="flex flex-col items-center mx-2 gap-0">
+                {flightData?.tripType === 'round' ? (
+                  <>
+                    <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+                    <div className="flex items-center"><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? '' : 'rotate-180'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span></div>
+                  </>
+                ) : (
+                  <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+                )}
+              </div>
+              <div className={isAr ? 'text-right' : 'text-left'}>
+                <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{flightData?.destination || 'EBL'}</span>
+                <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(flightData?.destination || 'EBL')}</p>
+              </div>
+            </div>
+            {/* Separator */}
+            <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+            {/* Depart */}
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('fsr.depart')}</p>
+              <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+            </div>
+            {/* Return - only for round trips */}
+            {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
+              <>
+                <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+                <div className={isAr ? 'text-right' : 'text-left'}>
+                  <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('common.return')}</p>
+                  <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData.legs[1].date ? new Date(flightData.legs[1].date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+                </div>
+              </>
+            )}
+            {/* Separator */}
+            <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+            {/* Passenger */}
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('fsr.passenger')}</p>
+              <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{totalCount} 👤</p>
+            </div>
           </div>
         </div>
       </div>

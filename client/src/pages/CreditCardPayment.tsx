@@ -445,85 +445,86 @@ export default function CreditCardPayment() {
       {/* Header */}
       <header className="bg-[#4ca42c] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          {/* Language Switcher on the Left */}
+          {/* Logo and Home (First in JSX = Right in RTL) */}
+          <div className="flex items-center gap-6">
+            <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 cursor-pointer" onClick={() => navigate('/')} />
+            <span className="hidden sm:inline border-l border-white/50 h-6"></span>
+            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>{lang === 'ar' ? 'الرئيسية' : 'Home'}</span>
+            <button className="sm:hidden text-white" onClick={() => navigate('/')}><svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+          </div>
+
+          {/* Language Switcher (Last in JSX = Left in RTL) */}
           <div className="relative hidden sm:block">
             <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>
             </button>
             {langMenuOpen && (
-              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden left-0">
+              <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden ${isAr ? 'left-0' : 'right-0'}`}>
                 <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">العربية</button>
                 <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">English</button>
               </div>
             )}
           </div>
-
-          {/* Logo and Home on the Right */}
-          <div className="flex items-center gap-6">
-            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>{lang === 'ar' ? 'الرئيسية' : 'Home'}</span>
-            <span className="hidden sm:inline border-l border-white/50 h-6"></span>
-            <button className="sm:hidden text-white" onClick={() => navigate('/')}><svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-            <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 cursor-pointer" onClick={() => navigate('/')} />
-          </div>
         </div>
         {/* Info bar */}
-        <div className="bg-white border-b">
-          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-            {/* Mobile route text */}
-            <div className="sm:hidden">
-              <p className="text-sm font-bold text-[#1B5E20]">{originCity} - {destCity}</p>
-              <p className="text-xs text-gray-600">{formatShortDate(flightDate)} &nbsp; {paxCount} 👤</p>
+        <div className="bg-white border-b" dir={isAr ? 'rtl' : 'ltr'}>
+          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
+            {/* Your booking (First in JSX = Right in RTL) */}
+            <div className="bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white order-last sm:order-first">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+              <span className="font-bold text-[10px]">{lang === 'ar' ? 'حجزك' : 'Your booking'}</span>
             </div>
-            {/* Desktop route */}
-            <div className="hidden sm:flex items-center gap-6">
-              <div className="flex items-center gap-3">
-                <span className="text-[#2E7D32] text-xl font-bold">{origin}</span>
-                <div className="flex flex-col items-center mx-1 gap-0">
-                  {flightData?.tripType === 'round' ? (
-                    <>
-                      <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">··········</span><svg className="w-3 h-3 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
-                      <div className="flex items-center"><svg className="w-3 h-3 text-[#4ca42c] rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span className="text-[#4ca42c] text-[9px] tracking-[2px]">··········</span></div>
-                    </>
-                  ) : (
-                    <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">··········</span><svg className="w-3 h-3 text-[#4ca42c]" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
-                  )}
+
+            {/* Route and Info (Middle/Left in RTL) */}
+            <div className={`flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+              {/* Mobile route text */}
+              <div className={`sm:hidden ${isAr ? 'text-right' : 'text-left'}`}>
+                <p className="text-sm font-bold text-[#1B5E20]">{cityName(origin)} - {cityName(destination)}</p>
+                <p className="text-xs text-gray-600">{formatShortDate(flightDate)} &nbsp; {paxCount} 👤</p>
+              </div>
+              {/* Desktop route */}
+              <div className={`hidden sm:flex items-center gap-6 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`flex items-center gap-3 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                  <div className={isAr ? 'text-right' : 'text-left'}>
+                    <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{origin}</span>
+                    <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(origin)}</p>
+                  </div>
+                  <div className="flex flex-col items-center mx-2 gap-0">
+                    {flightData?.tripType === 'round' ? (
+                      <>
+                        <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+                        <div className="flex items-center"><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? '' : 'rotate-180'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span></div>
+                      </>
+                    ) : (
+                      <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+                    )}
+                  </div>
+                  <div className={isAr ? 'text-right' : 'text-left'}>
+                    <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{destination}</span>
+                    <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(destination)}</p>
+                  </div>
                 </div>
-                <span className="text-[#2E7D32] text-xl font-bold">{destination}</span>
-              </div>
-              <div className="text-[#2E7D32] text-sm border-l pl-4">
-                <span className="text-gray-500">{originCity}</span> / <span className="text-gray-500">{destCity}</span>
-              </div>
-              <div className="text-[#2E7D32] text-sm border-l pl-4">
-                <p className="text-gray-500 text-xs">Depart</p>
-                <p className="font-bold">{formatShortDate(flightDate)}</p>
-              </div>
-              {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
-                <div className="text-[#2E7D32] text-sm border-l pl-4">
-                  <p className="text-gray-500 text-xs">Return</p>
-                  <p className="font-bold">{formatShortDate(flightData.legs[1].date)}</p>
+                <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+                <div className={isAr ? 'text-right' : 'text-left'}>
+                  <p className="text-[10px] sm:text-sm text-[#1B5E20]">{lang === 'ar' ? 'المغادرة' : 'Depart'}</p>
+                  <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{formatShortDate(flightDate)}</p>
                 </div>
-              )}
-              <div className="text-[#2E7D32] text-sm border-l pl-4">
-                <p className="text-gray-500 text-xs">Passenger</p>
-                <p className="font-bold">{paxCount} 👤</p>
+                {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
+                  <>
+                    <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+                    <div className={isAr ? 'text-right' : 'text-left'}>
+                      <p className="text-[10px] sm:text-sm text-[#1B5E20]">{lang === 'ar' ? 'العودة' : 'Return'}</p>
+                      <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{formatShortDate(flightData.legs[1].date)}</p>
+                    </div>
+                  </>
+                )}
+                <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+                <div className={isAr ? 'text-right' : 'text-left'}>
+                  <p className="text-[10px] sm:text-sm text-[#1B5E20]">{lang === 'ar' ? 'المسافر' : 'Passenger'}</p>
+                  <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{paxCount} 👤</p>
+                </div>
               </div>
-            </div>
-            {/* Mobile: green price pill */}
-            <div className="sm:hidden bg-[#4ca42c] text-white flex items-center gap-2 px-4 py-2 rounded-full">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
-              <span className="flex flex-col items-end leading-none">
-                {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{originalDisplayAmountStr}</span>}
-                <span className="text-sm font-bold">IQD {displayAmountStr}</span>
-              </span>
-            </div>
-            {/* Desktop: green box */}
-            <div className="hidden sm:flex bg-[#1B5E20] text-white flex-col items-center justify-center px-4 py-2 rounded" style={{minWidth:'90px',minHeight:'60px'}}>
-              <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
-              <span className="flex flex-col items-center leading-none">
-                {globalDiscount.value && <span className="text-[9px] line-through text-[#FF0000] opacity-80 mb-0.5">{originalDisplayAmountStr}</span>}
-                <span className="text-xs font-bold">IQD {displayAmountStr}</span>
-              </span>
             </div>
           </div>
         </div>
