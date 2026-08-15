@@ -540,7 +540,7 @@ const FlightSearchResults = () => {
 
   const detailDateLabel = (() => {
     try {
-      return new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      return new Date(date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     } catch { return date; }
   })();
 
@@ -588,7 +588,7 @@ const FlightSearchResults = () => {
     // For round trips, show all legs
     const allCartLegs = selectedLegs.length > 0 ? selectedLegs : [{ origin: cf.origin, destination: cf.destination, date: cf.date, flight: cf.flight, fare: cf.fare }];
     const grandCartTotal = formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(applyDiscount(l.flight.priceKWD)), 0), curCode);
-    const cartDateLabel = (() => { try { return new Date(cf.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return cf.date; } })();
+    const cartDateLabel = (() => { try { return new Date(cf.date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch { return cf.date; } })();
     const cartPrice = formatPrice(cf.flight.priceKWD, curCode);
     const cartTotal = grandCartTotal;
     const fareDetails = cf.fare.includes('Business') 
@@ -895,7 +895,7 @@ const FlightSearchResults = () => {
             <span className="text-sm text-gray-600">{t('fsr.passenger')}</span>
             <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
-          <div className="ml-auto flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 sm:px-6 py-2 sm:py-3 cursor-pointer min-h-[60px] sm:min-h-[80px]">
+          <div className={`${isAr ? 'mr-auto' : 'ml-auto'} flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 sm:px-6 py-2 sm:py-3 cursor-pointer min-h-[60px] sm:min-h-[80px]`}>
             <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
             <span className="text-sm font-medium">{t('fsr.yourBooking')}</span>
           </div>
