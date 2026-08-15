@@ -1324,10 +1324,34 @@ const FlightSearchResults = () => {
                       <h3 className="text-center text-[#2E7D32] text-xl mb-6">{t('fsr.selectFare')}</h3>
                       <div className={`flex justify-center gap-6 flex-wrap ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
                         {(expandedType === 'economy' ? [
-                          { key: 'Economy Gold', price: flight.priceKWD, cabin: '7kg', checked: '30kg', change: 'Any time - Yes with penalty', refund: 'Any time - Yes with penalty', lounge: 'No access' },
-                          { key: 'Economy Platinum', price: flight.priceKWD * 1.1, cabin: '7kg', checked: '30kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: 'No access' },
+                          { 
+                            key: isAr ? 'الدرجة السياحية الذهبية' : 'Economy Gold', 
+                            price: flight.priceKWD, 
+                            cabin: '7kg', 
+                            checked: '30kg', 
+                            change: isAr ? 'في أي وقت - نعم مع غرامة' : 'Any time - Yes with penalty', 
+                            refund: isAr ? 'في أي وقت - نعم مع غرامة' : 'Any time - Yes with penalty', 
+                            lounge: isAr ? 'لا يوجد دخول' : 'No access' 
+                          },
+                          { 
+                            key: isAr ? 'الدرجة السياحية البلاتينية' : 'Economy Platinum', 
+                            price: flight.priceKWD * 1.1, 
+                            cabin: '7kg', 
+                            checked: '30kg', 
+                            change: isAr ? 'قبل 72 ساعة من موعد الرحلة - مجاناً\nأي وقت آخر مع غرامة' : 'Before 72 from flight date - for free\nAny other time with penalty', 
+                            refund: isAr ? 'مسموح في أي وقت مع غرامة' : 'Allowed any time with penalty', 
+                            lounge: isAr ? 'لا يوجد دخول' : 'No access' 
+                          },
                         ] : [
-                          { key: 'Business Platinum', price: flight.priceKWD * 1.6, cabin: '10kg', checked: '40kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: `Yes, out of ${currentLeg.origin}` },
+                          { 
+                            key: isAr ? 'درجة الأعمال البلاتينية' : 'Business Platinum', 
+                            price: flight.priceKWD * 1.6, 
+                            cabin: '10kg', 
+                            checked: '40kg', 
+                            change: isAr ? 'قبل 72 ساعة من موعد الرحلة - مجاناً\nأي وقت آخر مع غرامة' : 'Before 72 from flight date - for free\nAny other time with penalty', 
+                            refund: isAr ? 'مسموح في أي وقت مع غرامة' : 'Allowed any time with penalty', 
+                            lounge: isAr ? `نعم، من ${cityName(currentLeg.origin, currentLeg.origin)}` : `Yes, out of ${currentLeg.origin}` 
+                          },
                         ]).map((fare) => (
                           <div
                             key={fare.key}
