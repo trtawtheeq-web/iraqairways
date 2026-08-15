@@ -632,24 +632,31 @@ const FlightSearchResults = () => {
             <div className="px-6 py-4">
               <p className="text-[#2E7D32] font-bold">{cityName(leg.origin, airportName(leg.origin).split(' ')[0])} {t('common.to')} {cityName(leg.destination, airportName(leg.destination).split(' ')[0])} - <span className="font-normal text-[#2E7D32]">{legDateLabel}</span></p>
               <hr className="border-[#2E7D32] mt-3" />
-              <div className={`flex flex-wrap sm:flex-nowrap items-center mt-4 gap-2 sm:gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`flex items-center gap-3 flex-1 min-w-[200px] ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className="flex flex-col items-center">
-                    <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.departureTime}</span>
-                    <span className="text-[10px] text-gray-400 font-bold">{leg.origin}</span>
+              {/* Keep the layout axis LTR so the visual positions are deterministic; text itself follows the selected language. */}
+              <div dir="ltr" className={`mt-4 flex flex-col items-center gap-4 ${isAr ? 'sm:flex-row-reverse' : 'sm:flex-row'}`}>
+                {/* Route: in Arabic departure is on the right and arrival on the left. */}
+                <div dir="ltr" className={`w-full min-w-0 flex-1 flex items-center gap-3 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                  <div className="w-[72px] shrink-0 flex flex-col items-center text-center">
+                    <span className="text-xl sm:text-2xl font-bold text-[#2E7D32] leading-tight">{leg.flight.departureTime}</span>
+                    <span className="text-[10px] text-gray-400 font-bold mt-1">{leg.origin}</span>
                   </div>
-                  <span className="text-gray-400 text-sm flex-1 text-center">··········· {t('fsr.nonstop')} ···········</span>
-                  <div className="flex flex-col items-center">
-                    <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.arrivalTime}</span>
-                    <span className="text-[10px] text-gray-400 font-bold">{leg.destination}</span>
+                  <div className="min-w-0 flex-1 flex items-center justify-center gap-2 text-gray-400 text-sm whitespace-nowrap">
+                    <span className="tracking-[2px]">········</span>
+                    <span>{t('fsr.nonstop')}</span>
+                    <span className="tracking-[2px]">········</span>
+                  </div>
+                  <div className="w-[72px] shrink-0 flex flex-col items-center text-center">
+                    <span className="text-xl sm:text-2xl font-bold text-[#2E7D32] leading-tight">{leg.flight.arrivalTime}</span>
+                    <span className="text-[10px] text-gray-400 font-bold mt-1">{leg.destination}</span>
                   </div>
                 </div>
-                <div className={`flex items-center gap-2 w-full sm:w-auto ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[#2E7D32] font-bold text-sm">{leg.fare}</span>
-                      <button onClick={() => setCartExpanded(!cartExpanded)} className="text-gray-400 hover:text-gray-600"><svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
-                    </div>
+                {/* Fare is isolated in a fixed-width panel so the arrow can never overlap the route or fare name. */}
+                <div dir="ltr" className={`w-full sm:w-[220px] shrink-0 flex items-center ${isAr ? 'justify-start text-right' : 'justify-end text-left'}`}>
+                  <div className={`min-w-0 flex-1 flex items-center gap-2 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <span className="min-w-0 break-words text-[#2E7D32] font-bold text-sm leading-5">{leg.fare}</span>
+                    <button aria-label={isAr ? 'عرض تفاصيل الدرجة' : 'Show fare details'} onClick={() => setCartExpanded(!cartExpanded)} className="shrink-0 text-gray-400 hover:text-gray-600 p-1">
+                      <svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -708,33 +715,32 @@ const FlightSearchResults = () => {
             );
           })}
           {/* Total price */}
-          <div className={`${isAr ? 'text-right' : 'text-right'} mt-6`}>
-            <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-end`}>
-              <p className="text-[#2E7D32] text-base">{t('fsr.totalPriceForFlight')}:</p>
-              <div className="flex items-center gap-2">
+          <div dir={isAr ? 'rtl' : 'ltr'} className="mt-6 space-y-4">
+            {/* Label stays at the reading edge; the values are kept in a separate non-wrapping group. */}
+            <div className="flex items-center justify-between gap-6">
+              <p className="shrink-0 text-[#2E7D32] text-base">{t('fsr.totalPriceForFlight')}:</p>
+              <div dir="ltr" className="flex shrink-0 items-center gap-2 whitespace-nowrap">
                 {globalDiscount.value && <span className="text-sm line-through text-[#FF0000]">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
                 <span className="font-bold text-lg text-[#2E7D32]">{cartTotal}</span>
               </div>
             </div>
-          </div>
-          <div className={`${isAr ? 'text-right' : 'text-right'} mt-6`}>
-            <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-end`}>
-              <p className="text-[#2E7D32] text-lg">{t('fsr.totalPrice')}:</p>
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between gap-6">
+              <p className="shrink-0 text-[#2E7D32] text-lg">{t('fsr.totalPrice')}:</p>
+              <div dir="ltr" className="flex shrink-0 items-center gap-2 whitespace-nowrap">
                 {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
                 <span className="font-bold text-2xl text-[#2E7D32]">{cartTotal}</span>
               </div>
             </div>
-            <p className={`text-gray-500 text-sm mt-1 ${isAr ? 'text-right' : 'text-right'}`}>{t('fsr.priceNotice')} <a href="#" className="text-[#2E7D32] underline">{t('fsr.seePriceDetails')}</a></p>
+            <p className="text-gray-500 text-sm leading-6">{t('fsr.priceNotice')} <a href="#" className="text-[#2E7D32] underline">{t('fsr.seePriceDetails')}</a></p>
           </div>
-          {/* Policy links - right aligned */}
-          <div className={`${isAr ? 'text-right' : 'text-right'} mt-6 text-sm text-[#2E7D32]`}>
-            <div className={`flex flex-wrap items-center gap-2 ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-end`}>
-              <a href="#" className="underline">{t('fsr.baggagePolicy')} ↗</a>
-              <span className="mx-2 text-gray-400">|</span>
-              <a href="#" className="underline">{t('fsr.reviewConditions')} ↗</a>
-              <span className="mx-2 text-gray-400">|</span>
-              <a href="#" className="underline">{t('fsr.dangerousGoods')} ↗</a>
+          {/* Policy links - keep each link readable and prevent inline collision in Arabic. */}
+          <div dir={isAr ? 'rtl' : 'ltr'} className="mt-6 text-sm text-[#2E7D32]">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <a href="#" className="underline whitespace-nowrap">{t('fsr.baggagePolicy')} ↗</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="underline whitespace-nowrap">{t('fsr.reviewConditions')} ↗</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="underline whitespace-nowrap">{t('fsr.dangerousGoods')} ↗</a>
             </div>
           </div>
           {/* Fill passenger details button - full width on mobile, right on desktop */}
