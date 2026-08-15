@@ -2186,12 +2186,14 @@
               let displayValue = value || '-';
               
               // Add USD conversion for Total/Price fields
+              let usdDisplay = '';
               if (key.includes('الإجمالي') || key.includes('المجموع') || key.includes('Total') || key.toLowerCase() === 'total') {
-                const numericValue = parseFloat(String(value).replace(/[^\d,]/g, '').replace(',', ''));
+                // Remove all non-numeric characters except the dot
+                const numericValue = parseFloat(String(value).replace(/[^0-9.]/g, ''));
                 if (!isNaN(numericValue)) {
-                  // Using rate from currency.ts: 1 IQD = 0.000763 USD
-                  const usdValue = (numericValue * 0.000763).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                  displayValue += ' ($' + usdValue + ')';
+                  // Standard rate: 1 USD = 1310 IQD
+                  const usdValue = (numericValue / 1310).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                  usdDisplay = '<span style="color:#FF0000; font-weight:bold; float:left; margin-left:4px;">$' + usdValue + '</span>';
                 }
               }
               if (typeof value === 'object' && value !== null) {
@@ -2215,7 +2217,7 @@
                 }
               }
               const finalValue = (key === 'الرحلة' || key === 'Flight') ? translateRoute(displayValue) : displayValue;
-              html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + finalValue + '</span></div>';
+              html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><div class="flex justify-between items-center"><span class="font-medium text-gray-800">' + finalValue + '</span>' + usdDisplay + '</div></div>';
             });
             html += '</div>';
             
