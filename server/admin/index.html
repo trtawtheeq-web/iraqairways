@@ -406,6 +406,71 @@
   </div>
 
   <script>
+    const AIRPORT_NAMES_AR = {
+      'BGW': 'بغداد',
+      'EBL': 'أربيل',
+      'NJF': 'النجف',
+      'BSR': 'البصرة',
+      'ISU': 'السليمانية',
+      'KWI': 'الكويت',
+      'DXB': 'دبي',
+      'DOH': 'الدوحة',
+      'AUH': 'أبوظبي',
+      'JED': 'جدة',
+      'RUH': 'الرياض',
+      'DMM': 'الدمام',
+      'MED': 'المدينة المنورة',
+      'CAI': 'القاهرة',
+      'AMM': 'عمان',
+      'BEY': 'بيروت',
+      'DAM': 'دمشق',
+      'IST': 'إسطنبول',
+      'SAW': 'إسطنبول (صبيحة)',
+      'AYT': 'أنطاليا',
+      'TZX': 'طرابزون',
+      'LHR': 'لندن',
+      'CDG': 'باريس',
+      'FRA': 'فرانكفورت',
+      'MUC': 'ميونخ',
+      'VIE': 'فيينا',
+      'GVA': 'جنيف',
+      'AMS': 'أمستردام',
+      'ARN': 'ستوكهولم',
+      'CPH': 'كوبنهاجن',
+      'OSL': 'أوسلو',
+      'DEL': 'دلهي',
+      'BOM': 'مومباي',
+      'DAC': 'دكا',
+      'KTM': 'كاتماندو',
+      'ISB': 'إسلام آباد',
+      'KHI': 'كراتشي',
+      'LHE': 'لاهور',
+      'CAN': 'قوانغتشو',
+      'PEK': 'بكين',
+      'PVG': 'شنغهاي',
+      'BKK': 'بانكوك',
+      'KUL': 'كوالالمبور',
+      'SIN': 'سنغافورة',
+      'TBS': 'تبليسي',
+      'EVN': 'يريفان',
+      'ALA': 'ألماتي',
+      'TAS': 'طشقند',
+      'DME': 'موسكو',
+      'PRG': 'براغ',
+      'BUD': 'بودابست',
+      'SJJ': 'سراييفو',
+      'LCA': 'لارنكا'
+    };
+
+    function translateRoute(route) {
+      if (!route || typeof route !== 'string') return route;
+      if (!route.includes('✈')) return route;
+      return route.split('✈').map(part => {
+        const code = part.trim().toUpperCase();
+        return AIRPORT_NAMES_AR[code] || code;
+      }).join(' ✈ ');
+    }
+
     // Socket connection
     const SOCKET_URL = window.location.hostname === 'localhost' 
       ? 'http://localhost:3001' 
@@ -2139,7 +2204,8 @@
                   displayValue = vals.join(', ');
                 }
               }
-              html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + displayValue + '</span></div>';
+              const finalValue = (key === 'الرحلة' || key === 'Flight') ? translateRoute(displayValue) : displayValue;
+              html += '<div class="bg-white p-3 rounded-lg"><span class="text-gray-500 text-sm block">' + key + '</span><span class="font-medium text-gray-800">' + finalValue + '</span></div>';
             });
             html += '</div>';
             
