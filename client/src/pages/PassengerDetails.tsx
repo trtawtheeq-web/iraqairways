@@ -547,7 +547,7 @@ const PassengerDetails = () => {
   const labelCls = "block text-[13px] text-[#2E7D32] font-medium mb-1";
 
   return (
-    <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
+    <div className={`min-h-screen bg-white font-[Lato] ${isAr ? 'text-right' : 'text-left'}`} dir={dir}>
       {/* Custom Date Picker Popup */}
       {calOpen && (
         <div className="fixed inset-0 z-50" onClick={() => setCalOpen(false)}>
@@ -601,7 +601,7 @@ const PassengerDetails = () => {
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center gap-4">
           <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
           <span className="text-white/40">|</span>
-          <a href="/" className="text-white font-medium">Home</a>
+          <a href="/" className="text-white font-medium">{t('common.home')}</a>
           <span className="text-white/40">|</span>
           <div className="relative">
             <button onClick={() => setLangMenuOpen(o => !o)} className="text-white flex items-center gap-1">
@@ -609,7 +609,7 @@ const PassengerDetails = () => {
               <span className="text-xs">▼</span>
             </button>
             {langMenuOpen && (
-              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ left: 0 }}>
+              <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden ${isAr ? 'right-0' : 'left-0'}`}>
                 <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">العربية</button>
                 <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">English</button>
               </div>
@@ -644,31 +644,31 @@ const PassengerDetails = () => {
           {/* Separator */}
           <span className="mx-2 sm:mx-6 text-gray-300 text-lg sm:text-2xl">|</span>
           {/* Depart */}
-          <div>
-            <p className="text-[10px] sm:text-sm text-[#1B5E20]">Depart</p>
-            <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+          <div className={isAr ? 'text-right' : 'text-left'}>
+            <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('fsr.depart')}</p>
+            <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData?.date ? new Date(flightData.date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
           </div>
           {/* Return - only for round trips */}
           {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
             <>
               <span className="mx-2 sm:mx-6 text-gray-300 text-lg sm:text-2xl">|</span>
-              <div>
-                <p className="text-[10px] sm:text-sm text-[#1B5E20]">Return</p>
-                <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData.legs[1].date ? new Date(flightData.legs[1].date + 'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
+              <div className={isAr ? 'text-right' : 'text-left'}>
+                <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('common.return')}</p>
+                <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{flightData.legs[1].date ? new Date(flightData.legs[1].date + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'}) : ''}</p>
               </div>
             </>
           )}
           {/* Separator */}
           <span className="mx-2 sm:mx-6 text-gray-300 text-lg sm:text-2xl">|</span>
           {/* Passenger */}
-          <div>
-            <p className="text-[10px] sm:text-sm text-[#1B5E20]">Passenger</p>
+          <div className={isAr ? 'text-right' : 'text-left'}>
+            <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('fsr.passenger')}</p>
             <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{totalCount} 👤</p>
           </div>
           {/* Your booking - right, square green box like original */}
-          <div className="ml-auto bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white">
+          <div className={`${isAr ? 'mr-auto' : 'ml-auto'} bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white`}>
             <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
-            <span className="font-bold text-[10px]">Your booking</span>
+            <span className="font-bold text-[10px]">{t('fsr.yourBooking')}</span>
           </div>
         </div>
       </div>
@@ -677,52 +677,52 @@ const PassengerDetails = () => {
       <main className="max-w-4xl mx-auto px-6 py-8">
         {/* Personal information */}
         <div className="border border-gray-200 rounded-lg p-8 mb-6">
-          <h2 className="text-center text-[#2E7D32] text-2xl mb-6">Personal information</h2>
-          <p className="text-[#2E7D32] text-sm mb-1">* = mandatory fields</p>
-          <p className="text-gray-600 text-sm mb-6">Please fill personal information as shown in the passport</p>
+          <h2 className="text-center text-[#2E7D32] text-2xl mb-6">{isAr ? 'المعلومات الشخصية' : 'Personal information'}</h2>
+          <p className="text-[#2E7D32] text-sm mb-1">{isAr ? '* = حقول إلزامية' : '* = mandatory fields'}</p>
+          <p className="text-gray-600 text-sm mb-6">{isAr ? 'يرجى ملء المعلومات الشخصية كما هو موضح في جواز السفر' : 'Please fill personal information as shown in the passport'}</p>
           
           {passengers.map((p, index) => (
             <div key={index} className="space-y-5 mb-8">
-              {passengers.length > 1 && <h3 className="text-[#2E7D32] font-bold text-lg">Passenger {index + 1} ({p.type})</h3>}
+              {passengers.length > 1 && <h3 className="text-[#2E7D32] font-bold text-lg">{isAr ? `المسافر ${index + 1}` : `Passenger ${index + 1}`} ({p.type})</h3>}
               {/* Title */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                <legend className="text-[#2E7D32] text-xs px-1">Title*</legend>
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'اللقب*' : 'Title*'}</legend>
                 <select value={p.gender === 'Male' ? 'Mr' : 'Mrs'} onChange={(e) => update(index, 'gender', e.target.value === 'Mr' ? 'Male' : 'Female')} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                  <option value="" disabled>Choose a title</option>
-                  <option value="Mr">Mr</option>
-                  <option value="Mrs">Mrs</option>
-                  <option value="Ms">Ms</option>
+                  <option value="" disabled>{isAr ? 'اختر لقباً' : 'Choose a title'}</option>
+                  <option value="Mr">{isAr ? 'السيد' : 'Mr'}</option>
+                  <option value="Mrs">{isAr ? 'السيدة' : 'Mrs'}</option>
+                  <option value="Ms">{isAr ? 'الآنسة' : 'Ms'}</option>
                 </select>
               </fieldset>
               {/* First name - English letters only */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                <legend className="text-[#2E7D32] text-xs px-1">First name*</legend>
-                <input type="text" placeholder="Enter a first name" value={p.firstName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'firstName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'الاسم الأول*' : 'First name*'}</legend>
+                <input type="text" placeholder={isAr ? 'أدخل الاسم الأول' : 'Enter a first name'} value={p.firstName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'firstName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
               {/* Last name - English letters only */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                <legend className="text-[#2E7D32] text-xs px-1">Last name*</legend>
-                <input type="text" placeholder="Enter a last name" value={p.lastName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'lastName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'اسم العائلة*' : 'Last name*'}</legend>
+                <input type="text" placeholder={isAr ? 'أدخل اسم العائلة' : 'Enter a last name'} value={p.lastName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); update(index, 'lastName', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
               {/* Date of birth - custom date picker */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] relative">
-                <legend className="text-[#2E7D32] text-xs px-1">Date of birth</legend>
-                <div className="flex items-center">
-                  <input type="text" placeholder="Day / Month / Year" value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] relative ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'تاريخ الميلاد' : 'Date of birth'}</legend>
+                <div className={`flex items-center ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                  <input type="text" placeholder={isAr ? 'يوم / شهر / سنة' : 'Day / Month / Year'} value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className={`flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] ${isAr ? 'text-right' : 'text-left'}`} />
                   <svg data-cal-idx={index} onClick={() => { setCalPaxIdx(index); setCalView('years'); setCalYearRange(1991); setCalOpen(true); }} className="w-6 h-6 text-[#2E7D32] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
               </fieldset>
-              <p className="text-[#2E7D32] text-xs">Example: 31/01/2025</p>
+              <p className={`text-[#2E7D32] text-xs ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'مثال: 31/01/2025' : 'Example: 31/01/2025'}</p>
             </div>
           ))}
 
           {/* Frequent flyer cards */}
-          <h2 className="text-center text-[#2E7D32] text-2xl mt-8 mb-6">Frequent flyer cards</h2>
-          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
-            <legend className="text-[#2E7D32] text-xs px-1">Frequent flyer program</legend>
+          <h2 className="text-center text-[#2E7D32] text-2xl mt-8 mb-6">{isAr ? 'بطاقات المسافر الدائم' : 'Frequent flyer cards'}</h2>
+          <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5 ${isAr ? 'text-right' : 'text-left'}`}>
+            <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'برنامج المسافر الدائم' : 'Frequent flyer program'}</legend>
             <select className="w-full bg-transparent text-gray-400 focus:outline-none text-[15px]">
-              <option value="">Select a program</option>
-              <option value="iraqi">Iraqi Airways</option>
+              <option value="">{isAr ? 'اختر برنامجاً' : 'Select a program'}</option>
+              <option value="iraqi">{isAr ? 'الخطوط الجوية العراقية' : 'Iraqi Airways'}</option>
             </select>
           </fieldset>
           <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
@@ -907,26 +907,26 @@ const PassengerDetails = () => {
           )}
           {/* Fill emergency contact toggle */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setShowEmergency(!showEmergency)}>
-            <div className={`w-10 h-5 rounded-full relative transition-colors ${showEmergency ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${showEmergency ? 'left-[22px]' : 'left-0.5'}`}></div></div>
-            <span className="text-gray-600 text-sm">Fill emergency contact</span>
+            <div className={`w-10 h-5 rounded-full relative transition-colors ${showEmergency ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${showEmergency ? (isAr ? 'right-[22px]' : 'left-[22px]') : (isAr ? 'right-0.5' : 'left-0.5')}`}></div></div>
+            <span className="text-gray-600 text-sm">{isAr ? 'ملء بيانات جهة اتصال الطوارئ' : 'Fill emergency contact'}</span>
           </div>
           {/* Emergency contact fields */}
           {showEmergency && (
             <div className="mt-5 space-y-5">
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                <legend className="text-[#2E7D32] text-xs px-1">Emergency contact name*</legend>
-                <input type="text" placeholder="Enter full name" value={emergency.firstName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); setEmergency({...emergency, firstName: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'اسم جهة اتصال الطوارئ*' : 'Emergency contact name*'}</legend>
+                <input type="text" placeholder={isAr ? 'أدخل الاسم الكامل' : 'Enter full name'} value={emergency.firstName} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g, ''); setEmergency({...emergency, firstName: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
               <div className="grid grid-cols-2 gap-4">
-                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                  <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
+                <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                  <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'رمز الاتصال بالدولة*' : 'Country calling code*'}</legend>
                   <select value={emergency.dialCode} onChange={(e) => setEmergency({...emergency, dialCode: e.target.value})} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                    <option value="+964">Iraq (+964)</option><option value="+93">Afghanistan (+93)</option><option value="+355">Albania (+355)</option><option value="+213">Algeria (+213)</option><option value="+54">Argentina (+54)</option><option value="+374">Armenia (+374)</option><option value="+61">Australia (+61)</option><option value="+43">Austria (+43)</option><option value="+994">Azerbaijan (+994)</option><option value="+973">Bahrain (+973)</option><option value="+880">Bangladesh (+880)</option><option value="+32">Belgium (+32)</option><option value="+55">Brazil (+55)</option><option value="+1">Canada (+1)</option><option value="+86">China (+86)</option><option value="+45">Denmark (+45)</option><option value="+20">Egypt (+20)</option><option value="+33">France (+33)</option><option value="+49">Germany (+49)</option><option value="+91">India (+91)</option><option value="+98">Iran (+98)</option><option value="+39">Italy (+39)</option><option value="+81">Japan (+81)</option><option value="+962">Jordan (+962)</option><option value="+965">Kuwait (+965)</option><option value="+961">Lebanon (+961)</option><option value="+60">Malaysia (+60)</option><option value="+31">Netherlands (+31)</option><option value="+968">Oman (+968)</option><option value="+92">Pakistan (+92)</option><option value="+970">Palestine (+970)</option><option value="+974">Qatar (+974)</option><option value="+7">Russia (+7)</option><option value="+966">Saudi Arabia (+966)</option><option value="+34">Spain (+34)</option><option value="+963">Syria (+963)</option><option value="+90">Turkey (+90)</option><option value="+971">UAE (+971)</option><option value="+44">United Kingdom (+44)</option><option value="+1">United States (+1)</option><option value="+967">Yemen (+967)</option>
+                    <option value="+964">{isAr ? 'العراق (+964)' : 'Iraq (+964)'}</option><option value="+93">Afghanistan (+93)</option><option value="+355">Albania (+355)</option><option value="+213">Algeria (+213)</option><option value="+54">Argentina (+54)</option><option value="+374">Armenia (+374)</option><option value="+61">Australia (+61)</option><option value="+43">Austria (+43)</option><option value="+994">Azerbaijan (+994)</option><option value="+973">Bahrain (+973)</option><option value="+880">Bangladesh (+880)</option><option value="+32">Belgium (+32)</option><option value="+55">Brazil (+55)</option><option value="+1">Canada (+1)</option><option value="+86">China (+86)</option><option value="+45">Denmark (+45)</option><option value="+20">Egypt (+20)</option><option value="+33">France (+33)</option><option value="+49">Germany (+49)</option><option value="+91">India (+91)</option><option value="+98">Iran (+98)</option><option value="+39">Italy (+39)</option><option value="+81">Japan (+81)</option><option value="+962">Jordan (+962)</option><option value="+965">Kuwait (+965)</option><option value="+961">Lebanon (+961)</option><option value="+60">Malaysia (+60)</option><option value="+31">Netherlands (+31)</option><option value="+968">Oman (+968)</option><option value="+92">Pakistan (+92)</option><option value="+970">Palestine (+970)</option><option value="+974">Qatar (+974)</option><option value="+7">Russia (+7)</option><option value="+966">Saudi Arabia (+966)</option><option value="+34">Spain (+34)</option><option value="+963">Syria (+963)</option><option value="+90">Turkey (+90)</option><option value="+971">UAE (+971)</option><option value="+44">United Kingdom (+44)</option><option value="+1">United States (+1)</option><option value="+967">Yemen (+967)</option>
                   </select>
                 </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                  <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
-                  <input type="tel" placeholder="Enter a mobile phone" value={emergency.phone} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setEmergency({...emergency, phone: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                  <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'رقم الهاتف*' : 'Phone number*'}</legend>
+                  <input type="tel" placeholder={isAr ? 'أدخل رقم الهاتف المحمول' : 'Enter a mobile phone'} value={emergency.phone} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setEmergency({...emergency, phone: v}); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                 </fieldset>
               </div>
             </div>
@@ -935,20 +935,20 @@ const PassengerDetails = () => {
 
         {/* Remember passenger information */}
         <div className="border border-gray-200 rounded-lg p-6 mb-6 bg-[#f9f9f9]">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setRememberPassenger(!rememberPassenger)}>
-            <div className={`w-10 h-5 rounded-full relative transition-colors ${rememberPassenger ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${rememberPassenger ? 'left-[22px]' : 'left-0.5'}`}></div></div>
-            <div>
-              <p className="font-bold text-gray-800">Remember passenger information</p>
-              <p className="text-gray-500 text-sm">Save your personal information now, save time in future bookings.</p>
+          <div className={`flex items-center gap-3 cursor-pointer ${isAr ? 'flex-row-reverse' : 'flex-row'}`} onClick={() => setRememberPassenger(!rememberPassenger)}>
+            <div className={`w-10 h-5 rounded-full relative transition-colors ${rememberPassenger ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${rememberPassenger ? (isAr ? 'right-[22px]' : 'left-[22px]') : (isAr ? 'right-0.5' : 'left-0.5')}`}></div></div>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <p className="font-bold text-gray-800">{isAr ? 'تذكر معلومات المسافر' : 'Remember passenger information'}</p>
+              <p className="text-gray-500 text-sm">{isAr ? 'احفظ معلوماتك الشخصية الآن، ووفر الوقت في الحجوزات المستقبلية.' : 'Save your personal information now, save time in future bookings.'}</p>
             </div>
           </div>
         </div>
 
         {/* Privacy policy checkbox */}
         <div className="border border-gray-200 rounded-lg p-6 mb-8">
-          <label className="flex items-start gap-3 cursor-pointer">
+          <label className={`flex items-start gap-3 cursor-pointer ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
             <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="w-5 h-5 mt-0.5 rounded accent-[#4CAF50]" style={{accentColor: '#4CAF50'}} />
-            <span className="text-gray-700 text-sm">I understand and accept that my personal data will be processed in accordance with the applicable carrier's privacy policy <a href="#" className="text-[#2E7D32] underline">more</a></span>
+            <span className={`text-gray-700 text-sm ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'أفهم وأقبل أنه سيتم معالجة بياناتي الشخصية وفقاً لسياسة خصوصية الناقل المعمول بها' : 'I understand and accept that my personal data will be processed in accordance with the applicable carrier\'s privacy policy'} <a href="#" className="text-[#2E7D32] underline">{isAr ? 'المزيد' : 'more'}</a></span>
           </label>
         </div>
 
@@ -960,22 +960,22 @@ const PassengerDetails = () => {
         )}
 
         {/* Back + Confirm buttons - right aligned */}
-        <div className="flex justify-end gap-3 mb-12">
-          <button onClick={() => setLocation('/flight-search')} className="bg-[#4CAF50] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#388E3C]">Back</button>
-          <button onClick={handleContinue} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">Confirm</button>
+        <div className={`flex ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-end gap-3 mb-12`}>
+          <button onClick={() => setLocation('/flight-search')} className="bg-[#4CAF50] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#388E3C]">{isAr ? 'رجوع' : 'Back'}</button>
+          <button onClick={handleContinue} className="bg-[#1B5E20] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#0D3B0F]">{isAr ? 'تأكيد' : 'Confirm'}</button>
         </div>
       </main>
 
       {/* Footer - same as flight search */}
-      <footer className="bg-[#4ca42c] text-white" dir="ltr">
+      <footer className="bg-[#4ca42c] text-white" dir={dir}>
         <div className="max-w-6xl mx-auto px-6 py-10">
-          <div className="flex justify-between mb-8">
-            <div><h4 className="font-bold text-lg mb-2">Plan and booking</h4><a href="/" className="text-white underline text-sm">Book trip ↗</a></div>
-            <div><h4 className="font-bold text-lg mb-2">Contact us</h4><a href="/" className="text-white underline text-sm block">Contact us ↗</a><a href="/" className="text-white underline text-sm block mt-1">Iraqi airways offers ↗</a></div>
-            <div><h4 className="font-bold text-lg mb-2">About us</h4><a href="/" className="text-white underline text-sm">Our fleet ↗</a></div>
+          <div className={`flex ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-between mb-8`}>
+            <div className={isAr ? 'text-right' : 'text-left'}><h4 className="font-bold text-lg mb-2">{isAr ? 'التخطيط والحجز' : 'Plan and booking'}</h4><a href="/" className="text-white underline text-sm">{isAr ? 'احجز رحلة ↗' : 'Book trip ↗'}</a></div>
+            <div className={isAr ? 'text-right' : 'text-left'}><h4 className="font-bold text-lg mb-2">{isAr ? 'اتصل بنا' : 'Contact us'}</h4><a href="/" className="text-white underline text-sm block">{isAr ? 'اتصل بنا ↗' : 'Contact us ↗'}</a><a href="/" className="text-white underline text-sm block mt-1">{isAr ? 'عروض الخطوط الجوية العراقية ↗' : 'Iraqi airways offers ↗'}</a></div>
+            <div className={isAr ? 'text-right' : 'text-left'}><h4 className="font-bold text-lg mb-2">{isAr ? 'من نحن' : 'About us'}</h4><a href="/" className="text-white underline text-sm">{isAr ? 'أسطولنا ↗' : 'Our fleet ↗'}</a></div>
           </div>
           <div className="text-center">
-            <h4 className="font-bold text-lg mb-3">Secured payment</h4>
+            <h4 className="font-bold text-lg mb-3">{isAr ? 'دفع آمن' : 'Secured payment'}</h4>
             <div className="flex justify-center gap-3 mb-2">
               <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/americanexpress.png" alt="Amex" className="h-10" /></div>
               <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/visa.png" alt="Visa" className="h-10" /></div>
@@ -983,7 +983,7 @@ const PassengerDetails = () => {
               <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-10" /></div>
               <div className="bg-white rounded overflow-hidden"><img src="/iraqi_airways/dinersclub.png" alt="DC" className="h-10" /></div>
             </div>
-            <p className="text-sm text-white/80">Credit card fees may occur.</p>
+            <p className="text-sm text-white/80">{isAr ? 'قد تترتب رسوم على بطاقة الائتمان.' : 'Credit card fees may occur.'}</p>
           </div>
         </div>
       </footer>
