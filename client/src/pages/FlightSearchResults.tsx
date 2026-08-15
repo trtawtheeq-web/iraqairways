@@ -632,20 +632,24 @@ const FlightSearchResults = () => {
             <div className="px-6 py-4">
               <p className="text-[#2E7D32] font-bold">{cityName(leg.origin, airportName(leg.origin).split(' ')[0])} {t('common.to')} {cityName(leg.destination, airportName(leg.destination).split(' ')[0])} - <span className="font-normal text-[#2E7D32]">{legDateLabel}</span></p>
               <hr className="border-[#2E7D32] mt-3" />
-              <div className="flex flex-wrap sm:flex-nowrap items-center mt-4 gap-2 sm:gap-4">
-                <div className="flex items-center gap-3 flex-1 min-w-[200px]">
-                  <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.departureTime}</span>
-                  <span className="text-gray-400 text-sm flex-1 text-center">··········· {t('fsr.nonstop')} ···········</span>
-                  <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.arrivalTime}</span>
-                </div>
-                <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                  <div className="flex flex-col">
-                    <span className="text-xs text-gray-500">{leg.origin}</span>
-                    <span className="text-[#2E7D32] font-bold text-sm">{leg.fare}</span>
+              <div className={`flex flex-wrap sm:flex-nowrap items-center mt-4 gap-2 sm:gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`flex items-center gap-3 flex-1 min-w-[200px] ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                  <div className="flex flex-col items-center">
+                    <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.departureTime}</span>
+                    <span className="text-[10px] text-gray-400 font-bold">{leg.origin}</span>
                   </div>
-                  <div className="flex flex-col items-end">
-                    <span className="text-xs text-gray-500">{leg.destination}</span>
-                    <button onClick={() => setCartExpanded(!cartExpanded)} className="text-gray-400 hover:text-gray-600"><svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+                  <span className="text-gray-400 text-sm flex-1 text-center">··········· {t('fsr.nonstop')} ···········</span>
+                  <div className="flex flex-col items-center">
+                    <span className="text-xl sm:text-2xl font-bold text-[#2E7D32]">{leg.flight.arrivalTime}</span>
+                    <span className="text-[10px] text-gray-400 font-bold">{leg.destination}</span>
+                  </div>
+                </div>
+                <div className={`flex items-center gap-2 w-full sm:w-auto ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                  <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[#2E7D32] font-bold text-sm">{leg.fare}</span>
+                      <button onClick={() => setCartExpanded(!cartExpanded)} className="text-gray-400 hover:text-gray-600"><svg className={`w-5 h-5 transition-transform ${cartExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -704,29 +708,37 @@ const FlightSearchResults = () => {
             );
           })}
           {/* Total price */}
-          <div className={`${isAr ? 'text-left' : 'text-right'} mt-6`}>
-            <p className="text-[#2E7D32] text-base">{t('fsr.totalPriceForFlight')}: 
-              {globalDiscount.value && <span className={`text-sm line-through text-[#FF0000] ${isAr ? 'mr-2' : 'ml-2'}`}>{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
-              <span className={`font-bold text-lg ${isAr ? 'mr-1' : 'ml-1'}`}>{cartTotal}</span>
-            </p>
+          <div className={`${isAr ? 'text-right' : 'text-right'} mt-6`}>
+            <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-end`}>
+              <p className="text-[#2E7D32] text-base">{t('fsr.totalPriceForFlight')}:</p>
+              <div className="flex items-center gap-2">
+                {globalDiscount.value && <span className="text-sm line-through text-[#FF0000]">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
+                <span className="font-bold text-lg text-[#2E7D32]">{cartTotal}</span>
+              </div>
+            </div>
           </div>
-          <div className={`${isAr ? 'text-left' : 'text-right'} mt-6`}>
-            <p className="text-[#2E7D32] text-lg">{t('fsr.totalPrice')}: 
-              {globalDiscount.value && <span className={`text-lg line-through text-[#FF0000] ${isAr ? 'mr-2' : 'ml-2'}`}>{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
-              <span className={`font-bold text-2xl ${isAr ? 'mr-1' : 'ml-1'}`}>{cartTotal}</span>
-            </p>
-            <p className="text-gray-500 text-sm mt-1">{t('fsr.priceNotice')} <a href="#" className="text-[#2E7D32] underline">{t('fsr.seePriceDetails')}</a></p>
+          <div className={`${isAr ? 'text-right' : 'text-right'} mt-6`}>
+            <div className={`flex items-center gap-2 ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-end`}>
+              <p className="text-[#2E7D32] text-lg">{t('fsr.totalPrice')}:</p>
+              <div className="flex items-center gap-2">
+                {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">{formatPrice(allCartLegs.reduce((sum, l) => sum + computeTotal(l.flight.priceKWD), 0), curCode)}</span>}
+                <span className="font-bold text-2xl text-[#2E7D32]">{cartTotal}</span>
+              </div>
+            </div>
+            <p className={`text-gray-500 text-sm mt-1 ${isAr ? 'text-right' : 'text-right'}`}>{t('fsr.priceNotice')} <a href="#" className="text-[#2E7D32] underline">{t('fsr.seePriceDetails')}</a></p>
           </div>
-          {/* Policy links - right aligned like original */}
-          <div className={`${isAr ? 'text-left' : 'text-right'} mt-6 text-sm text-[#2E7D32]`}>
-            <a href="#" className="underline">{t('fsr.baggagePolicy')} ↗</a>
-            <span className="mx-2 text-gray-400">|</span>
-            <a href="#" className="underline">{t('fsr.reviewConditions')} ↗</a>
-            <span className="mx-2 text-gray-400">|</span>
-            <a href="#" className="underline">{t('fsr.dangerousGoods')} ↗</a>
+          {/* Policy links - right aligned */}
+          <div className={`${isAr ? 'text-right' : 'text-right'} mt-6 text-sm text-[#2E7D32]`}>
+            <div className={`flex flex-wrap items-center gap-2 ${isAr ? 'flex-row-reverse' : 'flex-row'} justify-end`}>
+              <a href="#" className="underline">{t('fsr.baggagePolicy')} ↗</a>
+              <span className="mx-2 text-gray-400">|</span>
+              <a href="#" className="underline">{t('fsr.reviewConditions')} ↗</a>
+              <span className="mx-2 text-gray-400">|</span>
+              <a href="#" className="underline">{t('fsr.dangerousGoods')} ↗</a>
+            </div>
           </div>
           {/* Fill passenger details button - full width on mobile, right on desktop */}
-          <div className={`text-center ${isAr ? 'sm:text-left' : 'sm:text-right'} mt-8 mb-12`}>
+          <div className={`text-center ${isAr ? 'sm:text-right' : 'sm:text-right'} mt-8 mb-12`}>
             <button onClick={handleFillPassengerDetails} className="w-full sm:w-auto bg-[#2E7D32] text-white px-10 py-4 rounded-full text-lg font-medium hover:bg-[#1B5E20] transition-colors shadow-md">{t('fsr.fillPassenger')}</button>
           </div>
         </div>
@@ -840,9 +852,9 @@ const FlightSearchResults = () => {
           </div>
         </div>
         {/* Flight info bar - matching original exactly */}
-        <div className="w-full bg-white border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap sm:flex-nowrap items-center relative">
+        <div className={`w-full bg-white border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap sm:flex-nowrap items-center relative ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
           {/* Mobile: text route */}
-          <div className="sm:hidden w-[calc(100%-80px)]">
+          <div className={`sm:hidden w-[calc(100%-80px)] ${isAr ? 'text-right' : 'text-left'}`}>
             <p className="text-sm font-bold text-[#1a3c0a] m-0">{cityName(origin, cityOfEn(origin))} - {cityName(destination, cityOfEn(destination))}</p>
             <p className="text-xs text-gray-600 m-0">{new Date(initialDate + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'})} &nbsp; {passengers} <svg className="inline w-3 h-3" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></p>
           </div>
@@ -891,7 +903,7 @@ const FlightSearchResults = () => {
             </>
           )}
           <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
-          <div className="hidden sm:flex flex-col">
+          <div className={`hidden sm:flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
             <span className="text-sm text-gray-600">{t('fsr.passenger')}</span>
             <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
