@@ -733,59 +733,59 @@ const PassengerDetails = () => {
 
         {/* Contact Information */}
         <div className="border border-gray-200 rounded-lg p-8 mb-6">
-          <h2 className="text-center text-[#2E7D32] text-2xl mb-6">Contact Information</h2>
+          <h2 className="text-center text-[#2E7D32] text-2xl mb-6">{t('pax.contactInfo')}</h2>
           {/* Email */}
-          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
-            <legend className="text-[#2E7D32] text-xs px-1">Email*</legend>
-            <input type="email" placeholder="Enter an email address" value={passengers[0]?.email || ''} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); update(0, 'email', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+          <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5 ${isAr ? 'text-right' : 'text-left'}`}>
+            <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'البريد الإلكتروني*' : 'Email*'}</legend>
+            <input type="email" placeholder={isAr ? 'أدخل عنوان البريد الإلكتروني' : 'Enter an email address'} value={passengers[0]?.email || ''} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); update(0, 'email', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
           {/* Confirm email */}
-          <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-1 ${confirmEmail && confirmEmail !== (passengers[0]?.email || '') ? 'border-red-500' : 'border-[#4CAF50]'}`}>
-            <legend className="text-[#2E7D32] text-xs px-1">Confirm email*</legend>
-            <input type="email" placeholder="Confirm an email address" value={confirmEmail} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); setConfirmEmail(v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+          <fieldset className={`border rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-1 ${confirmEmail && confirmEmail !== (passengers[0]?.email || '') ? 'border-red-500' : 'border-[#4CAF50]'} ${isAr ? 'text-right' : 'text-left'}`}>
+            <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'تأكيد البريد الإلكتروني*' : 'Confirm email*'}</legend>
+            <input type="email" placeholder={isAr ? 'أكد عنوان البريد الإلكتروني' : 'Confirm an email address'} value={confirmEmail} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); setConfirmEmail(v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
           {confirmEmail && confirmEmail !== (passengers[0]?.email || '') && (
-            <p className="text-red-500 text-xs mb-5">Email addresses do not match</p>
+            <p className={`text-red-500 text-xs mb-5 ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'عناوين البريد الإلكتروني غير متطابقة' : 'Email addresses do not match'}</p>
           )}
           {/* Extra emails - each has Email + Confirm email + Remove button */}
           {extraEmails.map((em, i) => (
             <div key={`em-${i}`} className="mb-5 space-y-5">
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                <legend className="text-[#2E7D32] text-xs px-1">Email</legend>
-                <input type="email" placeholder="Enter an email address" value={em} onChange={(e) => { const arr = [...extraEmails]; arr[i] = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); setExtraEmails(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'البريد الإلكتروني' : 'Email'}</legend>
+                <input type="email" placeholder={isAr ? 'أدخل عنوان البريد الإلكتروني' : 'Enter an email address'} value={em} onChange={(e) => { const arr = [...extraEmails]; arr[i] = e.target.value.replace(/[^a-zA-Z0-9@._\-+]/g, ''); setExtraEmails(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                <legend className="text-[#2E7D32] text-xs px-1">Confirm email</legend>
-                <input type="email" placeholder="Confirm an email address" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'تأكيد البريد الإلكتروني' : 'Confirm email'}</legend>
+                <input type="email" placeholder={isAr ? 'أكد عنوان البريد الإلكتروني' : 'Confirm an email address'} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
             </div>
           ))}
           {/* Add another email */}
           <div className="text-center mb-4">
-            <button type="button" onClick={() => setExtraEmails([...extraEmails, ''])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another email address</button>
+            <button type="button" onClick={() => setExtraEmails([...extraEmails, ''])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">{t('pax.addEmail')}</button>
           </div>
           {/* Remove additional email */}
           {extraEmails.length > 0 && (
             <div className="text-center mb-6">
-              <button type="button" onClick={() => setExtraEmails(extraEmails.slice(0, -1))} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Remove additional email address</button>
+              <button type="button" onClick={() => setExtraEmails(extraEmails.slice(0, -1))} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">{isAr ? 'إزالة عنوان البريد الإلكتروني الإضافي' : 'Remove additional email address'}</button>
             </div>
           )}
           {/* Phone type */}
-          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5">
-            <legend className="text-[#2E7D32] text-xs px-1">Phone type*</legend>
+          <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] mb-5 ${isAr ? 'text-right' : 'text-left'}`}>
+            <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'نوع الهاتف*' : 'Phone type*'}</legend>
             <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-              <option value="Personal">Personal</option>
-              <option value="Business">Business</option>
-              <option value="Agency">Agency</option>
-              <option value="Other">Other</option>
+              <option value="Personal">{isAr ? 'شخصي' : 'Personal'}</option>
+              <option value="Business">{isAr ? 'عمل' : 'Business'}</option>
+              <option value="Agency">{isAr ? 'وكالة' : 'Agency'}</option>
+              <option value="Other">{isAr ? 'آخر' : 'Other'}</option>
             </select>
           </fieldset>
           {/* Country code + Phone number */}
           <div className="grid grid-cols-2 gap-4 mb-5">
-            <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-              <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
+            <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+              <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'رمز الاتصال بالدولة*' : 'Country calling code*'}</legend>
               <select value={passengers[0]?.dialCode || '+964'} onChange={(e) => update(0, 'dialCode', e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                <option value="+964">Iraq (+964)</option>
+                <option value="+964">{isAr ? 'العراق (+964)' : 'Iraq (+964)'}</option>
                 <option value="+93">Afghanistan (+93)</option>
                 <option value="+355">Albania (+355)</option>
                 <option value="+213">Algeria (+213)</option>
@@ -864,28 +864,28 @@ const PassengerDetails = () => {
                 <option value="+967">Yemen (+967)</option>
               </select>
             </fieldset>
-            <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-              <legend className="text-[#2E7D32] text-xs px-1">Phone number*</legend>
-              <input type="tel" placeholder="Enter a mobile phone" value={passengers[0]?.phone || ''} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); update(0, 'phone', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+            <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+              <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'رقم الهاتف*' : 'Phone number*'}</legend>
+              <input type="tel" placeholder={isAr ? 'أدخل رقم الهاتف المحمول' : 'Enter a mobile phone'} value={passengers[0]?.phone || ''} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); update(0, 'phone', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
             </fieldset>
           </div>
           {/* Extra phones - each has Phone type + Country code + Phone number */}
           {extraPhones.map((ph, i) => (
             <div key={`ph-${i}`} className="mb-5 space-y-5">
-              <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                <legend className="text-[#2E7D32] text-xs px-1">Phone type*</legend>
+              <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'نوع الهاتف*' : 'Phone type*'}</legend>
                 <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                  <option value="Personal">Personal</option>
-                  <option value="Business">Business</option>
-                  <option value="Agency">Agency</option>
-                  <option value="Other">Other</option>
+                  <option value="Personal">{isAr ? 'شخصي' : 'Personal'}</option>
+                  <option value="Business">{isAr ? 'عمل' : 'Business'}</option>
+                  <option value="Agency">{isAr ? 'وكالة' : 'Agency'}</option>
+                  <option value="Other">{isAr ? 'آخر' : 'Other'}</option>
                 </select>
               </fieldset>
               <div className="grid grid-cols-2 gap-4">
-                <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-                  <legend className="text-[#2E7D32] text-xs px-1">Country calling code*</legend>
+                <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+                  <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'رمز الاتصال بالدولة*' : 'Country calling code*'}</legend>
                   <select value={ph.code} onChange={(e) => { const arr = [...extraPhones]; arr[i] = {...arr[i], code: e.target.value}; setExtraPhones(arr); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                    <option value="+964">Iraq (+964)</option><option value="+93">Afghanistan (+93)</option><option value="+355">Albania (+355)</option><option value="+213">Algeria (+213)</option><option value="+54">Argentina (+54)</option><option value="+374">Armenia (+374)</option><option value="+61">Australia (+61)</option><option value="+43">Austria (+43)</option><option value="+994">Azerbaijan (+994)</option><option value="+973">Bahrain (+973)</option><option value="+880">Bangladesh (+880)</option><option value="+32">Belgium (+32)</option><option value="+55">Brazil (+55)</option><option value="+1">Canada (+1)</option><option value="+86">China (+86)</option><option value="+45">Denmark (+45)</option><option value="+20">Egypt (+20)</option><option value="+33">France (+33)</option><option value="+49">Germany (+49)</option><option value="+91">India (+91)</option><option value="+98">Iran (+98)</option><option value="+39">Italy (+39)</option><option value="+81">Japan (+81)</option><option value="+962">Jordan (+962)</option><option value="+965">Kuwait (+965)</option><option value="+961">Lebanon (+961)</option><option value="+60">Malaysia (+60)</option><option value="+31">Netherlands (+31)</option><option value="+968">Oman (+968)</option><option value="+92">Pakistan (+92)</option><option value="+970">Palestine (+970)</option><option value="+974">Qatar (+974)</option><option value="+7">Russia (+7)</option><option value="+966">Saudi Arabia (+966)</option><option value="+34">Spain (+34)</option><option value="+963">Syria (+963)</option><option value="+90">Turkey (+90)</option><option value="+971">UAE (+971)</option><option value="+44">United Kingdom (+44)</option><option value="+1">United States (+1)</option><option value="+967">Yemen (+967)</option>
+                    <option value="+964">{isAr ? 'العراق (+964)' : 'Iraq (+964)'}</option><option value="+93">Afghanistan (+93)</option><option value="+355">Albania (+355)</option><option value="+213">Algeria (+213)</option><option value="+54">Argentina (+54)</option><option value="+374">Armenia (+374)</option><option value="+61">Australia (+61)</option><option value="+43">Austria (+43)</option><option value="+994">Azerbaijan (+994)</option><option value="+973">Bahrain (+973)</option><option value="+880">Bangladesh (+880)</option><option value="+32">Belgium (+32)</option><option value="+55">Brazil (+55)</option><option value="+1">Canada (+1)</option><option value="+86">China (+86)</option><option value="+45">Denmark (+45)</option><option value="+20">Egypt (+20)</option><option value="+33">France (+33)</option><option value="+49">Germany (+49)</option><option value="+91">India (+91)</option><option value="+98">Iran (+98)</option><option value="+39">Italy (+39)</option><option value="+81">Japan (+81)</option><option value="+962">Jordan (+962)</option><option value="+965">Kuwait (+965)</option><option value="+961">Lebanon (+961)</option><option value="+60">Malaysia (+60)</option><option value="+31">Netherlands (+31)</option><option value="+968">Oman (+968)</option><option value="+92">Pakistan (+92)</option><option value="+970">Palestine (+970)</option><option value="+974">Qatar (+974)</option><option value="+7">Russia (+7)</option><option value="+966">Saudi Arabia (+966)</option><option value="+34">Spain (+34)</option><option value="+963">Syria (+963)</option><option value="+90">Turkey (+90)</option><option value="+971">UAE (+971)</option><option value="+44">United Kingdom (+44)</option><option value="+1">United States (+1)</option><option value="+967">Yemen (+967)</option>
                   </select>
                 </fieldset>
                 <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
@@ -897,12 +897,12 @@ const PassengerDetails = () => {
           ))}
           {/* Add another phone */}
           <div className="text-center mb-4">
-            <button type="button" onClick={() => setExtraPhones([...extraPhones, {code: '+964', number: ''}])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Add another phone number</button>
+            <button type="button" onClick={() => setExtraPhones([...extraPhones, {code: '+964', number: ''}])} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">{t('pax.addPhone')}</button>
           </div>
           {/* Remove additional phone */}
           {extraPhones.length > 0 && (
             <div className="text-center mb-6">
-              <button type="button" onClick={() => setExtraPhones(extraPhones.slice(0, -1))} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">Remove additional phone number</button>
+              <button type="button" onClick={() => setExtraPhones(extraPhones.slice(0, -1))} className="bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium">{isAr ? 'إزالة رقم الهاتف الإضافي' : 'Remove additional phone number'}</button>
             </div>
           )}
           {/* Fill emergency contact toggle */}

@@ -39,6 +39,7 @@ export const STRINGS: Dict = {
   'common.next': { en: 'Next', ar: 'التالي' },
   'common.remove': { en: 'Remove', ar: 'إزالة' },
   'common.select': { en: 'Select', ar: 'اختيار' },
+  'common.home': { en: 'Home', ar: 'الرئيسية' },
 
   // ---- Preferences modal ----
   'pref.title': { en: 'Choose your preferences', ar: 'اختر تفضيلاتك' },
@@ -201,6 +202,12 @@ export const STRINGS: Dict = {
   'pax.gender': { en: 'Gender', ar: 'الجنس' },
   'pax.male': { en: 'Male', ar: 'ذكر' },
   'pax.female': { en: 'Female', ar: 'أنثى' },
+  'pax.contactInfo': { en: 'Contact Information', ar: 'بيانات الاتصال' },
+  'pax.confirmEmail': { en: 'Confirm email', ar: 'تأكيد البريد الإلكتروني' },
+  'pax.addEmail': { en: 'Add another email address', ar: 'إضافة عنوان بريد إلكتروني آخر' },
+  'pax.addPhone': { en: 'Add another phone number', ar: 'إضافة رقم هاتف آخر' },
+  'pax.phoneType': { en: 'Phone type', ar: 'نوع الهاتف' },
+  'pax.countryCode': { en: 'Country calling code', ar: 'رمز الاتصال بالدولة' },
 
   // ---- Seats ----
   'seat.title': { en: 'Your secured spot', ar: 'مقعدك المحجوز' },
