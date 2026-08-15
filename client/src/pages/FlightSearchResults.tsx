@@ -1474,17 +1474,9 @@ const FlightSearchResults = () => {
               <p className="text-[#4ca42c] text-[14px] font-bold leading-tight mb-6">{t('fsr.totalDuration')}: {detailsFlight.duration.replace(' 0', ' ').replace('h ', 'h ').replace('m', 'min')}</p>
             </div>
             {/* Timeline: duration left | green line+dots | info right */}
-            <div className={`flex gap-2 mb-6 ${isAr ? 'mr-4' : 'ml-4'}`}>
-              {/* Duration on the left */}
-              <div className={`flex items-center justify-end w-6 text-gray-500 text-[12px] ${isAr ? 'order-2' : ''}`}>{detailsFlight.duration.split(' ')[0]}</div>
-              {/* Green vertical line with small dots */}
-              <div className="flex flex-col items-center" style={{minHeight:'80px'}}>
-                <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
-                <div className="w-[2px] flex-1 bg-[#4CAF50]"></div>
-                <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
-              </div>
-              {/* Flight info on the right */}
-              <div className={`flex-1 ${isAr ? 'mr-1' : 'ml-1'} ${isAr ? 'text-right' : 'text-left'}`}>
+            <div className={`flex gap-3 mb-6 ${isAr ? 'flex-row-reverse mr-4' : 'ml-4'}`}>
+              {/* Flight info (Left in RTL, Right in LTR) */}
+              <div className={`flex-1 ${isAr ? 'text-right' : 'text-left'}`}>
                 <div className="mb-4">
                   <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.departureTime} {cityName(currentLeg.origin, airportName(currentLeg.origin).split(' ')[0])}</p>
                   <p className="text-gray-500 text-[13px]">{cityName(currentLeg.origin, airportName(currentLeg.origin))} ({currentLeg.origin})</p>
@@ -1493,6 +1485,18 @@ const FlightSearchResults = () => {
                   <p className="text-[#2E7D32] font-bold text-[15px]">{detailsFlight.arrivalTime}{detailsFlight.arrivesNextDay ? ' +1' : ''} {cityName(currentLeg.destination, airportName(currentLeg.destination).split(' ')[0])}</p>
                   <p className="text-gray-500 text-[13px]">{cityName(currentLeg.destination, airportName(currentLeg.destination))} ({currentLeg.destination})</p>
                 </div>
+              </div>
+
+              {/* Duration (Next to line) */}
+              <div className="flex items-center text-gray-500 text-[12px] whitespace-nowrap">
+                {detailsFlight.duration.split(' ')[0]}
+              </div>
+
+              {/* Green vertical line with small dots (Right in RTL, Left in LTR) */}
+              <div className="flex flex-col items-center" style={{minHeight:'80px'}}>
+                <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
+                <div className="w-[2px] flex-1 bg-[#4CAF50]"></div>
+                <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF50] flex-shrink-0"></div>
               </div>
             </div>
             {/* Flight info - all green like original */}
