@@ -111,6 +111,14 @@ const FlightSearchResults = () => {
     cityNameI18n(iata, jazeeraRoutes.find(r => r.iata === iata)?.city || (iata === 'KWI' ? 'Kuwait' : iata), 'en');
   const airportName = (iata: string) =>
     fullAirportNameI18n(iata, jazeeraRoutes.find(r => r.iata === iata)?.city || (iata === 'KWI' ? 'Kuwait' : iata), lang);
+  // Localized city label used by the route summaries and flight-details modal.
+  // Keep the optional fallback so existing callers remain compatible in both languages.
+  const cityName = (iata: string, fallback?: string) =>
+    cityNameI18n(
+      String(iata || '').toUpperCase(),
+      fallback || jazeeraRoutes.find(r => r.iata === String(iata || '').toUpperCase())?.city || (iata === 'KWI' ? 'Kuwait' : iata),
+      lang,
+    );
 
   // ----- Parse URL params -----
   const searchParams = new URLSearchParams(window.location.search);
