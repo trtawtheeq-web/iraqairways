@@ -838,8 +838,8 @@ const FlightSearchResults = () => {
       <header className="w-full" dir={isAr ? 'rtl' : 'ltr'}>
         {/* Green top bar - matching original exactly */}
         <div className="w-full bg-[#4ca42c] px-3 sm:px-5 py-2 sm:py-3 flex items-center justify-between">
-          {/* Logo and Home (First in JSX = Right in RTL) */}
-          <div className="flex items-center">
+          {/* Logo and Home (Right in Arabic, Left in English) */}
+          <div className={`flex items-center ${isAr ? 'order-2' : 'order-1'}`}>
             {/* Hamburger - mobile only */}
             <button className="sm:hidden text-white mr-2" onClick={() => window.location.href = '/'}>
               <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -854,8 +854,8 @@ const FlightSearchResults = () => {
             <a href="/" className="hidden sm:block text-white text-[15px] font-medium hover:underline">{t('fsr.home')}</a>
           </div>
 
-          {/* Language Switcher (Last in JSX = Left in RTL) */}
-          <div className="relative hidden sm:block">
+          {/* Language Switcher (Left in Arabic, Right in English) */}
+          <div className={`relative hidden sm:block ${isAr ? 'order-1' : 'order-2'}`}>
             <button
               onClick={() => setLangMenuOpen(o => !o)}
               className="flex items-center gap-1.5 text-white text-[15px] font-medium"
@@ -874,12 +874,12 @@ const FlightSearchResults = () => {
         {/* Flight info bar - matching original exactly */}
         <div className="w-full bg-white border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4 flex flex-wrap sm:flex-nowrap items-center justify-between relative" dir={dir}>
           {/* Mobile: text route */}
-          <div className={`sm:hidden w-[calc(100%-80px)] ${isAr ? 'text-right' : 'text-left'}`}>
+          <div className={`sm:hidden w-[calc(100%-80px)] order-1 ${isAr ? 'text-right' : 'text-left'}`}>
             <p className="text-sm font-bold text-[#1a3c0a] m-0">{cityName(origin, cityOfEn(origin))} - {cityName(destination, cityOfEn(destination))}</p>
             <p className="text-xs text-gray-600 m-0">{new Date(initialDate + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', day:'numeric', month:'short'})} &nbsp; {passengers} <svg className="inline w-3 h-3" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></p>
           </div>
           {/* Desktop: full route with dots */}
-          <div className={`hidden sm:flex items-baseline gap-1 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div className={`hidden sm:flex items-baseline gap-1 order-1 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
             <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
               <span className="text-[22px] font-bold text-[#1a3c0a]">{origin}</span>
               <span className="text-xs text-gray-500">{cityName(origin, cityOfEn(origin))}</span>
@@ -909,25 +909,25 @@ const FlightSearchResults = () => {
             </div>
           </div>
           <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
-          <div className={`hidden sm:flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+          <div className={`hidden sm:flex flex-col order-1 ${isAr ? 'items-end' : 'items-start'}`}>
             <span className="text-sm text-gray-600">{t('fsr.depart')}</span>
             <span className="text-base font-bold text-[#4ca42c]">{new Date(initialDate + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', month:'short', day:'numeric'})}</span>
           </div>
           {tripType === 'round' && returnDate && (
             <>
               <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
-              <div className={`hidden sm:flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+              <div className={`hidden sm:flex flex-col order-1 ${isAr ? 'items-end' : 'items-start'}`}>
                 <span className="text-sm text-gray-600">{t('common.return')}</span>
                 <span className="text-base font-bold text-[#4ca42c]">{new Date(returnDate + 'T00:00:00').toLocaleDateString(isAr ? 'ar-IQ' : 'en-GB', {weekday:'short', month:'short', day:'numeric'})}</span>
               </div>
             </>
           )}
           <span className="hidden sm:block mx-5 h-10 w-px bg-gray-300"></span>
-          <div className={`hidden sm:flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+          <div className={`hidden sm:flex flex-col order-1 ${isAr ? 'items-end' : 'items-start'}`}>
             <span className="text-sm text-gray-600">{t('fsr.passenger')}</span>
             <span className="text-base font-bold text-[#1a3c0a]">{passengers} <svg className="inline w-4 h-4" fill="#4ca42c" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
           </div>
-          <div className={`${isAr ? 'mr-auto' : 'ml-auto'} flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 sm:px-6 py-2 sm:py-3 cursor-pointer min-h-[60px] sm:min-h-[80px]`}>
+          <div className={`flex flex-col items-center justify-center bg-[#2E7D32] text-white px-3 sm:px-6 py-2 sm:py-3 cursor-pointer min-h-[60px] sm:min-h-[80px] ${isAr ? 'order-2 mr-auto' : 'order-2 ml-auto'}`}>
             <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
             <span className="text-sm font-medium">{t('fsr.yourBooking')}</span>
           </div>

@@ -82,16 +82,22 @@ export default function SeatCustomization() {
     <div className="min-h-screen flex flex-col bg-white" dir="ltr" style={{ fontFamily: 'Lato, sans-serif' }}>
       {/* Header */}
       <header className="bg-[#4ca42c] text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
-          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
-          <span className="border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => setLocation('/')}>Home</span>
-          <div className="relative">
-            <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          {/* Logo and Home (Right in Arabic, Left in English) */}
+          <div className={`flex items-center gap-6 ${isAr ? 'order-2' : 'order-1'}`}>
+            <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 cursor-pointer" onClick={() => setLocation('/')} />
+            <span className="hidden sm:inline border-l border-white/50 h-6"></span>
+            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => setLocation('/')}>{lang === 'ar' ? 'الرئيسية' : 'Home'}</span>
+          </div>
+
+          {/* Language Switcher (Left in Arabic, Right in English) */}
+          <div className={`relative hidden sm:block ${isAr ? 'order-1' : 'order-2'}`}>
+            <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>
             </button>
             {langMenuOpen && (
-              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ left: 0 }}>
+              <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden ${isAr ? 'left-0' : 'right-0'}`}>
                 <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">العربية</button>
                 <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">English</button>
               </div>
