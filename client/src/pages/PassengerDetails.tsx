@@ -596,9 +596,9 @@ const PassengerDetails = () => {
       )}
 
       {/* Header - matching original exactly */}
-      <header className="bg-[#4ca42c] text-white">
+      <header className="bg-[#4ca42c] text-white" dir={dir}>
         {/* Top bar: Logo + Home + English */}
-        <div className="max-w-7xl mx-auto px-6 py-2 flex items-center gap-4">
+        <div className={`max-w-7xl mx-auto px-6 py-2 flex items-center gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
           <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
           <span className="text-white/40">|</span>
           <a href="/" className="text-white font-medium">{t('common.home')}</a>
@@ -709,7 +709,7 @@ const PassengerDetails = () => {
                 <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{isAr ? 'تاريخ الميلاد' : 'Date of birth'}</legend>
                 <div className={`flex items-center ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
                   <input type="text" placeholder={isAr ? 'يوم / شهر / سنة' : 'Day / Month / Year'} value={p.dob} onChange={(e) => { let v = e.target.value.replace(/[^0-9]/g, ''); if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2); if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5); if (v.length > 10) v = v.slice(0,10); update(index, 'dob', v); }} maxLength={10} className={`flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] ${isAr ? 'text-right' : 'text-left'}`} />
-                  <svg data-cal-idx={index} onClick={() => { setCalPaxIdx(index); setCalView('years'); setCalYearRange(1991); setCalOpen(true); }} className="w-6 h-6 text-[#2E7D32] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  <svg data-cal-idx={index} onClick={() => { setCalPaxIdx(index); setCalView('years'); setCalYearRange(1991); setCalOpen(true); }} className={`w-6 h-6 text-[#2E7D32] cursor-pointer ${isAr ? 'mr-2' : 'ml-2'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
               </fieldset>
               <p className={`text-[#2E7D32] text-xs ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'مثال: 31/01/2025' : 'Example: 31/01/2025'}</p>
@@ -725,9 +725,9 @@ const PassengerDetails = () => {
               <option value="iraqi">{isAr ? 'الخطوط الجوية العراقية' : 'Iraqi Airways'}</option>
             </select>
           </fieldset>
-          <fieldset className="border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0]">
-            <legend className="text-[#2E7D32] text-xs px-1">Frequent flyer number</legend>
-            <input type="text" placeholder="Enter a frequent flyer number" className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+          <fieldset className={`border border-[#4CAF50] rounded px-3 pt-1 pb-2 bg-[#f5faf0] ${isAr ? 'text-right' : 'text-left'}`}>
+            <legend className={`text-[#2E7D32] text-xs px-1 ${isAr ? 'mr-1' : 'ml-1'}`}>{t('pax.ffn')}</legend>
+            <input type="text" placeholder={t('pax.ffnPlaceholder')} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
           </fieldset>
         </div>
 
@@ -935,8 +935,8 @@ const PassengerDetails = () => {
 
         {/* Remember passenger information */}
         <div className="border border-gray-200 rounded-lg p-6 mb-6 bg-[#f9f9f9]">
-          <div className={`flex items-center gap-3 cursor-pointer ${isAr ? 'flex-row-reverse' : 'flex-row'}`} onClick={() => setRememberPassenger(!rememberPassenger)}>
-            <div className={`w-10 h-5 rounded-full relative transition-colors ${rememberPassenger ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${rememberPassenger ? (isAr ? 'right-[22px]' : 'left-[22px]') : (isAr ? 'right-0.5' : 'left-0.5')}`}></div></div>
+          <div className={`flex items-center gap-3 cursor-pointer ${isAr ? 'flex-row-reverse justify-start' : 'justify-start'}`} onClick={() => setRememberPassenger(!rememberPassenger)}>
+            <div className={`w-10 h-5 rounded-full relative transition-colors flex-shrink-0 ${rememberPassenger ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${rememberPassenger ? (isAr ? 'right-[22px]' : 'left-[22px]') : (isAr ? 'right-0.5' : 'left-0.5')}`}></div></div>
             <div className={isAr ? 'text-right' : 'text-left'}>
               <p className="font-bold text-gray-800">{isAr ? 'تذكر معلومات المسافر' : 'Remember passenger information'}</p>
               <p className="text-gray-500 text-sm">{isAr ? 'احفظ معلوماتك الشخصية الآن، ووفر الوقت في الحجوزات المستقبلية.' : 'Save your personal information now, save time in future bookings.'}</p>
@@ -946,8 +946,8 @@ const PassengerDetails = () => {
 
         {/* Privacy policy checkbox */}
         <div className="border border-gray-200 rounded-lg p-6 mb-8">
-          <label className={`flex items-start gap-3 cursor-pointer ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-            <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="w-5 h-5 mt-0.5 rounded accent-[#4CAF50]" style={{accentColor: '#4CAF50'}} />
+          <label className={`flex items-start gap-3 cursor-pointer ${isAr ? 'flex-row-reverse justify-start' : 'justify-start'}`}>
+            <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="w-5 h-5 mt-0.5 rounded accent-[#4CAF50] flex-shrink-0" style={{accentColor: '#4CAF50'}} />
             <span className={`text-gray-700 text-sm ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'أفهم وأقبل أنه سيتم معالجة بياناتي الشخصية وفقاً لسياسة خصوصية الناقل المعمول بها' : 'I understand and accept that my personal data will be processed in accordance with the applicable carrier\'s privacy policy'} <a href="#" className="text-[#2E7D32] underline">{isAr ? 'المزيد' : 'more'}</a></span>
           </label>
         </div>

@@ -208,6 +208,10 @@ export const STRINGS: Dict = {
   'pax.addPhone': { en: 'Add another phone number', ar: 'إضافة رقم هاتف آخر' },
   'pax.phoneType': { en: 'Phone type', ar: 'نوع الهاتف' },
   'pax.countryCode': { en: 'Country calling code', ar: 'رمز الاتصال بالدولة' },
+  'pax.ffn': { en: 'Frequent flyer number', ar: 'رقم المسافر الدائم' },
+  'pax.ffnPlaceholder': { en: 'Enter a frequent flyer number', ar: 'أدخل رقم المسافر الدائم' },
+  'pax.ffp': { en: 'Frequent flyer program', ar: 'برنامج المسافر الدائم' },
+  'pax.ffpSelect': { en: 'Select a program', ar: 'اختر برنامجاً' },
 
   // ---- Seats ----
   'seat.title': { en: 'Your secured spot', ar: 'مقعدك المحجوز' },
