@@ -837,20 +837,8 @@ const FlightSearchResults = () => {
       {/* Header - Iraqi Airways Original Style - visible on all sizes */}
       <header className="w-full" dir={isAr ? 'rtl' : 'ltr'}>
         {/* Green top bar - matching original exactly */}
-        <div className="w-full bg-[#4ca42c] px-3 sm:px-5 py-2 sm:py-3 flex items-center">
-          {/* Hamburger - mobile only */}
-          <button className="sm:hidden text-white mr-2" onClick={() => window.location.href = '/'}>
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <img
-            src="/iraqi_airways/upload/logo-white-transparent.png"
-            alt="Iraqi Airways"
-            onClick={() => { window.location.href = '/'; }}
-            className="w-[70px] h-[45px] sm:w-[100px] sm:h-[58px] object-contain cursor-pointer"
-          />
-          <span className="hidden sm:block mx-4 h-6 w-px bg-white/40"></span>
-          <a href="/" className="hidden sm:block text-white text-[15px] font-medium hover:underline">{t('fsr.home')}</a>
-          <span className="hidden sm:block mx-4 h-6 w-px bg-white/40"></span>
+        <div className="w-full bg-[#4ca42c] px-3 sm:px-5 py-2 sm:py-3 flex items-center justify-between">
+          {/* Language Switcher on the Left */}
           <div className="relative hidden sm:block">
             <button
               onClick={() => setLangMenuOpen(o => !o)}
@@ -860,11 +848,27 @@ const FlightSearchResults = () => {
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             {langMenuOpen && (
-              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ left: 0 }}>
-                <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">العربية</button>
-                <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">English</button>
+              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden left-0">
+                <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">العربية</button>
+                <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">English</button>
               </div>
             )}
+          </div>
+
+          {/* Logo and Home on the Right */}
+          <div className="flex items-center">
+            <a href="/" className="hidden sm:block text-white text-[15px] font-medium hover:underline">{t('fsr.home')}</a>
+            <span className="hidden sm:block mx-4 h-6 w-px bg-white/40"></span>
+            {/* Hamburger - mobile only */}
+            <button className="sm:hidden text-white mr-2" onClick={() => window.location.href = '/'}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <img
+              src="/iraqi_airways/upload/logo-white-transparent.png"
+              alt="Iraqi Airways"
+              onClick={() => { window.location.href = '/'; }}
+              className="w-[70px] h-[45px] sm:w-[100px] sm:h-[58px] object-contain cursor-pointer"
+            />
           </div>
         </div>
         {/* Flight info bar - matching original exactly */}

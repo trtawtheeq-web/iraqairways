@@ -444,21 +444,27 @@ export default function CreditCardPayment() {
 
       {/* Header */}
       <header className="bg-[#4ca42c] text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
-          <button className="sm:hidden text-white" onClick={() => navigate('/')}><svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10" />
-          <span className="hidden sm:inline border-l border-white/50 pl-4 text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>Home</span>
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          {/* Language Switcher on the Left */}
           <div className="relative hidden sm:block">
-            <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1">
+            <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>
             </button>
             {langMenuOpen && (
-              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ left: 0 }}>
+              <div className="absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden left-0">
                 <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">العربية</button>
                 <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm text-gray-800 hover:bg-green-50">English</button>
               </div>
             )}
+          </div>
+
+          {/* Logo and Home on the Right */}
+          <div className="flex items-center gap-6">
+            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>{lang === 'ar' ? 'الرئيسية' : 'Home'}</span>
+            <span className="hidden sm:inline border-l border-white/50 h-6"></span>
+            <button className="sm:hidden text-white" onClick={() => navigate('/')}><svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+            <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 cursor-pointer" onClick={() => navigate('/')} />
           </div>
         </div>
         {/* Info bar */}

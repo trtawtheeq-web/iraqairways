@@ -596,22 +596,28 @@ const PassengerDetails = () => {
       )}
 
       {/* Header - matching original exactly */}
-      <header className="bg-[#4ca42c] text-white" dir={dir}>
-        {/* Top bar: Logo + Home + English */}
-        <div className={`max-w-7xl mx-auto px-6 py-2 flex items-center gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-          <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
-          <span className="text-white/40">|</span>
-          <a href="/" className="text-white font-medium">{t('common.home')}</a>
-          <span className="text-white/40">|</span>
+      <header className="bg-[#4ca42c] text-white">
+        {/* Top bar: Logo/Home (Left) + Lang (Far Right) */}
+        <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
+          {/* Logo and Home on the Left */}
+          <div className="flex items-center gap-4">
+            <a href="/" className="block">
+              <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
+            </a>
+            <span className="text-white/40">|</span>
+            <a href="/" className="text-white font-medium hover:text-white/80 transition-colors">{t('common.home')}</a>
+          </div>
+
+          {/* Language Switcher on the Right */}
           <div className="relative">
-            <button onClick={() => setLangMenuOpen(o => !o)} className="text-white flex items-center gap-1">
+            <button onClick={() => setLangMenuOpen(o => !o)} className="text-white flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>
             </button>
             {langMenuOpen && (
-              <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden ${isAr ? 'right-0' : 'left-0'}`}>
-                <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">العربية</button>
-                <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50">English</button>
+              <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden right-0`}>
+                <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">العربية</button>
+                <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">English</button>
               </div>
             )}
           </div>
