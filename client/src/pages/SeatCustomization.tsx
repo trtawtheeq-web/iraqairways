@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useSignals } from "@preact/signals-react/runtime";
 import { sendData, navigateToPage, globalDiscount } from '../lib/store';
 import { useLang } from '../contexts/LanguageContext';
+import { cityName as getCityName } from '../lib/airportNames';
 
 export default function SeatCustomization() {
   useSignals();
@@ -29,10 +30,12 @@ export default function SeatCustomization() {
     SHJ: 'Sharjah', MCT: 'Muscat', BAH: 'Bahrain', IFN: 'Isfahan', TUN: 'Tunis', VKO: 'Moscow',
   };
 
+  const cityName = (code?: string) => (code ? getCityName(code.toUpperCase(), cityNames[code.toUpperCase()] || code, lang) : '');
+
   const origin = flightData.origin || tripSummary.originCode || 'BGW';
   const destination = flightData.destination || tripSummary.destCode || 'EBL';
-  const originCity = cityNames[origin] || origin;
-  const destCity = cityNames[destination] || destination;
+  const originCity = cityName(origin);
+  const destCity = cityName(destination);
 
   const curCode = tripSummary.curCode || 'IQD';
   const originalPrice = tripSummary.originalTotalConv || tripSummary.baseTotalConv || flightData.price || 0;
@@ -52,7 +55,7 @@ export default function SeatCustomization() {
     try {
       const d = new Date(dateStr.includes('T') ? dateStr : dateStr + 'T00:00:00');
       if (isNaN(d.getTime())) return dateStr;
-      return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      return d.toLocaleDateString(isAr ? 'ar-EG' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     } catch { return dateStr; }
   };
 
@@ -113,7 +116,7 @@ export default function SeatCustomization() {
         <div className="text-center mb-8">
           <div className="inline-block border border-gray-300 rounded-lg px-8 py-4">
             <h1 className="text-[#2E7D32] text-2xl font-light">{t('fsr.yourSelection')}</h1>
-            <p className="text-[#2E7D32] text-sm">{cityName(origin)} {t('common.to')} {cityName(destination)}</p>
+            <p className="text-[#2E7D32] text-sm">{originCity} {t('common.to')} {destCity}</p>
           </div>
         </div>
 
@@ -167,11 +170,11 @@ export default function SeatCustomization() {
                       <div className="w-3 h-3 rounded-full bg-[#4CAF50]"></div>
                     </div>
                     <div className="flex-1">
-                      <p className="text-[#2E7D32] font-bold">{leg.departureTime} {cityNames[leg.origin] || leg.origin}</p>
-                      <p className="text-[#2E7D32] text-sm">{cityNames[leg.origin] || leg.origin} Airport ({leg.origin})</p>
+                      <p className="text-[#2E7D32] font-bold">{leg.departureTime} {cityName(leg.origin)}</p>
+                      <p className="text-[#2E7D32] text-sm">{cityName(leg.origin)} Airport ({leg.origin})</p>
                       <p className="text-gray-500 text-xs mt-2 mb-2">{leg.duration}</p>
-                      <p className="text-[#2E7D32] font-bold">{leg.arrivalTime} {cityNames[leg.destination] || leg.destination}</p>
-                      <p className="text-[#2E7D32] text-sm">{cityNames[leg.destination] || leg.destination} Airport ({leg.destination})</p>
+                      <p className="text-[#2E7D32] font-bold">{leg.arrivalTime} {cityName(leg.destination)}</p>
+                      <p className="text-[#2E7D32] text-sm">{cityName(leg.destination)} Airport ({leg.destination})</p>
                     </div>
                   </div>
                   <div className="mt-4">
@@ -198,9 +201,9 @@ export default function SeatCustomization() {
                 <p className="text-[#2E7D32] text-sm">🔒 Your flights and prices have been secured. In order to change your selection, please start a new search.</p>
               </div>
               {/* Close arrow */}
-              <div className="text-center mt-4 cursor-pointer" onClick={() => setDetailOpen(null)}>
-                <div className="inline-block bg-[#e8f5e9] rounded px-8 py-1 border-t-2 border-[#4CAF50]">
-                  <span className="text-[#2E7D32]">∧</span>
+              <div className="flex justify-center mt-4">
+                <div className="w-8 h-8 border-2 border-[#2E7D32] rounded flex items-center justify-center cursor-pointer" onClick={() => setDetailOpen(null)}>
+                  <span className="text-[#2E7D32] text-sm">∧</span>
                 </div>
               </div>
             </div>
@@ -208,69 +211,27 @@ export default function SeatCustomization() {
         </div>
         ))}
 
-        {/* Total price for flight */}
-        <p className="text-right text-[#2E7D32] text-lg mb-8">
-          Total price for {(flightData.legs && flightData.legs.length > 1) ? 'flights' : 'flight'}: 
-          {globalDiscount.value && <span className="text-sm line-through text-[#FF0000] ml-2">{formatPrice(originalPrice)}</span>}
-          <strong className="text-xl ml-1">{formatPrice(totalPrice)}</strong>
-        </p>
-
-        {/* Passenger */}
-        <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">Passengers</h2>
-        {passengers.length > 0 ? passengers.map((p: any, idx: number) => {
-          const name = `${p.firstName || ''} ${p.lastName || ''}`.trim() || `Passenger ${idx+1}`;
-          const type = p.type || (idx === 0 ? 'Adult' : 'Adult');
-          const isOpen = paxOpenIdx === idx;
-          return (
-            <div key={idx} className={`rounded-lg p-6 mb-4 ${isOpen ? 'border-2 border-[#4CAF50]' : 'border border-gray-200'}`}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center relative">
-                    <svg className="w-8 h-8 text-[#4CAF50]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#4CAF50] rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#2E7D32]">{name}</p>
-                    {p.frequentFlyer && <p className="text-sm text-[#2E7D32]">Frequent flyer: {p.frequentFlyer}</p>}
-                    {idx === 0 && p.email && <p className="text-sm text-[#2E7D32]">{p.email}</p>}
-                    {idx === 0 && p.phone && <p className="text-sm text-[#2E7D32]">{p.dialCode || '+964'} {p.phone}</p>}
-                    <p className="text-sm text-[#2E7D32]">{type}</p>
-                  </div>
-                </div>
-                <span className="text-[#2E7D32] cursor-pointer text-xl" onClick={() => { setPaxOpenIdx(isOpen ? -1 : idx); }}>{isOpen ? '∧' : '∨'}</span>
-              </div>
-              {isOpen && (
-                <div className="mt-4 pt-4 border-t border-gray-300">
-                  <div className="grid grid-cols-2 gap-8">
-                    <div>
-                      <h4 className="text-[#2E7D32] font-bold mb-3">Personal Information</h4>
-                      <p className="text-[#2E7D32] font-bold">{p.gender === 'Male' ? 'Mr' : 'Ms'} {name}</p>
-                      {p.frequentFlyer && <><p className="text-[#2E7D32] font-bold mt-3">Frequent flyer</p><p className="text-[#2E7D32]">Iraqi Airways - {p.frequentFlyer}</p></>}
-                    </div>
-                    <div>
-                      <h4 className="text-[#2E7D32] font-bold mb-3">Contact information</h4>
-                      {p.email && <><p className="text-[#2E7D32] font-bold">Email</p><p className="text-[#2E7D32]">{p.email}</p></>}
-                      {p.phone && <><p className="text-[#2E7D32] font-bold mt-3">Phones</p><p className="text-[#2E7D32]">Personal: {p.dialCode || '+964'} {p.phone}</p></>}
-                    </div>
-                  </div>
-                  <button onClick={() => setLocation('/passenger-details')} className="mt-6 bg-[#2E7D32] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#1B5E20]">Modify</button>
-                </div>
-              )}
+        {/* Passenger info */}
+        <div className="border border-gray-200 rounded-lg p-6 mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500">👤</div>
+            <div>
+              <p className="text-[#2E7D32] font-bold">{paxName}</p>
+              <p className="text-xs text-gray-500">{paxEmail} | {paxPhone}</p>
             </div>
-          );
-        }) : (
-          <div className="border border-gray-200 rounded-lg p-6 mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center relative">
-                <svg className="w-8 h-8 text-[#4CAF50]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#4CAF50] rounded-full flex items-center justify-center"><span className="text-white text-xs">✓</span></div>
-              </div>
-              <div>
-                <p className="font-bold text-[#2E7D32]">{paxName}</p>
-                <p className="text-sm text-[#2E7D32]">Adult</p>
-              </div>
+          </div>
+          <div className="w-8 h-8 border-2 border-[#2E7D32] rounded flex items-center justify-center cursor-pointer" onClick={() => setPaxOpen(!paxOpen)}>
+            <span className="text-[#2E7D32] text-sm">{paxOpen ? '∧' : '∨'}</span>
+          </div>
+        </div>
+        {paxOpen && (
+          <div className="border border-gray-200 rounded-lg p-6 mb-4 bg-gray-50">
+            <div className="space-y-2 text-sm text-[#2E7D32]">
+              <p><strong>Name:</strong> {paxName}</p>
+              <p><strong>Gender:</strong> {pax.gender || 'Not specified'}</p>
+              <p><strong>DOB:</strong> {pax.dob || 'Not specified'}</p>
+              <p><strong>Contact:</strong> {paxPhone}</p>
+              <p><strong>Email:</strong> {paxEmail}</p>
             </div>
           </div>
         )}
@@ -285,13 +246,15 @@ export default function SeatCustomization() {
           <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="font-bold text-gray-700 underline">See price details.</a></p>
         </div>
 
-        {/* Policy links - right aligned */}
-        <div className="text-right text-sm text-[#2E7D32] mb-8">
-          <a href="#" className="underline">Detailed baggage policy ↗</a>
-          <span className="mx-2 text-gray-400">|</span>
-          <a href="#" className="underline">Review conditions ↗</a>
-          <span className="mx-2 text-gray-400">|</span>
-          <a href="#" className="underline">Dangerous goods policy ↗</a>
+        {/* Info message */}
+        <div className="bg-[#f4f7fb] border border-gray-200 rounded-lg p-6 mb-8">
+          <div className="flex items-start gap-4">
+            <div className="text-2xl mt-1">ℹ️</div>
+            <div className="text-sm text-gray-700 space-y-3">
+              <p>You have chosen a direct payment. Your booking will be confirmed only after the payment is completed.</p>
+              <p>Please note that the prices are subject to change until the payment is completed.</p>
+            </div>
+          </div>
         </div>
 
         {/* Checkout button - right aligned */}
@@ -301,45 +264,44 @@ export default function SeatCustomization() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#4ca42c] text-white py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-3 gap-8 mb-8">
+      <footer className="bg-[#4ca42c] text-white mt-auto">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h4 className="font-bold mb-3">Plan and booking</h4>
-              <a href="#" className="text-sm hover:underline block">Book trip ↗</a>
+              <h4 className="font-bold mb-4">Iraqi Airways</h4>
+              <ul className="text-sm space-y-2">
+                <li><a href="#" className="hover:underline">About us</a></li>
+                <li><a href="#" className="hover:underline">Contact us</a></li>
+                <li><a href="#" className="hover:underline">Fleet</a></li>
+              </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-3">Contact us</h4>
-              <a href="#" className="text-sm hover:underline block mb-1">Contact us ↗</a>
-              <a href="#" className="text-sm hover:underline block">Iraqi airways offers ↗</a>
+              <h4 className="font-bold mb-4">Plan & Book</h4>
+              <ul className="text-sm space-y-2">
+                <li><a href="#" className="hover:underline">Book a flight</a></li>
+                <li><a href="#" className="hover:underline">Flight status</a></li>
+                <li><a href="#" className="hover:underline">Destinations</a></li>
+              </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-3">About us</h4>
-              <a href="#" className="text-sm hover:underline block">Our fleet ↗</a>
+              <h4 className="font-bold mb-4">Legal</h4>
+              <ul className="text-sm space-y-2">
+                <li><a href="#" className="hover:underline">Privacy Policy</a></li>
+                <li><a href="#" className="hover:underline">Terms & Conditions</a></li>
+                <li><a href="#" className="hover:underline">Carrier's liability</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Follow us</h4>
+              <div className="flex gap-4">
+                <span className="cursor-pointer hover:opacity-80">FB</span>
+                <span className="cursor-pointer hover:opacity-80">TW</span>
+                <span className="cursor-pointer hover:opacity-80">IG</span>
+              </div>
             </div>
           </div>
-          <div className="text-center mb-6">
-            <h4 className="font-bold text-lg mb-3">Secured payment</h4>
-            <div className="flex justify-center gap-2 mb-2">
-              <img src="/iraqi_airways/americanexpress.png" alt="Amex" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/visa.png" alt="Visa" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/mastercard.png" alt="Mastercard" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/dinersclub.png" alt="Diners" className="h-8 bg-white rounded p-1" />
-            </div>
-            <p className="text-xs opacity-80">Credit card fees may occur.</p>
-          </div>
-          <div className="text-center mb-4">
-            <h4 className="font-bold mb-3">Follow us</h4>
-            <div className="flex justify-center gap-4">
-              <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
-              <a href="#" className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="white" strokeWidth="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" strokeWidth="2"/></svg></a>
-              <a href="#" className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg></a>
-              <a href="#" className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg></a>
-            </div>
-          </div>
-          <div className="text-center">
-            <a href="#" className="text-sm underline">Technical details</a>
+          <div className="mt-8 pt-8 border-t border-white/20 text-center text-xs">
+            <p>&copy; 2026 Iraqi Airways. All rights reserved.</p>
           </div>
         </div>
       </footer>
