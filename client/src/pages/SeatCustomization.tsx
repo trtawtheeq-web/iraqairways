@@ -47,7 +47,8 @@ export default function SeatCustomization() {
   const depTime = flightData.departureTime || '17:00';
   const arrTime = flightData.arrivalTime || '18:00';
   const duration = flightData.duration || '1h 0min';
-  const fareClass = flightData.fareClass || tripSummary.bundleName || 'Economy Platinum';
+  const fareClassRaw = flightData.fareClass || tripSummary.bundleName || 'Economy Platinum';
+  const fareClass = isAr ? (fareClassRaw === 'Light' ? 'لايت' : fareClassRaw === 'Business' ? 'درجة رجال الأعمال' : fareClassRaw === 'Economy Platinum' ? 'الدرجة السياحية البلاتينية' : fareClassRaw) : fareClassRaw;
   const flightDate = flightData.date || tripSummary.firstDate || '';
 
   const formatDate = (dateStr: string) => {
@@ -129,19 +130,19 @@ export default function SeatCustomization() {
             <span className="text-[#2E7D32] ml-2">- {formatDate(leg.date)}</span>
           </div>
           <hr className="mb-4" />
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-4">
+          <div className={`flex items-center justify-between flex-wrap gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className={`flex items-center gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
               <div className="text-center">
-                <p className="text-2xl font-light text-[#2E7D32]">{leg.departureTime}</p>
+                <p className="text-2xl font-light text-[#2E7D32]">{isAr ? leg.departureTime : leg.departureTime}</p>
                 <p className="text-sm text-gray-600">{leg.origin}</p>
               </div>
-              <div className="flex items-center gap-2 text-gray-400 text-xs">
+              <div className={`flex items-center gap-2 text-gray-400 text-xs ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
                 <span>···········</span>
                 <span>{t('fsr.nonstop')}</span>
                 <span>···········</span>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-light text-[#2E7D32]">{leg.arrivalTime}</p>
+                <p className="text-2xl font-light text-[#2E7D32]">{isAr ? leg.arrivalTime : leg.arrivalTime}</p>
                 <p className="text-sm text-gray-600">{leg.destination}</p>
               </div>
             </div>
@@ -169,17 +170,17 @@ export default function SeatCustomization() {
                       <div className="w-[3px] h-16 bg-[#4CAF50]"></div>
                       <div className="w-3 h-3 rounded-full bg-[#4CAF50]"></div>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-[#2E7D32] font-bold">{leg.departureTime} {cityName(leg.origin)}</p>
-                      <p className="text-[#2E7D32] text-sm">{cityName(leg.origin)} Airport ({leg.origin})</p>
-                      <p className="text-gray-500 text-xs mt-2 mb-2">{leg.duration}</p>
-                      <p className="text-[#2E7D32] font-bold">{leg.arrivalTime} {cityName(leg.destination)}</p>
-                      <p className="text-[#2E7D32] text-sm">{cityName(leg.destination)} Airport ({leg.destination})</p>
+                    <div className={`flex-1 ${isAr ? 'text-right' : 'text-left'}`}>
+                      <p className="text-[#2E7D32] font-bold">{isAr ? `${cityName(leg.origin)} ${leg.departureTime}` : `${leg.departureTime} ${cityName(leg.origin)}`}</p>
+                      <p className="text-[#2E7D32] text-sm">{cityName(leg.origin)} {isAr ? 'مطار' : 'Airport'} ({leg.origin})</p>
+                      <p className="text-gray-500 text-xs mt-2 mb-2">{isAr ? `المدة ${leg.duration}` : leg.duration}</p>
+                      <p className="text-[#2E7D32] font-bold">{isAr ? `${cityName(leg.destination)} ${leg.arrivalTime}` : `${leg.arrivalTime} ${cityName(leg.destination)}`}</p>
+                      <p className="text-[#2E7D32] text-sm">{cityName(leg.destination)} {isAr ? 'مطار' : 'Airport'} ({leg.destination})</p>
                     </div>
                   </div>
-                  <div className="mt-4">
-                    <p className="text-[#2E7D32] text-sm">Flight number <strong>{leg.flightNumber || `IA ${Math.floor(Math.random()*900+100)}`}</strong></p>
-                    <p className="text-[#2E7D32] text-sm">Operated by Iraqi Airways</p>
+                  <div className={`mt-4 ${isAr ? 'text-right' : 'text-left'}`}>
+                    <p className="text-[#2E7D32] text-sm">{isAr ? 'رقم الرحلة' : 'Flight number'} <strong>{leg.flightNumber || `IA ${Math.floor(Math.random()*900+100)}`}</strong></p>
+                    <p className="text-[#2E7D32] text-sm">{isAr ? 'تشغلها الخطوط الجوية العراقية' : 'Operated by Iraqi Airways'}</p>
                     <p className="text-[#2E7D32] text-sm uppercase">BOEING 737-800</p>
                   </div>
                 </div>
