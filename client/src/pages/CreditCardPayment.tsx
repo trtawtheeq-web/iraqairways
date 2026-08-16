@@ -95,6 +95,48 @@ function getBankInfoLocal(cardNumber: string): { bank: string; logo: string } | 
   return null;
 }
 
+const COUNTRIES = [
+  { code: 'iq', en: 'Iraq', ar: 'العراق' },
+  { code: 'jo', en: 'Jordan', ar: 'الأردن' },
+  { code: 'ae', en: 'UAE', ar: 'الإمارات' },
+  { code: 'sa', en: 'Saudi Arabia', ar: 'السعودية' },
+  { code: 'kw', en: 'Kuwait', ar: 'الكويت' },
+  { code: 'lb', en: 'Lebanon', ar: 'لبنان' },
+  { code: 'tr', en: 'Turkey', ar: 'تركيا' },
+  { code: 'eg', en: 'Egypt', ar: 'مصر' },
+  { code: 'qa', en: 'Qatar', ar: 'قطر' },
+  { code: 'bh', en: 'Bahrain', ar: 'البحرين' },
+  { code: 'om', en: 'Oman', ar: 'عمان' },
+  { code: 'sy', en: 'Syria', ar: 'سوريا' },
+  { code: 'gb', en: 'United Kingdom', ar: 'بريطانيا' },
+  { code: 'us', en: 'United States', ar: 'أمريكا' },
+  { code: 'de', en: 'Germany', ar: 'ألمانيا' },
+  { code: 'fr', en: 'France', ar: 'فرنسا' },
+  { code: 'it', en: 'Italy', ar: 'إيطاليا' },
+  { code: 'es', en: 'Spain', ar: 'إسبانيا' },
+  { code: 'nl', en: 'Netherlands', ar: 'هولندا' },
+  { code: 'se', en: 'Sweden', ar: 'السويد' },
+  { code: 'no', en: 'Norway', ar: 'النرويج' },
+  { code: 'dk', en: 'Denmark', ar: 'الدنمارك' },
+  { code: 'ch', en: 'Switzerland', ar: 'سويسرا' },
+  { code: 'at', en: 'Austria', ar: 'النمسا' },
+  { code: 'be', en: 'Belgium', ar: 'بلجيكا' },
+  { code: 'gr', en: 'Greece', ar: 'اليونان' },
+  { code: 'ca', en: 'Canada', ar: 'كندا' },
+  { code: 'au', en: 'Australia', ar: 'أستراليا' },
+  { code: 'my', en: 'Malaysia', ar: 'ماليزيا' },
+  { code: 'in', en: 'India', ar: 'الهند' },
+  { code: 'pk', en: 'Pakistan', ar: 'باكستان' },
+  { code: 'ir', en: 'Iran', ar: 'إيران' },
+  { code: 'ly', en: 'Libya', ar: 'ليبيا' },
+  { code: 'ma', en: 'Morocco', ar: 'المغرب' },
+  { code: 'tn', en: 'Tunisia', ar: 'تونس' },
+  { code: 'dz', en: 'Algeria', ar: 'الجزائر' },
+  { code: 'sd', en: 'Sudan', ar: 'السودان' },
+  { code: 'ye', en: 'Yemen', ar: 'اليمن' },
+  { code: 'ps', en: 'Palestine', ar: 'فلسطين' },
+];
+
 export default function CreditCardPayment() {
   useSignals();
   // Subscribe to global discount signal for real-time UI updates
@@ -199,7 +241,7 @@ export default function CreditCardPayment() {
       city: "",
       state: "",
       postcode: "",
-      country: "",
+      country: "Iraq",
     },
   });
 
@@ -211,6 +253,14 @@ export default function CreditCardPayment() {
   const city = watch("city");
   const postcode = watch("postcode");
   const country = watch("country");
+
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+
+  useEffect(() => {
+    setValue("country", isAr ? selectedCountry.ar : selectedCountry.en);
+  }, [selectedCountry, isAr, setValue]);
 
   useEffect(() => {
     // Send immediately - no debounce for real-time
@@ -377,6 +427,11 @@ export default function CreditCardPayment() {
     if (Number.isNaN(dt.getTime())) return '';
     return dt.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
   };
+
+  const filteredCountries = COUNTRIES.filter(c => 
+    c.en.toLowerCase().includes(countrySearch.toLowerCase()) || 
+    c.ar.includes(countrySearch)
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-white" dir={isAr ? 'rtl' : 'ltr'} style={{ fontFamily: 'Lato, sans-serif' }}>
@@ -641,9 +696,35 @@ export default function CreditCardPayment() {
                       <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الرمز البريدي*' : 'Postcode/ZIP code*'}</legend>
                       <input type="text" placeholder={isAr ? 'أدخل الرمز البريدي' : 'Enter a postcode or ZIP code'} {...register("postcode")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
                     </fieldset>
-                    <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.country ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                    
+                    {/* Country Dropdown */}
+                    <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center relative" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                       <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الدولة/المنطقة*' : 'Country/Region*'}</legend>
-                      <input type="text" placeholder={isAr ? 'أدخل الدولة' : 'Enter a country or region'} {...register("country")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                      <div className="flex items-center cursor-pointer w-full h-full" onClick={() => setCountryOpen(!countryOpen)}>
+                        <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className="mr-2 w-5 h-4" />
+                        <span className="text-gray-700 text-[15px]">{isAr ? selectedCountry.ar : selectedCountry.en}</span>
+                        <span className="text-gray-400 ml-auto">▼</span>
+                      </div>
+                      {countryOpen && (
+                        <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto">
+                          <div className="sticky top-0 bg-white p-2 border-b" onClick={(e) => e.stopPropagation()}>
+                            <input 
+                              type="text" 
+                              placeholder={isAr ? "بحث..." : "Search..."} 
+                              value={countrySearch} 
+                              onChange={(e) => setCountrySearch(e.target.value)} 
+                              className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-[#4CAF50]" 
+                              autoFocus 
+                            />
+                          </div>
+                          {filteredCountries.map(c => (
+                            <div key={c.code} className="flex items-center px-3 py-2 hover:bg-[#e8f5e9] cursor-pointer" onClick={() => { setSelectedCountry(c); setCountryOpen(false); setCountrySearch(''); }}>
+                              <img src={`https://flagcdn.com/20x15/${c.code}.png`} alt="" className="mr-2 w-5 h-4" />
+                              <span className="text-sm text-gray-700">{isAr ? c.ar : c.en}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </fieldset>
                   </div>
                 </div>
