@@ -510,7 +510,7 @@ export default function CreditCardPayment() {
           </div>
 
           {/* Language Switcher (Left in RTL, Right in LTR) */}
-          <div className="relative hidden sm:block">
+          <div className="relative">
             <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>

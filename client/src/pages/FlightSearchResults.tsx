@@ -612,7 +612,7 @@ const FlightSearchResults = () => {
             </div>
 
             {/* Language Switcher (Left in RTL, Right in LTR) */}
-            <div className="relative hidden sm:block">
+            <div className="relative">
               <button
                 onClick={() => setLangMenuOpen(o => !o)}
                 className="flex items-center gap-1.5 text-white text-[15px] font-medium"
@@ -875,7 +875,7 @@ const FlightSearchResults = () => {
           </div>
 
           {/* Language Switcher (Left in RTL, Right in LTR) */}
-          <div className="relative hidden sm:block">
+          <div className="relative">
             <button
               onClick={() => setLangMenuOpen(o => !o)}
               className="flex items-center gap-1.5 text-white text-[15px] font-medium"
