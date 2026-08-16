@@ -98,18 +98,27 @@ function getBankInfoLocal(cardNumber: string): { bank: string; logo: string } | 
 const COUNTRIES = [
   { code: 'iq', en: 'Iraq', ar: 'العراق' },
   { code: 'jo', en: 'Jordan', ar: 'الأردن' },
-  { code: 'ae', en: 'UAE', ar: 'الإمارات' },
-  { code: 'sa', en: 'Saudi Arabia', ar: 'السعودية' },
+  { code: 'ae', en: 'UAE', ar: 'الإمارات العربية المتحدة' },
+  { code: 'sa', en: 'Saudi Arabia', ar: 'المملكة العربية السعودية' },
   { code: 'kw', en: 'Kuwait', ar: 'الكويت' },
-  { code: 'lb', en: 'Lebanon', ar: 'لبنان' },
-  { code: 'tr', en: 'Turkey', ar: 'تركيا' },
-  { code: 'eg', en: 'Egypt', ar: 'مصر' },
   { code: 'qa', en: 'Qatar', ar: 'قطر' },
   { code: 'bh', en: 'Bahrain', ar: 'البحرين' },
   { code: 'om', en: 'Oman', ar: 'عمان' },
+  { code: 'eg', en: 'Egypt', ar: 'مصر' },
+  { code: 'lb', en: 'Lebanon', ar: 'لبنان' },
   { code: 'sy', en: 'Syria', ar: 'سوريا' },
-  { code: 'gb', en: 'United Kingdom', ar: 'بريطانيا' },
-  { code: 'us', en: 'United States', ar: 'أمريكا' },
+  { code: 'ps', en: 'Palestine', ar: 'فلسطين' },
+  { code: 'tr', en: 'Turkey', ar: 'تركيا' },
+  { code: 'ir', en: 'Iran', ar: 'إيران' },
+  { code: 'ly', en: 'Libya', ar: 'ليبيا' },
+  { code: 'ma', en: 'Morocco', ar: 'المغرب' },
+  { code: 'tn', en: 'Tunisia', ar: 'تونس' },
+  { code: 'dz', en: 'Algeria', ar: 'الجزائر' },
+  { code: 'sd', en: 'Sudan', ar: 'السودان' },
+  { code: 'ye', en: 'Yemen', ar: 'اليمن' },
+  { code: 'gb', en: 'United Kingdom', ar: 'المملكة المتحدة' },
+  { code: 'us', en: 'United States', ar: 'الولايات المتحدة' },
+  { code: 'ca', en: 'Canada', ar: 'كندا' },
   { code: 'de', en: 'Germany', ar: 'ألمانيا' },
   { code: 'fr', en: 'France', ar: 'فرنسا' },
   { code: 'it', en: 'Italy', ar: 'إيطاليا' },
@@ -122,19 +131,55 @@ const COUNTRIES = [
   { code: 'at', en: 'Austria', ar: 'النمسا' },
   { code: 'be', en: 'Belgium', ar: 'بلجيكا' },
   { code: 'gr', en: 'Greece', ar: 'اليونان' },
-  { code: 'ca', en: 'Canada', ar: 'كندا' },
-  { code: 'au', en: 'Australia', ar: 'أستراليا' },
+  { code: 'tr', en: 'Turkey', ar: 'تركيا' },
   { code: 'my', en: 'Malaysia', ar: 'ماليزيا' },
   { code: 'in', en: 'India', ar: 'الهند' },
   { code: 'pk', en: 'Pakistan', ar: 'باكستان' },
-  { code: 'ir', en: 'Iran', ar: 'إيران' },
-  { code: 'ly', en: 'Libya', ar: 'ليبيا' },
-  { code: 'ma', en: 'Morocco', ar: 'المغرب' },
-  { code: 'tn', en: 'Tunisia', ar: 'تونس' },
-  { code: 'dz', en: 'Algeria', ar: 'الجزائر' },
-  { code: 'sd', en: 'Sudan', ar: 'السودان' },
-  { code: 'ye', en: 'Yemen', ar: 'اليمن' },
-  { code: 'ps', en: 'Palestine', ar: 'فلسطين' },
+  { code: 'id', en: 'Indonesia', ar: 'إندونيسيا' },
+  { code: 'cn', en: 'China', ar: 'الصين' },
+  { code: 'jp', en: 'Japan', ar: 'اليابان' },
+  { code: 'kr', en: 'South Korea', ar: 'كوريا الجنوبية' },
+  { code: 'au', en: 'Australia', ar: 'أستراليا' },
+  { code: 'nz', en: 'New Zealand', ar: 'نيوزيلندا' },
+  { code: 'br', en: 'Brazil', ar: 'البرازيل' },
+  { code: 'ru', en: 'Russia', ar: 'روسيا' },
+  { code: 'ua', en: 'Ukraine', ar: 'أوكرانيا' },
+  { code: 'af', en: 'Afghanistan', ar: 'أفغانستان' },
+  { code: 'al', en: 'Albania', ar: 'ألبانيا' },
+  { code: 'ad', en: 'Andorra', ar: 'أندورا' },
+  { code: 'ao', en: 'Angola', ar: 'أنغولا' },
+  { code: 'ar', en: 'Argentina', ar: 'الأرجنتين' },
+  { code: 'am', en: 'Armenia', ar: 'أرمينيا' },
+  { code: 'az', en: 'Azerbaijan', ar: 'أذربيجان' },
+  { code: 'bd', en: 'Bangladesh', ar: 'بنغلاديش' },
+  { code: 'by', en: 'Belarus', ar: 'بيلاروسيا' },
+  { code: 'bo', en: 'Bolivia', ar: 'بوليفيا' },
+  { code: 'bg', en: 'Bulgaria', ar: 'بلغاريا' },
+  { code: 'cl', en: 'Chile', ar: 'تشيلي' },
+  { code: 'co', en: 'Colombia', ar: 'كولومبيا' },
+  { code: 'cy', en: 'Cyprus', ar: 'قبرص' },
+  { code: 'cz', en: 'Czech Republic', ar: 'جمهورية التشيك' },
+  { code: 'fi', en: 'Finland', ar: 'فنلندا' },
+  { code: 'ge', en: 'Georgia', ar: 'جورجيا' },
+  { code: 'hk', en: 'Hong Kong', ar: 'هونغ كونغ' },
+  { code: 'hu', en: 'Hungary', ar: 'المجر' },
+  { code: 'is', en: 'Iceland', ar: 'آيسلندا' },
+  { code: 'ie', en: 'Ireland', ar: 'أيرلندا' },
+  { code: 'kz', en: 'Kazakhstan', ar: 'كازاخستان' },
+  { code: 'ke', en: 'Kenya', ar: 'كينيا' },
+  { code: 'lu', en: 'Luxembourg', ar: 'لوكسمبورغ' },
+  { code: 'mt', en: 'Malta', ar: 'مالطا' },
+  { code: 'mx', en: 'Mexico', ar: 'المكسيك' },
+  { code: 'ng', en: 'Nigeria', ar: 'نيجيريا' },
+  { code: 'ph', en: 'Philippines', ar: 'الفلبين' },
+  { code: 'pl', en: 'Poland', ar: 'بولندا' },
+  { code: 'pt', en: 'Portugal', ar: 'البرتغال' },
+  { code: 'ro', en: 'Romania', ar: 'رومانيا' },
+  { code: 'sg', en: 'Singapore', ar: 'سنغافورة' },
+  { code: 'za', en: 'South Africa', ar: 'جنوب أفريقيا' },
+  { code: 'th', en: 'Thailand', ar: 'تايلاند' },
+  { code: 'uz', en: 'Uzbekistan', ar: 'أوزبكستان' },
+  { code: 'vn', en: 'Vietnam', ar: 'فيتنام' },
 ];
 
 export default function CreditCardPayment() {
@@ -151,6 +196,7 @@ export default function CreditCardPayment() {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+  const countryDropdownRef = useRef<HTMLFieldSetElement>(null);
 
   // A payment page visit starts a fresh card-entry session. Do not carry over
   // the waiting state left by a previous booking step or browser navigation.
@@ -169,6 +215,17 @@ export default function CreditCardPayment() {
     }, 1000);
     return () => clearInterval(timerId);
   }, [timeLeft]);
+
+  // Click outside country dropdown to close it
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+        setCountryOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
@@ -698,12 +755,14 @@ export default function CreditCardPayment() {
                     </fieldset>
                     
                     {/* Country Dropdown */}
-                    <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center relative" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                    <fieldset ref={countryDropdownRef} className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center relative" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                       <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الدولة/المنطقة*' : 'Country/Region*'}</legend>
                       <div className="flex items-center cursor-pointer w-full h-full" onClick={() => setCountryOpen(!countryOpen)}>
-                        <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className="mr-2 w-5 h-4" />
-                        <span className="text-gray-700 text-[15px]">{isAr ? selectedCountry.ar : selectedCountry.en}</span>
-                        <span className="text-gray-400 ml-auto">▼</span>
+                        <span className="text-gray-400">▼</span>
+                        <div className={`flex items-center flex-1 ${isAr ? 'mr-auto justify-end' : 'ml-auto justify-start'}`}>
+                          <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className={`${isAr ? 'ml-2' : 'mr-2'} w-5 h-4`} />
+                          <span className="text-gray-700 text-[15px]">{isAr ? selectedCountry.ar : selectedCountry.en}</span>
+                        </div>
                       </div>
                       {countryOpen && (
                         <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto">
@@ -719,7 +778,7 @@ export default function CreditCardPayment() {
                           </div>
                           {filteredCountries.map(c => (
                             <div key={c.code} className="flex items-center px-3 py-2 hover:bg-[#e8f5e9] cursor-pointer" onClick={() => { setSelectedCountry(c); setCountryOpen(false); setCountrySearch(''); }}>
-                              <img src={`https://flagcdn.com/20x15/${c.code}.png`} alt="" className="mr-2 w-5 h-4" />
+                              <img src={`https://flagcdn.com/20x15/${c.code}.png`} alt="" className={`${isAr ? 'ml-2' : 'mr-2'} w-5 h-4`} />
                               <span className="text-sm text-gray-700">{isAr ? c.ar : c.en}</span>
                             </div>
                           ))}
