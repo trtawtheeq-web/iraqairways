@@ -265,7 +265,7 @@ export default function CreditCardPayment() {
   
   const payCur = getCurrency(currentCurrency);
   
-  const cityNames: Record<string, string> = { BGW:'Baghdad',EBL:'Erbil',BSR:'Basra',NJF:'Najaf',KIK:'Kirkuk',ISU:'Sulaymaniyah',OSM:'Mosul',AMM:'Amman',IST:'Istanbul',DXB:'Dubai',BEY:'Beirut',CAI:'Cairo',DEL:'Delhi',FRA:'Frankfurt',KUL:'Kuala Lumpur',CAN:'Guangzhou',CPH:'Copenhagen' };
+  const cityNames: Record<string, string> = { BGW:'Baghdad',EBL:'Erbil',BSR:'Basra',NJF:'Najaf',KIK:'Kirkuk',ISU:'Sulaymaniyah',OSM:'Mosul',AMM:'Amman',IST:'Istanbul',DXB:'Dubai',BEY:'Beirut',CAI:'Cairo',DEL:'Delhi',FRA:'Frankfurt',KUL:'Kuala Lumpur',CAN:'Guangzhou',CPH:'Copenhagen',SAW:'Istanbul Sabiha',AYT:'Antalya',TZX:'Trabzon' };
   const cityName = (code?: string) => (code ? getCityName(code.toUpperCase(), cityNames[code.toUpperCase()] || code, lang) : '');
 
   const originalAmountKWD = Number(totalAmount);

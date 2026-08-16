@@ -354,7 +354,7 @@ const PassengerDetails = () => {
     HYD: 'Hyderabad', BLR: 'Bengaluru', DAC: 'Dhaka', CMB: 'Colombo', KTM: 'Kathmandu',
     SLL: 'Salalah', ADE: 'Aden', SAH: 'Sanaa', LXR: 'Luxor', SSH: 'Sharm El Sheikh',
     ALY: 'Alexandria', TBS: 'Tbilisi', GYD: 'Baku', EVN: 'Yerevan', SAW: 'Istanbul',
-    NJF: 'Najaf', BGW: 'Baghdad', BSR: 'Basra', EBL: 'Erbil', ISU: 'Sulaymaniyah',
+    NJF: 'Najaf', BGW: 'Baghdad', BSR: 'Basra', EBL: 'Erbil', ISU: 'Sulaymaniyah', KIK: 'Kirkuk', OSM: 'Mosul',
   };
   const cityName = (code?: string) => (code ? cityNameI18n(String(code).toUpperCase(), CITY_NAMES[String(code).toUpperCase()] || code, lang) : '');
   const paxTypeLabel = (type: string) => {
