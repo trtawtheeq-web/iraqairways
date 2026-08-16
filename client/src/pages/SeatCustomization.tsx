@@ -249,7 +249,7 @@ export default function SeatCustomization() {
 
         {/* Info message */}
         <div className="bg-[#f4f7fb] border border-gray-200 rounded-lg p-6 mb-8">
-          <div className={`flex items-start gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div className="flex items-start gap-4">
             <div className="text-2xl mt-1">ℹ️</div>
             <div className={`text-sm text-gray-700 space-y-3 ${isAr ? 'text-right' : 'text-left'}`}>
               <p>{isAr ? 'لقد اخترت الدفع المباشر. سيتم تأكيد حجزك فقط بعد اكتمال عملية الدفع.' : 'You have chosen a direct payment. Your booking will be confirmed only after the payment is completed.'}</p>
