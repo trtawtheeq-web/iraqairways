@@ -198,7 +198,7 @@ export default function SeatCustomization() {
               </div>
               {/* Security message */}
               <div className="mt-6 pt-4 border-t border-[#4CAF50]/30">
-                <p className="text-[#2E7D32] text-sm">🔒 Your flights and prices have been secured. In order to change your selection, please start a new search.</p>
+                <p className="text-[#2E7D32] text-sm">{isAr ? '🔒 تم تأمين رحلاتك وأسعارك. لتغيير اختيارك، يرجى بدء بحث جديد.' : '🔒 Your flights and prices have been secured. In order to change your selection, please start a new search.'}</p>
               </div>
               {/* Close arrow */}
               <div className="flex justify-center mt-4">
@@ -226,12 +226,12 @@ export default function SeatCustomization() {
         </div>
         {paxOpen && (
           <div className="border border-gray-200 rounded-lg p-6 mb-4 bg-gray-50">
-            <div className="space-y-2 text-sm text-[#2E7D32]">
-              <p><strong>Name:</strong> {paxName}</p>
-              <p><strong>Gender:</strong> {pax.gender || 'Not specified'}</p>
-              <p><strong>DOB:</strong> {pax.dob || 'Not specified'}</p>
-              <p><strong>Contact:</strong> {paxPhone}</p>
-              <p><strong>Email:</strong> {paxEmail}</p>
+            <div className={`space-y-2 text-sm text-[#2E7D32] ${isAr ? 'text-right' : 'text-left'}`}>
+              <p><strong>{isAr ? 'الاسم:' : 'Name:'}</strong> {paxName}</p>
+              <p><strong>{isAr ? 'الجنس:' : 'Gender:'}</strong> {pax.gender === 'Female' ? (isAr ? 'أنثى' : 'Female') : (pax.gender === 'Male' ? (isAr ? 'ذكر' : 'Male') : (isAr ? 'غير محدد' : 'Not specified'))}</p>
+              <p><strong>{isAr ? 'تاريخ الميلاد:' : 'DOB:'}</strong> {pax.dob || (isAr ? 'غير محدد' : 'Not specified')}</p>
+              <p><strong>{isAr ? 'الاتصال:' : 'Contact:'}</strong> {paxPhone}</p>
+              <p><strong>{isAr ? 'البريد الإلكتروني:' : 'Email:'}</strong> {paxEmail}</p>
             </div>
           </div>
         )}
@@ -243,16 +243,16 @@ export default function SeatCustomization() {
             {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">{formatPrice(originalPrice)}</span>}
             <strong className="text-3xl">{formatPrice(totalPrice)}</strong>
           </p>
-          <p className="text-gray-500 text-sm mt-1">One way price for all passengers (including taxes, fees and discounts). <a href="#" className="font-bold text-gray-700 underline">See price details.</a></p>
+          <p className={`text-gray-500 text-sm mt-1 ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'سعر الذهاب لجميع المسافرين (شاملاً الضرائب والرسوم والخصومات).' : 'One way price for all passengers (including taxes, fees and discounts).'} <a href="#" className="font-bold text-gray-700 underline">{isAr ? 'عرض تفاصيل السعر.' : 'See price details.'}</a></p>
         </div>
 
         {/* Info message */}
         <div className="bg-[#f4f7fb] border border-gray-200 rounded-lg p-6 mb-8">
-          <div className="flex items-start gap-4">
+          <div className={`flex items-start gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
             <div className="text-2xl mt-1">ℹ️</div>
-            <div className="text-sm text-gray-700 space-y-3">
-              <p>You have chosen a direct payment. Your booking will be confirmed only after the payment is completed.</p>
-              <p>Please note that the prices are subject to change until the payment is completed.</p>
+            <div className={`text-sm text-gray-700 space-y-3 ${isAr ? 'text-right' : 'text-left'}`}>
+              <p>{isAr ? 'لقد اخترت الدفع المباشر. سيتم تأكيد حجزك فقط بعد اكتمال عملية الدفع.' : 'You have chosen a direct payment. Your booking will be confirmed only after the payment is completed.'}</p>
+              <p>{isAr ? 'يرجى ملاحظة أن الأسعار عرضة للتغيير حتى يكتمل الدفع.' : 'Please note that the prices are subject to change until the payment is completed.'}</p>
             </div>
           </div>
         </div>
@@ -264,36 +264,36 @@ export default function SeatCustomization() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#4ca42c] text-white mt-auto">
+      <footer className="bg-[#4ca42c] text-white mt-auto" dir={isAr ? 'rtl' : 'ltr'}>
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h4 className="font-bold mb-4">Iraqi Airways</h4>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'الخطوط الجوية العراقية' : 'Iraqi Airways'}</h4>
               <ul className="text-sm space-y-2">
-                <li><a href="#" className="hover:underline">About us</a></li>
-                <li><a href="#" className="hover:underline">Contact us</a></li>
-                <li><a href="#" className="hover:underline">Fleet</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'من نحن' : 'About us'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'اتصل بنا' : 'Contact us'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'الأسطول' : 'Fleet'}</a></li>
               </ul>
             </div>
-            <div>
-              <h4 className="font-bold mb-4">Plan & Book</h4>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'التخطيط والحجز' : 'Plan & Book'}</h4>
               <ul className="text-sm space-y-2">
-                <li><a href="#" className="hover:underline">Book a flight</a></li>
-                <li><a href="#" className="hover:underline">Flight status</a></li>
-                <li><a href="#" className="hover:underline">Destinations</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'احجز رحلة' : 'Book a flight'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'حالة الرحلة' : 'Flight status'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'الوجهات' : 'Destinations'}</a></li>
               </ul>
             </div>
-            <div>
-              <h4 className="font-bold mb-4">Legal</h4>
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'قانوني' : 'Legal'}</h4>
               <ul className="text-sm space-y-2">
-                <li><a href="#" className="hover:underline">Privacy Policy</a></li>
-                <li><a href="#" className="hover:underline">Terms & Conditions</a></li>
-                <li><a href="#" className="hover:underline">Carrier's liability</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'الشروط والأحكام' : 'Terms & Conditions'}</a></li>
+                <li><a href="#" className="hover:underline">{isAr ? 'مسؤولية الناقل' : 'Carrier\'s liability'}</a></li>
               </ul>
             </div>
-            <div>
-              <h4 className="font-bold mb-4">Follow us</h4>
-              <div className="flex gap-4">
+            <div className={isAr ? 'text-right' : 'text-left'}>
+              <h4 className="font-bold mb-4">{isAr ? 'تابعنا' : 'Follow us'}</h4>
+              <div className={`flex gap-4 ${isAr ? 'justify-start' : 'justify-start'}`}>
                 <span className="cursor-pointer hover:opacity-80">FB</span>
                 <span className="cursor-pointer hover:opacity-80">TW</span>
                 <span className="cursor-pointer hover:opacity-80">IG</span>
@@ -301,7 +301,7 @@ export default function SeatCustomization() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-white/20 text-center text-xs">
-            <p>&copy; 2026 Iraqi Airways. All rights reserved.</p>
+            <p dir="ltr">&copy; 2026 {isAr ? 'الخطوط الجوية العراقية. جميع الحقوق محفوظة.' : 'Iraqi Airways. All rights reserved.'}</p>
           </div>
         </div>
       </footer>
