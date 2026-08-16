@@ -97,7 +97,7 @@ export default function CreditCardPayment() {
   const [luhnError, setLuhnError] = useState(false);
   const [rejectedError, setRejectedError] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { lang, setLang } = useLang();
+  const { lang, setLang, t } = useLang();
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
