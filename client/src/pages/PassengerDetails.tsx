@@ -945,7 +945,7 @@ const PassengerDetails = () => {
 
         {/* Remember passenger information */}
         <div className="border border-gray-200 rounded-lg p-6 mb-6 bg-[#f9f9f9]">
-          <div className={`flex items-center gap-3 cursor-pointer ${isAr ? 'flex-row-reverse justify-start' : 'justify-start'}`} onClick={() => setRememberPassenger(!rememberPassenger)}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setRememberPassenger(!rememberPassenger)}>
             <div className={`w-10 h-5 rounded-full relative transition-colors flex-shrink-0 ${rememberPassenger ? 'bg-[#4CAF50]' : 'bg-gray-400'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${rememberPassenger ? (isAr ? 'right-[22px]' : 'left-[22px]') : (isAr ? 'right-0.5' : 'left-0.5')}`}></div></div>
             <div className={isAr ? 'text-right' : 'text-left'}>
               <p className="font-bold text-gray-800">{isAr ? 'تذكر معلومات المسافر' : 'Remember passenger information'}</p>
@@ -956,7 +956,7 @@ const PassengerDetails = () => {
 
         {/* Privacy policy checkbox */}
         <div className="border border-gray-200 rounded-lg p-6 mb-8">
-          <label className={`flex items-start gap-3 cursor-pointer ${isAr ? 'flex-row-reverse justify-start' : 'justify-start'}`}>
+          <label className="flex items-start gap-3 cursor-pointer">
             <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="w-5 h-5 mt-0.5 rounded accent-[#4CAF50] flex-shrink-0" style={{accentColor: '#4CAF50'}} />
             <span className={`text-gray-700 text-sm ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'أفهم وأقبل أنه سيتم معالجة بياناتي الشخصية وفقاً لسياسة خصوصية الناقل المعمول بها' : 'I understand and accept that my personal data will be processed in accordance with the applicable carrier\'s privacy policy'} <a href="#" className="text-[#2E7D32] underline">{isAr ? 'المزيد' : 'more'}</a></span>
           </label>
