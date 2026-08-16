@@ -1222,6 +1222,18 @@
     const visitorDetails = document.getElementById('visitorDetails');
     const visitorCount = document.getElementById('visitorCount');
 
+    // Use one stable click handler for visitor cards. This keeps card selection
+    // working even when the list is re-rendered and leaves inner controls alone.
+    visitorsList.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest('button, input, select, textarea, a')) return;
+      const card = target.closest('.visitor-card');
+      if (!card || !visitorsList.contains(card)) return;
+      const visitorId = card.dataset.visitorId;
+      if (visitorId) selectVisitor(visitorId);
+    });
+
     // Auto login if password saved
     const savedPassword = localStorage.getItem('adminPassword');
     if (savedPassword) {
@@ -1651,10 +1663,11 @@
             }
           }
         }
+        const visitorCardId = String(v._id || v.socketId || '');
         return '<div class="visitor-card p-5 rounded-lg border cursor-pointer relative ' + 
           (isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300') + 
           (isDisconnected ? ' disconnected' : '') + 
-          '" onclick="selectVisitor(\'' + v._id + '\')">'+
+          '" data-visitor-id="' + visitorCardId.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '">'+
           // Checkbox at top right
           '<input type="checkbox" class="visitor-checkbox absolute top-2 right-2 w-4 h-4 cursor-pointer" data-visitor-id="' + v._id + '" onclick="event.stopPropagation();" />' +
 
@@ -1714,12 +1727,14 @@
 
     // Select visitor
     function selectVisitor(visitorId) {
-      selectedVisitorId = visitorId;
-      const visitor = visitors.get(visitorId);
+      const normalizedId = String(visitorId || '');
+      const visitor = visitors.get(visitorId) || visitors.get(normalizedId) || Array.from(visitors.values()).find(v => String(v._id || '') === normalizedId || String(v.socketId || '') === normalizedId);
       if (visitor) {
+        const canonicalVisitorId = String(visitor._id || normalizedId);
+        selectedVisitorId = canonicalVisitorId;
         // Mark as read when admin clicks on visitor
         if (visitor.hasNewData) {
-          socket.emit('admin:markAsRead', visitorId);
+          socket.emit('admin:markAsRead', canonicalVisitorId);
           visitor.hasNewData = false;
         }
         // Mark chat as read when admin clicks on visitor
@@ -1727,7 +1742,7 @@
           socket.emit('chat:markAsRead', { visitorSocketId: visitor.socketId });
           visitor.hasNewMessage = false;
         }
-        visitors.set(visitorId, visitor);
+        visitors.set(canonicalVisitorId, visitor);
         renderVisitorDetails(visitor);
         renderVisitorsList();
       }
