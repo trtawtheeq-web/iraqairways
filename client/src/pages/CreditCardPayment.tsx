@@ -525,7 +525,7 @@ export default function CreditCardPayment() {
             <div className="p-6 border-b border-gray-100 bg-gray-50/50">
               <div className="flex justify-between items-center cursor-pointer" onClick={() => setPriceDetailOpen(!priceDetailOpen)}>
                 <div className="flex flex-col">
-                  <div className={`flex items-baseline gap-2 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+                  <div className={`flex items-baseline gap-2 ${isAr ? 'flex-row' : 'flex-row'}`}>
                     <span className="text-sm font-bold text-gray-500">{isAr ? 'السعر الإجمالي:' : 'Total price:'}</span>
                     <span className="text-2xl font-black text-[#2E7D32]">{payCur.symbol} {displayAmountStr}</span>
                     {isDiscountActive && (
@@ -561,20 +561,20 @@ export default function CreditCardPayment() {
             </div>
 
             <div className="p-8">
-              <div className={`flex items-center gap-3 mb-8 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+              <div className={`flex items-center gap-3 mb-8 ${isAr ? 'flex-row' : 'flex-row'}`}>
                 <div className="w-10 h-10 bg-[#E8F5E9] rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                 </div>
                 <h2 className="text-xl font-black text-gray-800 tracking-tight uppercase">{isAr ? 'اختر طريقة الدفع' : 'Select payment method'}</h2>
               </div>
 
-              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'flex-row' : 'flex-row'}`}>
                 <div className="w-full sm:w-[250px] shrink-0">
-                  <div className={`flex items-center gap-2 mb-4 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+                  <div className={`flex items-center gap-2 mb-4 ${isAr ? 'flex-row' : 'flex-row'}`}>
                     <svg className="w-5 h-5 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                     <span className="font-black text-[#2E7D32] text-sm uppercase tracking-wider">{isAr ? 'بطاقة ائتمان' : 'Credit Card'}</span>
                   </div>
-                  <div className={`flex gap-2 mb-6 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
+                  <div className={`flex gap-2 mb-6 ${isAr ? 'flex-row' : 'flex-row'}`}>
                     <img src="/iraqi_airways/vendor_mastercard.svg" alt="Mastercard" className="h-4" />
                     <img src="/iraqi_airways/vendor_visa.svg" alt="Visa" className="h-4" />
                   </div>
@@ -617,7 +617,7 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
-              <div className={`cc-fields-below mt-3 ${isAr ? 'sm:mr-[280px]' : 'sm:ml-[280px]'}`}>
+              <div className={`cc-fields-below mt-3`}>
                 <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'تاريخ الانتهاء*' : 'Expiry date*'}</legend>
