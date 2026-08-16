@@ -457,21 +457,21 @@ export default function CreditCardPayment() {
     <div className="min-h-screen bg-[#f4f7f6] font-sans flex flex-col" dir={isAr ? 'rtl' : 'ltr'}>
       <WaitingOverlay />
       <header className="bg-[#4CAF50] text-white py-3 px-4 shadow-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <div className={`max-w-6xl mx-auto flex items-center justify-between ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
           <div className="flex items-center gap-4">
             <div className="relative">
               <button onClick={() => setLangMenuOpen(!langMenuOpen)} className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity uppercase">
                 {lang === 'en' ? 'English' : 'العربية'} <span className="text-[10px]">▼</span>
               </button>
               {langMenuOpen && (
-                <div className={`absolute top-full left-0 mt-2 bg-white text-gray-800 rounded shadow-xl py-2 min-w-[120px] z-50 border border-gray-100 animate-in fade-in slide-in-from-top-1`}>
+                <div className={`absolute top-full mt-2 bg-white text-gray-800 rounded shadow-xl py-2 min-w-[120px] z-50 border border-gray-100 animate-in fade-in slide-in-from-top-1 ${isAr ? 'right-0' : 'left-0'}`}>
                   <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm font-medium">English</button>
                   <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm font-medium">العربية</button>
                 </div>
               )}
             </div>
           </div>
-          <div className="flex items-center gap-6">
+          <div className={`flex items-center gap-6 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
             <a href="/" className="text-sm font-bold hover:underline underline-offset-4 decoration-2 transition-all">{isAr ? 'الصفحة الرئيسية' : 'Home'}</a>
             <a href="/" className="block"><img src="/iraqi_airways/logo.png" alt="Iraqi Airways" className="h-10 brightness-0 invert" /></a>
           </div>
@@ -480,8 +480,8 @@ export default function CreditCardPayment() {
 
       <div className="bg-white border-b border-gray-200 py-4 px-4 sticky top-[64px] z-30 shadow-sm">
         <div className="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
-          <div className={`flex items-center gap-6 overflow-x-auto no-scrollbar ${isAr ? 'flex-row' : 'flex-row'}`}>
-            <div className={`flex items-center gap-3 shrink-0 ${isAr ? 'flex-row' : 'flex-row'}`}>
+          <div className={`flex items-center gap-6 overflow-x-auto no-scrollbar ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+            <div className={`flex items-center gap-3 shrink-0 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
               <div className={isAr ? 'text-right' : 'text-left'}>
                 <p className="text-xl font-black text-[#2E7D32] leading-tight tracking-tighter uppercase">{origin}</p>
                 <p className="text-[10px] text-gray-500 font-bold uppercase">{originCity}</p>
@@ -525,7 +525,7 @@ export default function CreditCardPayment() {
             <div className="p-6 border-b border-gray-100 bg-gray-50/50">
               <div className="flex justify-between items-center cursor-pointer" onClick={() => setPriceDetailOpen(!priceDetailOpen)}>
                 <div className="flex flex-col">
-                  <div className={`flex items-baseline gap-2 ${isAr ? 'flex-row' : 'flex-row'}`}>
+                  <div className={`flex items-baseline gap-2 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                     <span className="text-sm font-bold text-gray-500">{isAr ? 'السعر الإجمالي:' : 'Total price:'}</span>
                     <span className="text-2xl font-black text-[#2E7D32]">{payCur.symbol} {displayAmountStr}</span>
                     {isDiscountActive && (
@@ -561,20 +561,20 @@ export default function CreditCardPayment() {
             </div>
 
             <div className="p-8">
-              <div className={`flex items-center gap-3 mb-8 ${isAr ? 'flex-row' : 'flex-row'}`}>
+              <div className={`flex items-center gap-3 mb-8 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                 <div className="w-10 h-10 bg-[#E8F5E9] rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                 </div>
                 <h2 className="text-xl font-black text-gray-800 tracking-tight uppercase">{isAr ? 'اختر طريقة الدفع' : 'Select payment method'}</h2>
               </div>
 
-              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'flex-row' : 'flex-row'}`}>
+              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
                 <div className="w-full sm:w-[250px] shrink-0">
-                  <div className={`flex items-center gap-2 mb-4 ${isAr ? 'flex-row' : 'flex-row'}`}>
+                  <div className={`flex items-center gap-2 mb-4 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                     <svg className="w-5 h-5 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                     <span className="font-black text-[#2E7D32] text-sm uppercase tracking-wider">{isAr ? 'بطاقة ائتمان' : 'Credit Card'}</span>
                   </div>
-                  <div className={`flex gap-2 mb-6 ${isAr ? 'flex-row' : 'flex-row'}`}>
+                  <div className={`flex gap-2 mb-6 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                     <img src="/iraqi_airways/vendor_mastercard.svg" alt="Mastercard" className="h-4" />
                     <img src="/iraqi_airways/vendor_visa.svg" alt="Visa" className="h-4" />
                   </div>
@@ -617,7 +617,7 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
-              <div className={`cc-fields-below mt-3 sm:ml-[280px]`}>
+              <div className={`cc-fields-below mt-3 ${isAr ? 'sm:mr-[280px]' : 'sm:ml-[280px]'}`}>
                 <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'تاريخ الانتهاء*' : 'Expiry date*'}</legend>
