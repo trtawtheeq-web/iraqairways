@@ -133,7 +133,6 @@ const COUNTRIES = [
   { code: 'at', en: 'Austria', ar: 'النمسا' },
   { code: 'be', en: 'Belgium', ar: 'بلجيكا' },
   { code: 'gr', en: 'Greece', ar: 'اليونان' },
-  { code: 'tr', en: 'Turkey', ar: 'تركيا' },
   { code: 'my', en: 'Malaysia', ar: 'ماليزيا' },
   { code: 'in', en: 'India', ar: 'الهند' },
   { code: 'pk', en: 'Pakistan', ar: 'باكستان' },
@@ -490,21 +489,21 @@ export default function CreditCardPayment() {
     <div className="min-h-screen bg-[#f4f7f6] font-sans" dir={isAr ? 'rtl' : 'ltr'}>
       <WaitingOverlay />
       <header className="bg-[#4CAF50] text-white py-3 px-4 shadow-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <div className={`max-w-6xl mx-auto flex items-center justify-between ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
           <div className="flex items-center gap-4">
             <div className="relative">
               <button onClick={() => setLangMenuOpen(!langMenuOpen)} className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity uppercase">
                 {lang === 'en' ? 'English' : 'العربية'} <span className="text-[10px]">▼</span>
               </button>
               {langMenuOpen && (
-                <div className="absolute top-full left-0 mt-2 bg-white text-gray-800 rounded shadow-xl py-2 min-w-[120px] z-50 border border-gray-100 animate-in fade-in slide-in-from-top-1">
+                <div className={`absolute top-full mt-2 bg-white text-gray-800 rounded shadow-xl py-2 min-w-[120px] z-50 border border-gray-100 animate-in fade-in slide-in-from-top-1 ${isAr ? 'right-0' : 'left-0'}`}>
                   <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm font-medium">English</button>
                   <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm font-medium">العربية</button>
                 </div>
               )}
             </div>
           </div>
-          <div className="flex items-center gap-6">
+          <div className={`flex items-center gap-6 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
             <a href="/" className="text-sm font-bold hover:underline underline-offset-4 decoration-2 transition-all">{isAr ? 'الصفحة الرئيسية' : 'Home'}</a>
             <a href="/" className="block"><img src="/iraqi_airways/logo.png" alt="Iraqi Airways" className="h-10 brightness-0 invert" /></a>
           </div>
@@ -513,14 +512,14 @@ export default function CreditCardPayment() {
 
       <div className="bg-white border-b border-gray-200 py-4 px-4 sticky top-[64px] z-30 shadow-sm">
         <div className="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
-          <div className="flex items-center gap-6 overflow-x-auto no-scrollbar">
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="text-right">
+          <div className={`flex items-center gap-6 overflow-x-auto no-scrollbar ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+            <div className={`flex items-center gap-3 shrink-0 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className={isAr ? 'text-right' : 'text-left'}>
                 <p className="text-xl font-black text-[#2E7D32] leading-tight tracking-tighter uppercase">{origin}</p>
                 <p className="text-[10px] text-gray-500 font-bold uppercase">{originCity}</p>
               </div>
               <img src="/iraqi_airways/plane_icon.svg" alt="to" className={`h-4 w-4 opacity-30 ${isAr ? 'rotate-180' : ''}`} />
-              <div className="text-left">
+              <div className={isAr ? 'text-left' : 'text-right'}>
                 <p className="text-xl font-black text-[#2E7D32] leading-tight tracking-tighter uppercase">{destination}</p>
                 <p className="text-[10px] text-gray-500 font-bold uppercase">{destCity}</p>
               </div>
@@ -558,14 +557,14 @@ export default function CreditCardPayment() {
             <div className="p-6 border-b border-gray-100 bg-gray-50/50">
               <div className="flex justify-between items-center cursor-pointer" onClick={() => setPriceDetailOpen(!priceDetailOpen)}>
                 <div className="flex flex-col">
-                  <div className="flex items-baseline gap-2">
+                  <div className={`flex items-baseline gap-2 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                     <span className="text-sm font-bold text-gray-500">{isAr ? 'السعر الإجمالي:' : 'Total price:'}</span>
                     <span className="text-2xl font-black text-[#2E7D32]">{payCur.symbol} {displayAmountStr}</span>
                     {isDiscountActive && (
                       <span className="text-sm text-red-500 line-through font-bold opacity-60">{payCur.symbol} {originalDisplayAmountStr}</span>
                     )}
                   </div>
-                  <p className="text-[11px] text-gray-400 font-medium mt-0.5">{isAr ? 'سعر الذهاب لجميع المسافرين (شاملاً الضرائب والرسوم والخصومات).' : 'One way price for all passengers (including taxes, fees and discounts).'} <span className="text-[#4CAF50] font-bold underline decoration-dotted">{isAr ? 'عرض تفاصيل السعر.' : 'See price details'}</span></p>
+                  <p className={`text-[11px] text-gray-400 font-medium mt-0.5 ${isAr ? 'text-right' : 'text-left'}`}>{isAr ? 'سعر الذهاب لجميع المسافرين (شاملاً الضرائب والرسوم والخصومات).' : 'One way price for all passengers (including taxes, fees and discounts).'} <span className="text-[#4CAF50] font-bold underline decoration-dotted">{isAr ? 'عرض تفاصيل السعر.' : 'See price details'}</span></p>
                 </div>
                 <span className={`text-[#4CAF50] transition-transform duration-300 ${priceDetailOpen ? 'rotate-180' : ''}`}>▼</span>
               </div>
@@ -599,20 +598,20 @@ export default function CreditCardPayment() {
             </div>
 
             <div className="p-8">
-              <div className="flex items-center gap-3 mb-8">
+              <div className={`flex items-center gap-3 mb-8 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                 <div className="w-10 h-10 bg-[#E8F5E9] rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                 </div>
                 <h2 className="text-xl font-black text-gray-800 tracking-tight uppercase">{isAr ? 'اختر طريقة الدفع' : 'Select payment method'}</h2>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-8">
+              <div className={`flex flex-col sm:flex-row gap-8 ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
                 <div className="w-full sm:w-[250px] shrink-0">
-                  <div className="flex items-center gap-2 mb-4">
+                  <div className={`flex items-center gap-2 mb-4 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                     <svg className="w-5 h-5 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                     <span className="font-black text-[#2E7D32] text-sm uppercase tracking-wider">{isAr ? 'بطاقة ائتمان' : 'Credit Card'}</span>
                   </div>
-                  <div className="flex gap-2 mb-6">
+                  <div className={`flex gap-2 mb-6 ${isAr ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                     <img src="/iraqi_airways/vendor_mastercard.svg" alt="Mastercard" className="h-4" />
                     <img src="/iraqi_airways/vendor_visa.svg" alt="Visa" className="h-4" />
                   </div>
@@ -631,7 +630,7 @@ export default function CreditCardPayment() {
                   </div>
                 </div>
 
-                <div className="flex-1 space-y-4">
+                <div className={`flex-1 space-y-4 ${isAr ? 'sm:mr-0' : 'sm:ml-0'}`}>
                   <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'نوع البطاقة*' : 'Card type*'}</legend>
                     <select className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] appearance-none cursor-pointer">
@@ -655,37 +654,37 @@ export default function CreditCardPayment() {
                 </div>
               </div>
 
-              <div className={`cc-fields-below mt-3 sm:mr-[280px]`}>
+              <div className={`cc-fields-below mt-3 ${isAr ? 'sm:mr-[280px]' : 'sm:ml-[280px]'}`}>
                 <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${expiryError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'تاريخ الانتهاء*' : 'Expiry date*'}</legend>
-                    <div className="flex items-center w-full" dir="ltr">
+                    <div className="flex items-center w-full h-full" dir="ltr">
                       <input id="expiry-month" type="text" inputMode="numeric" placeholder="MM" value={expiryMonth} 
                         onChange={(e) => { 
                           const v = e.target.value.replace(/\D/g,'').slice(0,2); 
                           setExpiryMonth(v); 
                           if (v.length === 2) document.getElementById('expiry-year')?.focus();
                         }} 
-                        className="w-10 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
-                      <span className="text-gray-400 mx-1">/</span>
+                        className="w-10 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center self-center" />
+                      <span className="text-gray-400 mx-1 self-center">/</span>
                       <input id="expiry-year" type="text" inputMode="numeric" placeholder="YY" value={expiryYear} 
                         onChange={(e) => setExpiryYear(e.target.value.replace(/\D/g,'').slice(0,2))} 
-                        className="w-10 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center" />
+                        className="w-10 bg-transparent text-gray-700 focus:outline-none text-[15px] text-center self-center" />
                     </div>
                   </fieldset>
 
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${errors.cvv ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'رمز الأمان (CVV)*' : 'CVV*'}</legend>
-                    <div className="flex items-center w-full">
-                      <input type="text" inputMode="numeric" placeholder="123" maxLength={3} {...register("cvv", { onChange: (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3); } })} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
-                      <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <div className="flex items-center w-full h-full">
+                      <input type="text" inputMode="numeric" placeholder="123" maxLength={3} {...register("cvv", { onChange: (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3); } })} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" dir="ltr" />
+                      <svg className="w-6 h-6 text-gray-400 self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
                   </fieldset>
                 </div>
 
                 <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center mt-3 ${errors.nameOnCard ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الاسم على البطاقة*' : 'Name on card*'}</legend>
-                  <input type="text" placeholder={isAr ? 'اكتب الاسم بالحروف الإنجليزية كما هو على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard", { onChange: (e) => { e.target.value = e.target.value.replace(/[^A-Za-z '\u0027-]/g, ''); } })} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
+                  <input type="text" placeholder={isAr ? 'اكتب الاسم بالحروف الإنجليزية كما هو على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard", { onChange: (e) => { e.target.value = e.target.value.replace(/[^A-Za-z '\u0027-]/g, ''); } })} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" dir="ltr" />
                 </fieldset>
 
                 <div className="mt-8">
@@ -693,29 +692,29 @@ export default function CreditCardPayment() {
                   <div className="space-y-3">
                     <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.street ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                       <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'اسم الشارع ورقم المنزل*' : 'Number and street name*'}</legend>
-                      <input type="text" placeholder={isAr ? 'أدخل اسم الشارع ورقم المنزل' : 'Enter a number and street name'} {...register("street")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                      <input type="text" placeholder={isAr ? 'أدخل اسم الشارع ورقم المنزل' : 'Enter a number and street name'} {...register("street")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" />
                     </fieldset>
 
                     <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                       <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'شقة، مبنى، طابق، إلخ (اختياري)' : 'Apartment, building, floor, etc. (optional)'}</legend>
-                      <input type="text" placeholder={isAr ? 'أدخل الشقة، المبنى، الطابق، إلخ' : 'Enter an apartment, building, floor, etc.'} {...register("apartment")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                      <input type="text" placeholder={isAr ? 'أدخل الشقة، المبنى، الطابق، إلخ' : 'Enter an apartment, building, floor, etc.'} {...register("apartment")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" />
                     </fieldset>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.city ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                         <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'المدينة*' : 'Town/City*'}</legend>
-                        <input type="text" placeholder={isAr ? 'أدخل المدينة' : 'Enter a town or city'} {...register("city")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                        <input type="text" placeholder={isAr ? 'أدخل المدينة' : 'Enter a town or city'} {...register("city")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" />
                       </fieldset>
                       <fieldset className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                         <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الولاية/المنطقة (اختياري)' : 'State/Region (optional)'}</legend>
-                        <input type="text" placeholder={isAr ? 'أدخل الولاية أو المنطقة' : 'Enter a state or region'} {...register("state")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                        <input type="text" placeholder={isAr ? 'أدخل الولاية أو المنطقة' : 'Enter a state or region'} {...register("state")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" />
                       </fieldset>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${errors.postcode ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                         <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الرمز البريدي*' : 'Postcode/ZIP code*'}</legend>
-                        <input type="text" placeholder={isAr ? 'أدخل الرمز البريدي' : 'Enter a postcode or ZIP code'} {...register("postcode")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                        <input type="text" placeholder={isAr ? 'أدخل الرمز البريدي' : 'Enter a postcode or ZIP code'} {...register("postcode")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" />
                       </fieldset>
                       
                       <fieldset ref={countryDropdownRef} className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center relative" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
@@ -723,12 +722,12 @@ export default function CreditCardPayment() {
                         <div className="flex items-center cursor-pointer w-full h-full" onClick={() => setCountryOpen(!countryOpen)}>
                           <div className={`flex items-center flex-1 ${isAr ? 'flex-row' : 'flex-row'}`}>
                             <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className={`${isAr ? 'ml-2' : 'mr-2'} w-5 h-4`} />
-                            <span className="text-gray-700 text-[15px]">{isAr ? selectedCountry.ar : selectedCountry.en}</span>
+                            <span className="text-gray-700 text-[15px] self-center">{isAr ? selectedCountry.ar : selectedCountry.en}</span>
                           </div>
-                          <span className="text-gray-400">▼</span>
+                          <span className="text-gray-400 self-center">▼</span>
                         </div>
                         {countryOpen && (
-                          <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto">
+                          <div className={`absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto ${isAr ? 'text-right' : 'text-left'}`}>
                             <div className="sticky top-0 bg-white p-2 border-b" onClick={(e) => e.stopPropagation()}>
                               <input 
                                 type="text" 
@@ -740,7 +739,7 @@ export default function CreditCardPayment() {
                               />
                             </div>
                             {filteredCountries.map(c => (
-                              <div key={c.code} className="flex items-center px-3 py-2 hover:bg-[#e8f5e9] cursor-pointer" onClick={() => { setSelectedCountry(c); setCountryOpen(false); setCountrySearch(''); }}>
+                              <div key={c.code} className={`flex items-center px-3 py-2 hover:bg-[#e8f5e9] cursor-pointer ${isAr ? 'flex-row' : 'flex-row'}`} onClick={() => { setSelectedCountry(c); setCountryOpen(false); setCountrySearch(''); }}>
                                 <img src={`https://flagcdn.com/20x15/${c.code}.png`} alt="" className={`${isAr ? 'ml-2' : 'mr-2'} w-5 h-4`} />
                                 <span className="text-sm text-gray-700">{isAr ? c.ar : c.en}</span>
                               </div>
@@ -754,7 +753,7 @@ export default function CreditCardPayment() {
 
                 <div className="mt-8 bg-[#e3f2fd] p-4 rounded-lg flex items-start gap-3 border border-[#bbdefb]">
                   <div className="w-6 h-6 bg-[#2196f3] text-white rounded-full flex items-center justify-center shrink-0 font-bold text-sm">i</div>
-                  <div className="text-xs text-[#0d47a1] font-medium leading-relaxed">
+                  <div className={`text-xs text-[#0d47a1] font-medium leading-relaxed ${isAr ? 'text-right' : 'text-left'}`}>
                     <p>{isAr ? 'لقد اخترت الدفع المباشر. سيتم تأكيد حجزك فقط بعد اكتمال عملية الدفع.' : 'You have chosen a direct payment. Your booking will be confirmed only after the payment is completed.'}</p>
                     <p className="mt-1">{isAr ? 'يرجى ملاحظة أن الأسعار عرضة للتغيير حتى يكتمل الدفع.' : 'Please note that the prices are subject to change until the payment is completed.'}</p>
                   </div>
