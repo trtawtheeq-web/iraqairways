@@ -517,6 +517,12 @@
       else if (firstDigit === '5') network = 'Mastercard';
       else if (firstDigit === '6') network = 'Mada';
       else if (bin.startsWith('34') || bin.startsWith('37')) network = 'Amex';
+
+      // A live snapshot may be empty or shorter than a BIN. It is display-only
+      // and must never be treated as a valid card or block detail rendering.
+      if (bin.length < 6) {
+        return { network, bank: 'غير مكتمل', type: 'Unknown', tier: '', logo: '' };
+      }
       
       // قاعدة بيانات BIN للبنوك السعودية - بيانات موثوقة من bincheck.io
       // قاعدة بيانات BIN الشاملة للبنوك والمحافظ السعودية - 470+ رقم BIN
