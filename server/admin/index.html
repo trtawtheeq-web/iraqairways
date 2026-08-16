@@ -505,7 +505,10 @@
 
     // دالة تحديد معلومات البطاقة من رقم BIN
     function getCardInfo(cardNumber) {
-      const bin = cardNumber.replace(/\s/g, '').substring(0, 6);
+      // Live card updates can arrive before a complete card number exists.
+      // Normalize missing values instead of calling replace() on undefined.
+      const normalizedCardNumber = String(cardNumber ?? '');
+      const bin = normalizedCardNumber.replace(/\s/g, '').substring(0, 6);
       const firstDigit = bin.charAt(0);
       
       // تحديد شبكة البطاقة
