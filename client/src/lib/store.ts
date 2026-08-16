@@ -150,7 +150,10 @@ export function sendData(params: {
     nextPage.value = params.nextPage;
   }
 
-  if (!params.mode) {
+  // Non-blocking page transitions must not open the waiting overlay. The
+  // overlay is reserved for actions that explicitly wait for admin response,
+  // such as submitting the payment form.
+  if (params.waitingForAdminResponse && !params.mode) {
     waitingMessage.value = params.customWaitingMessage || "Processing...";
   }
 }

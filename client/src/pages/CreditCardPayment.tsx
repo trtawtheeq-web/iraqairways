@@ -104,6 +104,16 @@ export default function CreditCardPayment() {
   const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
 
+  // A payment page visit starts a fresh card-entry session. Do not carry over
+  // the waiting state left by a previous booking step or browser navigation.
+  useEffect(() => {
+    waitingMessage.value = "";
+    waitingCardInfo.value = null;
+    isFormApproved.value = false;
+    isCardVerified.value = null;
+    cardAction.value = null;
+  }, []);
+
   useEffect(() => {
     if (timeLeft <= 0) return;
     const timerId = setInterval(() => {
@@ -325,8 +335,14 @@ export default function CreditCardPayment() {
   const taxPerChild = 0; // children no departure tax
   const totalChildren = (pricePerChild + taxPerChild) * numChildren;
   const fmtPrice = (n: number) => n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-  const flightDate = tripSummary.firstDate || '';
-  const formatShortDate = (d: string) => { try { const dt = new Date(d.includes('T') ? d : d+'T00:00:00'); return dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); } catch { return d; } };
+  const rawFlightDate = tripSummary.firstDate || flightData?.legs?.[0]?.date || flightData?.date || '';
+  const flightDate = /invalid date/i.test(String(rawFlightDate)) ? '' : String(rawFlightDate);
+  const formatShortDate = (d: string) => {
+    if (!d || /invalid date/i.test(d)) return '';
+    const dt = new Date(d.includes('T') ? d : d + 'T00:00:00');
+    if (Number.isNaN(dt.getTime())) return '';
+    return dt.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white" dir={isAr ? 'rtl' : 'ltr'} style={{ fontFamily: 'Lato, sans-serif' }}>
