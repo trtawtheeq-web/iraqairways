@@ -599,8 +599,8 @@ const PassengerDetails = () => {
       <header className="bg-[#4ca42c] text-white" dir={dir}>
         {/* Top bar: Logo/Home (Right in RTL) + Lang (Left in RTL) */}
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
-          {/* Logo and Home (First in JSX = Right in RTL) */}
-          <div className={`flex items-center gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+          {/* Logo and Home (Right in RTL, Left in LTR) */}
+          <div className="flex items-center gap-4">
             <a href="/" className="block">
               <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-14" />
             </a>
@@ -626,16 +626,10 @@ const PassengerDetails = () => {
       {/* Flight info bar - white background, green text like original */}
       <div className="bg-white border-b border-gray-200 py-2" dir={dir}>
         <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between flex-wrap sm:flex-nowrap">
-          {/* Your booking (First in JSX = Right in RTL) */}
-          <div className="bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white order-last sm:order-first">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
-            <span className="font-bold text-[10px]">{t('fsr.yourBooking')}</span>
-          </div>
-
-          {/* Route and Info (Middle/Left in RTL) */}
-          <div className={`flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+          {/* Route and Info (Right in RTL, Left in LTR) */}
+          <div className="flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6">
             {/* Route */}
-            <div className={`flex items-center gap-2 sm:gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className="flex items-center gap-2 sm:gap-4">
               <div className={isAr ? 'text-right' : 'text-left'}>
                 <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{flightData?.origin || 'BGW'}</span>
                 <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(flightData?.origin || 'BGW')}</p>
@@ -679,6 +673,12 @@ const PassengerDetails = () => {
               <p className="text-[10px] sm:text-sm text-[#1B5E20]">{t('fsr.passenger')}</p>
               <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{totalCount} 👤</p>
             </div>
+          </div>
+
+          {/* Your booking (Last in JSX = Left in RTL, Right in LTR) */}
+          <div className="bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+            <span className="font-bold text-[10px]">{t('fsr.yourBooking')}</span>
           </div>
         </div>
       </div>

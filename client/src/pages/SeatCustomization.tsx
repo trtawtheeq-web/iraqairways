@@ -9,7 +9,8 @@ export default function SeatCustomization() {
   // Subscribe to global discount signal for real-time UI updates
   const isDiscountActive = globalDiscount.value;
   const [, setLocation] = useLocation();
-  const { lang, setLang } = useLang();
+  const { lang, setLang, t } = useLang();
+  const isAr = lang === 'ar';
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState<number | null>(null);
   const [paxOpen, setPaxOpen] = useState(false);
@@ -83,15 +84,15 @@ export default function SeatCustomization() {
       {/* Header */}
       <header className="bg-[#4ca42c] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          {/* Logo and Home (Right in Arabic, Left in English) */}
-          <div className={`flex items-center gap-6 ${isAr ? 'order-2' : 'order-1'}`}>
+          {/* Logo and Home (Right in RTL, Left in LTR) */}
+          <div className="flex items-center gap-6">
             <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 cursor-pointer" onClick={() => setLocation('/')} />
             <span className="hidden sm:inline border-l border-white/50 h-6"></span>
-            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => setLocation('/')}>{lang === 'ar' ? 'الرئيسية' : 'Home'}</span>
+            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => setLocation('/')}>{t('common.home')}</span>
           </div>
 
-          {/* Language Switcher (Left in Arabic, Right in English) */}
-          <div className={`relative hidden sm:block ${isAr ? 'order-1' : 'order-2'}`}>
+          {/* Language Switcher (Left in RTL, Right in LTR) */}
+          <div className="relative hidden sm:block">
             <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>

@@ -443,18 +443,18 @@ export default function CreditCardPayment() {
       <WaitingOverlay />
 
       {/* Header */}
-      <header className="bg-[#4ca42c] text-white">
+      <header className="bg-[#4ca42c] text-white" dir={isAr ? 'rtl' : 'ltr'}>
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          {/* Logo and Home (Right in Arabic, Left in English) */}
-          <div className={`flex items-center gap-6 ${isAr ? 'order-2' : 'order-1'}`}>
+          {/* Logo and Home (Right in RTL, Left in LTR) */}
+          <div className="flex items-center gap-6">
             <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 cursor-pointer" onClick={() => navigate('/')} />
             <span className="hidden sm:inline border-l border-white/50 h-6"></span>
-            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>{lang === 'ar' ? 'الرئيسية' : 'Home'}</span>
+            <span className="hidden sm:inline text-sm cursor-pointer hover:underline" onClick={() => navigate('/')}>{t('common.home')}</span>
             <button className="sm:hidden text-white" onClick={() => navigate('/')}><svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
           </div>
 
-          {/* Language Switcher (Left in Arabic, Right in English) */}
-          <div className={`relative hidden sm:block ${isAr ? 'order-1' : 'order-2'}`}>
+          {/* Language Switcher (Left in RTL, Right in LTR) */}
+          <div className="relative hidden sm:block">
             <button onClick={() => setLangMenuOpen(o => !o)} className="text-sm flex items-center gap-1 hover:text-white/80 transition-colors">
               <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
               <span className="text-xs">▼</span>
@@ -470,61 +470,46 @@ export default function CreditCardPayment() {
         {/* Info bar */}
         <div className="bg-white border-b" dir={isAr ? 'rtl' : 'ltr'}>
           <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
-            {/* Your booking (Right in Arabic, Left in English) */}
-            <div className={`bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white ${isAr ? 'order-2' : 'order-2'}`}>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
-              <span className="font-bold text-[10px]">{lang === 'ar' ? 'حجزك' : 'Your booking'}</span>
-            </div>
-
-            {/* Route and Info (Left in Arabic, Right in English) */}
-            <div className={`flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6 ${isAr ? 'order-1 flex-row-reverse' : 'order-1 flex-row'}`}>
+            {/* Route and Info (Right in RTL, Left in LTR) */}
+            <div className={`flex items-center flex-wrap sm:flex-nowrap gap-2 sm:gap-6 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
               {/* Mobile route text */}
               <div className={`sm:hidden ${isAr ? 'text-right' : 'text-left'}`}>
                 <p className="text-sm font-bold text-[#1B5E20]">{cityName(origin)} - {cityName(destination)}</p>
                 <p className="text-xs text-gray-600">{formatShortDate(flightDate)} &nbsp; {paxCount} 👤</p>
               </div>
-              {/* Desktop route */}
-              <div className={`hidden sm:flex items-center gap-6 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`flex items-center gap-3 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className={isAr ? 'text-right' : 'text-left'}>
-                    <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{origin}</span>
-                    <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(origin)}</p>
-                  </div>
-                  <div className="flex flex-col items-center mx-2 gap-0">
-                    {flightData?.tripType === 'round' ? (
-                      <>
-                        <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
-                        <div className="flex items-center"><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? '' : 'rotate-180'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span></div>
-                      </>
-                    ) : (
-                      <div className="flex items-center"><span className="text-[#4ca42c] text-[9px] tracking-[2px]">············</span><svg className={`w-3.5 h-3.5 text-[#4ca42c] ${isAr ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
-                    )}
-                  </div>
-                  <div className={isAr ? 'text-right' : 'text-left'}>
-                    <span className="text-lg sm:text-2xl font-bold text-[#1B5E20]">{destination}</span>
-                    <p className="text-[10px] sm:text-xs text-[#1B5E20]">{cityName(destination)}</p>
+              {/* Desktop: full route with dots */}
+              <div className={`hidden sm:flex items-baseline gap-1 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+                  <span className="text-[22px] font-bold text-[#1B5E20]">{origin}</span>
+                  <span className="text-xs text-gray-500">{cityName(origin)}</span>
+                </div>
+                <div className="flex flex-col items-center mx-3 gap-0.5">
+                  <div className="flex items-center">
+                    <span className="text-[#4ca42c] text-[10px] tracking-[2px]">················</span>
+                    <svg className={`w-4 h-4 text-[#4ca42c] ${isAr ? 'rotate-180 mr-0.5' : 'ml-0.5'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
                   </div>
                 </div>
-                <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
-                <div className={isAr ? 'text-right' : 'text-left'}>
-                  <p className="text-[10px] sm:text-sm text-[#1B5E20]">{lang === 'ar' ? 'المغادرة' : 'Depart'}</p>
-                  <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{formatShortDate(flightDate)}</p>
-                </div>
-                {flightData?.tripType === 'round' && flightData?.legs?.length > 1 && (
-                  <>
-                    <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
-                    <div className={isAr ? 'text-right' : 'text-left'}>
-                      <p className="text-[10px] sm:text-sm text-[#1B5E20]">{lang === 'ar' ? 'العودة' : 'Return'}</p>
-                      <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{formatShortDate(flightData.legs[1].date)}</p>
-                    </div>
-                  </>
-                )}
-                <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
-                <div className={isAr ? 'text-right' : 'text-left'}>
-                  <p className="text-[10px] sm:text-sm text-[#1B5E20]">{lang === 'ar' ? 'المسافر' : 'Passenger'}</p>
-                  <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{paxCount} 👤</p>
+                <div className={`flex flex-col ${isAr ? 'items-end' : 'items-start'}`}>
+                  <span className="text-[22px] font-bold text-[#1B5E20]">{destination}</span>
+                  <span className="text-xs text-gray-500">{cityName(destination)}</span>
                 </div>
               </div>
+              <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+              <div className={isAr ? 'text-right' : 'text-left'}>
+                <p className="text-[10px] sm:text-sm text-[#1B5E20]">{isAr ? 'مغادرة' : 'Depart'}</p>
+                <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{formatShortDate(flightDate)}</p>
+              </div>
+              <span className="hidden sm:block text-gray-300 text-lg sm:text-2xl">|</span>
+              <div className={isAr ? 'text-right' : 'text-left'}>
+                <p className="text-[10px] sm:text-sm text-[#1B5E20]">{isAr ? 'مسافرون' : 'Passenger'}</p>
+                <p className="text-xs sm:text-base font-bold text-[#1B5E20]">{paxCount} 👤</p>
+              </div>
+            </div>
+
+            {/* Your booking (Left in RTL, Right in LTR) */}
+            <div className="bg-[#2E7D32] w-[60px] h-[50px] sm:w-[90px] sm:h-[70px] rounded flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-white">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+              <span className="font-bold text-[10px]">{t('fsr.yourBooking')}</span>
             </div>
           </div>
         </div>

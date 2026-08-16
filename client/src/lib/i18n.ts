@@ -39,7 +39,7 @@ export const STRINGS: Dict = {
   'common.next': { en: 'Next', ar: 'التالي' },
   'common.remove': { en: 'Remove', ar: 'إزالة' },
   'common.select': { en: 'Select', ar: 'اختيار' },
-  'common.home': { en: 'Home', ar: 'الرئيسية' },
+  'common.home': { en: 'Home', ar: 'الصفحة الرئيسية' },
 
   // ---- Preferences modal ----
   'pref.title': { en: 'Choose your preferences', ar: 'اختر تفضيلاتك' },
@@ -255,10 +255,10 @@ export const STRINGS: Dict = {
   'fsr.from': { en: 'from', ar: 'من' },
   'fsr.seatsLeft': { en: 'seats left', ar: 'مقاعد متبقية' },
   'fsr.seatLeft': { en: 'seat left', ar: 'مقعد متبقي' },
-  'fsr.yourBooking': { en: 'Your booking', ar: 'حجزك' },
+  'fsr.yourBooking': { en: 'Your booking', ar: 'الحجز الخاص بك' },
   'fsr.depart': { en: 'Depart', ar: 'المغادرة' },
   'fsr.passenger': { en: 'Passenger', ar: 'راكب' },
-  'fsr.home': { en: 'Home', ar: 'الرئيسية' },
+  'fsr.home': { en: 'Home', ar: 'الصفحة الرئيسية' },
   'fsr.back': { en: 'Back', ar: 'رجوع' },
   'fsr.selectFare': { en: 'Select a fare', ar: 'اختر التعرفة' },
   'fsr.confirmContinue': { en: 'Confirm and continue', ar: 'تأكيد ومتابعة' },
