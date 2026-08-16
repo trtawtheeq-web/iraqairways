@@ -130,19 +130,19 @@ export default function SeatCustomization() {
             <span className="text-[#2E7D32] ml-2">- {formatDate(leg.date)}</span>
           </div>
           <hr className="mb-4" />
-          <div className={`flex items-center justify-between flex-wrap gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
-            <div className={`flex items-center gap-4 ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4">
               <div className="text-center">
-                <p className="text-2xl font-light text-[#2E7D32]">{isAr ? leg.departureTime : leg.departureTime}</p>
+                <p className="text-2xl font-light text-[#2E7D32]">{leg.departureTime}</p>
                 <p className="text-sm text-gray-600">{leg.origin}</p>
               </div>
-              <div className={`flex items-center gap-2 text-gray-400 text-xs ${isAr ? 'flex-row-reverse' : 'flex-row'}`}>
+              <div className="flex items-center gap-2 text-gray-400 text-xs">
                 <span>···········</span>
                 <span>{t('fsr.nonstop')}</span>
                 <span>···········</span>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-light text-[#2E7D32]">{isAr ? leg.arrivalTime : leg.arrivalTime}</p>
+                <p className="text-2xl font-light text-[#2E7D32]">{leg.arrivalTime}</p>
                 <p className="text-sm text-gray-600">{leg.destination}</p>
               </div>
             </div>
