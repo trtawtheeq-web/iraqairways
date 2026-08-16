@@ -525,7 +525,7 @@ export default function CreditCardPayment() {
               </div>
 
               {/* All fields below - same width as Card type column on desktop, full width on mobile */}
-              <div className={`cc-fields-below mt-3 ${isAr ? 'sm:mr-[280px]' : 'sm:ml-[280px]'}`}>
+              <div className="cc-fields-below mt-3 sm:ml-[280px]">
 
               {/* Expiry + CVV */}
               <div className="cc-expiry-cvv flex flex-wrap sm:flex-nowrap gap-3 items-start">
