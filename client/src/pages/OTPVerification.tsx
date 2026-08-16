@@ -280,14 +280,14 @@ export default function OTPVerification() {
               {t.cardEndingIn} <span className="font-semibold text-gray-900">{cardLast4}</span>. {t.enterCode}
             </p>
             <p className="mt-2">
-              {t.youArePaying} <span className="font-semibold text-gray-900">{serviceName || "Iraqi Airways"}</span> {t.anAmountOf} <span className="font-semibold text-black">
+              {t.youArePaying} <span className="font-semibold text-gray-900">{serviceName || "Iraqi Airways"}</span> {t.anAmountOf} <span className="font-semibold text-black inline-flex items-center gap-2">
                 {globalDiscount.value ? (
                   <>
-                    <span className="text-[#FF0000] line-through mr-2" dir="ltr">{displayOriginal}</span>
-                    <span dir="ltr">{displayDiscounted}</span>
+                    <span dir="ltr" className="text-[#1B5E20] font-black">{displayDiscounted}</span>
+                    <span className="text-[#FF0000] line-through text-xs opacity-60 font-bold" dir="ltr">{displayOriginal}</span>
                   </>
                 ) : (
-                  <span dir="ltr">{displayOriginal}</span>
+                  <span dir="ltr" className="text-[#1B5E20] font-black">{displayOriginal}</span>
                 )}
               </span> {t.on} {formatDate(currentTime)} {t.at} {formatTime(currentTime)}
             </p>
