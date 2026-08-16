@@ -25,6 +25,7 @@ function Router() {
   return (
     <Switch>
       {/* Flight Booking Flow */}
+      <Route path="/" component={FlightSearchResults} />
       <Route path={"/flight-search"} component={FlightSearchResults} />
       <Route path={"/passenger-details"} component={PassengerDetails} />
       <Route path={"/seat-customization"} component={SeatCustomization} />

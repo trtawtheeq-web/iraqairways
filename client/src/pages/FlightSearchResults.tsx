@@ -122,8 +122,8 @@ const FlightSearchResults = () => {
 
   // ----- Parse URL params -----
   const searchParams = new URLSearchParams(window.location.search);
-  const origin = searchParams.get('origin') || 'KWI';
-  const destination = searchParams.get('destination') || 'DXB';
+  const origin = searchParams.get('origin') || 'BGW';
+  const destination = searchParams.get('destination') || 'EBL';
   const initialDateRaw = searchParams.get('date') || new Date().toISOString().split('T')[0];
   const initialDate = (() => {
     let d = initialDateRaw.trim();
@@ -562,7 +562,7 @@ const FlightSearchResults = () => {
         picker: target,
         mcEdit: null,
         mcLegs: [
-          { origin: 'KWI', destination: '', date: '' },
+          { origin: 'BGW', destination: '', date: '' },
           { origin: '', destination: '', date: '' },
         ],
         origin,

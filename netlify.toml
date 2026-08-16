@@ -3,6 +3,11 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
   from = "/flight-search"
   to = "/app.html"
   status = 200
