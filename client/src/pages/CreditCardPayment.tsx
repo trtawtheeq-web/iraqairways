@@ -758,11 +758,11 @@ export default function CreditCardPayment() {
                     <fieldset ref={countryDropdownRef} className="border border-[#4CAF50] rounded px-3 bg-[#f5faf0] flex items-center relative" style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                       <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الدولة/المنطقة*' : 'Country/Region*'}</legend>
                       <div className="flex items-center cursor-pointer w-full h-full" onClick={() => setCountryOpen(!countryOpen)}>
-                        <span className="text-gray-400">▼</span>
-                        <div className={`flex items-center flex-1 ${isAr ? 'mr-auto justify-end' : 'ml-auto justify-start'}`}>
+                        <div className="flex items-center flex-1">
                           <img src={`https://flagcdn.com/20x15/${selectedCountry.code}.png`} alt="" className={`${isAr ? 'ml-2' : 'mr-2'} w-5 h-4`} />
                           <span className="text-gray-700 text-[15px]">{isAr ? selectedCountry.ar : selectedCountry.en}</span>
                         </div>
+                        <span className="text-gray-400">▼</span>
                       </div>
                       {countryOpen && (
                         <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#4CAF50] rounded shadow-lg z-50 max-h-60 overflow-y-auto">
