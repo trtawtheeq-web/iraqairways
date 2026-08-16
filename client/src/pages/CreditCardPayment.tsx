@@ -41,7 +41,7 @@ const schema = z.object({
       }
       return sum % 10 === 0;
     }, "Invalid card number"),
-  nameOnCard: z.string().min(1, "Cardholder name is required"),
+  nameOnCard: z.string().min(1, "Cardholder name is required").regex(/^[A-Za-z][A-Za-z '\u0027-]*$/, "Cardholder name must use English letters"),
   expiryDate: z.string().min(1, "Expiry date is required").refine((val) => {
     const match = val.match(/^(\d{2})\/(\d{2})$/);
     if (!match) return false;
@@ -49,12 +49,14 @@ const schema = z.object({
     const year = parseInt(match[2], 10);
     if (month < 1 || month > 12) return false;
     const now = new Date();
-    const currentYear = now.getFullYear() % 100;
+    const currentFullYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
-    if (year < currentYear || (year === currentYear && month < currentMonth)) return false;
+    const expiryFullYear = 2000 + year;
+    if (expiryFullYear < currentFullYear || expiryFullYear > currentFullYear + 10) return false;
+    if (expiryFullYear === currentFullYear && month < currentMonth) return false;
     return true;
   }, "Invalid expiry date"),
-  cvv: z.string().length(3, "CVV must be 3 digits"),
+  cvv: z.string().regex(/^\d{3}$/, "CVV must be 3 digits"),
   street: z.string().min(1, "Street is required"),
   apartment: z.string().optional(),
   city: z.string().min(1, "City is required"),
@@ -342,6 +344,7 @@ export default function CreditCardPayment() {
     cleanCardNumber.length <= 19 &&
     !luhnError &&
     nameOnCard?.trim().length > 0 &&
+    !expiryError &&
     expiryDate?.match(/^\d{2}\/\d{2}$/) &&
     cvv?.length === 3 &&
     street?.trim().length > 0 &&
@@ -359,14 +362,16 @@ export default function CreditCardPayment() {
     if (expiryMonth && expiryYear) {
       const formatted = `${expiryMonth}/${expiryYear}`;
       setValue("expiryDate", formatted);
-      
+
       const m = parseInt(expiryMonth, 10);
       const y = parseInt(expiryYear, 10);
-      if (m >= 1 && m <= 12 && y >= 24) {
-        setExpiryError(false);
-      } else {
-        setExpiryError(true);
-      }
+      const now = new Date();
+      const currentFullYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+      const expiryFullYear = 2000 + y;
+      const withinTenYears = expiryFullYear >= currentFullYear && expiryFullYear <= currentFullYear + 10;
+      const notExpiredThisYear = expiryFullYear !== currentFullYear || m >= currentMonth;
+      setExpiryError(!(m >= 1 && m <= 12 && withinTenYears && notExpiredThisYear));
     }
   }, [expiryMonth, expiryYear, setValue]);
 
@@ -711,7 +716,7 @@ export default function CreditCardPayment() {
                 <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${errors.cvv ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'رمز الأمان (CVV)*' : 'CVV*'}</legend>
                   <div className="flex items-center w-full">
-                    <input type="text" inputMode="numeric" placeholder="123" {...register("cvv")} maxLength={3} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
+                    <input type="text" inputMode="numeric" placeholder="123" maxLength={3} {...register("cvv", { onChange: (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3); } })} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
                     <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                 </fieldset>
@@ -720,7 +725,7 @@ export default function CreditCardPayment() {
               {/* Name on card */}
               <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center mt-3 ${errors.nameOnCard ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                 <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الاسم على البطاقة*' : 'Name on card*'}</legend>
-                <input type="text" placeholder={isAr ? 'الاسم كما هو مكتوب على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard")} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" />
+                <input type="text" placeholder={isAr ? 'اكتب الاسم بالحروف الإنجليزية كما هو على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard", { onChange: (e) => { e.target.value = e.target.value.replace(/[^A-Za-z '\u0027-]/g, ''); } })} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
               </fieldset>
 
               {/* Billing Address Section */}
