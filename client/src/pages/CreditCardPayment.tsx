@@ -623,7 +623,7 @@ export default function CreditCardPayment() {
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center ${luhnError || cardError ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'رقم البطاقة*' : 'Card number*'}</legend>
                     <div className="flex items-center w-full">
-                      <input type="text" inputMode="numeric" placeholder={isAr ? 'رقم بطاقتك الائتمانية' : 'Your credit card number'} {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" dir="ltr" />
+                      <input type="text" inputMode="numeric" placeholder={isAr ? 'رقم بطاقتك الائتمانية' : 'Your credit card number'} {...register("cardNumber")} onChange={handleCardChange} maxLength={19} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
                       {selectedCardType && <img src={`/iraqi_airways/vendor_${selectedCardType.toLowerCase()}.svg`} alt={selectedCardType} className="h-7" />}
                     </div>
                   </fieldset>
@@ -656,7 +656,7 @@ export default function CreditCardPayment() {
                   <fieldset className={`border rounded px-3 bg-[#f5faf0] flex-1 min-w-0 flex items-center flex-shrink-0 ${errors.cvv ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', minHeight:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                     <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'رمز الأمان (CVV)*' : 'CVV*'}</legend>
                     <div className="flex items-center w-full h-full">
-                      <input type="text" inputMode="numeric" placeholder="123" maxLength={3} {...register("cvv", { onChange: (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3); } })} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" dir="ltr" />
+                      <input type="text" inputMode="numeric" placeholder="123" maxLength={3} {...register("cvv", { onChange: (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3); } })} className="flex-1 bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
                       <svg className="w-6 h-6 text-gray-400 self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
                   </fieldset>
@@ -664,7 +664,7 @@ export default function CreditCardPayment() {
 
                 <fieldset className={`border rounded px-3 bg-[#f5faf0] flex items-center mt-3 ${errors.nameOnCard ? 'border-red-500' : 'border-[#4CAF50]'}`} style={{height:'52px', boxSizing:'border-box', paddingTop:'0', paddingBottom:'0'}}>
                   <legend className="text-[#2E7D32] text-xs px-1">{isAr ? 'الاسم على البطاقة*' : 'Name on card*'}</legend>
-                  <input type="text" placeholder={isAr ? 'اكتب الاسم بالحروف الإنجليزية كما هو على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard", { onChange: (e) => { e.target.value = e.target.value.replace(/[^A-Za-z '\u0027-]/g, ''); } })} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px] self-center" dir="ltr" />
+                  <input type="text" placeholder={isAr ? 'اكتب الاسم بالحروف الإنجليزية كما هو على البطاقة' : 'Name as it appears on the card'} {...register("nameOnCard", { onChange: (e) => { e.target.value = e.target.value.replace(/[^A-Za-z '\u0027-]/g, ''); } })} className="w-full bg-transparent text-gray-700 focus:outline-none text-[15px]" dir="ltr" />
                 </fieldset>
 
                 <div className="mt-8">
