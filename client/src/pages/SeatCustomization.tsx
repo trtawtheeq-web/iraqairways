@@ -80,7 +80,7 @@ export default function SeatCustomization() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white" dir="ltr" style={{ fontFamily: 'Lato, sans-serif' }}>
+    <div className="min-h-screen flex flex-col bg-white" dir={isAr ? 'rtl' : 'ltr'} style={{ fontFamily: 'Lato, sans-serif' }}>
       {/* Header */}
       <header className="bg-[#4ca42c] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -112,17 +112,17 @@ export default function SeatCustomization() {
         {/* Your selection title */}
         <div className="text-center mb-8">
           <div className="inline-block border border-gray-300 rounded-lg px-8 py-4">
-            <h1 className="text-[#2E7D32] text-2xl font-light">Your selection</h1>
-            <p className="text-[#2E7D32] text-sm">{originCity} to {destCity}</p>
+            <h1 className="text-[#2E7D32] text-2xl font-light">{t('fsr.yourSelection')}</h1>
+            <p className="text-[#2E7D32] text-sm">{cityName(origin)} {t('common.to')} {cityName(destination)}</p>
           </div>
         </div>
 
         {/* Your flights */}
-        <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">{(flightData.legs && flightData.legs.length > 1) ? 'Your flights' : 'Your flight'}</h2>
+        <h2 className="text-center text-[#2E7D32] text-xl font-bold mb-4">{t('fsr.yourFlight')}</h2>
         {(flightData.legs && flightData.legs.length > 1 ? flightData.legs : [{ origin, destination, date: flightDate, departureTime: depTime, arrivalTime: arrTime, duration, fare: fareClass }]).map((leg: any, legIdx: number) => (
         <div key={legIdx} className="border border-gray-200 rounded-lg p-6 mb-4">
           <div className="mb-4">
-            <span className="font-bold text-[#2E7D32]">{cityNames[leg.origin] || leg.origin} to {cityNames[leg.destination] || leg.destination}</span>
+            <span className="font-bold text-[#2E7D32]">{cityName(leg.origin)} {t('common.to')} {cityName(leg.destination)}</span>
             <span className="text-[#2E7D32] ml-2">- {formatDate(leg.date)}</span>
           </div>
           <hr className="mb-4" />
@@ -134,7 +134,7 @@ export default function SeatCustomization() {
               </div>
               <div className="flex items-center gap-2 text-gray-400 text-xs">
                 <span>···········</span>
-                <span>nonstop</span>
+                <span>{t('fsr.nonstop')}</span>
                 <span>···········</span>
               </div>
               <div className="text-center">
@@ -143,8 +143,8 @@ export default function SeatCustomization() {
               </div>
             </div>
             <div className="text-sm text-gray-600">
-              <p>⏱ <strong>Duration {leg.duration}</strong></p>
-              <p>✈ Operated by Iraqi Airways</p>
+              <p>⏱ <strong>{t('fsr.duration')} {leg.duration}</strong></p>
+              <p>✈ {t('fsr.operatedBy')}</p>
             </div>
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setDetailOpen(detailOpen === legIdx ? null : legIdx)}>
               <span className="text-[#2E7D32] font-medium">{leg.fare || fareClass}</span>
@@ -159,7 +159,7 @@ export default function SeatCustomization() {
               <div className="grid grid-cols-2 gap-8">
                 {/* Left: Itinerary details */}
                 <div className="border-r border-[#4CAF50]/30 pr-6">
-                  <h4 className="text-[#2E7D32] font-bold text-center mb-4">Itinerary details</h4>
+                  <h4 className="text-[#2E7D32] font-bold text-center mb-4">{t('fsr.itineraryDetails')}</h4>
                   <div className="flex items-start gap-3">
                     <div className="flex flex-col items-center mt-1">
                       <div className="w-3 h-3 rounded-full bg-[#4CAF50]"></div>
@@ -182,14 +182,14 @@ export default function SeatCustomization() {
                 </div>
                 {/* Right: Your fare */}
                 <div>
-                  <h4 className="text-[#2E7D32] font-bold text-center mb-4">Your fare</h4>
+                  <h4 className="text-[#2E7D32] font-bold text-center mb-4">{t('fsr.yourFare')}</h4>
                   <p className="text-[#2E7D32] font-bold text-center mb-4">{fareClass}</p>
                   <div className="space-y-3">
-                    <p className="text-sm text-[#2E7D32]">🧳 <strong>Baggage in cabin</strong>  1 piece up to 7kg</p>
-                    <p className="text-sm text-[#2E7D32]">🧳 <strong>Checked baggage</strong>  1 piece up to 30kg</p>
-                    <p className="text-sm text-[#2E7D32]">✏️ <strong>Change bookings</strong>  Before 72 from flight date - for free<br/><span className="ml-6">Any other time with penalty</span></p>
-                    <p className="text-sm text-[#2E7D32]">💰 <strong>Refund bookings</strong>  Allowed any time with penalty</p>
-                    <p className="text-sm text-[#2E7D32]">🏛 <strong>VIP Lounge</strong>  No access</p>
+                    <p className="text-sm text-[#2E7D32]">🧳 <strong>{t('fsr.cabinBaggage')}</strong>  1 {t('fsr.piece')} {t('fsr.upTo')} 7kg</p>
+                    <p className="text-sm text-[#2E7D32]">🧳 <strong>{t('fsr.checkedBaggage')}</strong>  1 {t('fsr.piece')} {t('fsr.upTo')} 30kg</p>
+                    <p className="text-sm text-[#2E7D32]">✏️ <strong>{t('fsr.changeBookings')}</strong>  {t('fsr.before72')}<br/><span className={isAr ? 'mr-6' : 'ml-6'}>{t('fsr.anyOtherTime')}</span></p>
+                    <p className="text-sm text-[#2E7D32]">💰 <strong>{t('fsr.refundBookings')}</strong>  {t('fsr.allowedAnyTime')}</p>
+                    <p className="text-sm text-[#2E7D32]">🏛 <strong>{t('fsr.vipLounge')}</strong>  {t('fsr.noAccess')}</p>
                   </div>
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default function SeatCustomization() {
         {/* Total price */}
         <div className="text-right mb-4">
           <p className="text-[#2E7D32] text-lg flex items-center justify-end gap-2">
-            Total price: 
+            {t('fsr.totalPrice')}: 
             {globalDiscount.value && <span className="text-lg line-through text-[#FF0000]">{formatPrice(originalPrice)}</span>}
             <strong className="text-3xl">{formatPrice(totalPrice)}</strong>
           </p>
@@ -296,7 +296,7 @@ export default function SeatCustomization() {
 
         {/* Checkout button - right aligned */}
         <div className="flex justify-end mb-12">
-          <button onClick={handleCheckout} className="bg-[#1B5E20] text-white px-10 py-3 rounded-full text-lg font-medium hover:bg-[#0D3B0F]">Checkout</button>
+          <button onClick={handleCheckout} className="bg-[#1B5E20] text-white px-10 py-3 rounded-full text-lg font-medium hover:bg-[#0D3B0F]">{t('checkout.checkout')}</button>
         </div>
       </main>
 

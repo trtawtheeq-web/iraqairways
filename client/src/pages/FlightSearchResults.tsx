@@ -597,16 +597,36 @@ const FlightSearchResults = () => {
         ? { cabin: '7kg', checked: '30kg', change: 'Before 72 from flight date - for free\nAny other time with penalty', refund: 'Allowed any time with penalty', lounge: 'No access' }
         : { cabin: '7kg', checked: '30kg', change: 'Any time - Yes with penalty', refund: 'Any time - Yes with penalty', lounge: 'No access' };
     return (
-      <div className="min-h-screen bg-white font-[Lato]" dir="ltr">
+      <div className="min-h-screen bg-white font-[Lato]" dir={isAr ? 'rtl' : 'ltr'}>
         {/* Header - same green bar */}
         <header className="bg-[#4ca42c] text-white">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 sm:py-3 flex items-center gap-4 sm:gap-6">
-            <button className="sm:hidden text-white" onClick={() => window.location.href = '/'}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-            <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 sm:h-12" />
-            <a href="/" className="hidden sm:block text-white font-medium border-b border-white/50 pb-0.5">Home</a>
-            <span className="hidden sm:block text-white/80">English</span>
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between">
+            {/* Logo and Home (Right in RTL, Left in LTR) */}
+            <div className="flex items-center gap-4">
+              <button className="sm:hidden text-white" onClick={() => window.location.href = '/'}>
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              </button>
+              <img src="/iraqi_airways/upload/logo-white-transparent.png" alt="Iraqi Airways" className="h-10 sm:h-12 cursor-pointer" onClick={() => window.location.href = '/'} />
+              <span className="hidden sm:block mx-2 h-6 w-px bg-white/40"></span>
+              <a href="/" className="hidden sm:block text-white text-[15px] font-medium hover:underline">{t('common.home')}</a>
+            </div>
+
+            {/* Language Switcher (Left in RTL, Right in LTR) */}
+            <div className="relative hidden sm:block">
+              <button
+                onClick={() => setLangMenuOpen(o => !o)}
+                className="flex items-center gap-1.5 text-white text-[15px] font-medium"
+              >
+                <span>{lang === 'ar' ? 'العربية' : 'English'}</span>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              {langMenuOpen && (
+                <div className={`absolute z-30 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden ${isAr ? 'left-0' : 'right-0'}`}>
+                  <button onClick={() => { setLang('ar'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">العربية</button>
+                  <button onClick={() => { setLang('en'); setLangMenuOpen(false); }} className="block w-full text-start px-4 py-2.5 text-sm hover:bg-green-50 text-gray-800">English</button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
         {/* Your selection box */}
