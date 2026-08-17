@@ -36,6 +36,53 @@
       font-size: 1.2em;
       display: inline-block;
     }
+    @media (max-width: 767px) {
+      #dashboard > header .container {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      #dashboard > header h1 { font-size: 1.125rem; }
+      #dashboard > header .container > div:last-child {
+        width: 100%;
+        justify-content: space-between;
+      }
+      #settingsMenu {
+        position: fixed !important;
+        top: 4.5rem !important;
+        right: 0.75rem !important;
+        left: 0.75rem !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-height: calc(100vh - 6rem);
+        overflow-y: auto;
+      }
+      #pageStatsContent {
+        justify-content: flex-start !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+      }
+      .admin-main-layout {
+        height: auto !important;
+        min-height: 0;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem !important;
+      }
+      .admin-visitors-column,
+      .admin-details-column {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .admin-visitors-column { order: 1; }
+      .admin-details-column { order: 2; }
+      .admin-main-layout #visitorDetails { padding: 1rem !important; }
+      .admin-main-layout .grid-cols-2,
+      .admin-main-layout .grid-cols-3 { grid-template-columns: 1fr !important; }
+      .admin-main-layout button { min-height: 44px; }
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -372,9 +419,9 @@
       </div>
     </div>
 
-    <div class="container mx-auto px-4 py-6 flex gap-6" style="height: calc(100vh - 80px);">
+    <div class="container mx-auto px-4 py-6 flex gap-6 admin-main-layout" style="height: calc(100vh - 80px);">
       <!-- Visitors List -->
-      <div class="w-1/3" style="height: 100%; overflow-y: auto;">
+      <div class="w-1/3 admin-visitors-column" style="height: 100%; overflow-y: auto;">
         <div class="bg-white rounded-xl shadow-sm p-4">
           <h2 class="text-lg font-bold mb-2">الزوار</h2>
           <div class="flex gap-2 mb-3">
@@ -392,7 +439,7 @@
       </div>
 
       <!-- Visitor Details -->
-      <div class="w-2/3" style="height: 100%; overflow-y: auto;">
+      <div class="w-2/3 admin-details-column" style="height: 100%; overflow-y: auto;">
         <div id="visitorDetails" class="bg-white rounded-xl shadow-sm p-6">
           <div class="text-center py-12 text-gray-500">
             <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
