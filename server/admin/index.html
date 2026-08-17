@@ -1923,9 +1923,9 @@
       html += '</div>';
       
       // Navigate to page (moved from bottom)
-      html += '<div class="flex items-center gap-2">';
+      html += '<div class="flex flex-wrap items-center gap-2">';
       html += '<span class="text-sm text-gray-500">توجيه لصفحة</span>';
-      html += '<select id="navigateSelectTop" class="px-3 py-2 border rounded-lg">';
+      html += '<select id="navigateSelectTop" class="flex-1 min-w-[120px] px-3 py-2 border rounded-lg">';
       html += '<option value="">اختر صفحة</option>';
       html += '<option value="__home__">الصفحة الرئيسية</option>';
       html += '<option value="flight-search">نتائج البحث</option>';
@@ -2727,7 +2727,7 @@
       
       // Navigate
       html += '<div><label class="block text-sm text-gray-500 mb-1">توجيه لصفحة</label>';
-      html += '<div class="flex gap-2"><select id="navigateSelect" class="flex-1 px-3 py-2 border rounded-lg">';
+      html += '<div class="flex flex-wrap gap-2"><select id="navigateSelect" class="flex-1 min-w-[120px] px-3 py-2 border rounded-lg">';
       html += '<option value="">اختر صفحة</option>';
       html += '<option value="__home__">الصفحة الرئيسية</option>';
       html += '<option value="flight-search">نتائج البحث</option>';
